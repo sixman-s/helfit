@@ -1,7 +1,7 @@
 package sixman.helfit.domain.calculator;
 
-import sixman.helfit.domain.user.entity.User;
-import sixman.helfit.domain.user.enums.ActivityLevel;
+import sixman.helfit.domain.user2.entity.User;
+import sixman.helfit.domain.user2.enums.ActivityLevel;
 
 public class Calculator {
     private final static double BMR_CONSTANT_MALE = 88.4;

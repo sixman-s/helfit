@@ -1,4 +1,4 @@
-package sixman.helfit.domain.user.controller;
+package sixman.helfit.domain.user2.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import sixman.helfit.domain.calculator.Calculator;
-import sixman.helfit.domain.user.entity.User;
-import sixman.helfit.domain.user.enums.ActivityLevel;
+import sixman.helfit.domain.user2.entity.User;
+import sixman.helfit.domain.user2.enums.ActivityLevel;
 
 @RestController
 @RequestMapping("/api/v1/users")
