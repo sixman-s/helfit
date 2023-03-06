@@ -29,12 +29,6 @@ public class ApiResponse<T> {
         return new ApiResponse<>(new ApiResponseHeader(ResponseCode.OK.status, ResponseCode.OK.message), body);
     }
 
-    public static <T> ApiResponse<T> ok(String key1, T value1, String key2, T value2) {
-        Map<String, T> body = new HashMap<>() {{ put(key1, value1); put(key2,value2);}};
-
-        return new ApiResponse<>(new ApiResponseHeader(ResponseCode.OK.status, ResponseCode.OK.message), body);
-    }
-
     public static <T> ApiResponse<T> created() {
         return new ApiResponse<>(new ApiResponseHeader(ResponseCode.CREATED.status, ResponseCode.CREATED.message), null);
     }
@@ -47,11 +41,16 @@ public class ApiResponse<T> {
         return new ApiResponse<>(new ApiResponseHeader(ResponseCode.NO_CONTENT.status, ResponseCode.NO_CONTENT.message), null);
     }
 
+    public static <T> ApiResponse<T> badRequest() {
+        return new ApiResponse<>(new ApiResponseHeader(ResponseCode.BAD_REQUEST.status, ResponseCode.BAD_REQUEST.message), null);
+    }
+
     enum ResponseCode {
         OK(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase()),
         CREATED(HttpStatus.CREATED.value(), HttpStatus.CREATED.getReasonPhrase()),
         ACCEPTED(HttpStatus.ACCEPTED.value(), HttpStatus.ACCEPTED.getReasonPhrase()),
         NO_CONTENT(HttpStatus.NO_CONTENT.value(), HttpStatus.NO_CONTENT.getReasonPhrase()),
+        BAD_REQUEST(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase()),
         ;
 
         @Getter
