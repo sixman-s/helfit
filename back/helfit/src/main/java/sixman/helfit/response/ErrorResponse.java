@@ -1,6 +1,6 @@
 package sixman.helfit.response;
 
-import com.google.gson.Gson;
+import com.google.gson.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,15 +9,20 @@ import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import sixman.helfit.exception.ExceptionCode;
+import sixman.helfit.utils.GsonUtil;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Getter
 public class ErrorResponse {
+    private final LocalDateTime timestamp = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
     private final int status;
     private final String message;
     private final List<FieldError> errors;
@@ -61,11 +66,10 @@ public class ErrorResponse {
 
     public static void sendErrorResponse(HttpServletResponse response, HttpStatus status) throws IOException {
         ErrorResponse errorResponse = ErrorResponse.of(status);
-        Gson gson = new Gson();
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(status.value());
-        response.getWriter().write(gson.toJson(errorResponse, ErrorResponse.class));
+        response.getWriter().write(Objects.requireNonNull(GsonUtil.toJson(errorResponse, ErrorResponse.class)));
     }
 
     @Getter

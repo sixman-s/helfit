@@ -2,7 +2,7 @@ package sixman.helfit.exception;
 
 public class TokenValidFailedException extends RuntimeException {
     public TokenValidFailedException() {
-        super("Failed to generate Token.");
+        super("토큰 생성에 실패했습니다.");
     }
 
     private TokenValidFailedException(String message) {

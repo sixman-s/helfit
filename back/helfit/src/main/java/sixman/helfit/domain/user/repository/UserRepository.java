@@ -6,6 +6,7 @@ import sixman.helfit.domain.user.entity.User;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findByUserId(String userId);
+    Optional<User> findById(String id);
+    Optional<User> findByUserId(Long userId);
     Optional<User> findByEmail(String email);
 }

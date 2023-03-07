@@ -43,8 +43,8 @@ spring:
       client:
         registration:
           google:
-            clientId: ${google_client_id}
-            clientSecret: ${google_client_secret}
+            clientId: ${GOOGLE_CLIENT_ID}
+            clientSecret: ${GOOGLE_CLIENT_SECRET}
             scope:
               - email
               - profile
@@ -69,7 +69,7 @@ app:
     refreshTokenExpiry: 604800000
   oauth2:
     authorizedRedirectUris:
-      - http://localhost:3000/recieve
+      - http://localhost:3000/oauth/redirect
 
 #  thymeleaf:
 #    prefix: classpath:/mail-templates/

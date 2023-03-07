@@ -1,4 +1,4 @@
-package sixman.helfit.security.config.properties;
+package sixman.helfit.security.properties;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

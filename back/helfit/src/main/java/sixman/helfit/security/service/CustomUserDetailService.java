@@ -5,6 +5,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import sixman.helfit.exception.BusinessLogicException;
+import sixman.helfit.exception.ExceptionCode;
 import sixman.helfit.security.entity.UserPrincipal;
 import sixman.helfit.domain.user.entity.User;
 import sixman.helfit.domain.user.repository.UserRepository;
@@ -18,9 +20,9 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> byUserId = userRepository.findByUserId(username);
+        Optional<User> byUserId = userRepository.findById(username);
 
-        User user = byUserId.orElseThrow(() -> new UsernameNotFoundException("Can not find username."));
+        User user = byUserId.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USERS_NOT_FOUND));
 
         return UserPrincipal.create(user);
     }

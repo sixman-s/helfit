@@ -9,7 +9,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
-import sixman.helfit.security.config.properties.AppProperties;
+import sixman.helfit.security.properties.AppProperties;
 import sixman.helfit.security.entity.ProviderType;
 import sixman.helfit.security.entity.RoleType;
 import sixman.helfit.security.info.OAuth2UserInfo;
@@ -89,7 +89,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         );
 
         // # DB Access
-        UserRefreshToken userRefreshToken = userRefreshTokenRepository.findByUserId(userInfo.getId());
+        UserRefreshToken userRefreshToken = userRefreshTokenRepository.findById(userInfo.getId());
 
         if (userRefreshToken != null) {
             userRefreshToken.setRefreshToken(refreshToken.getToken());
@@ -103,10 +103,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         CookieUtil.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
 
         return createURI(accessToken, refreshToken).toString();
-        // return UriComponentsBuilder.fromUriString(targetUrl)
-        //          .queryParam("access_token", accessToken.getToken())
-        //          .build()
-        //          .toUriString();
     }
 
     protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {

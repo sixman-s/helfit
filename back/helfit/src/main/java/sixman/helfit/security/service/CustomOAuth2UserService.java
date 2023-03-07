@@ -7,6 +7,7 @@ import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserServ
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.stereotype.Service;
 import sixman.helfit.security.entity.ProviderType;
 import sixman.helfit.security.entity.RoleType;
 import sixman.helfit.security.entity.UserPrincipal;
@@ -18,6 +19,9 @@ import sixman.helfit.exception.OAuthProviderMissMatchException;
 
 import java.util.Optional;
 
+import static sixman.helfit.domain.user.entity.User.*;
+
+@Service
 @RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private final UserRepository userRepository;
@@ -50,6 +54,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                         " account. Please use your " + savedUser.getProviderType() + " account to login."
                 );
             }
+
             updateUser(savedUser, userInfo);
         } else {
             savedUser = createUser(userInfo, providerType);
@@ -61,10 +66,15 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private User createUser(OAuth2UserInfo userInfo, ProviderType providerType) {
         User user = new User(
             userInfo.getId(),
-            userInfo.getName(),
             userInfo.getEmail(),
-            "Y",
+            userInfo.getName(),
+            "",
             userInfo.getImageUrl(),
+            null,
+            null,
+            null,
+            EmailVerified.Y,
+            null,
             providerType,
             RoleType.USER
         );
@@ -72,15 +82,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         return userRepository.saveAndFlush(user);
     }
 
-    private User updateUser(User user, OAuth2UserInfo userInfo) {
+    private void updateUser(User user, OAuth2UserInfo userInfo) {
         if (userInfo.getName() != null && !user.getName().equals(userInfo.getName())) {
             user.setName(userInfo.getName());
         }
 
-        if (userInfo.getImageUrl() != null && !user.getImageUrl().equals(userInfo.getImageUrl())) {
-            user.setImageUrl(userInfo.getImageUrl());
+        if (userInfo.getImageUrl() != null && !user.getProfileImageUrl().equals(userInfo.getImageUrl())) {
+            user.setProfileImageUrl(userInfo.getImageUrl());
         }
-
-        return user;
     }
 }

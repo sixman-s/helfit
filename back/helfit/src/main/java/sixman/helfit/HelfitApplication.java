@@ -4,8 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-import sixman.helfit.security.config.properties.AppProperties;
-import sixman.helfit.security.config.properties.CorsProperties;
+import sixman.helfit.security.properties.AppProperties;
+import sixman.helfit.security.properties.CorsProperties;
 
 @EnableJpaAuditing
 @SpringBootApplication

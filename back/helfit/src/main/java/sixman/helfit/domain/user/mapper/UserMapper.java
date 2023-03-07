@@ -10,9 +10,8 @@ import sixman.helfit.domain.user.entity.User;
 public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-    @Mapping(target = "userId", source = "id")
     User userDtoSignupToUser(UserDto.Signup requestBody);
-    User userDtoLoginToUser(UserDto.Login requestBody);
+    User userDtoPatchToUser(UserDto.Patch requestBody);
 
     UserDto.Response userToUserDtoResponse(User user);
 }

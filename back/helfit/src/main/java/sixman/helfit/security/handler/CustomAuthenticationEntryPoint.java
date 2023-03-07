@@ -29,6 +29,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     private void logExceptionMessage(AuthenticationException authException, Exception exception) {
         String message = exception != null ? exception.getMessage() : authException.getMessage();
 
-        log.warn("Unauthorized error happened: {}", message);
+        log.warn("자격증명에 실패했습니다 = {}", message);
     }
 }

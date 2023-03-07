@@ -9,8 +9,6 @@ import sixman.helfit.security.entity.ProviderType;
 import sixman.helfit.security.entity.RoleType;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -21,10 +19,10 @@ import javax.validation.constraints.Size;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userSeq;
+    private Long userId;
 
     @Column(length = 64, nullable = false, unique = true)
-    private String userId;
+    private String id;
 
     @JsonIgnore
     @Column(length = 128, nullable = false)
@@ -36,31 +34,69 @@ public class User {
     @Column(length = 30, nullable = false)
     private String name;
 
-    @NotNull
-    @Size(min = 1, max = 1)
-    private String emailVerifiedYn;
+    @Column(length = 30)
+    private String nickname;
 
-    @NotNull
+    @Column(length = 512)
+    private String profileImageUrl;
+
+    @Column(length = 8)
+    private Integer birth;
+
+    private Integer height;
+    private Integer weight;
+
+    @Enumerated(value = EnumType.STRING)
+    private EmailVerified emailEmailVerifiedYn;
+
+    @Enumerated(value = EnumType.STRING)
+    private Gender gender;
+
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
     private RoleType roleType;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     private ProviderType providerType;
 
-    @NotNull
-    @Column(length = 512)
-    private String imageUrl;
-
-    public User(String userId, String name, String email, String emailVerifiedYn, String imageUrl, ProviderType providerType, RoleType roleType) {
-        this.userId = userId;
-        this.name = name;
-        this.password = "NO_PASS";
+    public User(
+        String id,
+        String email,
+        String name,
+        String nickname,
+        String profileImageUrl,
+        Integer birth,
+        Integer height,
+        Integer weight,
+        EmailVerified emailEmailVerifiedYn,
+        Gender gender,
+        ProviderType providerType,
+        RoleType roleType
+    ) {
+        this.id = id;
         this.email = email != null ? email : "NO_EMAIL";
-        this.emailVerifiedYn = emailVerifiedYn;
-        this.imageUrl = imageUrl != null ? imageUrl : "";
+        this.name = name;
+        this.nickname = nickname != null ? nickname : "";
+        this.password = "NO_PASS";
+        this.emailEmailVerifiedYn = emailEmailVerifiedYn;
+        this.profileImageUrl = profileImageUrl != null ? profileImageUrl : "";
+        this.birth = birth;
+        this.height = height;
+        this.weight = weight;
+        this.gender = gender;
         this.providerType = providerType;
         this.roleType = roleType;
+    }
+
+    public enum EmailVerified {
+        Y,
+        N
+        ;
+    }
+
+    public enum Gender {
+        MALE,
+        FEMALE,
+        ;
     }
 }

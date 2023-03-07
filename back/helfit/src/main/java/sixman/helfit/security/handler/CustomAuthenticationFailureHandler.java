@@ -22,18 +22,8 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
         HttpServletResponse response,
         AuthenticationException exception
     ) throws IOException {
-        log.error("Authentication failed = {}", exception.getMessage());
+        log.error("자격증명에 실패했습니다 = {}", exception.getMessage());
 
-        sendErrorResponse(response);
-    }
-
-    private void sendErrorResponse(HttpServletResponse response) throws IOException {
-        ErrorResponse errorResponse = ErrorResponse.of(HttpStatus.UNAUTHORIZED);
-        Gson gson = new Gson();
-
-        response.setStatus(HttpStatus.UNAUTHORIZED.value());
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.getWriter()
-            .write(gson.toJson(errorResponse, ErrorResponse.class));
+        ErrorResponse.sendErrorResponse(response, HttpStatus.UNAUTHORIZED);
     }
 }

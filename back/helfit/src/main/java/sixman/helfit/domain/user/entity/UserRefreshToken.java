@@ -19,14 +19,13 @@ public class UserRefreshToken {
     private Long refreshTokenSeq;
 
     @Column(length = 64, nullable = false, unique = true)
-    private String userId;
-
+    private String id;
 
     @Column(length = 256, nullable = false)
     private String refreshToken;
 
-    public UserRefreshToken(String userId, String refreshToken) {
-        this.userId = userId;
+    public UserRefreshToken(String id, String refreshToken) {
+        this.id = id;
         this.refreshToken = refreshToken;
     }
 }

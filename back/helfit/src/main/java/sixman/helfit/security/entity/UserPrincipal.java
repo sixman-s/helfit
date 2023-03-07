@@ -1,9 +1,6 @@
 package sixman.helfit.security.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,28 +16,27 @@ import java.util.Map;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
-@RequiredArgsConstructor
-public class UserPrincipal implements OAuth2User, UserDetails, OidcUser {
-    private final String userId;
-    private final String password;
-    private final ProviderType providerType;
-    private final RoleType roleType;
-    private final Collection<? extends GrantedAuthority> authorities;
+public class UserPrincipal implements UserDetails, OAuth2User, OidcUser {
+    private User user;
+    private Collection<? extends GrantedAuthority> authorities;
     private Map<String, Object> attributes;
+
+    public UserPrincipal(User user, Collection<? extends GrantedAuthority> authorities) {
+        this.user = user;
+        this.authorities = authorities;
+    }
 
     public static UserPrincipal create(User user) {
         return new UserPrincipal(
-            user.getUserId(),
-            user.getPassword(),
-            user.getProviderType(),
-            RoleType.USER,
+            user,
             Collections.singletonList(new SimpleGrantedAuthority(RoleType.USER.getCode()))
         );
     }
 
     public static UserPrincipal create(User user, Map<String, Object> attributes) {
-        UserPrincipal userPrincipal = UserPrincipal.create(user);
+        UserPrincipal userPrincipal = sixman.helfit.security.entity.UserPrincipal.create(user);
         userPrincipal.setAttributes(attributes);
 
         return userPrincipal;
@@ -48,17 +44,17 @@ public class UserPrincipal implements OAuth2User, UserDetails, OidcUser {
 
     @Override
     public String getName() {
-        return userId;
+        return user.getName();
     }
 
     @Override
     public String getUsername() {
-        return userId;
+        return user.getId();
     }
 
     @Override
     public String getPassword() {
-        return password;
+        return user.getPassword();
     }
 
     @Override

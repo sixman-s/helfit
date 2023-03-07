@@ -1,4 +1,4 @@
-package sixman.helfit.security.config.security;
+package sixman.helfit.security.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -18,8 +18,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import sixman.helfit.domain.user.repository.UserRefreshTokenRepository;
-import sixman.helfit.security.config.properties.AppProperties;
-import sixman.helfit.security.config.properties.CorsProperties;
+import sixman.helfit.security.properties.AppProperties;
+import sixman.helfit.security.properties.CorsProperties;
 import sixman.helfit.security.entity.RoleType;
 import sixman.helfit.security.filter.TokenAuthenticationFilter;
 import sixman.helfit.security.handler.CustomAccessDeniedHandler;
@@ -53,56 +53,53 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .headers()
-            .frameOptions()
-            .sameOrigin()
+            .headers().frameOptions().sameOrigin()
             .and()
-            .cors()
+                .cors()
             .and()
-            .sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
-            .csrf().disable()
-            .formLogin().disable()
-            .httpBasic().disable()
-            .exceptionHandling()
-            .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-            .accessDeniedHandler(new CustomAccessDeniedHandler())
+                .csrf().disable()
+                .formLogin().disable()
+                .httpBasic().disable()
+                .exceptionHandling()
+                    .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                    .accessDeniedHandler(new CustomAccessDeniedHandler())
             .and()
-            .apply(new CustomFilterConfigurer())
+                .apply(new CustomFilterConfigurer())
             .and()
-            .authorizeRequests()
-            .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-            .antMatchers("/",
-                "/error",
-                "/favicon.ico",
-                "/**/*.png",
-                "/**/*.gif",
-                "/**/*.svg",
-                "/**/*.jpg",
-                "/**/*.html",
-                "/**/*.css",
-                "/**/*.js"
-            ).permitAll()
-            .antMatchers("/api/**/auth/signup", "/api/**/auth/login").permitAll()
-            .antMatchers("/api/**").hasAnyAuthority(RoleType.USER.getCode())
-            .antMatchers("/api/**/admin/**").hasAnyAuthority(RoleType.ADMIN.getCode())
-            .anyRequest().authenticated()
+                .authorizeRequests()
+                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+                .antMatchers("/",
+                    "/error",
+                    "/favicon.ico",
+                    "/**/*.png",
+                    "/**/*.gif",
+                    "/**/*.svg",
+                    "/**/*.jpg",
+                    "/**/*.html",
+                    "/**/*.css",
+                    "/**/*.js"
+                ).permitAll()
+                .antMatchers("/api/**/users/signup", "/api/**/users/login").permitAll()
+                .antMatchers("/api/**").hasAnyAuthority(RoleType.USER.getCode())
+                .antMatchers("/api/**/admin/**").hasAnyAuthority(RoleType.ADMIN.getCode())
+                .anyRequest().authenticated()
             .and()
-            .userDetailsService(customUserDetailService)
-            .oauth2Login()
-            .authorizationEndpoint()
-            .baseUri("/oauth2/authorization")
-            .authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository())
+                .oauth2Login()
+                    .authorizationEndpoint()
+                        .baseUri("/oauth2/authorization")
+                    .authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository())
             .and()
-            .redirectionEndpoint()
-            .baseUri("/*/oauth2/code/*")
+                .redirectionEndpoint()
+                    .baseUri("/*/oauth2/code/*")
             .and()
-            .userInfoEndpoint()
-            .userService(customOAuth2UserService)
+                .userInfoEndpoint()
+                .userService(customOAuth2UserService)
             .and()
-            .successHandler(oAuth2AuthenticationSuccessHandler())
-            .failureHandler(oAuth2AuthenticationFailureHandler());
+                .successHandler(oAuth2AuthenticationSuccessHandler())
+                .failureHandler(oAuth2AuthenticationFailureHandler());
 
         return http.build();
     }
@@ -133,7 +130,7 @@ public class SecurityConfig {
      */
     @Bean
     public TokenAuthenticationFilter tokenAuthenticationFilter() {
-        return new TokenAuthenticationFilter(authTokenProvider);
+        return new TokenAuthenticationFilter(authTokenProvider, customUserDetailService);
     }
 
     /*
