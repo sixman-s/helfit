@@ -20,7 +20,7 @@ public class BoardController {
     }
 
 //    @GetMapping
-//    private ApiResponse getBoards(){
+//    public ApiResponse getBoards(){
 //
 //    }
 }

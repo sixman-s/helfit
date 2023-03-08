@@ -10,7 +10,7 @@ import sixman.helfit.domain.tag.entity.Tag;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "BOARD-TAGS")
+@Table(name = "BOARD_TAGS")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,11 +21,11 @@ public class BoardTag extends Auditable {
     private Long boardTagId;
 
     @ManyToOne
-    @JoinColumn(name = "board_id")
+    @JoinColumn(name = "BOARD_ID")
     private Board board;
 
     @ManyToOne
-    @JoinColumn(name = "tag_id")
+    @JoinColumn(name = "TAG_ID")
     private Tag tag;
 
 
