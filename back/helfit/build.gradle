@@ -37,20 +37,27 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
 	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+
 	compileOnly 'org.projectlombok:lombok'
+
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'com.mysql:mysql-connector-j'
-	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5',
-			'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+	implementation 'com.google.code.gson:gson'
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
 	annotationProcessor 'org.projectlombok:lombok'
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
+	implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+
 	asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 	testImplementation 'org.springframework.security:spring-security-test'
-	implementation 'com.google.code.gson:gson'
-	implementation 'org.mapstruct:mapstruct:1.5.3.Final'
-	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
-	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
 }
 
 def querydslDir = "$buildDir/generated/querydsl"

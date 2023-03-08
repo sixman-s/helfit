@@ -1,6 +1,7 @@
 package sixman.helfit.domain.user2.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -8,8 +9,9 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@Table(name = "USERS")
-public class User {
+@NoArgsConstructor
+@Table(name = "USERS2")
+public class User2 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
@@ -21,7 +23,7 @@ public class User {
     private String goal;
     private double bmr; //기초대사량임.
     private double hb;  //기초대사량 x ActiveLevel 한값. 유지칼로리임.
-    public User(int age, double weight, double height, String sex) {
+    public User2(int age, double weight, double height, String sex) {
         this.age = age;
         this.weight = weight;
         this.height = height;

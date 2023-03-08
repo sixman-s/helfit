@@ -1,6 +1,6 @@
 package sixman.helfit.domain.calculator;
 
-import sixman.helfit.domain.user2.entity.User;
+import sixman.helfit.domain.user2.entity.User2;
 import sixman.helfit.domain.user2.enums.ActivityLevel;
 
 public class Calculator {
@@ -16,17 +16,17 @@ public class Calculator {
     private final static int BULK_ADJUSTMENT = 440;
 
 
-    public static double calculateBMR_Male(User user) {
-        double bmr = BMR_CONSTANT_MALE + (BMR_CONSTANT_WEIGHT_MALE * user.getWeight())
-                + (BMR_CONSTANT_HEIGHT_MALE * user.getHeight())
-                - (BMR_CONSTANT_AGE_MALE * user.getAge());
+    public static double calculateBMR_Male(User2 user2) {
+        double bmr = BMR_CONSTANT_MALE + (BMR_CONSTANT_WEIGHT_MALE * user2.getWeight())
+                + (BMR_CONSTANT_HEIGHT_MALE * user2.getHeight())
+                - (BMR_CONSTANT_AGE_MALE * user2.getAge());
         return bmr;
     }
 
-    public static double calculateBMR_Female(User user) {
-        double bmr = BMR_CONSTANT_FEMALE + (BMR_CONSTANT_WEIGHT_FEMALE * user.getWeight())
-                + (BMR_CONSTANT_HEIGHT_FEMALE * user.getHeight())
-                - (BMR_CONSTANT_AGE_FEMALE * user.getAge());
+    public static double calculateBMR_Female(User2 user2) {
+        double bmr = BMR_CONSTANT_FEMALE + (BMR_CONSTANT_WEIGHT_FEMALE * user2.getWeight())
+                + (BMR_CONSTANT_HEIGHT_FEMALE * user2.getHeight())
+                - (BMR_CONSTANT_AGE_FEMALE * user2.getAge());
         return bmr;
     }
 

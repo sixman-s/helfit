@@ -4,29 +4,62 @@ import lombok.Getter;
 
 public enum ExceptionCode {
     /*
-    400 BAD REQUEST - 잘못된 요청
+     * # 400 BAD REQUEST
+     *
      */
-    BAD_REQUEST(400, "잘못된 요청입니다."),
+    INVALID_INPUT_VALUE(400, "잘못된 입력값입니다."),
+    INVALID_TYPE_VALUE(400, "잘못된 타입 정보입니다."),
+    INVALID_CREDENTIAL_VALUE(400, "잘못된 인증 정보입니다."),
+    INVALID_ACCESS_TOKEN(400, "잘못된 토큰입니다."),
+    INVALID_REFRESH_TOKEN(400, "잘못된 리프레쉬 토큰입니다."),
+    NOT_EXPIRED_TOKEN_YET(400, "만료되지 않은 토큰입니다."),
 
     /*
-    401 UNAUTHORIZED : 인증되지 않은 사용자
+     * # 401 UNAUTHORIZED
+     *
      */
     UNAUTHORIZED(401, "권한이 없습니다."),
 
     /*
-    404 NOT_FOUND : Resource 를 찾을 수 없음.
+     * # 403 ACCESS_DENIED
+     *
      */
-    QUESTION_NOT_FOUND(404, "Question not found"),
-    TAG_NOT_FOUND(404, "Tag not found"),
+    ACCESS_DENIED(403, "접근이 거부되었습니다."),
 
     /*
-    409 CONFLICT : Resource 의 현재 상태와 충돌.
+     * # 404 NOT_FOUND
+     *
      */
-    USERS_EXISTS_EMAIL(409,"이미 존재하는 이메일입니다."),
-    USERS_NOT_VALID_USERNAME_PASSWORD(409, "등록되지 않은 이메일/비밀번호 입니다."),
-    EMAIL_TOKEN_EXPIRED(409, "만료된 이메일 인증 토큰입니다."),
-    USERS_DOES_NOT_VERIFY_EMAIL(409, "이메일 인증이 되지 않았습니다." ),
-    USERS_NOT_VALID(409, "등록되지 않은 사용자입니다.");
+
+    /*
+     * # 405 METHOD NOT ALLOWED
+     *
+     */
+    METHOD_NOT_ALLOWED(405,"지원되지 않는 메소드입니다."),
+
+    /*
+     * # 406 NOT_ACCEPTABLE
+     *
+     */
+    NOT_ACCEPTABLE(406, "잘못된 전송 포맷입니다."),
+
+    /*
+     * # 409 CONFLICT
+     *
+     */
+    USERS_EXISTS(409,"이미 등록된 사용자가 존재합니다."),
+    USERS_NOT_FOUND(409, "등록되지 않은 사용자입니다."),
+    USERS_NOT_VALID(409, "등록되지 않은 이메일/비밀번호 입니다."),
+    USERS_DOES_NOT_VERIFY_EMAIL(409, "이메일 인증이 되지 않았습니다."),
+
+    USERS_ALREADY_ASSIGNED_WITH_GOOGLE(409, "Looks like you're signed up with GOOGLE account. Please use your LOCAL account to login."),
+
+    /*
+     * # 500 Internal server error
+     *
+     */
+    INTERNAL_SERVER_ERROR(500, "Internal server error")
+    ;
 
     @Getter
     private final int status;

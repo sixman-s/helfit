@@ -43,27 +43,40 @@ spring:
       client:
         registration:
           google:
-            clientId: ${google_client_id}
-            clientSecret: ${google_client_secret}
+            clientId: ${GOOGLE_CLIENT_ID}
+            clientSecret: ${GOOGLE_CLIENT_SECRET}
             scope:
               - email
               - profile
-#  thymeleaf:
-#    prefix: classpath:/mail-templates/
-#    suffix: .html
-#    mode: HTML
-#    encoding: UTF-8
-#    check-template-location: true
 
 logging:
   level:
     org.hibernate.SQL: trace
     org.hibernate.type.descriptor.sql.BasicBinder: trace
 
-#jwt:
-#  secret: ${secret_key}
-#  access-token-expiration-minutes: 1800000
-#  refresh-token-expiration-minutes: 604800000
+# Cors
+cors:
+  allowed-origins: "*"
+  allowed-headers: "*"
+  allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+  max-age: 3600
+
+# Auth & OAuth
+app:
+  auth:
+    tokenSecret: ${JWT_SECRET_KEY}
+    tokenExpiry: 1800000
+    refreshTokenExpiry: 604800000
+  oauth2:
+    authorizedRedirectUris:
+      - http://localhost:3000/oauth/redirect
+
+#  thymeleaf:
+#    prefix: classpath:/mail-templates/
+#    suffix: .html
+#    mode: HTML
+#    encoding: UTF-8
+#    check-template-location: true
 
 #mail:
 #  address:
