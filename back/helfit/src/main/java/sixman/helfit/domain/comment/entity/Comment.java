@@ -8,6 +8,7 @@ import sixman.helfit.audit.Auditable;
 import sixman.helfit.domain.board.entity.Board;
 import sixman.helfit.domain.user.entity.User;
 
+
 import javax.persistence.*;
 
 @NoArgsConstructor

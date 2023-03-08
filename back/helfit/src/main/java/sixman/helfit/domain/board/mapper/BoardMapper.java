@@ -1,4 +1,7 @@
 package sixman.helfit.domain.board.mapper;
 
-public class BoardMapper {
+import org.mapstruct.Mapper;
+
+@Mapper(componentModel = "spring")
+public interface BoardMapper {
 }
