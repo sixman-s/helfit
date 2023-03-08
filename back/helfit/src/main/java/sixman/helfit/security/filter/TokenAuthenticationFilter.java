@@ -1,13 +1,9 @@
 package sixman.helfit.security.filter;
 
-import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
 import sixman.helfit.exception.TokenValidFailedException;
@@ -21,9 +17,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
@@ -59,6 +52,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         }
     }
 
+    // ! FilterChange 선순위 오류 수정
     // private Authentication getAuthentication(AuthToken authToken) {
     //     if (authToken.validate()) {
     //         Claims claims = authToken.getTokenClaims();
