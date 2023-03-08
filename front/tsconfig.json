@@ -22,7 +22,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "src/styles/variables.js"
+    "src/styles/variables.js",
+    "src/styles/global-style.\bcss"
   ],
   "exclude": ["node_modules"]
 }
