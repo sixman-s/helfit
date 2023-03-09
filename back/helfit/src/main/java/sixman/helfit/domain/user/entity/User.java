@@ -47,7 +47,7 @@ public class User {
     private Integer weight;
 
     @Enumerated(value = EnumType.STRING)
-    private EmailVerified emailEmailVerifiedYn;
+    private EmailVerified emailVerifiedYn;
 
     @Enumerated(value = EnumType.STRING)
     private Gender gender;
@@ -68,7 +68,7 @@ public class User {
         Integer birth,
         Integer height,
         Integer weight,
-        EmailVerified emailEmailVerifiedYn,
+        EmailVerified emailVerifiedYn,
         Gender gender,
         ProviderType providerType,
         RoleType roleType
@@ -78,7 +78,7 @@ public class User {
         this.name = name;
         this.nickname = nickname != null ? nickname : "";
         this.password = "NO_PASS";
-        this.emailEmailVerifiedYn = emailEmailVerifiedYn;
+        this.emailVerifiedYn = emailVerifiedYn;
         this.profileImageUrl = profileImageUrl != null ? profileImageUrl : "";
         this.birth = birth;
         this.height = height;

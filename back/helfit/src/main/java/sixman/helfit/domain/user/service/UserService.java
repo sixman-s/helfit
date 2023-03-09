@@ -25,10 +25,11 @@ public class UserService {
 
     public User createUser(User user) {
         verifyExistsUserId(user.getId());
+        verifyExistsUserEmail(user.getEmail());
 
         String encryptedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encryptedPassword);
-        user.setEmailEmailVerifiedYn(EmailVerified.N);
+        user.setEmailVerifiedYn(EmailVerified.N);
         user.setRoleType(RoleType.USER);
         user.setProviderType(ProviderType.LOCAL);
 
@@ -43,8 +44,15 @@ public class UserService {
         return userRepository.save(updatedUser);
     }
 
-    public void updateUserPassword(Long userId) {
+    public void updateUserPassword(Long userId, User user) {
+        User verifiedUser = findVerifiedUserByUserId(userId);
 
+        if (passwordEncoder.matches(user.getPassword(), verifiedUser.getPassword()))
+            throw new BusinessLogicException(ExceptionCode.NOT_CHANGED_PASSWORD);
+
+        verifiedUser.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        userRepository.save(verifiedUser);
     }
 
     @Transactional(readOnly = true)
@@ -57,7 +65,14 @@ public class UserService {
     @Transactional(readOnly = true)
     public void verifyExistsUserId(String id) {
         userRepository.findById(id).ifPresent((e) -> {
-            throw new BusinessLogicException(ExceptionCode.USERS_EXISTS);
+            throw new BusinessLogicException(ExceptionCode.USERS_EXISTS_ID);
+        });
+    }
+
+    @Transactional(readOnly = true)
+    public void verifyExistsUserEmail(String email) {
+        userRepository.findById(email).ifPresent((e) -> {
+            throw new BusinessLogicException(ExceptionCode.USERS_EXISTS_EMAIL);
         });
     }
 }

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import sixman.helfit.exception.BusinessLogicException;
 import sixman.helfit.exception.ExceptionCode;
-import sixman.helfit.exception.OAuthProviderMissMatchException;
 import sixman.helfit.response.ErrorResponse;
 
 import java.nio.file.AccessDeniedException;
@@ -88,7 +87,7 @@ public class GlobalExceptionHandler {
      *
      */
     @ExceptionHandler(BadCredentialsException.class)
-    protected ResponseEntity<ErrorResponse> handleBadCredentialsException(final BadCredentialsException e) {
+    protected ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException e) {
         log.error("handleBadCredentialsException", e);
 
         final ErrorResponse response = ErrorResponse.of(ExceptionCode.INVALID_CREDENTIAL_VALUE);

@@ -4,9 +4,11 @@ import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +37,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.net.URI;
 import java.util.Date;
+import java.util.Objects;
 
 @Slf4j
 @RestController
@@ -54,17 +57,29 @@ public class UserController {
     private final static long THREE_DAYS_MSE = 259200000;
     private final static String REFRESH_TOKEN = "refresh_token";
 
+    /*
+     * # Local 회원 가입
+     *
+     */
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@Valid @RequestBody UserDto.Signup requestBody) {
         User user = userService.createUser(userMapper.userDtoSignupToUser(requestBody));
 
         URI uri = UriUtil.createUri(DEFAULT_URI, user.getUserId());
 
-        return ResponseEntity.created(uri).body(ApiResponse.ok("message", "회원등록이 완료됐습니다."));
+        return ResponseEntity.created(uri).body(ApiResponse.created());
     }
 
+    /*
+     * # Local 회원 로그인
+     *
+     */
     @PostMapping("/login")
-    public ResponseEntity<?> login(HttpServletRequest request, HttpServletResponse response, @Valid @RequestBody UserDto.Login requestBody) {
+    public ResponseEntity<?> login(
+        HttpServletRequest request,
+        HttpServletResponse response,
+        @Valid @RequestBody UserDto.Login requestBody
+    ) {
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
                 requestBody.getId(),
@@ -105,14 +120,12 @@ public class UserController {
         return ResponseEntity.ok().body(ApiResponse.ok("accessToken", accessToken.getToken()));
     }
 
-    @GetMapping("{user-id}")
-    public ResponseEntity<?> getUser(@Positive @PathVariable("user-id") Long userId) {
-        User user = userService.findVerifiedUserByUserId(userId);
-
-        return ResponseEntity.ok().body(ApiResponse.ok("data", user));
-    }
-
-    @GetMapping("/refresh")
+    /*
+     * # 사용자 refresh-token 재발급
+     *
+     */
+    @GetMapping("/refresh-token")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> refreshToken(HttpServletRequest request, HttpServletResponse response) {
         // # Access Token
         String accessToken = HeaderUtil.getAccessToken(request);
@@ -170,15 +183,59 @@ public class UserController {
         return ResponseEntity.ok().body(ApiResponse.ok("access_token", authAccessToken.getToken()));
     }
 
-    @PatchMapping("{user-id}")
-    public ResponseEntity<?> patchUser(
-        @Positive @PathVariable("user-id") Long userId,
-        @Valid @RequestBody UserDto.Patch requestBody
-    ) {
-        User user = userService.updateUser(userId, userMapper.userDtoPatchToUser(requestBody));
+    /*
+     * # 사용자 정보 조회
+     *
+     */
+    @GetMapping("{user-id}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> getCurrentUser(@Positive @PathVariable("user-id") Long userId) {
+        User user = userService.findVerifiedUserByUserId(userId);
 
-        UserDto.Response response = userMapper.userToUserDtoResponse(user);
+        return ResponseEntity.ok().body(ApiResponse.ok("data", user));
+    }
+
+    /*
+     * # 사용자 정보 변경
+     *
+     */
+    @PatchMapping("{user-id}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> updateCurrentUser(
+        @Positive @PathVariable("user-id") Long userId,
+        @Valid @RequestBody UserDto.Update requestBody,
+        @AuthenticationPrincipal UserPrincipal userPrincipal
+    ) {
+        User user = userPrincipal.getUser();
+
+        if (!Objects.equals(user.getUserId(), userId))
+            return ResponseEntity.badRequest().body(ApiResponse.badRequest());
+
+        User updatedUser = userService.updateUser(userId, userMapper.userDtoPatchToUser(requestBody));
+
+        UserDto.Response response = userMapper.userToUserDtoResponse(updatedUser);
 
         return ResponseEntity.ok().body(ApiResponse.ok("data", response));
+    }
+
+    /*
+     * # 사용자 비밀번호 변경
+     *
+     */
+    @PatchMapping("/{user-id}/password")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> updateCurrentUserPassword(
+        @Positive @PathVariable("user-id") Long userId,
+        @Valid @RequestBody UserDto.Password requestBody,
+        @AuthenticationPrincipal UserPrincipal userPrincipal
+    ) {
+        User user = userPrincipal.getUser();
+
+        if (!Objects.equals(user.getUserId(), userId))
+            return ResponseEntity.badRequest().body(ApiResponse.badRequest());
+
+        userService.updateUserPassword(userId, userMapper.userDtoPasswordToUser(requestBody));
+
+        return ResponseEntity.ok().body(ApiResponse.ok());
     }
 }

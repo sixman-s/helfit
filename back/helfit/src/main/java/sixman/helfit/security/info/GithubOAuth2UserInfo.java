@@ -18,6 +18,11 @@ public class GithubOAuth2UserInfo extends OAuth2UserInfo {
     }
 
     @Override
+    public String getNickname() {
+        return (String) attributes.get("name");
+    }
+
+    @Override
     public String getEmail() {
         return (String) attributes.get("email");
     }

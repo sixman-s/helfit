@@ -1,6 +1,7 @@
 package sixman.helfit.security.config;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -42,6 +43,9 @@ import java.util.Arrays;
 )
 @RequiredArgsConstructor
 public class SecurityConfig {
+    @Value("${front.domain}")
+    private String frontDomain;
+
     private final CorsProperties corsProperties;
     private final AppProperties appProperties;
 
@@ -63,6 +67,12 @@ public class SecurityConfig {
                 .csrf().disable()
                 .formLogin().disable()
                 .httpBasic().disable()
+                .logout()
+                    .logoutSuccessUrl(frontDomain)
+                    .invalidateHttpSession(true)
+                    .clearAuthentication(true)
+                    .deleteCookies("JSESSIONID", "refresh_token")
+            .and()
                 .exceptionHandling()
                     .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                     .accessDeniedHandler(new CustomAccessDeniedHandler())
