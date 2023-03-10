@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import styles from '../styles/lnb.module.css';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 export const LNB = () => {
   const [choiceIdx, setChoiceIdx] = useState(0);
   const [menuClick, setMenuClick] = useState(true);
-
+  const router = useRouter();
+  console.log(router.pathname);
   const category: string[] = ['Home', 'Community', 'Map', 'Calender', 'Mypage'];
 
   const clickMenu = (idx: number) => {
@@ -21,7 +23,7 @@ export const LNB = () => {
   };
 
   return (
-    <div className={styles.container}>
+    <nav className={styles.container}>
       <img className={styles.logo} src={'assets/logo.svg'} />
       <ul className={styles.manuUl}>
         {category.map((menu: string, key: number) => {
@@ -54,6 +56,6 @@ export const LNB = () => {
           <span className={styles.lnbFont}>{'logout'}</span>
         </li>
       </ul>
-    </div>
+    </nav>
   );
 };

@@ -1,3 +1,16 @@
-import logo from '../assets/logo.svg';
+import { LNB } from './LNB';
 
-const Layout = () => {};
+type MainProps = {
+  children: React.ReactNode;
+};
+
+const Layout = ({ children }: MainProps) => {
+  return (
+    <main>
+      <LNB />
+      <section>{children}</section>
+    </main>
+  );
+};
+
+export default Layout;
