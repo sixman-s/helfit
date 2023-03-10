@@ -9,6 +9,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
+import java.time.LocalDateTime;
+
 import static sixman.helfit.domain.user.entity.User.*;
 
 public class UserDto {
@@ -103,5 +105,7 @@ public class UserDto {
         private Integer weight;
         private Gender gender;
         private String providerType;
+        private LocalDateTime createdAt;
+        private LocalDateTime modifiedAt;
     }
 }

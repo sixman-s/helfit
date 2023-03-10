@@ -37,7 +37,7 @@ public class UserService {
     }
 
     public User updateUser(Long userId, User user) {
-        User verifiedUser = findVerifiedUserByUserId(userId);
+        User verifiedUser = findUserByUserId(userId);
 
         User updatedUser = customBeanUtil.copyNonNullProperties(user, verifiedUser);
 
@@ -45,7 +45,7 @@ public class UserService {
     }
 
     public void updateUserPassword(Long userId, User user) {
-        User verifiedUser = findVerifiedUserByUserId(userId);
+        User verifiedUser = findUserByUserId(userId);
 
         if (passwordEncoder.matches(user.getPassword(), verifiedUser.getPassword()))
             throw new BusinessLogicException(ExceptionCode.NOT_CHANGED_PASSWORD);
@@ -56,7 +56,7 @@ public class UserService {
     }
 
     public void updateUserProfileImage(Long userId, String imagePath) {
-        User verifiedUser = findVerifiedUserByUserId(userId);
+        User verifiedUser = findUserByUserId(userId);
 
         verifiedUser.setProfileImageUrl(imagePath);
 
@@ -64,7 +64,7 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public User findVerifiedUserByUserId(Long userId) {
+    public User findUserByUserId(Long userId) {
         Optional<User> byUserId = userRepository.findByUserId(userId);
 
         return byUserId.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USERS_NOT_FOUND));
