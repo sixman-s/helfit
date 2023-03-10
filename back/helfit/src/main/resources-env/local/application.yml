@@ -107,8 +107,8 @@ logging:
 
 # Cors
 cors:
-  allowed-origins: "*"
   allowed-headers: "*"
+  allowed-origins: "*"
   allowed-methods: GET,POST,PUT,DELETE,OPTIONS
   max-age: 3600
 

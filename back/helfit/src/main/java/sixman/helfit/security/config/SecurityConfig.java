@@ -73,10 +73,6 @@ public class SecurityConfig {
                     .clearAuthentication(true)
                     .deleteCookies("JSESSIONID", "refresh_token")
             .and()
-                .exceptionHandling()
-                    .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-                    .accessDeniedHandler(new CustomAccessDeniedHandler())
-            .and()
                 .apply(new CustomFilterConfigurer())
             .and()
                 .authorizeRequests()
@@ -97,6 +93,10 @@ public class SecurityConfig {
                 .antMatchers("/api/**/admin/**").hasAnyAuthority(RoleType.ADMIN.getCode())
                 .antMatchers("/api/**").permitAll()
                 .anyRequest().authenticated()
+            .and()
+                .exceptionHandling()
+                    .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                    .accessDeniedHandler(new CustomAccessDeniedHandler())
             .and()
                 .oauth2Login()
                     .authorizationEndpoint()
@@ -121,6 +121,10 @@ public class SecurityConfig {
                             .antMatchers("/h2/**");
     }
 
+    /*
+     * # AuthenticationManager
+     *
+     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
@@ -187,7 +191,7 @@ public class SecurityConfig {
         CorsConfiguration corsConfig = new CorsConfiguration();
         corsConfig.setAllowedHeaders(Arrays.asList(corsProperties.getAllowedHeaders().split(",")));
         corsConfig.setAllowedMethods(Arrays.asList(corsProperties.getAllowedMethods().split(",")));
-        corsConfig.setAllowedOrigins(Arrays.asList(corsProperties.getAllowedOrigins().split(",")));
+        corsConfig.setAllowedOriginPatterns(Arrays.asList(corsProperties.getAllowedOrigins().split(",")));
         corsConfig.setAllowCredentials(true);
         corsConfig.setMaxAge(corsConfig.getMaxAge());
 

@@ -23,10 +23,7 @@ public class UserDto {
         )
         private String password;
 
-        @Pattern(regexp = "^\\S+(\\s?\\S+)*$", message = "이름은 공백이 아니어야 합니다.")
-        private String name;
-
-        @NotBlank
+        @Pattern(regexp = "^\\S+(\\s?\\S+)*$", message = "별명은 공백을 포함할 수 없습니다.")
         private String nickname;
 
         @NotBlank
@@ -62,10 +59,7 @@ public class UserDto {
     @Getter
     public static class Update {
         @Nullable
-        @Email
-        private String email;
-
-        @Nullable
+        @Pattern(regexp = "^\\S+(\\s?\\S+)*$", message = "별명은 공백을 포함할 수 없습니다.")
         private String nickname;
 
         @Nullable

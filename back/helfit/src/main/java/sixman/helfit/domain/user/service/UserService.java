@@ -55,6 +55,14 @@ public class UserService {
         userRepository.save(verifiedUser);
     }
 
+    public void updateUserProfileImage(Long userId, String imagePath) {
+        User verifiedUser = findVerifiedUserByUserId(userId);
+
+        verifiedUser.setProfileImageUrl(imagePath);
+
+        userRepository.save(verifiedUser);
+    }
+
     @Transactional(readOnly = true)
     public User findVerifiedUserByUserId(Long userId) {
         Optional<User> byUserId = userRepository.findByUserId(userId);

@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -15,7 +16,6 @@ import sixman.helfit.exception.BusinessLogicException;
 import sixman.helfit.exception.ExceptionCode;
 import sixman.helfit.response.ErrorResponse;
 
-import java.nio.file.AccessDeniedException;
 
 @Slf4j
 @RestControllerAdvice
@@ -55,7 +55,7 @@ public class GlobalExceptionHandler {
         log.error("handleHttpRequestMethodNotSupportedException", e);
 
         final ErrorResponse response = ErrorResponse.of(ExceptionCode.METHOD_NOT_ALLOWED);
-        return new ResponseEntity<>(response, HttpStatus.METHOD_NOT_ALLOWED);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(ExceptionCode.METHOD_NOT_ALLOWED.getStatus()));
     }
 
     /*
@@ -67,7 +67,7 @@ public class GlobalExceptionHandler {
         log.error("HttpMessageNotReadableException", e);
 
         final ErrorResponse response = ErrorResponse.of(ExceptionCode.NOT_ACCEPTABLE);
-        return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(ExceptionCode.NOT_ACCEPTABLE.getStatus()));
     }
 
     /*

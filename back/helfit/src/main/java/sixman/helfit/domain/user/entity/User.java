@@ -31,9 +31,6 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(length = 30, nullable = false)
-    private String name;
-
     @Column(length = 30)
     private String nickname;
 
@@ -62,7 +59,6 @@ public class User {
     public User(
         String id,
         String email,
-        String name,
         String nickname,
         String profileImageUrl,
         Integer birth,
@@ -75,7 +71,6 @@ public class User {
     ) {
         this.id = id;
         this.email = email != null ? email : "NO_EMAIL";
-        this.name = name;
         this.nickname = nickname != null ? nickname : "";
         this.password = "NO_PASS";
         this.emailVerifiedYn = emailVerifiedYn;

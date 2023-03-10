@@ -69,7 +69,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         User user = new User(
             userInfo.getId(),
             userInfo.getEmail(),
-            userInfo.getName(),
             userInfo.getNickname(),
             userInfo.getImageUrl(),
             null,
@@ -85,8 +84,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     }
 
     private void updateUser(User user, OAuth2UserInfo userInfo) {
-        if (userInfo.getName() != null && !user.getName().equals(userInfo.getName())) {
-            user.setName(userInfo.getName());
+        if (userInfo.getNickname() != null && !user.getNickname().equals(userInfo.getNickname())) {
+            user.setNickname(userInfo.getNickname());
         }
 
         if (userInfo.getImageUrl() != null && !user.getProfileImageUrl().equals(userInfo.getImageUrl())) {

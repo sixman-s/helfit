@@ -12,6 +12,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import sixman.helfit.domain.file.service.FileService;
 import sixman.helfit.domain.user.dto.UserDto;
 import sixman.helfit.domain.user.entity.User;
 import sixman.helfit.domain.user.entity.UserRefreshToken;
@@ -37,6 +39,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.net.URI;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Slf4j
@@ -53,6 +56,7 @@ public class UserController {
     private final UserRefreshTokenRepository userRefreshTokenRepository;
     private final UserService userService;
     private final UserMapper userMapper;
+    private final FileService fileService;
 
     private final static long THREE_DAYS_MSE = 259200000;
     private final static String REFRESH_TOKEN = "refresh_token";
@@ -189,7 +193,7 @@ public class UserController {
      */
     @GetMapping("{user-id}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> getCurrentUser(@Positive @PathVariable("user-id") Long userId) {
+    public ResponseEntity<?> getUser(@Positive @PathVariable("user-id") Long userId) {
         User user = userService.findVerifiedUserByUserId(userId);
 
         return ResponseEntity.ok().body(ApiResponse.ok("data", user));
@@ -201,15 +205,13 @@ public class UserController {
      */
     @PatchMapping("{user-id}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> updateCurrentUser(
+    public ResponseEntity<?> updateUser(
         @Positive @PathVariable("user-id") Long userId,
         @Valid @RequestBody UserDto.Update requestBody,
         @AuthenticationPrincipal UserPrincipal userPrincipal
     ) {
-        User user = userPrincipal.getUser();
-
-        if (!Objects.equals(user.getUserId(), userId))
-            return ResponseEntity.badRequest().body(ApiResponse.badRequest());
+        if (!userId.equals(userPrincipal.getUser().getUserId()))
+            throw new BusinessLogicException(ExceptionCode.ACCESS_DENIED);
 
         User updatedUser = userService.updateUser(userId, userMapper.userDtoPatchToUser(requestBody));
 
@@ -224,18 +226,54 @@ public class UserController {
      */
     @PatchMapping("/{user-id}/password")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> updateCurrentUserPassword(
+    public ResponseEntity<?> updateUserPassword(
         @Positive @PathVariable("user-id") Long userId,
         @Valid @RequestBody UserDto.Password requestBody,
         @AuthenticationPrincipal UserPrincipal userPrincipal
     ) {
-        User user = userPrincipal.getUser();
-
-        if (!Objects.equals(user.getUserId(), userId))
-            return ResponseEntity.badRequest().body(ApiResponse.badRequest());
+        if (!userId.equals(userPrincipal.getUser().getUserId()))
+            throw new BusinessLogicException(ExceptionCode.ACCESS_DENIED);
 
         userService.updateUserPassword(userId, userMapper.userDtoPasswordToUser(requestBody));
 
         return ResponseEntity.ok().body(ApiResponse.ok());
+    }
+
+    /*
+     * # 회원 프로필 이미지 등록&수정
+     *
+     */
+    @PostMapping("/{user-id}/profileImage")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> updateUserProfileImage(
+        @Positive @PathVariable("user-id") Long userId,
+        @RequestParam MultipartFile multipartFile,
+        @AuthenticationPrincipal UserPrincipal userPrincipal
+    ) throws Exception {
+        if (!userId.equals(userPrincipal.getUser().getUserId()))
+            throw new BusinessLogicException(ExceptionCode.ACCESS_DENIED);
+
+        String imagePath = fileService.uploadFile(multipartFile);
+        userService.updateUserProfileImage(userId, imagePath);
+
+        return ResponseEntity.ok().body(ApiResponse.ok());
+    }
+
+    /*
+     * # 회원 프로필 이미지 삭제
+     *
+     */
+    @DeleteMapping("/{user-id}/profileImage")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> updateUserProfileImage(
+        @Positive @PathVariable("user-id") Long userId,
+        @AuthenticationPrincipal UserPrincipal userPrincipal
+    ) {
+        if (!userId.equals(userPrincipal.getUser().getUserId()))
+            throw new BusinessLogicException(ExceptionCode.ACCESS_DENIED);
+
+        userService.updateUserProfileImage(userId, null);
+
+        return ResponseEntity.ok().body(ApiResponse.noContent());
     }
 }

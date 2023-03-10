@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,32 +21,39 @@ public class FileService {
 
     private final AmazonS3Client amazonS3Client;
 
-    public List<String> uploadFiles(MultipartFile[] multipartFileList) throws Exception {
+    public String uploadFile(MultipartFile multipartFile) throws Exception {
+        return uploadToS3(multipartFile);
+    }
+
+    public List<String> uploadFiles(MultipartFile[] multipartFiles) throws Exception {
         List<String> imagePathList = new ArrayList<>();
 
-        for (MultipartFile multipartFile: multipartFileList) {
-            String originalName = multipartFile.getOriginalFilename();
-            long size = multipartFile.getSize();
-
-            ObjectMetadata objectMetaData = new ObjectMetadata();
-
-            // # 파일명
-            objectMetaData.setContentType(multipartFile.getContentType());
-            // # 파일 사이즈
-            objectMetaData.setContentLength(size);
-
-            // # S3 버킷 업로드
-            amazonS3Client.putObject(
-                new PutObjectRequest(S3Bucket, originalName, multipartFile.getInputStream(), objectMetaData)
-                    .withCannedAcl(CannedAccessControlList.PublicRead)
-            );
-
-            // ~ 저장 후 생성된 접근 가능 URL 가져오기
-            String imagePath = amazonS3Client.getUrl(S3Bucket, originalName).toString();
-
+        for (MultipartFile multipartFile: multipartFiles) {
+            String imagePath = uploadToS3(multipartFile);
             imagePathList.add(imagePath);
         }
 
         return imagePathList;
+    }
+
+    private String uploadToS3(MultipartFile multipartFile) throws IOException {
+        String originalName = multipartFile.getOriginalFilename();
+        long size = multipartFile.getSize();
+
+        ObjectMetadata objectMetaData = new ObjectMetadata();
+
+        // # 파일명
+        objectMetaData.setContentType(multipartFile.getContentType());
+        // # 파일 사이즈
+        objectMetaData.setContentLength(size);
+
+        // # S3 버킷 업로드
+        amazonS3Client.putObject(
+            new PutObjectRequest(S3Bucket, originalName, multipartFile.getInputStream(), objectMetaData)
+                .withCannedAcl(CannedAccessControlList.PublicRead)
+        );
+
+        // ~ 저장 후 생성된 접근 가능 URL 내보내기
+        return amazonS3Client.getUrl(S3Bucket, originalName).toString();
     }
 }
