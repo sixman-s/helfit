@@ -14,6 +14,7 @@ spring:
     username: sa
     password:
     driver-class-name: org.h2.Driver
+    data: data.sql
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
@@ -23,6 +24,10 @@ spring:
         format_sql: true
         highlight_sql: true
         use_sql_comments: true
+    defer-datasource-initialization : true
+  sql:
+    init:
+      mode: always
 #  mail:
 #    host: smtp.gmail.com
 #    port: 587
