@@ -25,6 +25,6 @@ public class Tag extends Auditable {
     private String tagName;
 
     @OneToMany(mappedBy = "tag")
-    private Set<BoardTag> postTags = new HashSet<>();
+    private Set<BoardTag> boardTags = new HashSet<>();
 
 }

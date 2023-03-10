@@ -24,10 +24,17 @@ public class Board extends Auditable {
     private Long boardId;
     @Column(nullable = false, length = 2000)
     private String title;
-    @Column(nullable = false)
-    private Content content;
+
+    @Column(name = "text", length = 20000)
+    private String text;
+
+    @Column(name = "image")
+    private byte[] image;
 
     private Long categoryId;
+
+    @Column(name = "likes", nullable = false, columnDefinition = "int default 0")
+    private int likes;
 
     @ManyToOne
     @JoinColumn(name ="user_id")
@@ -35,4 +42,5 @@ public class Board extends Auditable {
 
     @OneToMany(mappedBy = "board")
     private Set<BoardTag> boardTags = new HashSet<>();
+
 }

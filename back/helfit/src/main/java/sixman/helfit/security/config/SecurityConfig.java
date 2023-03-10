@@ -83,8 +83,9 @@ public class SecurityConfig {
                     "/**/*.js"
                 ).permitAll()
                 .antMatchers("/api/**/users/signup", "/api/**/users/login").permitAll()
-                .antMatchers("/api/**").hasAnyAuthority(RoleType.USER.getCode())
+                .antMatchers("/api/**/users/**").hasAnyAuthority(RoleType.USER.getCode())
                 .antMatchers("/api/**/admin/**").hasAnyAuthority(RoleType.ADMIN.getCode())
+                .antMatchers("/api/**").permitAll()
                 .anyRequest().authenticated()
             .and()
                 .oauth2Login()

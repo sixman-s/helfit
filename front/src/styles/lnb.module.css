@@ -1,0 +1,62 @@
+.container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  width: 240px;
+  height: 100vh;
+  border-right: 1px solid var(--line_2);
+  padding-top: 40px;
+}
+
+.logo {
+  width: 155px;
+  margin-bottom: 60px;
+  padding-left: 30px;
+}
+.manuUl {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
+}
+
+.manuUl li:last-child {
+  margin-top: auto;
+  padding-bottom: 40px;
+}
+
+.manu {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 20px 0;
+  cursor: pointer;
+  padding-left: 30px;
+}
+
+.lnbIcon {
+  user-select: none;
+  margin-right: 10px;
+}
+
+.lnbIcon_active {
+  user-select: none;
+  margin-right: 10px;
+  filter: invert(46%) sepia(100%) saturate(5048%) hue-rotate(220deg)
+    brightness(99%) contrast(103%);
+}
+
+.lnbFont {
+  user-select: none;
+  font-weight: 700;
+  color: var(--text_3);
+}
+
+.lnbFont_active {
+  user-select: none;
+  font-weight: 700;
+  color: var(--main);
+}
