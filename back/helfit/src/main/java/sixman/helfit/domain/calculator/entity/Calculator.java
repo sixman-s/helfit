@@ -26,7 +26,7 @@ public class Calculator extends Auditable {
 
     public static void checkNotFoundUser(User user) {
         if (user == null) {
-            throw new BusinessLogicException(ExceptionCode.USERS_EXISTS);
+            throw new BusinessLogicException(ExceptionCode.CALCULATOR_NOT_FOUND);
         }
     }
 }

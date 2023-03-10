@@ -48,7 +48,7 @@ public class CalculatorService {
         Optional<Calculator> optionalCalculator =
                 calculatorRepository.findById(calculatorId);
         return optionalCalculator.orElseThrow(() ->
-        new BusinessLogicException(ExceptionCode.USERS_EXISTS));
+        new BusinessLogicException(ExceptionCode.CALCULATOR_NOT_FOUND));
     }
     public Calculator findUserResult(long userId){
         User findUser = userService.findVerifiedUserByUserId(userId);
