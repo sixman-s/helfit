@@ -4,19 +4,11 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 export const LNB = () => {
-  const [choiceIdx, setChoiceIdx] = useState(0);
-  const [menuClick, setMenuClick] = useState(true);
   const router = useRouter();
-  console.log(router.pathname);
-  const category: string[] = ['Home', 'Community', 'Map', 'Calender', 'Mypage'];
-
-  const clickMenu = (idx: number) => {
-    setChoiceIdx(idx);
-    setMenuClick(menuClick!);
-  };
+  const category: string[] = ['', 'Community', 'Map', 'Calender', 'Mypage'];
 
   const linkPath = (menu: string) => {
-    if (menu === 'Home') {
+    if (menu === '') {
       return '/';
     } else if (menu.includes('community')) return `/${menu.toLowerCase()}`;
     else return `/${menu.toLowerCase()}`;
@@ -28,24 +20,26 @@ export const LNB = () => {
       <ul className={styles.manuUl}>
         {category.map((menu: string, key: number) => {
           return (
-            <li key={key} onClick={() => clickMenu(key)}>
+            <li key={key}>
               <Link className={styles.manu} href={linkPath(menu)}>
                 <img
                   className={
-                    menuClick && key === choiceIdx
+                    router.pathname === `/${menu.toLowerCase()}`
                       ? styles.lnbIcon_active
                       : styles.lnbIcon
                   }
-                  src={`assets/lnb_${menu.toLowerCase()}_icn.svg`}
+                  src={`assets/lnb_${
+                    menu === '' ? 'home' : menu.toLowerCase()
+                  }_icn.svg`}
                 />
                 <span
                   className={
-                    menuClick && key === choiceIdx
+                    router.pathname === `/${menu.toLowerCase()}`
                       ? styles.lnbFont_active
                       : styles.lnbFont
                   }
                 >
-                  {menu}
+                  {menu === '' ? 'Home' : menu}
                 </span>
               </Link>
             </li>
