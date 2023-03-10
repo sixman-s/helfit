@@ -22,7 +22,7 @@ public class CustomUserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> byUserId = userRepository.findById(username);
 
-        User user = byUserId.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USERS_NOT_FOUND));
+        User user = byUserId.orElseThrow(() -> new UsernameNotFoundException(ExceptionCode.USERS_NOT_FOUND.getMessage()));
 
         return UserPrincipal.create(user);
     }

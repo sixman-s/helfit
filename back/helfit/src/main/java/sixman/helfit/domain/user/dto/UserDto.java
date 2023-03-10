@@ -3,7 +3,6 @@ package sixman.helfit.domain.user.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.lang.Nullable;
-import sixman.helfit.domain.user.entity.User;
 import sixman.helfit.global.annotations.ValidEnum;
 
 import javax.validation.constraints.Email;
@@ -24,10 +23,7 @@ public class UserDto {
         )
         private String password;
 
-        @Pattern(regexp = "^\\S+(\\s?\\S+)*$", message = "이름은 공백이 아니어야 합니다.")
-        private String name;
-
-        @NotBlank
+        @Pattern(regexp = "^\\S+(\\s?\\S+)*$", message = "별명은 공백을 포함할 수 없습니다.")
         private String nickname;
 
         @NotBlank
@@ -61,20 +57,10 @@ public class UserDto {
     }
 
     @Getter
-    public static class Patch {
+    public static class Update {
         @Nullable
-        @Email
-        private String email;
-
-        @Nullable
+        @Pattern(regexp = "^\\S+(\\s?\\S+)*$", message = "별명은 공백을 포함할 수 없습니다.")
         private String nickname;
-
-        @Nullable
-        @Pattern(
-            regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!@#$%^&*()_\\-\"',.+/])[A-Za-z\\d!@#$%^&*()_\\-\"',.+/]{8,}$",
-            message = "비밀번호는 영어(대/소문자), 숫자, 특수문자 포함 8자 이상으로 구성되어야 합니다."
-        )
-        private String password;
 
         @Nullable
         private String profileImageUrl;
@@ -91,6 +77,15 @@ public class UserDto {
         @Nullable
         @ValidEnum(enumClass = Gender.class)
         private Gender gender;
+    }
+
+    @Getter
+    public static class Password {
+        @Pattern(
+            regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!@#$%^&*()_\\-\"',.+/])[A-Za-z\\d!@#$%^&*()_\\-\"',.+/]{8,}$",
+            message = "비밀번호는 영어(대/소문자), 숫자, 특수문자 포함 8자 이상으로 구성되어야 합니다."
+        )
+        private String password;
     }
 
     @AllArgsConstructor
