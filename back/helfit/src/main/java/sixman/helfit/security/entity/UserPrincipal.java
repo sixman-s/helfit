@@ -44,7 +44,7 @@ public class UserPrincipal implements UserDetails, OAuth2User, OidcUser {
 
     @Override
     public String getName() {
-        return user.getName();
+        return user.getNickname();
     }
 
     @Override
