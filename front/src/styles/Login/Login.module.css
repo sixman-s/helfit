@@ -4,15 +4,12 @@
   grid-auto-flow: column;
   grid-auto-rows: 200px;
   grid-template-areas:
-    'side content content'
-    'side content content'
-    'side content content';
+    'content content'
+    'content content'
+    'content content';
   background-color: aqua;
 }
-.sidebar {
-  grid-area: side;
-  background: green;
-}
+
 .all_box {
   grid-area: content;
   background: yellow;
