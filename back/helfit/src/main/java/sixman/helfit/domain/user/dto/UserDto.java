@@ -88,12 +88,12 @@ public class UserDto {
         private String password;
     }
 
-    @AllArgsConstructor
+
     @Getter
+    @AllArgsConstructor
     public static class Response {
         private Long userId;
         private String id;
-        private String name;
         private String nickname;
         private String email;
         private String emailVerifiedYn;

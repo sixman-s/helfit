@@ -73,14 +73,14 @@ public class UserService {
     @Transactional(readOnly = true)
     public void verifyExistsUserId(String id) {
         userRepository.findById(id).ifPresent((e) -> {
-            throw new BusinessLogicException(ExceptionCode.USERS_EXISTS_ID);
+            throw new BusinessLogicException(ExceptionCode.ALREADY_EXISTS_ID);
         });
     }
 
     @Transactional(readOnly = true)
     public void verifyExistsUserEmail(String email) {
         userRepository.findById(email).ifPresent((e) -> {
-            throw new BusinessLogicException(ExceptionCode.USERS_EXISTS_EMAIL);
+            throw new BusinessLogicException(ExceptionCode.ALREADY_EXISTS_EMAIL);
         });
     }
 }
