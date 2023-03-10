@@ -8,6 +8,8 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import sixman.helfit.exception.BusinessLogicException;
+import sixman.helfit.exception.ExceptionCode;
 import sixman.helfit.security.entity.ProviderType;
 import sixman.helfit.security.entity.RoleType;
 import sixman.helfit.security.entity.UserPrincipal;
@@ -67,8 +69,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         User user = new User(
             userInfo.getId(),
             userInfo.getEmail(),
-            userInfo.getName(),
-            "",
+            userInfo.getNickname(),
             userInfo.getImageUrl(),
             null,
             null,
@@ -83,8 +84,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     }
 
     private void updateUser(User user, OAuth2UserInfo userInfo) {
-        if (userInfo.getName() != null && !user.getName().equals(userInfo.getName())) {
-            user.setName(userInfo.getName());
+        if (userInfo.getNickname() != null && !user.getNickname().equals(userInfo.getNickname())) {
+            user.setNickname(userInfo.getNickname());
         }
 
         if (userInfo.getImageUrl() != null && !user.getProfileImageUrl().equals(userInfo.getImageUrl())) {

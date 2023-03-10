@@ -1,10 +1,8 @@
 package sixman.helfit.domain.tag.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import sixman.helfit.domain.tag.dto.TagDto;
 import sixman.helfit.domain.tag.entity.Tag;
 import sixman.helfit.domain.tag.mapper.TagMapper;
@@ -14,6 +12,7 @@ import sixman.helfit.utils.UriUtil;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/tag")
@@ -27,10 +26,10 @@ public class TagController {
         this.mapper = mapper;
     }
 
-    @PostMapping
-    public ResponseEntity postTag(@Valid @RequestBody TagDto.Post requestBody) {
-        Tag tag = tagService.createTag(mapper.tagPostToTag(requestBody));
-        URI location = UriUtil.createUri(TAG_DEFAULT_URL, tag.getTagId());
-        return ResponseEntity.created(location).build();
+    @GetMapping
+    public ResponseEntity getTag(@Valid @RequestBody TagDto.Get requestBody) {
+        Tag tag = tagService.findTag(mapper.tagGetToTag(requestBody));
+
+        return new ResponseEntity<>(mapper.tagToTagResponse(tag), HttpStatus.OK);
     }
 }

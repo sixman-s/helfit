@@ -11,8 +11,7 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-@Table(name = "TAGS")
+@Entity(name = "TAGS")
 @Getter
 @Setter
 @NoArgsConstructor

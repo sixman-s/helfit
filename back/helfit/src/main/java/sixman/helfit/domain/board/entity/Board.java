@@ -12,8 +12,7 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-@Table(name = "BOARDS")
+@Entity(name = "BOARDS")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -28,19 +27,21 @@ public class Board extends Auditable {
     @Column(name = "text", length = 20000)
     private String text;
 
-    @Column(name = "image")
-    private byte[] image;
+    @Column(length = 512)
+    private String boardImageUrl;
 
-    private Long categoryId;
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 
-    @Column(name = "likes", nullable = false, columnDefinition = "int default 0")
-    private int likes;
+    @OneToMany(mappedBy = "board",cascade = CascadeType.PERSIST)
+    private Set<BoardLike> boardLikes = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name ="user_id")
     private User user;
 
-    @OneToMany(mappedBy = "board")
+    @OneToMany(mappedBy = "board",cascade = CascadeType.PERSIST)
     private Set<BoardTag> boardTags = new HashSet<>();
 
 }
