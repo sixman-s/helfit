@@ -33,6 +33,7 @@ public class CalculatorDto {
     @AllArgsConstructor
     public static class PostResponse {
         private long calculatorId;
+        private double result;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
     }

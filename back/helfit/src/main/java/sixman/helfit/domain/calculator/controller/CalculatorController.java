@@ -7,36 +7,48 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import sixman.helfit.domain.calculator.dto.CalculatorDto;
 import sixman.helfit.domain.calculator.entity.Calculator;
+import sixman.helfit.domain.calculator.enums.ActivityLevel;
+import sixman.helfit.domain.calculator.helper.CalculatorHelper;
 import sixman.helfit.domain.calculator.mapper.CalculatorMapper;
 import sixman.helfit.domain.calculator.service.CalculatorService;
+import sixman.helfit.domain.user.entity.User;
 import sixman.helfit.domain.user.service.UserService;
+import sixman.helfit.security.entity.UserPrincipal;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
 @RestController
-@RequestMapping("/api/v1/calculator")
+@RequestMapping("/api/v1/calculate")
 public class CalculatorController {
+    private static final String DEFAULT_URI = "/api/v1/calculate";
     private final CalculatorService calculatorService;
-    private final UserService userService;
     private final CalculatorMapper calculatorMapper;
 
-    public CalculatorController(CalculatorService calculatorService, UserService userService, CalculatorMapper calculatorMapper) {
+    public CalculatorController(CalculatorService calculatorService, CalculatorMapper calculatorMapper) {
         this.calculatorService = calculatorService;
-        this.userService = userService;
         this.calculatorMapper = calculatorMapper;
     }
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/{user-id}")
-    public ResponseEntity postResult(@AuthenticationPrincipal @RequestBody CalculatorDto.Post requestBody) {
-        Calculator calculator = calculatorService.createResult(calculatorMapper.calculatorPostToCalculator(requestBody)
-        ,requestBody.getActivityLevel(), requestBody.getGoal());
+    public ResponseEntity postResult(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody CalculatorDto.Post requestBody) {
+
+        Calculator calculator = calculatorService.createResult(calculatorMapper.calculatorPostToCalculator(requestBody));
+        double bmr;
+        if (userPrincipal.getUser().getGender().equals(User.Gender.MALE)) {
+            bmr = CalculatorHelper.calculateBMR_Male(userPrincipal.getUser());
+        } else {
+            bmr = CalculatorHelper.calculateBMR_Female(userPrincipal.getUser());
+        }
+        double result = CalculatorHelper.calculateResult(bmr, requestBody.getActivityLevel(), requestBody.getGoal());
+        calculator.setResult(result);
         return new ResponseEntity<>(calculatorMapper.calculatorToPostResponse(calculator), HttpStatus.CREATED);
     }
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{user-id}")
-    public ResponseEntity<CalculatorDto.GetResponse> getResult(@PathVariable("user-id") @Positive long userId) {
-        Calculator findResult = calculatorService.findUserResult(userId);
+    public ResponseEntity<CalculatorDto.GetResponse> getResult(@PathVariable("calculator-id") @Positive long calculatorId) {
+        Calculator calculator = new Calculator();
+        Calculator findResult = calculatorService.findResult(calculator.getCalculatorId());
         return new ResponseEntity<>(calculatorMapper.calculatorToGetResponse(findResult), HttpStatus.OK);
     }
     @PreAuthorize("isAuthenticated()")

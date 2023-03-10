@@ -24,25 +24,16 @@ public class CalculatorService {
         this.userService = userService;
     }
 
-    public Calculator createResult(Calculator calculator, ActivityLevel activityLevel, String goal){
-        UserPrincipal userPrincipal = new UserPrincipal();
-        double bmr;
-        if (userPrincipal.getUser().getGender().equals("male")) {
-            bmr = CalculatorHelper.calculateBMR_Male(userPrincipal.getUser());
-        } else {
-            bmr = CalculatorHelper.calculateBMR_Female(userPrincipal.getUser());
-        }
-        double result = CalculatorHelper.calculateResult(bmr, activityLevel, goal);
-        calculator.setResult(result);
+    public Calculator createResult(Calculator calculator){
 
         Calculator savedResult = calculatorRepository.save(calculator);
         return savedResult;
     }
-//    public Calculator getResult(long calculatorId){
-//        Calculator calculator = new Calculator();
-//        calculator.setCalculatorId(calculatorId);
-//        return findVerifyCalculator(calculator.getCalculatorId());
-//    }
+    public Calculator findResult(long calculatorId){
+        Calculator calculator = new Calculator();
+        calculator.setCalculatorId(calculatorId);
+        return findVerifyCalculator(calculator.getCalculatorId());
+    }
     public Calculator updateResult(Calculator calculator){
         Calculator findCalculator = findVerifyCalculator(calculator.getCalculatorId());
         Optional.ofNullable(calculator.getResult())

@@ -22,7 +22,7 @@ public class Calculator extends Auditable {
     private double result;
     @ManyToOne()
     @JoinColumn(name = "USER_ID")
-    private User userId;
+    private User user;
 
     public static void checkNotFoundUser(User user) {
         if (user == null) {
