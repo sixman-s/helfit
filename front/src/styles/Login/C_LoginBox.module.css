@@ -1,0 +1,13 @@
+.box {
+  width: 400px;
+  height: 100%;
+  background-color: white;
+  margin: 40px;
+}
+.login__form {
+  border: 1px solid black;
+  border-radius: 5px;
+  height: 35px;
+  width: 100%;
+  margin: 5px 0;
+}
