@@ -1,4 +1,4 @@
-package sixman.helfit.domain.user2.enums;
+package sixman.helfit.domain.calculator.enums;
 
 public enum ActivityLevel {
     SEDENTARY("sedentary", 1.2),

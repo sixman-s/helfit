@@ -54,6 +54,9 @@ public enum ExceptionCode {
     USERS_NOT_VALID(409, "등록되지 않은 이메일/비밀번호 입니다."),
     USERS_DOES_NOT_VERIFY_EMAIL(409, "이메일 인증이 되지 않았습니다."),
 
+    USERS_ALREADY_ASSIGNED_WITH_GOOGLE(409, "Looks like you're signed up with GOOGLE account. Please use your LOCAL account to login."),
+    CALCULATOR_NOT_FOUND(409,"결과가 존재하지 않습니다."),
+
     /*
      * # 500 Internal server error
      *
