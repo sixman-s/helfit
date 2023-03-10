@@ -1,11 +1,13 @@
-import { LNB } from '@/components/LNB';
-import { Inter } from 'next/font/google';
-const inter = Inter({ subsets: ['latin'] });
+import Layout from '@/components/MainLayout';
 
 export default function Home() {
+  const style = {
+    height: 1000,
+    background: '#ddd'
+  };
   return (
-    <div>
-      <LNB />
-    </div>
+    <Layout>
+      <h1 style={style}>contents</h1>
+    </Layout>
   );
 }
