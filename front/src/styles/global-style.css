@@ -23,7 +23,6 @@ main {
 }
 section {
   position: inherit;
-  padding: 40px 60px 40px 300px;
   width: 100%;
   min-height: 100vh;
   background-color: var(--bg_2);

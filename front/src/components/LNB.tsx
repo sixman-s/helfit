@@ -1,9 +1,8 @@
-import { useState } from 'react';
 import styles from '../styles/lnb.module.css';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-export const LNB = () => {
+const LNB = () => {
   const router = useRouter();
   const category: string[] = ['', 'Community', 'Map', 'Calender', 'Mypage'];
 
@@ -53,3 +52,5 @@ export const LNB = () => {
     </nav>
   );
 };
+
+export default LNB;
