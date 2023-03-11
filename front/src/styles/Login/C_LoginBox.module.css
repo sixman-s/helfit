@@ -52,6 +52,5 @@
 .OAuthText {
   display: flex;
   justify-content: center;
-
   color: var(--main);
 }

@@ -7,31 +7,51 @@
     'contentL  contentR'
     'contentL  contentR'
     'footer  footer';
-  background-color: blue;
-  width: 1000px;
   height: 600px;
+  background-color: #eef8ff;
 }
 .leftbox {
   grid-area: contentL;
-  background-color: yellow;
   display: flex;
+  flex-direction: column;
+  row-gap: 30px;
   justify-content: center;
   align-items: center;
-  width: 500px;
-  height: 450px;
 }
 .rightbox {
   grid-area: contentR;
-  background-color: white;
   display: flex;
+  flex-direction: column;
+  row-gap: 30px;
   justify-content: center;
   align-items: center;
-  width: 500px;
-  height: 450px;
 }
+.signup__form {
+  border: 1px solid black;
+  border-radius: 5px;
+  height: 35px;
+  width: 290px;
+  margin: 5px 0;
+}
+
 .OAuthbox {
   grid-area: footer;
 }
 .logo {
   width: 155px;
+}
+.button {
+  background-color: var(--main);
+  color: white;
+  border-radius: 10px;
+  width: 130px;
+  height: 40px;
+}
+.button:hover {
+  background-color: blue;
+  transition: 0.7s;
+}
+.signupButton {
+  grid-area: footer;
+  margin-left: 120px;
 }
