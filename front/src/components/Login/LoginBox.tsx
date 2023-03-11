@@ -12,7 +12,9 @@ type LoginForm = {
 const LoginBox = () => {
   const { register, handleSubmit } = useForm<LoginForm>();
   const router = useRouter();
-
+  const SignuphandleClick = () => {
+    router.push('/signup');
+  };
   const onSubmit = async (data: LoginForm) => {
     // TODO: 로그인 로직 구현
     if (data.userID === 'user' && data.password === 'password') {
@@ -46,11 +48,13 @@ const LoginBox = () => {
             <Btn
               className={boxstyle.button}
               text='회원가입'
-              onClick={() => console.log('Button clicked!')}
+              onClick={SignuphandleClick}
             />
-            <button type='submit' className={boxstyle.button}>
-              로그인
-            </button>
+            <Btn
+              className={boxstyle.button}
+              text='로그인'
+              onClick={() => console.log('로그인버튼을 눌렀습니다.')}
+            />
           </div>
           <div className={boxstyle.OAuth}>
             <OAuthBox />
