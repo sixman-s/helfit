@@ -37,6 +37,10 @@
   transition: 0.7s;
 }
 
+.OAuth {
+  margin-top: 40px;
+}
+
 .OAuth2 {
   display: flex;
   justify-content: center;
@@ -48,6 +52,6 @@
 .OAuthText {
   display: flex;
   justify-content: center;
-  margin-top: 40px;
+
   color: var(--main);
 }
