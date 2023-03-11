@@ -1,4 +1,6 @@
 import boxstyle from '../../styles/Login/C_LoginBox.module.css';
+import OAuthBox from './OAuth';
+import Btn from './Buttons';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 
@@ -29,22 +31,41 @@ const LoginBox = () => {
     <>
       <div className={boxstyle.box}>
         <form onSubmit={handleSubmit}>
-          <h2>아이디</h2>
-          <input
-            type='text'
-            name='userID'
-            value={userID}
-            onChange={handleUserIDChange}
-            className={boxstyle.login__form}
-          />
-          <h2>비밀번호</h2>
-          <input
-            type='password'
-            name='password'
-            value={password}
-            onChange={handlePasswordChange}
-          />
-          <button type='submit'>로그인</button>
+          <div className={boxstyle.formID}>
+            <h5>아이디</h5>
+            <input
+              type='text'
+              name='userID'
+              value={userID}
+              onChange={handleUserIDChange}
+              className={boxstyle.login__form}
+            />
+          </div>
+          <div className={boxstyle.formPassword}>
+            <h5>비밀번호</h5>
+            <input
+              type='password'
+              name='password'
+              value={password}
+              onChange={handlePasswordChange}
+              className={boxstyle.login__form}
+            />
+          </div>
+          <div className={boxstyle.buttons}>
+            <Btn
+              className={boxstyle.button}
+              text='회원가입'
+              onClick={() => console.log('Button clicked!')}
+            />
+            <Btn
+              className={boxstyle.button}
+              text='로그인'
+              onClick={() => console.log('Button clicked!')}
+            />
+          </div>
+          <div className={boxstyle.OAuth}>
+            <OAuthBox />
+          </div>
         </form>
       </div>
     </>
