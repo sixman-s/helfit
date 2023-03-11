@@ -4,6 +4,7 @@ import Btn from '../Login/Buttons';
 import { useForm } from 'react-hook-form';
 
 type SignupForm = {
+  userID: string;
   email: string;
   password: string;
   name: string;
@@ -25,7 +26,7 @@ const SignupBox = () => {
             <input
               type='text'
               placeholder='아이디'
-              {...register('email', { required: true })}
+              {...register('userID', { required: true })}
               className={style.signup__form}
             />
           </div>
