@@ -1,6 +1,6 @@
 import login from '../styles/Login/P_Login.module.css';
 import Layout from '@/components/MainLayout';
-import LoginBox from '@/components/Login/LoginBox';
+import LoginBox from '../components/Login/LoginBox';
 
 const LoginP = () => {
   return (
