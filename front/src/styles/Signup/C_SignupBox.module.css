@@ -1,0 +1,37 @@
+.container {
+  display: grid;
+  grid-template-areas:
+    'header  header'
+    'contentL  contentR'
+    'contentL  contentR'
+    'contentL  contentR'
+    'contentL  contentR'
+    'footer  footer';
+  background-color: blue;
+  width: 1000px;
+  height: 600px;
+}
+.leftbox {
+  grid-area: contentL;
+  background-color: yellow;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 500px;
+  height: 450px;
+}
+.rightbox {
+  grid-area: contentR;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 500px;
+  height: 450px;
+}
+.OAuthbox {
+  grid-area: footer;
+}
+.logo {
+  width: 155px;
+}
