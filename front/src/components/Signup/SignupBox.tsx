@@ -59,6 +59,7 @@ const SignupBox = () => {
               {...register('birthdate', { required: true })}
               className={style.signup__form}
             />
+            <h6 className={style.h6}>ex) 2000.01.01</h6>
           </div>
           <div>
             <h5>닉네임</h5>
