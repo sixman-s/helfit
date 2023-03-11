@@ -1,0 +1,53 @@
+.box {
+  width: 400px;
+  height: 100%;
+  background-color: #eef8ff;
+  margin: 40px;
+  display: flex;
+  justify-content: center;
+}
+.login__form {
+  border: 1px solid black;
+  border-radius: 5px;
+  height: 35px;
+  width: 290px;
+  margin: 5px 0;
+}
+.formID {
+  margin: 10px;
+}
+.formPassword {
+  margin: 10px;
+  padding-top: 20px;
+}
+.buttons {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 50px;
+}
+.button {
+  background-color: var(--main);
+  color: white;
+  border-radius: 10px;
+  width: 130px;
+  height: 40px;
+}
+.button:hover {
+  background-color: blue;
+  transition: 0.7s;
+}
+
+.OAuth2 {
+  display: flex;
+  justify-content: center;
+}
+.OAuthBtn {
+  margin: 20px;
+  background-color: #eef8ff;
+}
+.OAuthText {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+  color: var(--main);
+}
