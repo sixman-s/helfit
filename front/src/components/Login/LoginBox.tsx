@@ -1,26 +1,21 @@
 import boxstyle from '../../styles/Login/C_LoginBox.module.css';
 import OAuthBox from './OAuth';
 import Btn from './Buttons';
-import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 
+type LoginForm = {
+  userID: string;
+  password: string;
+};
+
 const LoginBox = () => {
-  const [userID, setUserID] = useState('');
-  const [password, setPassword] = useState('');
+  const { register, handleSubmit } = useForm<LoginForm>();
   const router = useRouter();
 
-  const handleUserIDChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUserID(event.target.value);
-  };
-
-  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.target.value);
-  };
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const onSubmit = async (data: LoginForm) => {
     // TODO: 로그인 로직 구현
-    if (userID === 'user' && password === 'password') {
+    if (data.userID === 'user' && data.password === 'password') {
       router.push('/dashboard');
     } else {
       alert('아이디 또는 비밀번호가 일치하지 않습니다.');
@@ -30,14 +25,12 @@ const LoginBox = () => {
   return (
     <>
       <div className={boxstyle.box}>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className={boxstyle.formID}>
             <h5>아이디</h5>
             <input
               type='text'
-              name='userID'
-              value={userID}
-              onChange={handleUserIDChange}
+              {...register('userID', { required: true })}
               className={boxstyle.login__form}
             />
           </div>
@@ -45,9 +38,7 @@ const LoginBox = () => {
             <h5>비밀번호</h5>
             <input
               type='password'
-              name='password'
-              value={password}
-              onChange={handlePasswordChange}
+              {...register('password', { required: true })}
               className={boxstyle.login__form}
             />
           </div>
@@ -57,11 +48,9 @@ const LoginBox = () => {
               text='회원가입'
               onClick={() => console.log('Button clicked!')}
             />
-            <Btn
-              className={boxstyle.button}
-              text='로그인'
-              onClick={() => console.log('Button clicked!')}
-            />
+            <button type='submit' className={boxstyle.button}>
+              로그인
+            </button>
           </div>
           <div className={boxstyle.OAuth}>
             <OAuthBox />
