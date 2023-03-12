@@ -27,6 +27,11 @@ public class CalendarService {
         return calendarRepository.save(calendar);
     }
 
+    @Transactional(readOnly = true)
+    public List<Calendar> findAllCalendarByUserId(Long userId) {
+        return calendarRepository.findAllByUserId(userId);
+    }
+
     public Calendar updateCalendar(Long calendarId, Calendar calendar) {
         Calendar verifiedCalendar = findVerifiedCalendar(calendarId);
 
@@ -39,11 +44,6 @@ public class CalendarService {
         Calendar verifiedCalendar = findVerifiedCalendar(calendarId);
 
         calendarRepository.delete(verifiedCalendar);
-    }
-
-    @Transactional(readOnly = true)
-    public List<Calendar> findAllCalendarByUserId(Long userId) {
-        return calendarRepository.findAllByUserId(userId);
     }
 
     @Transactional(readOnly = true)

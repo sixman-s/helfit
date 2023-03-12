@@ -22,6 +22,8 @@ public class Calendar extends Auditable {
     @Column(columnDefinition = "TEXT")
     private String content;
 
+    private Integer kcal;
+
     @Column(unique = true)
     private String recodedAt;
 

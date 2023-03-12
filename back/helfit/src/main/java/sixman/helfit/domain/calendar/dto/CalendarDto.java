@@ -17,17 +17,18 @@ public class CalendarDto {
         private String content;
 
         @NotBlank
+        private Integer kcal;
+
+        @NotBlank
         @Size(min = 8, max = 8)
         private String recodedAt;
     }
 
     @Getter
     public static class Patch {
-        @NotBlank
         private String title;
-
-        @NotBlank
         private String content;
+        private Integer kcal;
     }
 
     @Getter
@@ -36,6 +37,7 @@ public class CalendarDto {
         private Long calendarId;
         private String title;
         private String content;
+        private Integer kcal;
         private String recodedAt;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
