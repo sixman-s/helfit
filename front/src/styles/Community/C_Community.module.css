@@ -9,6 +9,7 @@
   background-color: #e6ecfc;
   border-radius: 10px;
   display: flex;
+  justify-content: space-between;
 }
 .Search_bar {
   width: 500px;
@@ -66,4 +67,16 @@
   border-top: 1px solid var(--line_1);
   margin: -1px 15px 0px 15px;
   justify-content: space-between;
+}
+.UserProfile {
+  display: flex;
+  margin-top: 3px;
+  align-items: center;
+}
+.UserPhoto {
+  width: 40px;
+  margin-right: 10px;
+}
+.UserName {
+  margin-right: 20px;
 }
