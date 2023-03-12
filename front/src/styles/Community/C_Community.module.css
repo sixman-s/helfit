@@ -1,9 +1,7 @@
 .box {
   width: 100%;
   margin: 20px;
-  background-color: white;
   flex: 1 1 40%;
-  height: 300px;
 }
 .Search_box {
   width: 100%;
@@ -13,10 +11,10 @@
   display: flex;
 }
 .Search_bar {
-  width: 400px;
+  width: 500px;
   height: 30px;
   border-radius: 10px;
-  margin-left: 80px;
+  margin-left: 20px;
   margin-top: 10px;
 }
 .SeachBtn {
@@ -39,4 +37,33 @@
 .Menubar {
   border: 1px solid var(--main) !important;
   border-radius: 10px !important;
+}
+
+.P_text {
+  background-color: #e6ecfc;
+  color: var(--main);
+  border-radius: 10px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
+.P_text_h4 {
+  margin-left: 20px;
+}
+
+.P_content {
+  margin-top: 10px;
+  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.12);
+  border-radius: 10px;
+  height: 300px;
+  display: grid;
+  grid-template-rows: (4, 1fr);
+  overflow: hidden;
+}
+.P_list {
+  display: flex;
+  align-items: center;
+  border-top: 1px solid var(--line_1);
+  margin: -1px 15px 0px 15px;
+  justify-content: space-between;
 }

@@ -2,6 +2,7 @@
   display: grid;
   margin: 0px 120px 40px 350px;
   grid-auto-flow: column;
+  grid-gap: 30px;
   grid-template-areas:
     'header  header'
     'category  category'
@@ -9,8 +10,6 @@
     'content  content'
     'content  content'
     'footer  footer';
-
-  height: 1500px;
 }
 .Searchbar {
   grid-area: header;
@@ -20,9 +19,7 @@
   grid-area: category;
 }
 .Popular {
-  background-color: blue;
   grid-area: content;
-  height: 1000px;
   display: flex;
   justify-content: center;
   align-items: center;
