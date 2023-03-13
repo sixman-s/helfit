@@ -1,11 +1,23 @@
-const examplePosts = [
+interface Post {
+  id: number;
+  title: string;
+  author: string;
+  date: string;
+  tag: string;
+  views: string;
+  content: string; // content 변수 추가
+}
+
+const examplePosts: Post[] = [
   {
     id: 1,
     title: '안녕하세요 첫 번째 글을 남기게 되었습니다.   ',
     author: '김세훈',
     date: '23.01.01',
     tag: 'Health',
-    views: '1202'
+    views: '1202',
+    content:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
   },
   {
     id: 2,
@@ -13,7 +25,9 @@ const examplePosts = [
     author: '김준희',
     date: '23.01.01',
     tag: 'Health',
-    views: '565'
+    views: '565',
+    content:
+      'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
   },
   {
     id: 3,
@@ -21,7 +35,9 @@ const examplePosts = [
     author: '윤영원',
     date: '23.01.01',
     tag: 'Health',
-    views: '402'
+    views: '402',
+    content:
+      'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
   },
   {
     id: 4,
@@ -29,7 +45,9 @@ const examplePosts = [
     author: '개똥이',
     date: '23.01.01',
     tag: 'Health',
-    views: '182'
+    views: '182',
+    content:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
   },
   {
     id: 5,
@@ -37,7 +55,9 @@ const examplePosts = [
     author: 'C.Bumstead',
     date: '23.01.01',
     tag: 'Health',
-    views: '444'
+    views: '444',
+    content:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
   },
   {
     id: 6,
@@ -45,7 +65,9 @@ const examplePosts = [
     author: '김태형',
     date: '23.01.01',
     tag: 'Health',
-    views: '2'
+    views: '2',
+    content:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
   },
   {
     id: 7,
@@ -53,7 +75,9 @@ const examplePosts = [
     author: '김지열',
     date: '23.01.01',
     tag: 'Health',
-    views: '12'
+    views: '12',
+    content:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
   },
   {
     id: 8,
@@ -61,7 +85,9 @@ const examplePosts = [
     author: '현지원',
     date: '23.01.01',
     tag: 'Health',
-    views: '102'
+    views: '102',
+    content:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
   },
   {
     id: 9,
@@ -69,7 +95,9 @@ const examplePosts = [
     author: '윤성빈',
     date: '23.01.01',
     tag: 'Health',
-    views: '122'
+    views: '122',
+    content:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
   },
   {
     id: 10,
@@ -77,7 +105,9 @@ const examplePosts = [
     author: '윤석열',
     date: '23.01.01',
     tag: 'Health',
-    views: '1202'
+    views: '1202',
+    content:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
   }
 ];
 export default examplePosts;
