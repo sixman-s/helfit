@@ -21,9 +21,11 @@ const HealthPost: React.FC<Props> = ({ posts }) => {
   return (
     <>
       <div className={style.List}>
-        <Link href={'/community/writepost'}>
-          <Btn className={style.button} text='게시글 작성' />
-        </Link>
+        <div className={style.buttonline}>
+          <Link href={'/community/writepost'}>
+            <Btn className={style.button} text='게시글 작성' />
+          </Link>
+        </div>
         <div className={style.ListHeader}>
           <div className={style.ListHeader_No}>No.</div>
           <div className={style.ListHeader_Title}>제목</div>

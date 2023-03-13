@@ -69,5 +69,9 @@
 .pagenation {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 40px;
+}
+.buttonline {
+  display: flex;
+  justify-content: flex-end;
 }
