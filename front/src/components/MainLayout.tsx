@@ -1,4 +1,4 @@
-import { LNB } from './LNB';
+import LNB from './LNB';
 
 type MainProps = {
   children: React.ReactNode;
