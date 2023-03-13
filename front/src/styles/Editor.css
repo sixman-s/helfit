@@ -1,0 +1,23 @@
+.quill {
+  background-color: white;
+  height: 230px;
+  width: 100%;
+}
+
+.ql-editor {
+  font-size: 20px;
+  border-radius: 3px;
+  background-color: white;
+  white-space: pre-wrap;
+}
+
+.ql-editor > p {
+  font-size: 13px;
+  white-space: normal;
+}
+.DropDown {
+  width: 400px;
+}
+.tagicon {
+  width: 500px;
+}
