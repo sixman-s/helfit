@@ -12,7 +12,6 @@ const LNB = () => {
     } else if (menu.includes('community')) return `/${menu.toLowerCase()}`;
     else return `/${menu.toLowerCase()}`;
   };
-  console.log('test');
   return (
     <nav className={styles.container}>
       <Link href='/'>
