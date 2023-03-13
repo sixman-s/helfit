@@ -50,7 +50,7 @@ const LNB = () => {
                       ? styles.lnbIcon_active
                       : styles.lnbIcon
                   }
-                  src={`../assets/lnb_${
+                  src={`../../assets/lnb_${
                     menu === 'Index' ? 'home' : menu.toLowerCase()
                   }_icn.svg`}
                 />
