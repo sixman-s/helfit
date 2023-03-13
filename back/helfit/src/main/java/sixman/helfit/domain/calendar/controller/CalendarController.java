@@ -10,6 +10,8 @@ import sixman.helfit.domain.calendar.dto.CalendarDto;
 import sixman.helfit.domain.calendar.entity.Calendar;
 import sixman.helfit.domain.calendar.mapper.CalendarMapper;
 import sixman.helfit.domain.calendar.service.CalendarService;
+import sixman.helfit.exception.BusinessLogicException;
+import sixman.helfit.exception.ExceptionCode;
 import sixman.helfit.response.ApiResponse;
 import sixman.helfit.security.entity.UserPrincipal;
 import sixman.helfit.utils.UriUtil;
@@ -47,10 +49,13 @@ public class CalendarController {
 
     @GetMapping("{calendar-id}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> getCalendar(@Positive @PathVariable("calendar-id") Long calendarId) {
-        Calendar verifiedCalendar = calendarService.findVerifiedCalendar(calendarId);
+    public ResponseEntity<?> getCalendar(
+        @Positive @PathVariable("calendar-id") Long calendarId,
+        @AuthenticationPrincipal UserPrincipal userPrincipal
+    ) {
+        Calendar verifiedCalendarWithUserId = calendarService.findVerifiedCalendarWithUserId(calendarId, userPrincipal.getUser().getUserId());
 
-        CalendarDto.Response response = calendarMapper.calendarToCalendarDtoResponse(verifiedCalendar);
+        CalendarDto.Response response = calendarMapper.calendarToCalendarDtoResponse(verifiedCalendarWithUserId);
 
         return ResponseEntity.ok().body(ApiResponse.ok("data", response));
     }
@@ -69,9 +74,15 @@ public class CalendarController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> updateCalendar(
         @Positive @PathVariable("calendar-id") Long calendarId,
-        @RequestBody CalendarDto.Patch requestBody
+        @RequestBody CalendarDto.Patch requestBody,
+        @AuthenticationPrincipal UserPrincipal userPrincipal
     ) {
-        Calendar calendar = calendarService.updateCalendar(calendarId, calendarMapper.calendarDtoPatchToCalendar(requestBody));
+        Calendar verifiedCalendarWithUserId = calendarService.findVerifiedCalendarWithUserId(calendarId, userPrincipal.getUser().getUserId());
+
+        Calendar calendar = calendarService.updateCalendar(
+            calendarMapper.calendarDtoPatchToCalendar(requestBody),
+            verifiedCalendarWithUserId
+            );
 
         CalendarDto.Response response = calendarMapper.calendarToCalendarDtoResponse(calendar);
 
@@ -80,10 +91,13 @@ public class CalendarController {
 
     @DeleteMapping("{calendar-id}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> updateCalendar(
-        @Positive @PathVariable("calendar-id") Long calendarId
+    public ResponseEntity<?> deleteCalendar(
+        @Positive @PathVariable("calendar-id") Long calendarId,
+        @AuthenticationPrincipal UserPrincipal userPrincipal
     ) {
-        calendarService.deleteCalendar(calendarId);
+        Calendar verifiedCalendarWithUserId = calendarService.findVerifiedCalendarWithUserId(calendarId, userPrincipal.getUser().getUserId());
+
+        calendarService.deleteCalendar(verifiedCalendarWithUserId);
 
         return ResponseEntity.noContent().build();
     }

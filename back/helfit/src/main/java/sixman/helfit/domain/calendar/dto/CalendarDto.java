@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
@@ -16,7 +17,7 @@ public class CalendarDto {
         @NotBlank
         private String content;
 
-        @NotBlank
+        @Positive
         private Integer kcal;
 
         @NotBlank

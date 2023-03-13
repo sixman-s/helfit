@@ -32,17 +32,13 @@ public class CalendarService {
         return calendarRepository.findAllByUserId(userId);
     }
 
-    public Calendar updateCalendar(Long calendarId, Calendar calendar) {
-        Calendar verifiedCalendar = findVerifiedCalendar(calendarId);
-
-        Calendar updatedCalendar = customBeanUtil.copyNonNullProperties(calendar, verifiedCalendar);
+    public Calendar updateCalendar(Calendar requestCalendar, Calendar verifiedCalendar) {
+        Calendar updatedCalendar = customBeanUtil.copyNonNullProperties(requestCalendar, verifiedCalendar);
 
         return calendarRepository.save(updatedCalendar);
     }
 
-    public void deleteCalendar(Long calendarId) {
-        Calendar verifiedCalendar = findVerifiedCalendar(calendarId);
-
+    public void deleteCalendar(Calendar verifiedCalendar) {
         calendarRepository.delete(verifiedCalendar);
     }
 
@@ -51,6 +47,18 @@ public class CalendarService {
         Optional<Calendar> byCalendarId = calendarRepository.findByCalendarId(calendarId);
 
         return byCalendarId.orElseThrow(() -> new BusinessLogicException(ExceptionCode.NOT_FOUND));
+    }
+
+    @Transactional(readOnly = true)
+    public Calendar findVerifiedCalendarWithUserId(Long calendarId, Long userId) {
+        Optional<Calendar> byCalendarId = calendarRepository.findByCalendarId(calendarId);
+
+        Calendar calendar = byCalendarId.orElseThrow(() -> new BusinessLogicException(ExceptionCode.NOT_FOUND));
+
+        if (!calendar.getUser().getUserId().equals(userId))
+            throw new BusinessLogicException(ExceptionCode.ACCESS_DENIED);
+
+        return calendar;
     }
 
     @Transactional(readOnly = true)
