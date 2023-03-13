@@ -60,7 +60,7 @@
   border-right: 1px solid var(--line_2);
   margin: 0px !important;
   font-size: var(--h6) !important;
-  padding: 20px 20px;
+  padding: 2.5vh 1.85vw;
 }
 
 .react-datepicker__day-name:last-child,

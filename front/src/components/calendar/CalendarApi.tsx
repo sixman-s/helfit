@@ -1,7 +1,13 @@
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
-const CalenderApi = ({ setDate, date, open, setOpen }) => {
+type Props = {
+  setDate: React.Dispatch<React.SetStateAction<Date>>;
+  date: Date;
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
+const CalendarApi = ({ setDate, date, open, setOpen }: Props) => {
   return (
     <DatePicker
       inline
@@ -9,6 +15,7 @@ const CalenderApi = ({ setDate, date, open, setOpen }) => {
       selected={date}
       maxDate={new Date()}
       onChange={(date) => {
+        console.log(date);
         setDate(date);
         setOpen(true);
       }}
@@ -18,4 +25,4 @@ const CalenderApi = ({ setDate, date, open, setOpen }) => {
     />
   );
 };
-export default CalenderApi;
+export default CalendarApi;

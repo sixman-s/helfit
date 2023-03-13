@@ -4,6 +4,7 @@
   align-items: flex-end;
   justify-content: space-between;
   max-width: 750px;
+  margin-bottom: 40px;
 }
 
 .h3 {
@@ -11,6 +12,7 @@
   font-weight: 500;
   line-height: 48px;
   color: var(--text_1);
+  margin-bottom: 0px;
 }
 
 .username {
@@ -32,7 +34,7 @@
 }
 
 .chartContainer .chart:first-child {
-  margin-left: 0px;
+  margin-right: 10px !important;
 }
 .chart {
   width: 370px;
@@ -41,8 +43,7 @@
   box-shadow: 0px 4px 6px rgba(15, 73, 166, 0.08);
   border-radius: 30px;
   padding: 20px 32px;
-  margin-top: 40px;
-  margin-left: 10px;
+  margin: 0px !important;
 }
 
 .chartInfo {

@@ -1,0 +1,27 @@
+.Container {
+  display: grid;
+  margin: 0px 120px 40px 350px;
+  grid-auto-flow: column;
+  grid-gap: 30px;
+  grid-template-areas:
+    'header  header'
+    'category  category'
+    'content  content'
+    'content  content'
+    'content  content'
+    'footer  footer';
+}
+.Searchbar {
+  grid-area: header;
+  margin-top: 40px;
+}
+.Category {
+  grid-area: category;
+}
+.Popular {
+  grid-area: content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}

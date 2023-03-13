@@ -5,4 +5,12 @@
   row-gap: 20px;
   column-gap: 20px;
   padding: 40px 60px 40px 300px;
+  grid-area: auto;
+}
+
+@media screen and (max-width: 1440px) {
+  .container {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(4, 1fr);
+  }
 }

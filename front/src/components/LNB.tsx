@@ -4,18 +4,41 @@ import { useRouter } from 'next/router';
 
 const LNB = () => {
   const router = useRouter();
-  const category: string[] = ['', 'Community', 'Map', 'Calender', 'Mypage'];
+  const category: string[] = [
+    'Index',
+    'Community',
+    'Map',
+    'Calendar',
+    'Mypage'
+  ];
 
   const linkPath = (menu: string) => {
-    if (menu === '') {
+    if (menu === 'Index') {
       return '/';
-    } else if (menu.includes('community')) return `/${menu.toLowerCase()}`;
-    else return `/${menu.toLowerCase()}`;
+    } else if (menu.includes('Community')) {
+      return `/${menu.toLowerCase()}`;
+    } else return `/${menu.toLowerCase()}`;
+  };
+
+  const menuActive = (menu: string) => {
+    const path = router.pathname;
+    if (menu === 'index' && path === '/') {
+      console.log(menu, path);
+      return true;
+    } else if (path === `/${menu}` || path.includes(`/${menu}`)) {
+      console.log(menu, path);
+      return true;
+    } else {
+      console.log(menu, path);
+      return false;
+    }
   };
 
   return (
     <nav className={styles.container}>
-      <img className={styles.logo} src={'../assets/logo.svg'} />
+      <Link href='/'>
+        <img className={styles.logo} src={'../../assets/logo.svg'} />
+      </Link>
       <ul className={styles.manuUl}>
         {category.map((menu: string, key: number) => {
           return (
@@ -23,12 +46,12 @@ const LNB = () => {
               <Link className={styles.manu} href={linkPath(menu)}>
                 <img
                   className={
-                    router.pathname === `/${menu.toLowerCase()}`
+                    menuActive(menu.toLowerCase())
                       ? styles.lnbIcon_active
                       : styles.lnbIcon
                   }
-                  src={`../assets/lnb_${
-                    menu === '' ? 'home' : menu.toLowerCase()
+                  src={`../../assets/lnb_${
+                    menu === 'Index' ? 'home' : menu.toLowerCase()
                   }_icn.svg`}
                 />
                 <span
@@ -38,14 +61,17 @@ const LNB = () => {
                       : styles.lnbFont
                   }
                 >
-                  {menu === '' ? 'Home' : menu}
+                  {menu === 'Index' ? 'Home' : menu}
                 </span>
               </Link>
             </li>
           );
         })}
         <li className={styles.manu}>
-          <img src='../assets/lnb_lnout_icn.svg' className={styles.lnbIcon} />
+          <img
+            src='../../assets/lnb_lnout_icn.svg'
+            className={styles.lnbIcon}
+          />
           <span className={styles.lnbFont}>{'logout'}</span>
         </li>
       </ul>

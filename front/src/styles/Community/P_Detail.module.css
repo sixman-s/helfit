@@ -1,0 +1,93 @@
+.container {
+  margin: 0px 120px 40px 320px;
+  display: grid;
+}
+.box {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  background-color: white;
+  height: 800px;
+  border-radius: 15px;
+  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.12);
+}
+.allInput {
+  margin: 30px;
+  display: grid;
+  grid-row-gap: 20px;
+}
+.UserProfile {
+  display: flex;
+  margin-top: 3px;
+  align-items: center;
+  justify-content: flex-end;
+}
+.UserPhoto {
+  width: 40px;
+  margin-right: 8px;
+}
+.UserName {
+  margin-right: 20px;
+  color: var(--main);
+  font-weight: bold;
+  font-size: var(--h6);
+}
+.Category {
+  color: var(--main);
+  font-weight: bold;
+}
+.Title {
+  font-size: var(--h1);
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.PostNav {
+  display: flex;
+  justify-content: space-between;
+  width: 400px;
+  color: var(--text_4);
+  font-size: 12px;
+}
+.Content {
+  width: 100%;
+
+  padding-top: 20px;
+  border-top: 1px solid var(--line_2);
+
+  display: flex;
+  justify-content: space-between;
+}
+.Content_Img {
+  width: 250px;
+  height: 250px;
+}
+.CommentWrite {
+  display: flex;
+  border-top: 1px solid var(--line_2);
+  padding-top: 20px;
+}
+.CommnetSVG {
+  display: flex;
+  width: 100px;
+}
+.CommnetText {
+  margin-top: 6px;
+  margin-left: 6px;
+  color: var(--text_4);
+}
+.CommentWriteBox {
+  width: 500px;
+  height: 30px;
+  border: 1px solid var(--line_1);
+  margin-left: 40px;
+  margin-right: 10px;
+}
+.Commnet {
+  border-top: 1px solid var(--line_2);
+}
+.PostLike {
+  display: flex;
+}
+.PostLikeSVG {
+  margin-right: 5px;
+  margin-top: -3px;
+}
