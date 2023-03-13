@@ -14,6 +14,7 @@
 
 .ListItem {
   margin-top: 40px;
+  color: black;
   display: grid;
   grid-template-areas:
     'No title title author date tag tag views'

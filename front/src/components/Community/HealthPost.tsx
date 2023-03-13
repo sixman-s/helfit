@@ -37,14 +37,16 @@ const HealthPost: React.FC<Props> = ({ posts }) => {
         <div className={style.ListBody}>
           <ul>
             {posts.map((post) => (
-              <li key={post.id} className={style.ListItem}>
-                <div className={style.No}>{post.id}.</div>
-                <div className={style.title}>{post.title}</div>
-                <div className={style.author}>{post.author}</div>
-                <div className={style.date}>{post.date}</div>
-                <div className={style.tag}>{post.tag}</div>
-                <div className={style.views}>{post.views}</div>
-              </li>
+              <Link href={`/community/health/${post.id}`} key={post.id}>
+                <li className={style.ListItem}>
+                  <div className={style.No}>{post.id}.</div>
+                  <div className={style.title}>{post.title}</div>
+                  <div className={style.author}>{post.author}</div>
+                  <div className={style.date}>{post.date}</div>
+                  <div className={style.tag}>{post.tag}</div>
+                  <div className={style.views}>{post.views}</div>
+                </li>
+              </Link>
             ))}
           </ul>
         </div>
