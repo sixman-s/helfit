@@ -5,10 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import sixman.helfit.domain.comment.entity.Comment;
 import sixman.helfit.security.entity.ProviderType;
 import sixman.helfit.security.entity.RoleType;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -94,4 +97,7 @@ public class User {
         FEMALE,
         ;
     }
+
+    @OneToMany(mappedBy = "user")
+    private List<Comment> comments = new ArrayList<>();
 }

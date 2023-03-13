@@ -6,11 +6,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import sixman.helfit.audit.Auditable;
+import sixman.helfit.domain.category.entity.Category;
+import sixman.helfit.domain.comment.entity.Comment;
 import sixman.helfit.domain.user.entity.User;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity(name = "BOARDS")
 @Getter
@@ -35,13 +36,18 @@ public class Board extends Auditable {
     private Category category;
 
     @OneToMany(mappedBy = "board",cascade = CascadeType.PERSIST)
-    private Set<BoardLike> boardLikes = new HashSet<>();
+    private List<BoardLike> boardLikes = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name ="user_id")
     private User user;
 
     @OneToMany(mappedBy = "board",cascade = CascadeType.PERSIST)
-    private Set<BoardTag> boardTags = new HashSet<>();
+    private List<BoardTag> boardTags = new ArrayList<>();
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.PERSIST)
+    private List<Comment> comments = new ArrayList<>();
+
+
 
 }

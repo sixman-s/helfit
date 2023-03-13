@@ -27,12 +27,16 @@ public class BoardLike {
 
     public void addBoard(Board board){
         this.board = board;
-        board.getBoardLikes().add(this);
+        if(!this.board.getBoardLikes().contains(this)){
+            this.board.getBoardLikes().add(this);
+        }
     }
 
     public void addLike(Like like){
         this.like = like;
-        like.getBoardLikes().add(this);
+        if(!this.like.getBoardLikes().contains(this)) {
+            this.like.getBoardLikes().add(this);
+        }
     }
 
 }
