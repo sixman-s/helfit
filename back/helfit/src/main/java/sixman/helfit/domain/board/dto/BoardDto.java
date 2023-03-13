@@ -2,6 +2,7 @@ package sixman.helfit.domain.board.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.lang.Nullable;
 import sixman.helfit.global.annotations.NoKoreanCurseWords;
 
@@ -9,6 +10,8 @@ import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 public class BoardDto {
@@ -30,15 +33,8 @@ public class BoardDto {
         @Nullable
         private String boardImageUrl;
 
-        @NotNull
-        @Positive
-        private Long categoryId;
-
-        @NotNull
-        @Size(min = 1, max=64)
-        private String userId;
-
-        private Set<String> tagNames;
+        @Nullable
+        private List<BoardTagDto> boardTags;
 
     }
 }

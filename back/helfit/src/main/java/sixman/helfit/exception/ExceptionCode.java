@@ -31,6 +31,7 @@ public enum ExceptionCode {
      * # 404 NOT_FOUND
      *
      */
+    CATEGORY_NOT_FOUNT(404,"카테고리가 존재하지 않습니다."),
 
     /*
      * # 405 METHOD NOT ALLOWED
@@ -56,6 +57,7 @@ public enum ExceptionCode {
 
     USERS_ALREADY_ASSIGNED_WITH_GOOGLE(409, "Looks like you're signed up with GOOGLE account. Please use your LOCAL account to login."),
     CALCULATOR_NOT_FOUND(409,"결과가 존재하지 않습니다."),
+
 
     /*
      * # 500 Internal server error

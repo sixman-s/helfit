@@ -23,11 +23,13 @@ public class Comment extends Auditable {
     @Column(nullable = false, length = 20000)
     private String commentBody;
 
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(name ="user_id")
+    private User user;
 
-    private Long boardId;
-
-    private Long categoryId;
+    @ManyToOne
+    @JoinColumn(name ="board_id")
+    private Board board;
 
 
 }

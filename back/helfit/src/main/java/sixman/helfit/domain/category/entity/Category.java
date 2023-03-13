@@ -1,12 +1,15 @@
-package sixman.helfit.domain.board.entity;
+package sixman.helfit.domain.category.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import sixman.helfit.domain.board.entity.Board;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity(name = "CATEGORIES")
@@ -23,6 +26,12 @@ public class Category {
     private String categoryName;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.PERSIST)
-    private Set<Board> boards = new HashSet<>();
+    private List<Board> boards = new ArrayList<>();
+
+    public void addBoard(Board board){
+        if(!this.boards.contains(board)){
+            this.boards.add(board);
+        }
+    }
 
 }
