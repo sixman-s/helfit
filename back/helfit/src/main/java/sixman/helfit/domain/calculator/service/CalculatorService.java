@@ -21,38 +21,42 @@ public class CalculatorService {
         this.userService = userService;
     }
 
-    public Calculator createResult(Calculator calculator){
+    public Calculator createResult(Calculator calculator) {
 
         Calculator savedResult = calculatorRepository.save(calculator);
         return savedResult;
     }
-//    public Calculator findResult(Long calculatorId){
+
+    //    public Calculator findResult(Long calculatorId){
 //        Calculator calculator = new Calculator();
 //        calculator.setCalculatorId(calculatorId);
 //        return findVerifyCalculator(calculator.getCalculatorId());
 //    }
-    public Calculator updateResult(Long userId){
+    public Calculator updateResult(Long userId) {
         Calculator findCalculator = findUserResult(userId);
         Optional.ofNullable(findCalculator.getResult())
                 .ifPresent(result -> findCalculator.setResult(result));
         return calculatorRepository.save(findCalculator);
     }
-    public void deleteResult(Long calculatorId){
+
+    public void deleteResult(Long calculatorId) {
         Calculator findResult = findVerifyCalculator(calculatorId);
         calculatorRepository.delete(findResult);
-        }
-    private Calculator findVerifyCalculator(Long calculatorId){
+    }
+
+    private Calculator findVerifyCalculator(Long calculatorId) {
         Optional<Calculator> optionalCalculator =
                 calculatorRepository.findById(calculatorId);
         return optionalCalculator.orElseThrow(() ->
-        new BusinessLogicException(ExceptionCode.CALCULATOR_NOT_FOUND));
+                new BusinessLogicException(ExceptionCode.CALCULATOR_NOT_FOUND));
     }
-//    public Calculator findUserResult(Long userId){
+
+    //    public Calculator findUserResult(Long userId){
 //        User findUser = userService.findVerifiedUserByUserId(userId);
 //        return calculatorRepository.findByUser(findUser);
 //    }
     public Calculator findUserResult(Long userId) {
-    // userId에 해당하는 사용자의 최신 계산 결과를 조회.
+        // userId에 해당하는 사용자의 최신 계산 결과를 조회.
         Optional<Calculator> optionalCalculator = calculatorRepository.findFirstByUserIdOrderByModifiedAtDesc(userId);
         if (optionalCalculator.isPresent()) {
             Calculator calculator = optionalCalculator.get();
@@ -60,6 +64,9 @@ public class CalculatorService {
         } else {
             throw new NotFoundException("해당 사용자의 계산 결과를 찾을 수 없습니다.");
         }
+//    public Calculator findUserResult(long userId){
+//        User findUser = userService.findUserByUserId(userId);
+//        return calculatorRepository.findByUser(findUser);
+//    }
     }
-
 }
