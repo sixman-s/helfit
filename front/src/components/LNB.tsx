@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 
 const LNB = () => {
   const router = useRouter();
-  const category: string[] = ['', 'Community', 'Map', 'Calender', 'Mypage'];
+  const category: string[] = ['', 'Community', 'Map', 'Calendar', 'Mypage'];
 
   const linkPath = (menu: string) => {
     if (menu === '') {
@@ -15,7 +15,9 @@ const LNB = () => {
 
   return (
     <nav className={styles.container}>
-      <img className={styles.logo} src={'assets/logo.svg'} />
+      <Link href='/'>
+        <img className={styles.logo} src={'assets/logo.svg'} />
+      </Link>
       <ul className={styles.manuUl}>
         {category.map((menu: string, key: number) => {
           return (

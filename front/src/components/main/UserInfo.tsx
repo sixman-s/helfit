@@ -12,7 +12,7 @@ const UserInfo = () => {
           핏한 하루 되셨나요?
         </h3>
         <Link href='/mypage'>
-          <button className={styled.Btn}>my page</button>
+          <button className={styled.Btn}>Mypage</button>
         </Link>
       </header>
       <div className={styled.chartContainer}>

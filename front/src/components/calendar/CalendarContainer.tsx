@@ -1,19 +1,19 @@
-import styled from '../../styles/calender/C_calenderContainer.module.css';
-import CalenderApi from '@/components/calender/CalenderApi';
-import ReaderPop from './CalenderPop';
+import styled from '../../styles/calendar/C_calendarContainer.module.css';
+import CalendarApi from './CalendarApi';
+import ReaderPop from './CalendarPop';
 import { useState } from 'react';
 
-const CalenderContainer = () => {
+const CalendarContainer = () => {
   const [open, setOpen] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
   //aa
   return (
     <article className={styled.article}>
       <header className={styled.header}>
-        <h1 className={styled.h1}>Calender</h1>
+        <h1 className={styled.h1}>Calendar</h1>
       </header>
       <figure className={styled.figure}>
-        <CalenderApi
+        <CalendarApi
           setDate={setStartDate}
           date={startDate}
           open={open}
@@ -25,4 +25,4 @@ const CalenderContainer = () => {
   );
 };
 
-export default CalenderContainer;
+export default CalendarContainer;
