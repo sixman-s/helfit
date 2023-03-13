@@ -39,8 +39,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.net.URI;
 import java.util.Date;
-import java.util.List;
-import java.util.Objects;
 
 @Slf4j
 @RestController
@@ -194,7 +192,7 @@ public class UserController {
     @GetMapping("{user-id}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> getUser(@Positive @PathVariable("user-id") Long userId) {
-        User user = userService.findVerifiedUserByUserId(userId);
+        User user = userService.findUserByUserId(userId);
 
         return ResponseEntity.ok().body(ApiResponse.ok("data", user));
     }

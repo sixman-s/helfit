@@ -2,16 +2,11 @@ package sixman.helfit.domain.calculator.service;
 
 import org.springframework.stereotype.Service;
 import sixman.helfit.domain.calculator.entity.Calculator;
-import sixman.helfit.domain.calculator.enums.ActivityLevel;
-import sixman.helfit.domain.calculator.helper.CalculatorHelper;
-import sixman.helfit.domain.calculator.mapper.CalculatorMapper;
 import sixman.helfit.domain.calculator.repository.CalculatorRepository;
 import sixman.helfit.domain.user.entity.User;
-import sixman.helfit.domain.user.repository.UserRepository;
 import sixman.helfit.domain.user.service.UserService;
 import sixman.helfit.exception.BusinessLogicException;
 import sixman.helfit.exception.ExceptionCode;
-import sixman.helfit.security.entity.UserPrincipal;
 
 import java.util.Optional;
 
@@ -51,7 +46,7 @@ public class CalculatorService {
         new BusinessLogicException(ExceptionCode.CALCULATOR_NOT_FOUND));
     }
     public Calculator findUserResult(long userId){
-        User findUser = userService.findVerifiedUserByUserId(userId);
+        User findUser = userService.findUserByUserId(userId);
         return calculatorRepository.findByUser(findUser);
     }
 }
