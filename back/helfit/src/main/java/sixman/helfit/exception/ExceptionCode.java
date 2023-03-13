@@ -12,6 +12,7 @@ public enum ExceptionCode {
     INVALID_CREDENTIAL_VALUE(400, "잘못된 인증 정보입니다."),
     INVALID_ACCESS_TOKEN(400, "잘못된 토큰입니다."),
     INVALID_REFRESH_TOKEN(400, "잘못된 리프레쉬 토큰입니다."),
+
     NOT_EXPIRED_TOKEN_YET(400, "만료되지 않은 토큰입니다."),
     NOT_CHANGED_PASSWORD(400, "최근 사용한 비밀번호입니다. 다른 비밀번호를 선택해 주세요."),
 
@@ -31,7 +32,12 @@ public enum ExceptionCode {
      * # 404 NOT_FOUND
      *
      */
+
     CATEGORY_NOT_FOUNT(404,"카테고리가 존재하지 않습니다."),
+    NOT_FOUND(404,"결과가 존재하지 않습니다."),
+    USERS_NOT_FOUND(404, "등록되지 않은 사용자입니다."),
+    CALCULATOR_NOT_FOUND(404,"결과가 존재하지 않습니다."),
+
 
     /*
      * # 405 METHOD NOT ALLOWED
@@ -49,14 +55,9 @@ public enum ExceptionCode {
      * # 409 CONFLICT
      *
      */
-    USERS_EXISTS_ID(409,"이미 등록된 'ID' 정보가 존재합니다."),
-    USERS_EXISTS_EMAIL(409,"이미 등록된 'EMAIL' 정보가 존재합니다."),
-    USERS_NOT_FOUND(409, "등록되지 않은 사용자입니다."),
-    USERS_NOT_VALID(409, "등록되지 않은 이메일/비밀번호 입니다."),
-    USERS_DOES_NOT_VERIFY_EMAIL(409, "이메일 인증이 되지 않았습니다."),
-
-    USERS_ALREADY_ASSIGNED_WITH_GOOGLE(409, "Looks like you're signed up with GOOGLE account. Please use your LOCAL account to login."),
-    CALCULATOR_NOT_FOUND(409,"결과가 존재하지 않습니다."),
+    ALREADY_EXISTS_INFORMATION(409, "이미 등록된 정보가 존재합니다."),
+    ALREADY_EXISTS_ID(409,"이미 등록된 'ID' 정보가 존재합니다."),
+    ALREADY_EXISTS_EMAIL(409,"이미 등록된 'EMAIL' 정보가 존재합니다."),
 
 
     /*
