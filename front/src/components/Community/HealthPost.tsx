@@ -1,6 +1,7 @@
 import React from 'react';
-import style from '../../styles/Community/C_HealthPost.module.css';
+import style from '../../styles/Community/C_Post.module.css';
 import Btn from '../Login/Buttons';
+import Pagenation from './C_Community/Pagenation';
 
 type Post = {
   id: number;
@@ -44,6 +45,9 @@ const HealthPost: React.FC<Props> = ({ posts }) => (
             </li>
           ))}
         </ul>
+      </div>
+      <div className={style.pagenation}>
+        <Pagenation />
       </div>
     </div>
   </>
