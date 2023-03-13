@@ -1,9 +1,16 @@
 import Layout from '@/components/MainLayout';
+import style from '../../../styles/Community/P_Detail.module.css';
+import DetailP from '@/components/Community/DetailP';
+
 const DetailPage = () => {
   return (
     <>
       <Layout>
-        <div>디테일 페이지 입니다.</div>
+        <div className={style.container}>
+          <div className={style.box}>
+            <DetailP />
+          </div>
+        </div>
       </Layout>
     </>
   );
