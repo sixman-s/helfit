@@ -6,6 +6,17 @@
   width: 444px;
   background: white;
   box-shadow: -6px 0px 20px rgba(15, 73, 166, 0.06);
+  animation: mySlide 0.2s ease-in-out;
+}
+@keyframes mySlide {
+  from {
+    right: -100px;
+    opacity: 0;
+  }
+  to {
+    right: 0;
+    opacity: 1;
+  }
 }
 
 .disable {
@@ -26,6 +37,7 @@
   text-align: center;
   line-height: 14px;
 }
+
 .closeBtn:hover {
   background: var(--bg_1);
 }

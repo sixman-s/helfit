@@ -1,11 +1,15 @@
-import styled from '../../styles/calender/C_calenderPop.module.css';
+import styled from '../../styles/calendar/C_calendarPop.module.css';
 import { useState } from 'react';
 
 const ReaderPop = ({ date, open, setOpen }) => {
   const [title, setTitle] = useState('');
-  let year = date.getFullYear().toString();
-  let month = (+date.getMonth() + 1).toString().padStart(2, '0');
-  let day = date.getDate().toString().padStart(2, '0');
+
+  const DateView = (current: Date) => {
+    let year = current.getFullYear().toString();
+    let month = (+current.getMonth() + 1).toString().padStart(2, '0');
+    let day = current.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
 
   return (
     <section className={open ? styled.article : styled.disable}>
@@ -24,14 +28,17 @@ const ReaderPop = ({ date, open, setOpen }) => {
         <ul className={styled.infoUl}>
           <li className={styled.infoLi}>
             <picture className={styled.cate}>
-              <img className={styled.icon} src='/assets/lnb_calender_icn.svg' />
+              <img className={styled.icon} src='/assets/lnb_calendar_icn.svg' />
               <label className={styled.label}>날짜</label>
             </picture>
-            <p className={styled.innerText}>{`${year}.${month}.${day}`}</p>
+            <p className={styled.innerText}>{DateView(date)}</p>
           </li>
           <li className={styled.infoLi}>
             <picture className={styled.cate}>
-              <img className={styled.icon} src='/assets/cal_icn.svg' />
+              <img
+                className={styled.icon}
+                src='/assets/calendarP/cal_icn.svg'
+              />
               <label className={styled.label}>칼로리</label>
             </picture>
             <p className={styled.innerText}>
