@@ -37,7 +37,7 @@ const LNB = () => {
   return (
     <nav className={styles.container}>
       <Link href='/'>
-        <img className={styles.logo} src={'../assets/logo.svg'} />
+        <img className={styles.logo} src={'../../assets/logo.svg'} />
       </Link>
       <ul className={styles.manuUl}>
         {category.map((menu: string, key: number) => {
@@ -51,7 +51,7 @@ const LNB = () => {
                       : styles.lnbIcon
                   }
                   src={`../assets/lnb_${
-                    menu === 'Index' ? 'home' : menu.toLowerCase()
+                    menu === '' ? 'home' : menu.toLowerCase()
                   }_icn.svg`}
                 />
                 <span
@@ -68,7 +68,10 @@ const LNB = () => {
           );
         })}
         <li className={styles.manu}>
-          <img src='../assets/lnb_lnout_icn.svg' className={styles.lnbIcon} />
+          <img
+            src='../../assets/lnb_lnout_icn.svg'
+            className={styles.lnbIcon}
+          />
           <span className={styles.lnbFont}>{'logout'}</span>
         </li>
       </ul>
