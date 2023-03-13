@@ -50,6 +50,8 @@
 .title::placeholder {
   color: #d5d9e1;
 }
+
+.calInput:focus,
 .memo:focus,
 .title:focus {
   outline: none;
@@ -82,10 +84,22 @@
   color: #c4cad5;
   margin-left: 6px;
 }
+.calInput,
 .memo,
 .innerText {
   font-size: 14px;
   color: var(--text_4);
+}
+
+.calInput {
+  width: auto;
+  text-align: end;
+  margin-right: 4px;
+}
+
+.calInput::-webkit-outer-spin-button,
+.calInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
 }
 
 .memoLi {

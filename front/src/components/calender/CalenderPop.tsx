@@ -1,4 +1,4 @@
-import styled from '../../styles/calender/C_calenderReadPop.module.css';
+import styled from '../../styles/calender/C_calenderPop.module.css';
 import { useState } from 'react';
 
 const ReaderPop = ({ date, open, setOpen }) => {
@@ -35,7 +35,11 @@ const ReaderPop = ({ date, open, setOpen }) => {
               <label className={styled.label}>칼로리</label>
             </picture>
             <p className={styled.innerText}>
-              <input type='number' placeholder='0' />
+              <input
+                type='number'
+                className={styled.calInput}
+                placeholder='0'
+              />
               kcal
             </p>
           </li>
