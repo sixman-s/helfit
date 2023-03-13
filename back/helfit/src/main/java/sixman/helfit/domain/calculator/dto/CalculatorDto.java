@@ -4,10 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import sixman.helfit.domain.calculator.enums.ActivityLevel;
+import sixman.helfit.domain.user.controller.UserController;
+import sixman.helfit.security.entity.UserPrincipal;
 
 import java.time.LocalDateTime;
 
 public class CalculatorDto {
+    UserPrincipal userPrincipal = new UserPrincipal();
     @Getter
     @Setter
     public static class Post{
@@ -17,7 +20,7 @@ public class CalculatorDto {
     @Getter
     @AllArgsConstructor
     public static class Patch{
-        private long calculatorId;
+        private Long calculatorId;
         private double result;
 
         public void setCalculatorId(long calculatorId){ this.calculatorId = calculatorId;}
@@ -32,8 +35,9 @@ public class CalculatorDto {
     @Getter
     @AllArgsConstructor
     public static class PostResponse {
-        private long calculatorId;
+        private Long calculatorId;
         private double result;
+        private Long userId;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
     }
@@ -45,3 +49,5 @@ public class CalculatorDto {
         private LocalDateTime modifiedAt;
     }
 }
+
+

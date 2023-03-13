@@ -17,7 +17,7 @@ import javax.persistence.*;
 public class Calculator extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long calculatorId;
+    private Long calculatorId;
     @Column
     private double result;
     @ManyToOne()
