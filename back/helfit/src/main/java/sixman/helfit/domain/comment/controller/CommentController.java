@@ -24,14 +24,9 @@ public class CommentController {
         this.mapper = mapper;
     }
     @PostMapping("/{category-id}/{user-id}/{board-id}")
-    public ResponseEntity postComment(@PathVariable("category-id") @Positive long categoryId,
-                                      @PathVariable("user-id") @Positive long userId,
-                                      @PathVariable("board-id") @Positive long boardId,
-                                      @Valid @RequestBody CommentDto.Post requestBody){
+    public ResponseEntity postComment(@Valid @RequestBody CommentDto.Post requestBody){
         Comment comment = mapper.commentPostToComment(requestBody);
-        comment.setBoardId(boardId);
-        comment.setCategoryId(categoryId);
-        comment.setUserId(userId);
+
 
         return new ResponseEntity(comment, HttpStatus.CREATED);
     }
