@@ -5,7 +5,7 @@ import style from '../../styles/Community/C_Community.module.css';
 const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [userProfile, setUserProfile] = useState(
-    '/assets/Community/UserProfile.svg'
+    '../assets/Community/UserProfile.svg'
   );
   const [userName, setUserName] = useState('User');
 
@@ -46,7 +46,7 @@ const SearchBar = () => {
             onKeyDown={handleKeyDown}
           />
           <button type='submit' className={style.SeachBtn}>
-            <img src='assets/Community/Search.svg' />
+            <img src='../assets/Community/Search.svg' />
           </button>
         </form>
       </div>
@@ -54,7 +54,7 @@ const SearchBar = () => {
         <img
           src={userProfile}
           className={style.UserPhoto}
-          onError={() => setUserProfile('/assets/Community/UserProfile.svg')} // 이미지 로딩 실패 시 기본 이미지로 대체
+          onError={() => setUserProfile('../assets/Community/UserProfile.svg')} // 이미지 로딩 실패 시 기본 이미지로 대체
         />
         <div className={style.UserName}>{userName}</div>
       </div>
