@@ -22,6 +22,7 @@
     "react-datepicker": "^4.10.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.43.5",
+    "react-quill": "^2.0.0",
     "react-svg": "^16.1.5",
     "semantic-ui-css": "^2.5.0",
     "semantic-ui-react": "^2.1.4",
