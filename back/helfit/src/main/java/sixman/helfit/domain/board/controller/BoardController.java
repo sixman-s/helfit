@@ -33,6 +33,6 @@ public class BoardController {
         Board board = boardService.createBoard(mapper.boardPostToBoard(requestBody,categoryId,userId));
         URI location = UriUtil.createUri(BOARD_DEFAULT_URL,board.getBoardId());
 
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.created(location).body(ApiResponse.created());
     }
 }
