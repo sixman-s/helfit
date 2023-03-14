@@ -1,6 +1,7 @@
 import axios from 'axios';
 import style from '../../../styles/Signup/C_SignupBox.module.css';
 import OAuthBox from '@/components/loginc/OAuth';
+import Checkbox from './Checkbox';
 import Btn from '@/components/loginc/Buttons';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
@@ -62,7 +63,7 @@ const SignupBox = () => {
               className={style.signup__form}
             />
             {errors.userID && (
-              <div style={{ color: 'red' }}>{errors.userID.message}</div>
+              <div className={style.errormessage}>{errors.userID.message}</div>
             )}
           </div>
 
@@ -83,13 +84,15 @@ const SignupBox = () => {
                   value:
                     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
                   message:
-                    '대문자, 소문자, 숫자, 특수문자가 1개 이상씩 포함되어야 합니다.'
+                    '대/소문자, 숫자, 특수문자가 1개 이상 포함되어야 합니다.'
                 }
               })}
               className={style.signup__form}
             />
             {errors.password && (
-              <div style={{ color: 'red' }}>{errors.password.message}</div>
+              <div className={style.errormessage}>
+                {errors.password.message}
+              </div>
             )}
           </div>
 
@@ -97,12 +100,23 @@ const SignupBox = () => {
 
           <div>
             <h5>이메일</h5>
-            <input
-              type='text'
-              placeholder='이메일'
-              {...register('email', { required: true })}
-              className={style.signup__form}
-            />
+            <div>
+              <input
+                type='text'
+                placeholder='이메일'
+                {...register('email', {
+                  required: true,
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: '올바른 이메일 형식으로 작성해주세요'
+                  }
+                })}
+                className={style.signup__form}
+              />
+              {errors.email && (
+                <div className={style.errormessage}>{errors.email.message}</div>
+              )}
+            </div>
           </div>
         </div>
 
@@ -127,7 +141,7 @@ const SignupBox = () => {
             />
             <h6 className={style.h6}>ex) 20000101</h6>
             {errors.birth && (
-              <div style={{ color: 'red' }}>{errors.birth.message}</div>
+              <div className={style.errormessage}>{errors.birth.message}</div>
             )}
           </div>
 
@@ -138,20 +152,33 @@ const SignupBox = () => {
             <input
               type='text'
               placeholder='닉네임'
-              {...register('nickname', { required: true })}
+              {...register('nickname', {
+                required: true,
+                maxLength: 10
+              })}
               className={style.signup__form}
             />
+            {errors.nickname && errors.nickname.type === 'maxLength' && (
+              <div className={style.errormessage}>
+                닉네임은 10글자를 넘길 수 없습니다.
+              </div>
+            )}
           </div>
         </div>
-        <div className={style.OAuthbox}>
-          <OAuthBox />
-        </div>
-        <div className={style.signupButton}>
-          <Btn
-            className={style.button}
-            text='가입하기'
-            onClick={handleSubmit(onSubmit)}
-          />
+        <div className={style.footer}>
+          <div className={style.Checkbox}>
+            <Checkbox />
+          </div>
+          <div className={style.OAuthbox}>
+            <OAuthBox />
+          </div>
+          <div className={style.signupButton}>
+            <Btn
+              className={style.button}
+              text='가입하기'
+              onClick={handleSubmit(onSubmit)}
+            />
+          </div>
         </div>
       </div>
     </>
