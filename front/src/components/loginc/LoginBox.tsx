@@ -60,7 +60,9 @@ const LoginBox = () => {
               className={boxstyle.login__form}
             />
             {errors.userID && (
-              <div style={{ color: 'red' }}>{errors.userID.message}</div>
+              <div className={boxstyle.errorMessage}>
+                {errors.userID.message}
+              </div>
             )}
           </div>
           <div className={boxstyle.formPassword}>
@@ -77,14 +79,16 @@ const LoginBox = () => {
                   value:
                     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
                   message:
-                    '대문자, 소문자, 숫자, 특수문자가 1개 이상씩 포함되어야 합니다.'
+                    '대/소문자, 숫자, 특수문자가 1개 이상 포함되어야 합니다.'
                 }
               })}
               className={boxstyle.login__form}
             />
 
             {errors.password && (
-              <div style={{ color: 'red' }}>{errors.password.message}</div>
+              <div className={boxstyle.errorMessage}>
+                {errors.password.message}
+              </div>
             )}
           </div>
           <div className={boxstyle.buttons}>

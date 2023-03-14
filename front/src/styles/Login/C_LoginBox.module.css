@@ -11,7 +11,7 @@
   border-radius: 5px;
   height: 35px;
   width: 290px;
-  margin: 5px 0;
+  padding-left: 3px;
 }
 .formID {
   margin: 10px;
@@ -23,7 +23,7 @@
 .buttons {
   display: flex;
   justify-content: space-around;
-  margin-top: 50px;
+  margin-top: 20px;
 }
 .button {
   background-color: var(--main);
@@ -44,6 +44,7 @@
 .OAuth2 {
   display: flex;
   justify-content: center;
+  margin-top: -10px;
 }
 .OAuthBtn {
   margin: 20px;
@@ -53,4 +54,8 @@
   display: flex;
   justify-content: center;
   color: var(--main);
+}
+.errorMessage {
+  color: red;
+  font-size: 12px;
 }
