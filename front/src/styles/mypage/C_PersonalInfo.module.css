@@ -1,7 +1,6 @@
 .pInfoContainer{
     display: flex;
     flex-direction: column;
-    
 }
 
 .mypageTitle{
@@ -12,11 +11,6 @@
     display: flex;
     align-items: center;
     margin: 0 35px;
-}
-
-.topContainer .profileDiv{
-    /* margin-left: 35px; */
-    
 }
 
 .topContainer .idDiv{

@@ -1,53 +1,61 @@
-import { PropsWithChildren } from "react";
-import { useForm, Controller } from "react-hook-form"
+import { useForm, Controller } from 'react-hook-form';
 
-import s from '../../../styles/mypage/M_ModalPInfo.module.css'
+import s from '../../../styles/mypage/M_ModalPInfo.module.css';
 
+const ModalPInfo = () => {
+  // const { control, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm();
 
-interface ModalDefaultType {
-    clickModalP: () => void;
-  }
+  return (
+    <form
+      onSubmit={handleSubmit(async (data) => {
+        await new Promise((r) => setTimeout(r, 1000));
+        console.log(data);
+      })}
+    >
+      <div className={s.imageDiv}>
+        <p id={s.image}>
+          <img
+            src='../../../../assets/mypage/profile.svg'
+            className={s.profile}
+          />
+        </p>
+        <p className={s.imageP}>
+          <button id={s.deleteBtn}>Delete Image</button>
+          <button id={s.findBtn}>Find Image</button>
+        </p>
+      </div>
+      <div className={s.inputDiv}>
+        <label htmlFor='id'>아이디</label>
+        <input
+          type='text'
+          id='id'
+          placeholder='your Id'
+          disabled
+          {...register('id')}
+        />
 
-const ModalPInfo = ({clickModalP, children}: PropsWithChildren<ModalDefaultType>) => {
-    const { control, handleSubmit } = useForm();
+        <label htmlFor='nickName'>닉네임</label>
+        <input type='text' id='nickName' placeholder='your Nickname' />
 
-    return (
-        <div className={s.modalContainer} onClick={clickModalP}>
-            {/* {children} */}
-            <div className={s.innerContainer} onClick={(e) => e.stopPropagation()}>
-                <form>
-                    <p id={s.exit}><img src='../../../../assets/mypage/exit.svg' onClick={clickModalP}/></p>
-                    <div className={s.imageDiv}>
-                        <p id={s.image}>
-                            <img src='../../../../assets/mypage/profile.svg' className={s.profile} />
-                        </p>
-                        <p className={s.imageP}>
-                            <button id={s.deleteBtn}>Delete Image</button>
-                            <button id={s.findBtn}>Find Image</button>
-                        </p>
-                    </div>
-                    <div className={s.inputDiv}>
-                        <label htmlFor="id">User id</label>
-                        <input type="text" id="id" name="id" placeholder="your Id"/>
+        <label htmlFor='email'>이메일</label>
+        <input
+          type='email'
+          id='email'
+          placeholder='your Email'
+          {...register('email')}
+        />
 
-                        <label htmlFor="id">NickName</label>
-                        <input type="text" id="nickName" name="nickName" placeholder="your Nickname"/>
-                        
-                        <label htmlFor="id">User Email</label>
-                        <input type="email" id="email" name="email" placeholder="your Email"/>
+        <label htmlFor='birthDay'>생년월일</label>
+        <input type='text' id='birthDay' placeholder='your Birthday' />
 
-                        <label htmlFor="id">User BirthDay</label>
-                        <input type="text" id="birthDay" name="birthDay" placeholder="your Birthday"/>
+        <p className={s.inputP}>
+          <button id={s.clearBtn}>Clear profile</button>
+          <button id={s.submitBtn}>Submit profile</button>
+        </p>
+      </div>
+    </form>
+  );
+};
 
-                        <p className={s.inputP}>
-                        <button id={s.clearBtn}>Clear profile</button>
-                        <button id={s.submitBtn}>Submit profile</button>
-                        </p>
-                    </div>
-                </form>
-            </div>
-        </div>
-    )
-}
-
-export default ModalPInfo
+export default ModalPInfo;

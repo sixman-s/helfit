@@ -1,36 +1,41 @@
-import { PropsWithChildren } from "react";
+import { PropsWithChildren } from 'react';
 
-import s from '../../../styles/mypage/M_ModalPassword.module.css'
+import s from '../../../styles/mypage/M_ModalPassword.module.css';
 
-interface ModalDefaultType {
-    clickModalPW: () => void;
-  }
-const ModalPassword = ({clickModalPW, children}: PropsWithChildren<ModalDefaultType>) => {
-    
-    return (
-        <div className={s.modalContainer} onClick={clickModalPW}>
-            <div className={s.innerContainer} onClick={(e) => e.stopPropagation()}>
-                <p id={s.exit}><img src='../../../../assets/mypage/exit.svg' onClick={clickModalPW}/></p>
-                <form>
-                    <div className={s.inputDiv}>
-                        <label htmlFor="password">User password</label>
-                        <input type="text" id="password" name="password" placeholder="your password"/>
+const ModalPassword = () => {
+  return (
+    <form>
+      <div className={s.inputDiv}>
+        <label htmlFor='password'>현재 비밀번호</label>
+        <input
+          type='text'
+          id='password'
+          name='password'
+          placeholder='현재 비밀번호를 입력해주세요.'
+        />
 
-                        <label htmlFor="checkPW">check password</label>
-                        <input type="text" id="checkPW" name="checkPW" placeholder="check password"/>
+        <label htmlFor='checkPW'>새 비밀번호</label>
+        <input
+          type='text'
+          id='checkPW'
+          name='checkPW'
+          placeholder='새 비밀번호를 입력해주세요.'
+        />
 
-                        <label htmlFor="doubleCheckPW">double check</label>
-                        <input type="text" id="doubleCheckPW" name="doubleCheckPW" placeholder="DoubleCheck password"/>
+        <label htmlFor='doubleCheckPW'>새 비밀번호 확인</label>
+        <input
+          type='text'
+          id='doubleCheckPW'
+          name='doubleCheckPW'
+          placeholder='새 비밀번호를 한번 더 입력해주세요.'
+        />
 
-                        <p className={s.submitP}>
-                        <button id={s.submitBtn}>Submit password</button>
-                        </p>
-                    </div>
-                </form>
+        <p className={s.submitP}>
+          <button id={s.submitBtn}>Submit password</button>
+        </p>
+      </div>
+    </form>
+  );
+};
 
-            </div>
-        </div>
-    )
-}
-
-export default ModalPassword
+export default ModalPassword;

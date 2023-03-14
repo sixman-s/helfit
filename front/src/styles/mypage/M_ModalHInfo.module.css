@@ -1,0 +1,39 @@
+.inputDiv{
+    display: flex;
+    flex-direction: column;
+    margin: 20px 30px 30px;
+}
+
+.inputDiv > span{
+    margin: 10px 0;
+ }
+
+.inputDiv > label{
+    margin: 10px 0;
+ }
+
+.inputDiv > input {
+    border: 1px solid #B1B1B1;
+    width: 340px;
+    height: 25px;
+    padding: 2px 5px;
+}
+
+.inputDiv .submitP{
+    margin: 40px 40px 20px;
+    text-align: center;
+}
+
+.inputDiv select {
+    border: 1px solid #B1B1B1;
+    height: 25px;
+    padding: 2px 5px;
+}
+
+#submitBtn {
+    width: 123px;
+    height: 27px;
+    border-radius: 2px;
+    color: white;
+    background-color: var(--main);
+}
