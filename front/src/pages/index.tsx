@@ -2,7 +2,7 @@ import Layout from '@/components/MainLayout';
 import styled from '../styles/main/P_main.module.css';
 import UserInfo from '@/components/main/UserInfo';
 import CalendarInfo from '@/components/main/CalendarInfo';
-import FoodInfo from '@/components/main/FoodInfo';
+import DietInfo from '@/components/main/DietInfo';
 import CommunityInfo from '@/components/main/CommunityInfo';
 
 export default function Home() {
@@ -11,7 +11,7 @@ export default function Home() {
       <section className={styled.container}>
         <UserInfo />
         <CalendarInfo />
-        <FoodInfo />
+        <DietInfo />
         <CommunityInfo />
       </section>
     </Layout>
