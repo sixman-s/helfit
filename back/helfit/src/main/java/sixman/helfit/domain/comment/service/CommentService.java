@@ -47,6 +47,8 @@ public class CommentService {
         Comment comment = findVerifiedComment(userId,boardId,commentId);
 
         commentRepository.delete(comment);
+
+
     }
 
     public Comment findVerifiedComment (long userId,long boardId,long commentId){
