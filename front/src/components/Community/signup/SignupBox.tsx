@@ -1,6 +1,6 @@
 import style from '../../styles/Signup/C_SignupBox.module.css';
-import OAuthBox from '../Login/OAuth';
-import Btn from '../Login/Buttons';
+import OAuthBox from '../../loginc/OAuth';
+import Btn from '../../loginc/Buttons';
 import { useForm } from 'react-hook-form';
 
 type SignupForm = {

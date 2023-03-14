@@ -3,7 +3,7 @@ import style from '../../styles/Community/C_WritePost.module.css';
 import Editor from './C_Community/Editor';
 import DropdownC, { Option } from './C_Community/Dropdown';
 import Tag from './C_Community/Tag';
-import Btn from '../Login/Buttons';
+import Btn from '../loginc/Buttons';
 
 const options: Option[] = [
   { key: 'health', text: '헬스 갤러리', value: 'health' },
