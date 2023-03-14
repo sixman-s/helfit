@@ -40,7 +40,7 @@ public class BoardService {
     }
 
     private void verifyBoard(Board board) {
-        userService.findVerifiedUserByUserId(board.getUser().getUserId());
+        userService.findUserByUserId(board.getUser().getUserId());
 
         categoryService.verifiedCategoryById(board.getCategory().getCategoryId());
     }
