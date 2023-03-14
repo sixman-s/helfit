@@ -8,24 +8,26 @@ import sixman.helfit.global.annotations.NoKoreanCurseWords;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
+import java.util.List;
 
 
 public class CommentDto {
 
     @Getter
-    @AllArgsConstructor
+    @Setter
     public static class Post {
-        @NotNull
-        @Positive
-        private Long userId;
-
         @NotNull
         @Size(max = 200000)
         @NoKoreanCurseWords
         private String commentBody;
-
-        @NotNull
-        @Positive
-        private Long boardId;
     }
+    @Getter
+    @AllArgsConstructor
+    public static class CommentResponseDto {
+        private String commentBody;
+        private LocalDateTime createdAt;
+        private LocalDateTime modifiedAt;
+    }
+
 }
