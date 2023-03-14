@@ -32,13 +32,15 @@ public enum ExceptionCode {
      * # 404 NOT_FOUND
      *
      */
-
-    CATEGORY_NOT_FOUNT(404,"카테고리가 존재하지 않습니다."),
     NOT_FOUND(404,"결과가 존재하지 않습니다."),
     USERS_NOT_FOUND(404, "등록되지 않은 사용자입니다."),
     CALCULATOR_NOT_FOUND(404,"결과가 존재하지 않습니다."),
 
+
     BOARD_NOT_FOUND(404,"게시글이 존재하지 않습니다."),
+
+
+    CATEGORY_NOT_FOUNT(404,"카테고리가 존재하지 않습니다."),
 
 
     /*
@@ -60,7 +62,6 @@ public enum ExceptionCode {
     ALREADY_EXISTS_INFORMATION(409, "이미 등록된 정보가 존재합니다."),
     ALREADY_EXISTS_ID(409,"이미 등록된 'ID' 정보가 존재합니다."),
     ALREADY_EXISTS_EMAIL(409,"이미 등록된 'EMAIL' 정보가 존재합니다."),
-
 
     /*
      * # 500 Internal server error

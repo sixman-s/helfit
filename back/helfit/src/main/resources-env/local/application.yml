@@ -2,6 +2,9 @@ running: local
 front:
   domain: http://localhost:3000
 
+chat-gpt:
+  secret-key: ${CHAT_GPT_SECRET_KEY}
+
 cloud:
   aws:
     s3bucket: helfit.life/files
