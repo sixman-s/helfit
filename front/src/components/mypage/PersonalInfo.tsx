@@ -4,6 +4,7 @@ import s from '../../styles/mypage/C_PersonalInfo.module.css';
 import ModalPInfo from './modal/ModalPInfo';
 import ModalPassword from './modal/ModalPassword';
 import ModalContainer from './modal/ModalContainer';
+import ModalImage from './modal/ModalImage';
 
 const PersonalInfo = () => {
   const [modalContents, setModalContents] = useState<JSX.Element>(<></>);
@@ -17,6 +18,10 @@ const PersonalInfo = () => {
     setShowMoadal(true);
     setModalContents(<ModalPassword />);
   };
+  const clickModalImage = () => {
+    setShowMoadal(true);
+    setModalContents(<ModalImage />);
+  };
 
   return (
     <div className={s.pInfoContainer}>
@@ -27,16 +32,21 @@ const PersonalInfo = () => {
           <img
             src='../../../assets/mypage/profile_option.svg'
             className={s.profile_option}
-            onClick={clickModalP}
+            onClick={clickModalImage}
           />
         </div>
         <div className={s.idDiv}>
           <span className={s.welcome}>good day</span>
           <span className={s.id}>hfhfhf</span>
         </div>
-        <button className={s.buttonDiv} onClick={clickModalPW}>
-          비밀번호 변경
-        </button>
+        <div className={s.divBtn}>
+          <button id={s.infoBtn} className={s.buttonDiv} onClick={clickModalP}>
+            개인정보 변경
+          </button>
+          <button className={s.buttonDiv} onClick={clickModalPW}>
+            비밀번호 변경
+          </button>
+        </div>
       </div>
       <div className={s.bottomContainer}>
         <p className={s.nnContainer}>

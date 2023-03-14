@@ -10,7 +10,7 @@
 .header {
   display: flex;
   flex-direction: row;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
   padding: 32px;
 }
@@ -18,6 +18,14 @@
 .title {
   font-weight: 700;
   font-size: var(--h3);
-  line-height: 29px;
+  /* line-height: 29px; */
   color: var(--text_6);
+}
+
+.moreBtn {
+  color: var(--text_5);
+}
+
+.moreBtn:hover {
+  color: var(--text_4);
 }

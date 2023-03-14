@@ -25,7 +25,8 @@
 
 .manuUl li:last-child {
   margin-top: auto;
-  padding-bottom: 40px;
+  padding-top: 40px;
+  padding-left: 30px;
 }
 
 .manu {
@@ -58,5 +59,18 @@
 .lnbFont_active {
   user-select: none;
   font-weight: 700;
+  color: var(--main);
+}
+
+.loginMenu {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding-bottom: 40px;
+}
+
+.loginMenu:hover {
+  filter: invert(46%) sepia(100%) saturate(5048%) hue-rotate(220deg)
+    brightness(99%) contrast(103%);
   color: var(--main);
 }

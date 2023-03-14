@@ -1,5 +1,3 @@
-import { PropsWithChildren } from 'react';
-
 import s from '../../../styles/mypage/M_ModalPassword.module.css';
 
 const ModalPassword = () => {
