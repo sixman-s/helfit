@@ -10,22 +10,33 @@
 .topContainer{
     display: flex;
     align-items: center;
-    margin: 0 35px;
+    margin-left: 35px;
 }
 
 .topContainer .idDiv{
     display: flex;
     flex-direction: column;
     padding-left: 17px;
-    padding-right: 78px;
+    padding-right: 5px;
 }
 
 .topContainer .buttonDiv{
-    padding: 11.5px 23.5px;
+    padding: 5.5px 10.5px;
     color: var(--text_3);
     background-color: var(--vg_2);
     border: 1px solid var(--line_1);
     border-radius: 10px;
+    /* margin-left: 5px; */
+}
+
+.topContainer #infoBtn {
+   margin-bottom: 10px;
+} 
+
+.topContainer .divBtn {
+    display: flex;
+    flex-direction: column;
+    margin-left: 120px;
 }
 
 .topContainer .idDiv .welcome{
