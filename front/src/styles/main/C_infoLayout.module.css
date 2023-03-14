@@ -18,7 +18,7 @@
 .title {
   font-weight: 700;
   font-size: var(--h3);
-  line-height: 29px;
+  /* line-height: 29px; */
   color: var(--text_6);
 }
 

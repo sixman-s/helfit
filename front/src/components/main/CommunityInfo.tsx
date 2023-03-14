@@ -18,27 +18,24 @@ const CommunityInfo = () => {
       </header>
       <ul className={styled.contents}>
         <li className={styled.content}>
-          <picture className={styled.imgContainer}>
-            <img className={styled.img} src={imgUrl} />
-          </picture>
+          <img className={styled.img} src={imgUrl} />
+
           <label className={styled.label}>
             <span className={styled.title}>{title}</span>
             <p className={styled.context}>{context}</p>
           </label>
         </li>
         <li className={styled.content}>
-          <picture className={styled.imgContainer}>
-            <img className={styled.img} src={imgUrl} />
-          </picture>
+          <img className={styled.img} src={imgUrl} />
+
           <label className={styled.label}>
             <span className={styled.title}>{title}</span>
             <p className={styled.context}>{context}</p>
           </label>
         </li>
         <li className={styled.content}>
-          <picture className={styled.imgContainer}>
-            <img className={styled.img} src={imgUrl} />
-          </picture>
+          <img className={styled.img} src={imgUrl} />
+
           <label className={styled.label}>
             <span className={styled.title}>{title}</span>
             <p className={styled.context}>{context}</p>
