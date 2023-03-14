@@ -76,11 +76,11 @@ public class User {
         this.email = email != null ? email : "NO_EMAIL";
         this.nickname = nickname != null ? nickname : "";
         this.password = "NO_PASS";
-        this.emailVerifiedYn = emailVerifiedYn;
         this.profileImageUrl = profileImageUrl != null ? profileImageUrl : "";
         this.birth = birth;
         this.height = height;
         this.weight = weight;
+        this.emailVerifiedYn = emailVerifiedYn;
         this.gender = gender;
         this.providerType = providerType;
         this.roleType = roleType;

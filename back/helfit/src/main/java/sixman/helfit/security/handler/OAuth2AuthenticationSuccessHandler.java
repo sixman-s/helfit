@@ -39,7 +39,7 @@ import static sixman.helfit.security.repository.OAuth2AuthorizationRequestBasedO
 
 @RequiredArgsConstructor
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-    @Value("${front.domain}")
+    @Value("${domain.front}")
     private String frontDomain;
 
     private final AppProperties appProperties;

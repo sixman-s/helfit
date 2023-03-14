@@ -10,8 +10,11 @@ import sixman.helfit.domain.user.entity.User;
 import sixman.helfit.domain.user.repository.UserRepository;
 import sixman.helfit.exception.BusinessLogicException;
 import sixman.helfit.exception.ExceptionCode;
+import sixman.helfit.security.mail.entity.EmailConfirmToken;
+import sixman.helfit.security.mail.service.EmailConfirmTokenService;
 import sixman.helfit.utils.CustomBeanUtil;
 
+import javax.mail.MessagingException;
 import java.util.Optional;
 
 import static sixman.helfit.domain.user.entity.User.*;
@@ -19,9 +22,10 @@ import static sixman.helfit.domain.user.entity.User.*;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    private final CustomBeanUtil<User> customBeanUtil;
-    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CustomBeanUtil<User> customBeanUtil;
+
+    private final UserRepository userRepository;
 
     public User createUser(User user) {
         verifyExistsUserId(user.getId());
@@ -42,6 +46,14 @@ public class UserService {
         User updatedUser = customBeanUtil.copyNonNullProperties(user, verifiedUser);
 
         return userRepository.save(updatedUser);
+    }
+
+    public void updateUserEmailVerifiedYn(Long userId) {
+        User verifiedUser = findUserByUserId(userId);
+
+        verifiedUser.setEmailVerifiedYn(EmailVerified.Y);
+
+        userRepository.save(verifiedUser);
     }
 
     public void updateUserPassword(Long userId, User user) {
@@ -79,7 +91,14 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public void verifyExistsUserEmail(String email) {
-        userRepository.findById(email).ifPresent((e) -> {
+        userRepository.findByEmail(email).ifPresent((e) -> {
+            throw new BusinessLogicException(ExceptionCode.ALREADY_EXISTS_EMAIL);
+        });
+    }
+
+    @Transactional(readOnly = true)
+    public void verifyExistsUserEmailConfirmToken(String email) {
+        userRepository.findByEmail(email).ifPresent((e) -> {
             throw new BusinessLogicException(ExceptionCode.ALREADY_EXISTS_EMAIL);
         });
     }
