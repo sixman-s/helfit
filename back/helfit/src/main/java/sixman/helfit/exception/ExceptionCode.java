@@ -15,6 +15,7 @@ public enum ExceptionCode {
 
     NOT_EXPIRED_TOKEN_YET(400, "만료되지 않은 토큰입니다."),
     NOT_CHANGED_PASSWORD(400, "최근 사용한 비밀번호입니다. 다른 비밀번호를 선택해 주세요."),
+    MISS_MATCH_USERID(400,"유저 아이디가 일치하지 않습니다."),
 
     /*
      * # 401 UNAUTHORIZED
@@ -40,7 +41,9 @@ public enum ExceptionCode {
     BOARD_NOT_FOUND(404,"게시글이 존재하지 않습니다."),
 
 
-    CATEGORY_NOT_FOUNT(404,"카테고리가 존재하지 않습니다."),
+    CATEGORY_NOT_FOUND(404,"카테고리가 존재하지 않습니다."),
+
+    COMMENTS_NOT_FOUND(404,"댓글이 존재하지 않습니다."),
 
 
     /*
