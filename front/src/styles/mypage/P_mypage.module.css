@@ -1,28 +1,30 @@
-.myPageContainer{
-    margin-left: 240px; 
-    height: 100%;
-    display: grid;
-    grid-template-columns: 444px auto;
-    grid-template-rows: auto 1fr;
-    grid-template-areas:
-    "leftTop rightTop "
-    "leftBottom rightTop"
-    "leftBottom rightBottom"
+.myPageContainer {
+  margin-left: 240px;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 444px auto;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    'leftTop rightTop '
+    'leftBottom rightTop'
+    'leftBottom rightBottom';
+  padding-top: 30px;
+  grid-gap: 30px;
 }
 
 .personalInfo {
-    grid-area: leftTop;
+  grid-area: leftTop;
+  padding-top: 60px;
 }
 
 .healthInfo {
-    grid-area: leftBottom;
+  grid-area: leftBottom;
 }
 
-.myList{
-    grid-area: rightTop;
+.myList {
+  grid-area: rightTop;
 }
 
-.calorieInfo{
-    grid-area: rightBottom;
-    height: 200px;
+.calorieInfo {
+  grid-area: rightBottom;
 }
