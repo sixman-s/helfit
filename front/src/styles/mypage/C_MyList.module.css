@@ -11,7 +11,7 @@
 .table {
     width: 100%;
     border: 1px solid var(--line_1);
-    margin-bottom: 65px;
+    margin-bottom: 20px;
     padding: 20px 0;
 }
 
@@ -50,4 +50,8 @@
     color: var(--text_6);
     text-align: end;
     padding-right: 10px;
+}
+
+.pageDiv{
+    text-align: center;
 }

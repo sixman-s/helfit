@@ -4,10 +4,6 @@
     margin: 20px 30px 30px;
 }
 
-.inputDiv > span{
-    margin: 10px 0;
- }
-
 .inputDiv > label{
     margin: 10px 0;
  }
@@ -26,6 +22,7 @@
 
 .inputDiv select {
     border: 1px solid #B1B1B1;
+    width: 300px;
     height: 25px;
     padding: 2px 5px;
 }

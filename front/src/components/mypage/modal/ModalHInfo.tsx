@@ -4,22 +4,6 @@ const ModalHInfo = () => {
   return (
     <form>
       <div className={s.inputDiv}>
-        <span>성별</span>
-        <p>
-          <input type='radio' name='gender' id='man' />
-          <label htmlFor='man'>남</label>
-        </p>
-        <p>
-          <input type='radio' name='gender' id='woman' />
-          <label htmlFor='woman'>여</label>
-        </p>
-
-        <label htmlFor='height'>키</label>
-        <input type='text' id='height' className='height'></input>
-
-        <label htmlFor='weight'>몸무게</label>
-        <input type='text' id='weight' className='weight'></input>
-
         <label htmlFor='activity'>활동 정도</label>
         <select>
           <option value='' selected disabled hidden>

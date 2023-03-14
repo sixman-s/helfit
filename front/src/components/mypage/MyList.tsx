@@ -1,10 +1,11 @@
 import s from '../../styles/mypage/C_MyList.module.css';
+import Pagenation from './Pagination';
 
 const MyList = () => {
   return (
     <div className={s.myListContainer}>
       <div className={s.topLine}>
-        <h1>Questions</h1>
+        <h1>내 게시글</h1>
         <span>더보기</span>
       </div>
       <table className={s.table}>
@@ -36,7 +37,9 @@ const MyList = () => {
           </tr>
         </tbody>
       </table>
-      <hr />
+      <div className={s.pageDiv}>
+        <Pagenation />
+      </div>
       <div className={s.topLine}>
         <h1>Answer</h1>
         <span>더보기</span>
@@ -68,9 +71,14 @@ const MyList = () => {
             <td className={s.aContent}>kdkdjsdjidajsai</td>
             <td className={s.aDate}>2020/01/01</td>
           </tr>
+          <tr>
+            <td className={s.page}></td>
+          </tr>
         </tbody>
       </table>
-      <hr />
+      <div className={s.pageDiv}>
+        <Pagenation />
+      </div>
     </div>
   );
 };
