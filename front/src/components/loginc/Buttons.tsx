@@ -14,5 +14,5 @@ const Btn = ({ text, onClick, className, type }: ButtonProps) => {
     </button>
   );
 };
-
+// 주석
 export default Btn;

@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import style from '../../styles/Community/C_Post.module.css';
-import Btn from '../login/Buttons';
+import Btn from '../loginc/Buttons';
 import Pagenation from './C_Community/Pagenation';
 
 type Post = {

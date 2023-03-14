@@ -1,6 +1,6 @@
 import style from '../../styles/Signup/C_SignupBox.module.css';
-import OAuthBox from '../../login/OAuth';
-import Btn from '../../login/Buttons';
+import OAuthBox from '../../loginc/OAuth';
+import Btn from '../../loginc/Buttons';
 import { useForm } from 'react-hook-form';
 
 type SignupForm = {
@@ -11,7 +11,7 @@ type SignupForm = {
   birthdate: string;
   nickname: string;
 };
-
+// 주석
 const SignupBox = () => {
   const { register, handleSubmit } = useForm<SignupForm>();
 
