@@ -8,7 +8,10 @@ const OAuthBox = () => {
         'http://ec2-3-34-96-242.ap-northeast-2.compute.amazonaws.com/oauth2/authorization/google'
       )
       .then((res) => {
-        console.log(res.data);
+        console.log(res);
+        window.open(
+          'http://ec2-3-34-96-242.ap-northeast-2.compute.amazonaws.com/oauth2/authorization/google'
+        );
       })
       .catch((error) => {
         console.log(error);
@@ -22,6 +25,9 @@ const OAuthBox = () => {
       )
       .then((res) => {
         console.log(res.data);
+        window.open(
+          'http://ec2-3-34-96-242.ap-northeast-2.compute.amazonaws.com/oauth2/authorization/naver'
+        );
       })
       .catch((error) => {
         console.log(error);
@@ -35,6 +41,9 @@ const OAuthBox = () => {
       )
       .then((res) => {
         console.log(res.data);
+        window.open(
+          'http://ec2-3-34-96-242.ap-northeast-2.compute.amazonaws.com/oauth2/authorization/kakao'
+        );
       })
       .catch((error) => {
         console.log(error);
