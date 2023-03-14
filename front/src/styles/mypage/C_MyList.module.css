@@ -1,0 +1,53 @@
+.myListContainer {
+    margin: 62px 35px 0;
+}
+
+.topLine {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.table {
+    width: 100%;
+    border: 1px solid var(--line_1);
+    margin-bottom: 65px;
+    padding: 20px 0;
+}
+
+
+/** question, answer 리스트 */
+.qNumber {
+    font-size: var(--h6);
+    text-align: center;
+    color: var(--text_6)
+}
+
+.qContent {
+    font-size: var(--h6);
+}
+
+.qDate {
+    font-size: var(--h6);
+    text-align: end;
+    padding-right: 10px;
+    color: var(--text_6)
+    
+}
+
+.aNumber {
+    font-size: var(--h6);
+    color: var(--text_6);
+    text-align: center;
+}
+
+.aContent {
+    font-size: var(--h6);
+}
+
+.aDate {
+    font-size: var(--h6);
+    color: var(--text_6);
+    text-align: end;
+    padding-right: 10px;
+}
