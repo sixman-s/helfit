@@ -11,7 +11,7 @@ type SignupForm = {
   birthdate: string;
   nickname: string;
 };
-// 주석
+
 const SignupBox = () => {
   const { register, handleSubmit } = useForm<SignupForm>();
 
