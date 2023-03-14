@@ -1,4 +1,4 @@
-import styles from '../styles/lnb.module.css';
+import styled from '../styles/lnb.module.css';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -35,20 +35,20 @@ const LNB = () => {
   };
 
   return (
-    <nav className={styles.container}>
+    <nav className={styled.container}>
       <Link href='/'>
-        <img className={styles.logo} src={'../../assets/logo.svg'} />
+        <img className={styled.logo} src={'../../assets/logo.svg'} />
       </Link>
-      <ul className={styles.manuUl}>
+      <ul className={styled.manuUl}>
         {category.map((menu: string, key: number) => {
           return (
             <li key={key}>
-              <Link className={styles.manu} href={linkPath(menu)}>
+              <Link className={styled.manu} href={linkPath(menu)}>
                 <img
                   className={
                     menuActive(menu.toLowerCase())
-                      ? styles.lnbIcon_active
-                      : styles.lnbIcon
+                      ? styled.lnbIcon_active
+                      : styled.lnbIcon
                   }
                   src={`../../assets/lnb_${
                     menu === 'Index' ? 'home' : menu.toLowerCase()
@@ -56,9 +56,9 @@ const LNB = () => {
                 />
                 <span
                   className={
-                    router.pathname === `/${menu.toLowerCase()}`
-                      ? styles.lnbFont_active
-                      : styles.lnbFont
+                    menuActive(menu.toLowerCase())
+                      ? styled.lnbFont_active
+                      : styled.lnbFont
                   }
                 >
                   {menu === 'Index' ? 'Home' : menu}
@@ -67,12 +67,14 @@ const LNB = () => {
             </li>
           );
         })}
-        <li className={styles.manu}>
-          <img
-            src='../../assets/lnb_lnout_icn.svg'
-            className={styles.lnbIcon}
-          />
-          <span className={styles.lnbFont}>{'logout'}</span>
+        <li className={styled.menu}>
+          <Link className={styled.loginMenu} href='/login'>
+            <img
+              src='../../assets/lnb_lnout_icn.svg'
+              className={styled.lnbIcon}
+            />
+            <span className={styled.lnbFont}>{'logout'}</span>
+          </Link>
         </li>
       </ul>
     </nav>
