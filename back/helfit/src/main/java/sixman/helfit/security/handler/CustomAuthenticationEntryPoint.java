@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
+import sixman.helfit.exception.ExceptionCode;
 import sixman.helfit.response.ErrorResponse;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,13 +16,9 @@ import java.io.IOException;
 @Component
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
-    public void commence(
-        HttpServletRequest request,
-        HttpServletResponse response,
-        AuthenticationException authException
-    ) throws IOException {
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
         Exception exception = (Exception) request.getAttribute("exception");
-        ErrorResponse.sendErrorResponse(response, HttpStatus.UNAUTHORIZED);
+        ErrorResponse.sendErrorResponse(response, ExceptionCode.ACCESS_DENIED);
 
         logExceptionMessage(authException, exception);
     }

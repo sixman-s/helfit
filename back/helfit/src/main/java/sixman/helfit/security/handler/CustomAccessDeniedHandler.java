@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
+import sixman.helfit.exception.ExceptionCode;
 import sixman.helfit.response.ErrorResponse;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +19,6 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException {
         log.warn("접근이 거부되었습니다. = {}", accessDeniedException.getMessage());
 
-        ErrorResponse.sendErrorResponse(response, HttpStatus.FORBIDDEN);
+        ErrorResponse.sendErrorResponse(response, ExceptionCode.ACCESS_DENIED);
     }
 }
