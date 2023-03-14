@@ -10,8 +10,5 @@ import sixman.helfit.domain.calculator.entity.Calculator;
 public interface CalculatorMapper {
     Calculator calculatorPostToCalculator(CalculatorDto.Post requestBody);
     Calculator calculatorPatchToCalculator(CalculatorDto.Patch requestBody);
-    CalculatorDto.PostResponse calculatorToPostResponse(Calculator calculator);
-    CalculatorDto.PostResponse calculatorToPostResponseWithUserId(Calculator calculator, Long userId);
-    CalculatorDto.GetResponse calculatorToGetResponse(Calculator calculator);
-    CalculatorDto.PatchResponse calculatorToPatchResponse(Calculator calculator);
+    CalculatorDto.Response calculatorToResponse(Calculator calculator);
 }

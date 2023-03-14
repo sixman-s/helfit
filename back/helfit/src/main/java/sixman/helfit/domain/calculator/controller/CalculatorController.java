@@ -1,6 +1,5 @@
 package sixman.helfit.domain.calculator.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -10,72 +9,79 @@ import sixman.helfit.domain.calculator.dto.CalculatorDto;
 import sixman.helfit.domain.calculator.entity.Calculator;
 import sixman.helfit.domain.calculator.helper.CalculatorHelper;
 import sixman.helfit.domain.calculator.mapper.CalculatorMapper;
+import sixman.helfit.domain.calculator.repository.CalculatorRepository;
 import sixman.helfit.domain.calculator.service.CalculatorService;
-import sixman.helfit.domain.user.entity.User;
+import sixman.helfit.domain.calendar.entity.Calendar;
 import sixman.helfit.domain.user.repository.UserRepository;
 import sixman.helfit.domain.user.service.UserService;
+import sixman.helfit.response.ApiResponse;
 import sixman.helfit.security.entity.UserPrincipal;
+import sixman.helfit.utils.UriUtil;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
-import java.util.List;
-import java.util.Optional;
+import java.net.URI;
 
 @RestController
 @RequestMapping("/api/v1/calculate")
 public class CalculatorController {
-    private static final String DEFAULT_URI = "/api/v1/calculate";
+    private static final String DEFAULT_URL = "/api/v1/calculate";
     private final CalculatorService calculatorService;
     private final CalculatorMapper calculatorMapper;
+    private final CalculatorRepository calculatorRepository;
     private final UserService userService;
     private final UserRepository userRepository;
 
-    public CalculatorController(CalculatorService calculatorService, CalculatorMapper calculatorMapper, UserService userService, UserRepository userRepository) {
+    public CalculatorController(CalculatorService calculatorService, CalculatorMapper calculatorMapper, CalculatorRepository calculatorRepository, UserService userService, UserRepository userRepository) {
         this.calculatorService = calculatorService;
         this.calculatorMapper = calculatorMapper;
+        this.calculatorRepository = calculatorRepository;
         this.userService = userService;
         this.userRepository = userRepository;
     }
+
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/{user-id}")
-    public ResponseEntity postResult(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                     @RequestBody CalculatorDto.Post requestBody) {
-        Calculator calculator = calculatorService.createResult(calculatorMapper.calculatorPostToCalculator(requestBody));
-        //
-        double bmr;
-        if (userPrincipal.getUser().getGender().equals(User.Gender.MALE)) {
-            bmr = CalculatorHelper.calculateBMR_Male(userPrincipal.getUser());
-        } else {
-            bmr = CalculatorHelper.calculateBMR_Female(userPrincipal.getUser());
-        }
-        double result = CalculatorHelper.calculateResult(bmr, requestBody.getActivityLevel(), requestBody.getGoal());
-        calculator.setResult(result);
-        User user = userPrincipal.getUser();
-        calculator.setUser(user);
-        //responseEntity<ok.body> callendar 보고해보기
-        return new ResponseEntity<>(calculatorMapper.calculatorToPostResponse(calculator), HttpStatus.CREATED);
+    public ResponseEntity<?> postResult(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                        @RequestBody CalculatorDto.Post requestBody) {
+        Calculator calculator = calculatorService.createResult(
+                calculatorMapper.calculatorPostToCalculator(requestBody),
+                userPrincipal.getUser());
+        URI uri = UriUtil.createUri(DEFAULT_URL, calculator.getCalculatorId());
+        return ResponseEntity.created(uri).body(ApiResponse.created());
     }
+
+    //return new ResponseEntity<>(calculatorMapper.calculatorToPostResponse(calculator), HttpStatus.CREATED);
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{user-id}")
-    public ResponseEntity<CalculatorDto.GetResponse> getResult(@PathVariable("user-id") @Positive Long userId,
-                                                               @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        userId = userPrincipal.getUser().getUserId();
-        Calculator findResult = calculatorService.findUserResult(userId);
-        return new ResponseEntity<>(calculatorMapper.calculatorToGetResponse(findResult), HttpStatus.OK);
+    public ResponseEntity<?> getResult(@PathVariable("user-id") @Positive Long userId,
+                                       @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        Calculator verifiedCalculatorWithUserId = calculatorService.findUserResult(userId);
+        CalculatorDto.Response response = calculatorMapper.calculatorToResponse(verifiedCalculatorWithUserId);
+        return ResponseEntity.ok().body(ApiResponse.ok("data", response));
     }
+
     @PreAuthorize("isAuthenticated()")
-    @PatchMapping("/{user-id}")
-    public ResponseEntity<CalculatorDto.PatchResponse> patchResult(@PathVariable("user-id") @Positive Long userId,
-                                                                   @Valid @RequestBody CalculatorDto.Patch calculatorPatchDto){
+    @PatchMapping("/{calculator-id}")
+    public ResponseEntity<?> patchResult(@PathVariable("calculator-id") @Positive Long calculatorId,
+                                         @Valid @RequestBody CalculatorDto.Patch requestBody,
+                                         @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        Calculator verifiedResult = calculatorService.findVerifiedCalculatorWithUserId(calculatorId, userPrincipal.getUser().getUserId());
 
-        Calculator calculator  = calculatorMapper.calculatorPatchToCalculator(calculatorPatchDto);
-        Calculator updateCalculator = calculatorService.updateResult(userId);
-        return new ResponseEntity<>(calculatorMapper.calculatorToPatchResponse(updateCalculator), HttpStatus.OK);
+        Calculator calculator = calculatorService.updateCalculator(
+                calculatorMapper.calculatorPatchToCalculator(requestBody),
+                verifiedResult
+        );
+        Calculator afterResult = calculatorService.updateResult(
+                calculator
+                ,userPrincipal.getUser());
 
+        CalculatorDto.Response response = calculatorMapper.calculatorToResponse(afterResult);
+        return ResponseEntity.ok().body(ApiResponse.ok("data", response));
     }
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{user-id}")
-    public ResponseEntity deleteResult(@PathVariable("user-id") @Positive Long userId){
+    public ResponseEntity deleteResult(@PathVariable("user-id") @Positive Long userId) {
         calculatorService.deleteResult(userId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

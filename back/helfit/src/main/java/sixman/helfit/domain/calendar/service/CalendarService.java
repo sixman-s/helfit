@@ -38,6 +38,7 @@ public class CalendarService {
         return calendarRepository.save(updatedCalendar);
     }
 
+
     public void deleteCalendar(Calendar verifiedCalendar) {
         calendarRepository.delete(verifiedCalendar);
     }
