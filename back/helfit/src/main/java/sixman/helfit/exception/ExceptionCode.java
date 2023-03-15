@@ -44,8 +44,6 @@ public enum ExceptionCode {
     BOARD_NOT_FOUND(404,"게시글이 존재하지 않습니다."),
 
 
-    CATEGORY_NOT_FOUNT(404,"카테고리가 존재하지 않습니다."),
-
 
     /*
      * # 405 METHOD NOT ALLOWED
