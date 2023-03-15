@@ -50,6 +50,9 @@ public class User {
     private EmailVerified emailVerifiedYn;
 
     @Enumerated(value = EnumType.STRING)
+    private PersonalInfoAgreement personalInfoAgreementYn;
+
+    @Enumerated(value = EnumType.STRING)
     private Gender gender;
 
     @Enumerated(EnumType.STRING)
@@ -58,6 +61,9 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private ProviderType providerType;
+
+    @Enumerated(EnumType.STRING)
+    private UserStatus userStatus = UserStatus.USER_ACTIVE;
 
     public User(
         String id,
@@ -68,6 +74,7 @@ public class User {
         Integer height,
         Integer weight,
         EmailVerified emailVerifiedYn,
+        PersonalInfoAgreement personalInfoAgreementYn,
         Gender gender,
         ProviderType providerType,
         RoleType roleType
@@ -81,9 +88,28 @@ public class User {
         this.height = height;
         this.weight = weight;
         this.emailVerifiedYn = emailVerifiedYn;
+        this.personalInfoAgreementYn = personalInfoAgreementYn;
         this.gender = gender;
         this.providerType = providerType;
         this.roleType = roleType;
+    }
+
+    public enum UserStatus {
+        USER_ACTIVE("활동중"),
+        USER_SLEEP("휴면 상태"),
+        USER_QUIT("탈퇴 상태");
+
+        @Getter
+        private String status;
+
+        UserStatus(String status) {
+            this.status = status;
+        }
+    }
+
+    public enum PersonalInfoAgreement {
+        Y
+        ;
     }
 
     public enum EmailVerified {
@@ -94,7 +120,7 @@ public class User {
 
     public enum Gender {
         MALE,
-        FEMALE,
+        FEMALE
         ;
     }
 

@@ -32,6 +32,10 @@ public class CalendarController {
     private final CalendarService calendarService;
     private final CalendarMapper calendarMapper;
 
+    /*
+     * # 캘린더 등록
+     *
+     */
     @PostMapping
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> postCalendar(
@@ -48,6 +52,10 @@ public class CalendarController {
         return ResponseEntity.created(uri).body(ApiResponse.created());
     }
 
+    /*
+     * # 캘린더 개별 조회
+     *
+     */
     @GetMapping("{calendar-id}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> getCalendar(
@@ -61,6 +69,10 @@ public class CalendarController {
         return ResponseEntity.ok().body(ApiResponse.ok("data", response));
     }
 
+    /*
+     * # 캘린더 등록일자 기준 조회
+     *
+     */
     @GetMapping(params = { "recodedAt" })
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> getCalendarWithQuery(
@@ -74,6 +86,10 @@ public class CalendarController {
         return ResponseEntity.ok().body(ApiResponse.ok("data", response));
     }
 
+    /*
+     * # 캘린더 전체 조회
+     *
+     */
     @GetMapping
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> getAllCalendar(@AuthenticationPrincipal UserPrincipal userPrincipal) {
@@ -84,6 +100,10 @@ public class CalendarController {
         return ResponseEntity.ok().body(ApiResponse.ok("data", responses));
     }
 
+    /*
+     * # 캘린더 수정
+     *
+     */
     @PatchMapping("{calendar-id}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> updateCalendar(
@@ -103,6 +123,10 @@ public class CalendarController {
         return ResponseEntity.ok().body(ApiResponse.ok("data", response));
     }
 
+    /*
+     * # 캘린더 삭제
+     *
+     */
     @DeleteMapping("{calendar-id}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> deleteCalendar(

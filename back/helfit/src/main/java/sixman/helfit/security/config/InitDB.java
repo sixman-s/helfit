@@ -42,6 +42,7 @@ public class InitDB {
                 180,
                 80,
                 EmailVerified.N,
+                PersonalInfoAgreement.Y,
                 Gender.MALE,
                 ProviderType.LOCAL,
                 RoleType.USER
