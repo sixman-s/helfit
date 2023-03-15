@@ -43,7 +43,7 @@ public enum ExceptionCode {
 
     COMMENTS_NOT_FOUND(404,"댓글이 존재하지 않습니다."),
 
-    CATEGORY_NOT_FOUNT(404,"카테고리가 존재하지 않습니다."),
+    CATEGORY_NOT_FOUND(404,"카테고리가 존재하지 않습니다."),
 
 
 

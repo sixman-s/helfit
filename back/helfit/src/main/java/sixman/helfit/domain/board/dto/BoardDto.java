@@ -4,15 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.lang.Nullable;
+import sixman.helfit.domain.board.entity.BoardTag;
+import sixman.helfit.domain.comment.entity.Comment;
 import sixman.helfit.global.annotations.NoKoreanCurseWords;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
-import java.util.LinkedHashSet;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 public class BoardDto {
 
@@ -36,5 +35,17 @@ public class BoardDto {
         @Nullable
         private List<BoardTagDto> boardTags;
 
+    }
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    public static class Response {
+        private String title;
+        private String text;
+        private String boardImageUrl;
+        private List<Comment> comments;
+        private List<String> tagNames;
+        private LocalDateTime createdAt;
+        private LocalDateTime modifiedAt;
     }
 }

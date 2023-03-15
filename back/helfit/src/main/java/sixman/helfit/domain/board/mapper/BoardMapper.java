@@ -5,9 +5,12 @@ import sixman.helfit.domain.board.dto.BoardDto;
 import sixman.helfit.domain.board.entity.Board;
 import sixman.helfit.domain.board.entity.BoardTag;
 import sixman.helfit.domain.category.entity.Category;
+import sixman.helfit.domain.comment.entity.Comment;
 import sixman.helfit.domain.tag.entity.Tag;
 import sixman.helfit.domain.user.entity.User;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,5 +48,36 @@ public interface BoardMapper {
 
         return board;
     }
+
+    default BoardDto.Response boardToResponse(Board board) {
+        if ( board == null ) {
+            return null;
+        }
+
+        String title = null;
+        String text = null;
+        String boardImageUrl = null;
+        List<Comment> comments = null;
+        LocalDateTime createdAt = null;
+        LocalDateTime modifiedAt = null;
+
+        title = board.getTitle();
+        text = board.getText();
+        boardImageUrl = board.getBoardImageUrl();
+        List<Comment> list = board.getComments();
+        if ( list != null ) {
+            comments = new ArrayList<Comment>( list );
+        }
+        createdAt = board.getCreatedAt();
+        modifiedAt = board.getModifiedAt();
+        List<String> tagNames = new ArrayList<>();
+        if(!board.getBoardTags().isEmpty()){
+            board.getBoardTags().stream()
+                    .peek(boardTags -> tagNames.add(boardTags.getTag().getTagName())).close();
+        }
+        return new BoardDto.Response(title,text,boardImageUrl,comments,tagNames,createdAt,modifiedAt);
+
+    }
+    List<BoardDto.Response> boardsToResponses(List<Board> boards);
 
 }

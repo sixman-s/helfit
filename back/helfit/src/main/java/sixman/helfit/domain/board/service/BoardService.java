@@ -1,5 +1,8 @@
 package sixman.helfit.domain.board.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import sixman.helfit.domain.board.entity.Board;
 import sixman.helfit.domain.board.entity.BoardTag;
@@ -37,6 +40,11 @@ public class BoardService {
             tagService.findTag(boardTag.getTag());
         }
         return boardRepository.save(board);
+    }
+
+    public Page<Board> findBoards() {
+        return boardRepository.findAll(PageRequest.of(1,10,
+                Sort.by("boardId").descending()));
     }
 
     private void verifyBoard(Board board) {
