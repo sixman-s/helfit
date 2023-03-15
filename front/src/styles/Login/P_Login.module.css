@@ -1,15 +1,13 @@
 .layout {
   display: grid;
-  padding: 40px 120px 40px 350px;
+  padding: 120px 120px 20px 350px;
   grid-auto-flow: column;
   grid-auto-rows: 150px;
   grid-template-areas:
-    'header  header'
     'contentL  contentR'
     'contentL  contentR'
     'contentL  contentR'
-    'contentL  contentR'
-    'footer  footer';
+    'contentL  contentR';
   background-color: var(--bg_2);
 }
 

@@ -13,8 +13,8 @@ type LoginForm = {
 const LoginBox = () => {
   const {
     register,
-    handleSubmit
-    // formState: { errors }
+    handleSubmit,
+    formState: { errors }
   } = useForm<LoginForm>();
   const router = useRouter();
   const SignuphandleClick = () => {
@@ -42,33 +42,6 @@ const LoginBox = () => {
       });
   };
 
-  // 유효성 검사
-
-  // const validateID = (userID: string) => {
-  //   const constraint = /^[a-z0-9]{6,20}$/;
-  //   if (!userID) {
-  //     return 'userID cannot be empty';
-  //   } else if (/\s/.test(userID)) {
-  //     return 'userID cannot contain blank spaces';
-  //   } else if (!constraint.test(userID)) {
-  //     return 'userID must contain between 6 and 20 lowercase letters and numbers';
-  //   }
-  //   return '';
-  // };
-
-  // const validatePassword = (password: string) => {
-  //   const constraint =
-  //     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
-  //   if (!password) {
-  //     return 'Password cannot be empty';
-  //   } else if (password.length < 8) {
-  //     return 'Passwords must contain at least 8 characters';
-  //   } else if (!constraint.test(password)) {
-  //     return 'Please add at least 1 letter, 1 number, and 1 special character.';
-  //   }
-  //   return '';
-  // };
-
   return (
     <>
       <div className={boxstyle.box}>
@@ -78,28 +51,45 @@ const LoginBox = () => {
             <input
               type='text'
               {...register('userID', {
-                required: true
-                // validate: validateID
+                required: true,
+                pattern: {
+                  value: /^[a-z0-9]{6,20}$/,
+                  message: '6~20글자 사이의 소문자 + 숫자의 조합이여야 합니다.'
+                }
               })}
               className={boxstyle.login__form}
             />
-            {/* {errors.userID && (
-              <p style={{ color: 'red' }}>{errors.userID.message}</p>
-            )} */}
+            {errors.userID && (
+              <div className={boxstyle.errorMessage}>
+                {errors.userID.message}
+              </div>
+            )}
           </div>
           <div className={boxstyle.formPassword}>
             <h5>비밀번호</h5>
             <input
               type='password'
               {...register('password', {
-                required: true
-                // validate: validatePassword
+                required: true,
+                minLength: {
+                  value: 8,
+                  message: '8글자 이상이어야 합니다.'
+                },
+                pattern: {
+                  value:
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+                  message:
+                    '대/소문자, 숫자, 특수문자가 1개 이상 포함되어야 합니다.'
+                }
               })}
               className={boxstyle.login__form}
             />
-            {/* {errors.password && (
-              <p style={{ color: 'red' }}>{errors.password.message}</p>
-            )} */}
+
+            {errors.password && (
+              <div className={boxstyle.errorMessage}>
+                {errors.password.message}
+              </div>
+            )}
           </div>
           <div className={boxstyle.buttons}>
             <Btn
