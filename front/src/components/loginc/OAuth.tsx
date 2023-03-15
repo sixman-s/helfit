@@ -1,5 +1,4 @@
 import style from '../../styles/Login/C_LoginBox.module.css';
-import axios from 'axios';
 
 const OAuthBox = () => {
   const handleGoogleLogin = () => {
