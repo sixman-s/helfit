@@ -5,15 +5,25 @@
 .bottomContainer{
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content:center
 }
 
-.bottomContainer div {
-    width: 80px;
-    height: 80px;
-    border: 1px solid black;
-    border-radius: 50px;
+.bottomContainer > div:first-child {
+    width: 200px;
+    height: 50px;
+    border: 1px solid var(--line_1);
+    border-radius: 10px;
     text-align: center;
-    padding-top: 20px;
-   
+}
+
+.bottomContainer > div:first-child span {
+    font-size: var(--h1);
+    color: var(--text_5);
+    line-height: 150%;
+}
+
+.kcal{
+    line-height: 200%;
+    font-size: var(--h2);
+    margin-left: 10px;
 }

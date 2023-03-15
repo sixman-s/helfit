@@ -34,6 +34,22 @@ const ModalPInfo = () => {
         <label htmlFor='birthDay'>생년월일</label>
         <input type='text' id='birthDay' {...register('birthday')} />
 
+        <label htmlFor='height'>키</label>
+        <input type='text' id='height' className='height'></input>
+
+        <label htmlFor='weight'>몸무게</label>
+        <input type='text' id='weight' className='weight'></input>
+
+        <span>성별</span>
+        <div>
+          <input type='radio' name='gender' id='man' />
+          <label htmlFor='man'>남</label>
+        </div>
+        <div>
+          <input type='radio' name='gender' id='woman' />
+          <label htmlFor='woman'>여</label>
+        </div>
+
         <p className={s.inputP}>
           <button id={s.clearBtn}>Clear profile</button>
           <button type='submit' id={s.submitBtn}>

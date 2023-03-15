@@ -1,7 +1,6 @@
 .inputDiv{
     display: flex;
-    flex-direction: column;
-    
+    flex-direction: column;   
     margin: 20px 30px;
 }
 
@@ -19,6 +18,10 @@
 .inputDiv .inputP{
     margin: 40px 40px 20px;
 }
+
+.inputDiv span{
+    margin-top: 20px;
+ }
 
 
 #clearBtn {
