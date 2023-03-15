@@ -75,6 +75,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             null,
             null,
             EmailVerified.Y,
+            PersonalInfoAgreement.Y,
             null,
             providerType,
             RoleType.USER

@@ -241,17 +241,13 @@ public class UserController {
      * # 사용자 정보 변경
      *
      */
-    @PatchMapping("{user-id}")
+    @PatchMapping
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> updateUser(
-        @Positive @PathVariable("user-id") Long userId,
         @Valid @RequestBody UserDto.Update requestBody,
         @AuthenticationPrincipal UserPrincipal userPrincipal
     ) {
-        if (!userId.equals(userPrincipal.getUser().getUserId()))
-            throw new BusinessLogicException(ExceptionCode.ACCESS_DENIED);
-
-        User updatedUser = userService.updateUser(userId, userMapper.userDtoPatchToUser(requestBody));
+        User updatedUser = userService.updateUser(userPrincipal.getUser().getUserId(), userMapper.userDtoPatchToUser(requestBody));
 
         UserDto.Response response = userMapper.userToUserDtoResponse(updatedUser);
 
@@ -262,17 +258,16 @@ public class UserController {
      * # 사용자 비밀번호 변경
      *
      */
-    @PatchMapping("/{user-id}/password")
+    @PatchMapping("/password")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> updateUserPassword(
-        @Positive @PathVariable("user-id") Long userId,
         @Valid @RequestBody UserDto.Password requestBody,
         @AuthenticationPrincipal UserPrincipal userPrincipal
     ) {
-        if (!userId.equals(userPrincipal.getUser().getUserId()))
-            throw new BusinessLogicException(ExceptionCode.ACCESS_DENIED);
-
-        userService.updateUserPassword(userId, userMapper.userDtoPasswordToUser(requestBody));
+        userService.updateUserPassword(
+            userPrincipal.getUser().getUserId(),
+            userMapper.userDtoPasswordToUser(requestBody)
+        );
 
         return ResponseEntity.ok().body(ApiResponse.ok());
     }
@@ -281,18 +276,14 @@ public class UserController {
      * # 회원 프로필 이미지 등록&수정
      *
      */
-    @PostMapping("/{user-id}/profile-image")
+    @PostMapping("/profile-image")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> updateUserProfileImage(
-        @Positive @PathVariable("user-id") Long userId,
         @RequestParam MultipartFile multipartFile,
         @AuthenticationPrincipal UserPrincipal userPrincipal
     ) throws Exception {
-        if (!userId.equals(userPrincipal.getUser().getUserId()))
-            throw new BusinessLogicException(ExceptionCode.ACCESS_DENIED);
-
         String imagePath = fileService.uploadFile(multipartFile);
-        userService.updateUserProfileImage(userId, imagePath);
+        userService.updateUserProfileImage(userPrincipal.getUser().getUserId(), imagePath);
 
         return ResponseEntity.ok().body(ApiResponse.ok());
     }
@@ -301,17 +292,21 @@ public class UserController {
      * # 회원 프로필 이미지 삭제
      *
      */
-    @DeleteMapping("/{user-id}/profile-image")
+    @DeleteMapping("/profile-image")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> updateUserProfileImage(
-        @Positive @PathVariable("user-id") Long userId,
-        @AuthenticationPrincipal UserPrincipal userPrincipal
-    ) {
-        if (!userId.equals(userPrincipal.getUser().getUserId()))
-            throw new BusinessLogicException(ExceptionCode.ACCESS_DENIED);
-
-        userService.updateUserProfileImage(userId, null);
+    public ResponseEntity<?> updateUserProfileImage(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        userService.updateUserProfileImage(userPrincipal.getUser().getUserId(), null);
 
         return ResponseEntity.ok().body(ApiResponse.noContent());
+    }
+
+    /*
+     * # 회원 탈퇴 (UserStatus 변경)
+     *
+     */
+    @DeleteMapping("/withdraw")
+    public ResponseEntity<?> withdrawUser() {
+
+        return ResponseEntity.noContent().build();
     }
 }

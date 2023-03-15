@@ -2,11 +2,13 @@ package sixman.helfit.domain.user.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.lang.Nullable;
 import sixman.helfit.global.annotations.ValidEnum;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import java.time.LocalDateTime;
@@ -32,6 +34,14 @@ public class UserDto {
         @Email
         private String email;
 
+        @NotNull
+        @ValidEnum(
+            enumClass = PersonalInfoAgreement.class,
+            message = "개인정보 제공 동의 항목은 필수입력값 입니다. : 기대값: ['Y']",
+            ignoreCase = true
+        )
+        private String personalInfoAgreement;
+
         @Nullable
         private String profileImageUrl;
 
@@ -45,8 +55,12 @@ public class UserDto {
         private Integer weight;
 
         @Nullable
-        @ValidEnum(enumClass = Gender.class)
-        private Gender gender;
+        @ValidEnum(
+            enumClass = Gender.class,
+            message = "잘못된 입력값입니다. : 기대값: ['MALE', FEMALE]",
+            ignoreCase = true
+        )
+        private String gender;
     }
 
     @Getter
@@ -77,8 +91,8 @@ public class UserDto {
         private Integer weight;
 
         @Nullable
-        @ValidEnum(enumClass = Gender.class)
-        private Gender gender;
+        @ValidEnum(enumClass = Gender.class, ignoreCase = true)
+        private String gender;
     }
 
     @Getter
