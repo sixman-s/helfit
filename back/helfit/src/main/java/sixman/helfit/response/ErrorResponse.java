@@ -64,11 +64,11 @@ public class ErrorResponse {
         return new ErrorResponse(code, FieldError.of(bindingResult));
     }
 
-    public static void sendErrorResponse(HttpServletResponse response, HttpStatus status) throws IOException {
-        ErrorResponse errorResponse = ErrorResponse.of(status);
+    public static void sendErrorResponse(HttpServletResponse response, ExceptionCode exceptionCode) throws IOException {
+        ErrorResponse errorResponse = ErrorResponse.of(exceptionCode);
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setStatus(status.value());
+        response.setStatus(exceptionCode.getStatus());
         response.getWriter().write(Objects.requireNonNull(GsonUtil.toJson(errorResponse, ErrorResponse.class)));
     }
 
