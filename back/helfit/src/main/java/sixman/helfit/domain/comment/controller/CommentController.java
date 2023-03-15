@@ -30,7 +30,7 @@ public class CommentController {
     @PostMapping("{user-id}/{board-id}")
     public ResponseEntity postComment(@Positive @PathVariable ("user-id") long userId,
                                       @Positive @PathVariable ("board-id") long boardId,
-                                      @Valid @RequestBody CommentDto.Post requestBody){
+                                      @Valid @RequestBody CommentDto.PostAndPatch requestBody){
         Comment comment = mapper.commentPostToComment(requestBody);
         Comment savedComment = commentService.createComment(comment,userId,boardId);
         URI uri = UriUtil.createUri(COMMENT_DEFAULT_URI, savedComment.getCommentId());
@@ -41,7 +41,26 @@ public class CommentController {
     @GetMapping("{board-id}")
     public ResponseEntity getComment(@Positive @PathVariable ("board-id") long boardId){
         List<Comment> comments = commentService.getComments(boardId);
-        return new ResponseEntity(mapper.commentsToCommentResponseDtos(comments),HttpStatus.OK);
+        return new ResponseEntity(mapper.commentsToResponseDtos(comments),HttpStatus.OK);
     }
+
+    @PatchMapping("{user-id}/{board-id}/{comment-id}")
+    public ResponseEntity patchComment(@Positive @PathVariable ("user-id") long userId,
+                                      @Positive @PathVariable ("board-id") long boardId,
+                                       @Positive @PathVariable ("comment-id") long commentId,
+                                      @Valid @RequestBody CommentDto.PostAndPatch requestBody) {
+        Comment comment = commentService.updateComment(mapper.commentPostToComment(requestBody),userId,boardId,commentId);
+
+        return new ResponseEntity(mapper.commentToResponseDto(comment),HttpStatus.OK);
+    }
+
+    @DeleteMapping("{user-id}/{board-id}/{comment-id}")
+    public ResponseEntity deleteComment(@Positive @PathVariable ("user-id") long userId,
+                                        @Positive @PathVariable ("board-id") long boardId,
+                                        @Positive @PathVariable ("comment-id") long commentId){
+        commentService.deleteComment(userId,boardId,commentId);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
 
 }

@@ -16,7 +16,7 @@ public class CommentDto {
 
     @Getter
     @Setter
-    public static class Post {
+    public static class PostAndPatch {
         @NotNull
         @Size(max = 200000)
         @NoKoreanCurseWords
@@ -24,7 +24,7 @@ public class CommentDto {
     }
     @Getter
     @AllArgsConstructor
-    public static class CommentResponseDto {
+    public static class responseDto {
         private String commentBody;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;

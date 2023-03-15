@@ -8,7 +8,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface CommentMapper {
-    Comment commentPostToComment(CommentDto.Post postDto);
-    CommentDto.CommentResponseDto commentToCommentResponseDto(Comment comment);
-    List<CommentDto.CommentResponseDto> commentsToCommentResponseDtos(List<Comment> comments);
+    Comment commentPostToComment(CommentDto.PostAndPatch postDto);
+    CommentDto.responseDto commentToResponseDto(Comment comment);
+    List<CommentDto.responseDto> commentsToResponseDtos(List<Comment> comments);
 }

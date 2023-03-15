@@ -18,6 +18,6 @@ public class CategoryService {
     public void verifiedCategoryById(Long categoryId){
         Optional<Category> optionalCategory = categoryRepository.findById(categoryId);
         optionalCategory.orElseThrow(() ->
-                        new BusinessLogicException(ExceptionCode.CATEGORY_NOT_FOUNT));
+                        new BusinessLogicException(ExceptionCode.CATEGORY_NOT_FOUND));
     }
 }
