@@ -4,6 +4,15 @@ import Btn from './Buttons';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
+// import { useSelector, useDispatch } from 'react-redux';
+// import { ThunkDispatch } from 'redux-thunk';
+// import { fetchUser } from '../../store/userSlice';
+// import { RootState } from '../../store/rootReducer';
+// import { AppDispatch } from '../../store/store';
+
+// const dispatch: ThunkDispatch<RootState, null, AppDispatch> = useDispatch();
+
+const URL = process.env.NEXT_PUBLIC_URL;
 
 type LoginForm = {
   userID: string;
@@ -25,20 +34,39 @@ const LoginBox = () => {
 
   const onSubmit = (data: LoginForm) => {
     axios
-      .post(
-        'http://ec2-3-34-96-242.ap-northeast-2.compute.amazonaws.com/api/v1/users/login',
-        {
-          id: data.userID,
-          password: data.password
-        }
-      )
+      .post(`${URL}/api/v1/users/login`, {
+        id: data.userID,
+        password: data.password
+      })
       .then((res) => {
-        localStorage.setItem('accessToken', res.data.body.accessToken);
+        const accessToken = res.data.body.accessToken;
+        localStorage.setItem('accessToken', accessToken);
+        // dispatch(fetchUser(res.data.body.accessToken));
+        axios
+          .get(`${URL}/api/v1/users`, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`
+            }
+          })
+          .then((res) => {
+            const UserInfo = res.data.body.data;
+            localStorage.setItem('userId', UserInfo.userId);
+            localStorage.setItem('id', UserInfo.id);
+            localStorage.setItem('email', UserInfo.email);
+            localStorage.setItem('nickname', UserInfo.nickname);
+            localStorage.setItem('birth', UserInfo.birth);
+            localStorage.setItem('height', UserInfo.height);
+            localStorage.setItem('weight', UserInfo.weight);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
         router.push('/');
       })
+
       .catch((error) => {
         console.log(error);
-        alert('아이디 또는 비밀번호가 일치하지 않습니다.');
+        alert('ID or password do not match.');
       });
   };
 

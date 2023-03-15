@@ -23,7 +23,7 @@
 .buttons {
   display: flex;
   justify-content: space-around;
-  margin-top: 20px;
+  margin-top: 40px;
 }
 .button {
   background-color: var(--main);
@@ -58,4 +58,5 @@
 .errorMessage {
   color: red;
   font-size: 12px;
+  position: fixed;
 }

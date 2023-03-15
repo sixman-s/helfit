@@ -1,22 +1,18 @@
 import style from '../../styles/Login/C_LoginBox.module.css';
 
+const URL = process.env.NEXT_PUBLIC_URL;
+
 const OAuthBox = () => {
   const handleGoogleLogin = () => {
-    window.open(
-      'http://ec2-3-34-96-242.ap-northeast-2.compute.amazonaws.com/oauth2/authorization/google'
-    );
+    window.open(`${URL}/oauth2/authorization/google`);
   };
 
   const handleNaverLogin = () => {
-    window.open(
-      'http://ec2-3-34-96-242.ap-northeast-2.compute.amazonaws.com/oauth2/authorization/naver'
-    );
+    window.open(`${URL}/oauth2/authorization/naver`);
   };
 
   const handleKakaoLogin = () => {
-    window.open(
-      'http://ec2-3-34-96-242.ap-northeast-2.compute.amazonaws.com/oauth2/authorization/kakao'
-    );
+    window.open(`${URL}/oauth2/authorization/kakao`);
   };
 
   return (

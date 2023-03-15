@@ -13,7 +13,6 @@ const Checkbox = () => {
   return (
     <>
       <div>
-        <input type='checkbox' />
         <a className={style.Showmodal} onClick={handleModalOpen}>
           개인정보 수집 및 이용
         </a>
@@ -22,8 +21,12 @@ const Checkbox = () => {
       {showModal && (
         <div className={style.modal} ref={modalRef}>
           <div className={style.modal_content}>
-            <h2>개인정보 수집 및 이용</h2>
+            <h2>개인정보 수집 및 이용 동의</h2>
+            <h6 style={{ color: 'red' }}>
+              * 필독 * 상기 사항을 모두 읽어주시기 바랍니다.
+            </h6>
             <p>
+              <br />
               1. 개인정보의 수집항목 및 수집방법
               <br /> HelFit사이트에서는 기본적인 회원 서비스 제공을 위한
               필수정보로 실명인증정보와 가입정보로 구분하여 다음의 정보를
@@ -67,17 +70,13 @@ const Checkbox = () => {
               동의, 법률의 특별한 규정 등 개인정보 보호법 제17조 및 제18조에
               해당하는 경우에만 개인정보를 제3자에게 제공합니다.
               <br />
+              <br />
             </p>
             <button
-              style={{
-                fontSize: '18px',
-                width: '100px',
-                height: '30px',
-                borderRadius: '20px'
-              }}
+              className={style.modalBtn}
               onClick={() => setShowModal(false)}
             >
-              닫기
+              모든 내용을 확인했습니다.
             </button>
           </div>
         </div>

@@ -6,6 +6,8 @@ import Btn from '@/components/loginc/Buttons';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 
+const URL = process.env.NEXT_PUBLIC_URL;
+
 type SignupForm = {
   userID: string;
   email: string;
@@ -13,6 +15,7 @@ type SignupForm = {
   name: string;
   birth: string;
   nickname: string;
+  checkbox: any;
 };
 
 const SignupBox = () => {
@@ -25,16 +28,13 @@ const SignupBox = () => {
 
   const onSubmit = (data: SignupForm) => {
     axios
-      .post(
-        'http://ec2-3-34-96-242.ap-northeast-2.compute.amazonaws.com/api/v1/users/signup',
-        {
-          id: data.userID,
-          password: data.password,
-          email: data.email,
-          nickname: data.nickname,
-          birth: data.birth
-        }
-      )
+      .post(`${URL}/api/v1/users/signup`, {
+        id: data.userID,
+        password: data.password,
+        email: data.email,
+        nickname: data.nickname,
+        birth: data.birth
+      })
       .then((response) => {
         router.push('/login');
         console.log(response);
@@ -167,6 +167,17 @@ const SignupBox = () => {
         </div>
         <div className={style.footer}>
           <div className={style.Checkbox}>
+            <div>
+              <input
+                type='checkbox'
+                {...register('checkbox', { required: true })}
+              />
+              {errors.checkbox && (
+                <div className={style.errormessage}>
+                  가입을 위해 동의가 필요합니다.
+                </div>
+              )}
+            </div>
             <Checkbox />
           </div>
           <div className={style.OAuthbox}>
