@@ -45,8 +45,6 @@ public enum ExceptionCode {
 
     CATEGORY_NOT_FOUND(404,"카테고리가 존재하지 않습니다."),
 
-
-
     /*
      * # 405 METHOD NOT ALLOWED
      *
