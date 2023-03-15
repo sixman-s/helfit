@@ -281,7 +281,7 @@ public class UserController {
      * # 회원 프로필 이미지 등록&수정
      *
      */
-    @PostMapping("/{user-id}/profileImage")
+    @PostMapping("/{user-id}/profile-image")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> updateUserProfileImage(
         @Positive @PathVariable("user-id") Long userId,
@@ -301,7 +301,7 @@ public class UserController {
      * # 회원 프로필 이미지 삭제
      *
      */
-    @DeleteMapping("/{user-id}/profileImage")
+    @DeleteMapping("/{user-id}/profile-image")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> updateUserProfileImage(
         @Positive @PathVariable("user-id") Long userId,
