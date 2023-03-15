@@ -23,7 +23,7 @@ public class Comment extends Auditable {
     @Column(nullable = false, length = 20000)
     private String commentBody;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="user_id")
     private User user;
 

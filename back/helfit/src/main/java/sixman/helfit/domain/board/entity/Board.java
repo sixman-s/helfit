@@ -31,7 +31,7 @@ public class Board extends Auditable {
     @Column(length = 512)
     private String boardImageUrl;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
 

@@ -37,13 +37,13 @@ public class BoardService {
     public Board createBoard(Board board){
         verifyBoard(board);
         for (BoardTag boardTag: board.getBoardTags()) {
-            tagService.findTag(boardTag.getTag());
+            boardTag.setTag(tagService.findTag(boardTag.getTag()));
         }
         return boardRepository.save(board);
     }
 
-    public Page<Board> findBoards() {
-        return boardRepository.findAll(PageRequest.of(1,10,
+    public Page<Board> findBoards(int page) {
+        return boardRepository.findAll(PageRequest.of(page,10,
                 Sort.by("boardId").descending()));
     }
 
@@ -58,5 +58,8 @@ public class BoardService {
         return optionalBoard.orElseThrow(() -> new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND));
     }
 
-
+    public Board findBoardByAllId(Long categoryId,Long userId, Long boardId){
+        Optional<Board> optionalBoard = boardRepository.findBoardByIds(categoryId, userId, boardId);
+        return optionalBoard.orElseThrow(() -> new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND));
+    }
 }

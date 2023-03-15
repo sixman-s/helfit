@@ -4,8 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.lang.Nullable;
-import sixman.helfit.domain.board.entity.BoardTag;
-import sixman.helfit.domain.comment.entity.Comment;
+
+import sixman.helfit.domain.comment.dto.CommentDto;
+
+import sixman.helfit.domain.tag.dto.TagDto;
 import sixman.helfit.global.annotations.NoKoreanCurseWords;
 
 import javax.validation.constraints.NotNull;
@@ -43,8 +45,8 @@ public class BoardDto {
         private String title;
         private String text;
         private String boardImageUrl;
-        private List<Comment> comments;
-        private List<String> tagNames;
+        private List<CommentDto.responseDto> comments;
+        private List<TagDto.GetResponse> tags;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
     }

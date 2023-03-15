@@ -37,10 +37,17 @@ public class BoardController {
 
         return ResponseEntity.created(location).body(ApiResponse.created());
     }
+    @GetMapping("/{category-id}/{user-id}/{board-id}")
+    public ResponseEntity getBoard(@Positive @PathVariable ("category-id") Long categoryId,
+                                    @Positive @PathVariable ("user-id") Long userId,
+                                    @Positive @PathVariable ("board-id") Long boardId) {
+        Board board = boardService.findBoardByAllId(categoryId, userId, boardId);
 
+        return new ResponseEntity(mapper.boardToResponse(board),HttpStatus.OK);
+    }
     @GetMapping()
-    public ResponseEntity getBoards() {
-        Page<Board> pageBoards = boardService.findBoards();
+    public ResponseEntity getBoards(@Positive @RequestParam int page) {
+        Page<Board> pageBoards = boardService.findBoards(page-1);
         List<Board> listBoards = pageBoards.getContent();
 
         return new ResponseEntity(mapper.boardsToResponses(listBoards),HttpStatus.OK);
