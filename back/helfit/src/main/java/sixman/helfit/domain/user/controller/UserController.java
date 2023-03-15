@@ -229,10 +229,10 @@ public class UserController {
      * # 사용자 정보 조회
      *
      */
-    @GetMapping("{user-id}")
+    @GetMapping
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> getUser(@Positive @PathVariable("user-id") Long userId) {
-        User user = userService.findUserByUserId(userId);
+    public ResponseEntity<?> getUser(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        User user = userService.findUserByUserId(userPrincipal.getUser().getUserId());
 
         return ResponseEntity.ok().body(ApiResponse.ok("data", user));
     }

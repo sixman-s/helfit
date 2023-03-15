@@ -32,12 +32,18 @@ public class CalendarService {
         return calendarRepository.findAllByUserId(userId);
     }
 
+    @Transactional(readOnly = true)
+    public Calendar findCalendarByUserIdAndRecodedAt(Long userId, String recodedAt) {
+        Optional<Calendar> byUserIdAndRecodedAt = calendarRepository.findByUserIdAndRecodedAt(userId, recodedAt);
+
+        return byUserIdAndRecodedAt.orElseThrow(() -> new BusinessLogicException(ExceptionCode.NOT_FOUND));
+    }
+
     public Calendar updateCalendar(Calendar requestCalendar, Calendar verifiedCalendar) {
         Calendar updatedCalendar = customBeanUtil.copyNonNullProperties(requestCalendar, verifiedCalendar);
 
         return calendarRepository.save(updatedCalendar);
     }
-
 
     public void deleteCalendar(Calendar verifiedCalendar) {
         calendarRepository.delete(verifiedCalendar);
