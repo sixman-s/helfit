@@ -1,5 +1,6 @@
 package sixman.helfit.domain.board.controller;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import sixman.helfit.utils.UriUtil;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/board")
@@ -34,5 +36,20 @@ public class BoardController {
         URI location = UriUtil.createUri(BOARD_DEFAULT_URL,board.getBoardId());
 
         return ResponseEntity.created(location).body(ApiResponse.created());
+    }
+    @GetMapping("/{category-id}/{user-id}/{board-id}")
+    public ResponseEntity getBoard(@Positive @PathVariable ("category-id") Long categoryId,
+                                    @Positive @PathVariable ("user-id") Long userId,
+                                    @Positive @PathVariable ("board-id") Long boardId) {
+        Board board = boardService.findBoardByAllId(categoryId, userId, boardId);
+
+        return new ResponseEntity(mapper.boardToResponse(board),HttpStatus.OK);
+    }
+    @GetMapping()
+    public ResponseEntity getBoards(@Positive @RequestParam int page) {
+        Page<Board> pageBoards = boardService.findBoards(page-1);
+        List<Board> listBoards = pageBoards.getContent();
+
+        return new ResponseEntity(mapper.boardsToResponses(listBoards),HttpStatus.OK);
     }
 }

@@ -1,5 +1,8 @@
 package sixman.helfit.domain.board.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import sixman.helfit.domain.board.entity.Board;
 import sixman.helfit.domain.board.entity.BoardTag;
@@ -34,9 +37,14 @@ public class BoardService {
     public Board createBoard(Board board){
         verifyBoard(board);
         for (BoardTag boardTag: board.getBoardTags()) {
-            tagService.findTag(boardTag.getTag());
+            boardTag.setTag(tagService.findTag(boardTag.getTag()));
         }
         return boardRepository.save(board);
+    }
+
+    public Page<Board> findBoards(int page) {
+        return boardRepository.findAll(PageRequest.of(page,10,
+                Sort.by("boardId").descending()));
     }
 
     private void verifyBoard(Board board) {
@@ -50,5 +58,8 @@ public class BoardService {
         return optionalBoard.orElseThrow(() -> new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND));
     }
 
-
+    public Board findBoardByAllId(Long categoryId,Long userId, Long boardId){
+        Optional<Board> optionalBoard = boardRepository.findBoardByIds(categoryId, userId, boardId);
+        return optionalBoard.orElseThrow(() -> new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND));
+    }
 }

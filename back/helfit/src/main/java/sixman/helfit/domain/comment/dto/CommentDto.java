@@ -6,10 +6,8 @@ import lombok.Setter;
 import sixman.helfit.global.annotations.NoKoreanCurseWords;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.util.List;
 
 
 public class CommentDto {
@@ -25,6 +23,8 @@ public class CommentDto {
     @Getter
     @AllArgsConstructor
     public static class responseDto {
+//        private String userNickname;
+//        private String userProfileUrl;
         private String commentBody;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
