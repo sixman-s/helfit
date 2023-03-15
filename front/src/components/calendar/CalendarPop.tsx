@@ -17,7 +17,7 @@ const ReaderPop = ({ date, open, setOpen }) => {
   const [content, setContent] = useState('');
   const [calendarId, setCalendarId] = useState(0);
   const recodedAt = DateView(date);
-  const url = `${process.env.NEXT_PUBLIC_APP_SERVER}/api/v1/calendar`;
+  const url = `${process.env.NEXT_PUBLIC_URL}/api/v1/calendar`;
   const body: PostData = { title, content, kcal, recodedAt };
   const postBody = { title, content, kcal };
 

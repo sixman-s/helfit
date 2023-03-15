@@ -50,13 +50,8 @@ const LoginBox = () => {
           })
           .then((res) => {
             const UserInfo = res.data.body.data;
-            localStorage.setItem('userId', UserInfo.userId);
-            localStorage.setItem('id', UserInfo.id);
-            localStorage.setItem('email', UserInfo.email);
-            localStorage.setItem('nickname', UserInfo.nickname);
-            localStorage.setItem('birth', UserInfo.birth);
-            localStorage.setItem('height', UserInfo.height);
-            localStorage.setItem('weight', UserInfo.weight);
+            localStorage.setItem('UserInfo', JSON.stringify(UserInfo));
+            // console.log(JSON.parse(localStorage.UserInfo).email);
           })
           .catch((error) => {
             console.log(error);
