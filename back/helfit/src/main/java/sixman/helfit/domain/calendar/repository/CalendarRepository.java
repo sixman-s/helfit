@@ -10,9 +10,12 @@ import java.util.Optional;
 public interface CalendarRepository extends JpaRepository<Calendar, Long> {
     Optional<Calendar> findByCalendarId(Long calendarId);
 
+    @Query("select c from Calendar c where c.recodedAt = :recodedAt")
+    Optional<Calendar> findByRecodedAt(String recodedAt);
+
     @Query("select c from Calendar c where c.user.userId = :userId")
     List<Calendar> findAllByUserId(Long userId);
 
-    @Query("select c from Calendar c where c.recodedAt = :recodedAt")
-    Optional<Calendar> findByRecodedAt(String recodedAt);
+    @Query("select c from Calendar c where c.user.userId = :userId and c.recodedAt = :recodedAt")
+    Optional<Calendar> findByUserIdAndRecodedAt(Long userId, String recodedAt);
 }

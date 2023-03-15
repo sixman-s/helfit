@@ -17,6 +17,7 @@ import sixman.helfit.security.entity.UserPrincipal;
 import sixman.helfit.utils.UriUtil;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import java.net.URI;
 import java.util.List;
@@ -56,6 +57,19 @@ public class CalendarController {
         Calendar verifiedCalendarWithUserId = calendarService.findVerifiedCalendarWithUserId(calendarId, userPrincipal.getUser().getUserId());
 
         CalendarDto.Response response = calendarMapper.calendarToCalendarDtoResponse(verifiedCalendarWithUserId);
+
+        return ResponseEntity.ok().body(ApiResponse.ok("data", response));
+    }
+
+    @GetMapping(params = { "recodedAt" })
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> getCalendarWithQuery(
+        @RequestParam String recodedAt,
+        @AuthenticationPrincipal UserPrincipal userPrincipal
+    ) {
+        Calendar calendarByUserIdAndRecodedAt = calendarService.findCalendarByUserIdAndRecodedAt(userPrincipal.getUser().getUserId(), recodedAt);
+
+        CalendarDto.Response response = calendarMapper.calendarToCalendarDtoResponse(calendarByUserIdAndRecodedAt);
 
         return ResponseEntity.ok().body(ApiResponse.ok("data", response));
     }
