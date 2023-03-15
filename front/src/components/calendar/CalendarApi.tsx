@@ -15,7 +15,6 @@ const CalendarApi = ({ setDate, date, open, setOpen }: Props) => {
       selected={date}
       maxDate={new Date()}
       onChange={(date) => {
-        console.log(date);
         setDate(date);
         setOpen(true);
       }}

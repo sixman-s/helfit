@@ -23,13 +23,10 @@ const LNB = () => {
   const menuActive = (menu: string) => {
     const path = router.pathname;
     if (menu === 'index' && path === '/') {
-      console.log(menu, path);
       return true;
     } else if (path === `/${menu}` || path.includes(`/${menu}`)) {
-      console.log(menu, path);
       return true;
     } else {
-      console.log(menu, path);
       return false;
     }
   };
@@ -73,7 +70,7 @@ const LNB = () => {
               src='../../assets/lnb_lnout_icn.svg'
               className={styled.lnbIcon}
             />
-            <span className={styled.lnbFont}>{'logout'}</span>
+            <span className={styled.lnbFont}>{'login'}</span>
           </Link>
         </li>
       </ul>

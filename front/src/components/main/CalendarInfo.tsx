@@ -2,15 +2,9 @@ import Link from 'next/link';
 import { useState } from 'react';
 import layout from '../../styles/main/C_infoLayout.module.css';
 import styled from '../../styles/main/C_calendarInfo.module.css';
+import { DateView } from '../calendar/utils/DateView';
 
 const CalendarInfo = () => {
-  const DateView = (current: Date) => {
-    let year = current.getFullYear().toString();
-    let month = (+current.getMonth() + 1).toString().padStart(2, '0');
-    let day = current.getDate().toString().padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  };
-
   const [date, setDate] = useState(DateView(new Date()));
   const calorie = 1000;
   const title = '제목을 입력해 주세요';

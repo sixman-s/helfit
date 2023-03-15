@@ -131,7 +131,3 @@
 .react-datepicker__year-option--selected_year {
   color: var(--main);
 }
-
-.react-datepicker__navigation--years-upcoming,
-.react-datepicker__navigation--years-previous {
-}
