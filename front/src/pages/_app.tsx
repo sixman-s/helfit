@@ -6,7 +6,7 @@ import '../styles/calendar/C_calendarApi.css';
 import '../styles/Editor.css';
 import Script from 'next/script';
 
-export default function App({ Component, pageProps }: AppProps) {
+const App = ({ Component, pageProps }: AppProps) => {
   return (
     <>
       <Script
@@ -16,4 +16,6 @@ export default function App({ Component, pageProps }: AppProps) {
       <Component {...pageProps} />
     </>
   );
-}
+};
+
+export default App;

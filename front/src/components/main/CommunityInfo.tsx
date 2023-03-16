@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import layout from '../../styles/main/C_infoLayout.module.css';
-import styled from '../../styles/main/C_CommunityInfo.module.css';
+import styled from '../../styles/main/C_communityInfo.module.css';
+import NonMembers from './NonMembers';
 
 const CommunityInfo = () => {
   const imgUrl =
