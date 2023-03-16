@@ -7,11 +7,12 @@ phases:
   build:
     commands:
       - echo Build Starting on `date`
+      - cd helfit
       - chmod +x ./gradlew
       - ./gradlew clean build
   post_build:
     commands:
-      - echo $(basename ./build/libs/*.jar)
+      - echo $(basename ./helfit/build/libs/*.jar)
 artifacts:
   files:
     - build/libs/*.jar
