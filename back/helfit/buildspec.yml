@@ -6,16 +6,10 @@ phases:
       java: corretto11
   build:
     commands:
-      - echo Build Starting on `date`
-      - cd back/helfit
+      - echo Build Starting on `date`s
+      - cd helfit
       - chmod +x ./gradlew
       - ./gradlew clean build
   post_build:
     commands:
-      - echo $(basename ./back/helfit/build/libs/*.jar)
-artifacts:
-  files:
-    - back/helfit/build/libs/*.jar
-    - back/helfit/scripts/**
-    - back/helfit/appspec.yml
-  discard-paths: yes
+      - echo $(basename ./helfit/build/libs/*.jar)
