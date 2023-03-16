@@ -6,9 +6,15 @@ phases:
       java: corretto11
   build:
     commands:
-      - echo Build Starting on `date`s
+      - echo Build Starting on `date`
       - chmod +x ./gradlew
       - ./gradlew clean build
   post_build:
     commands:
       - echo $(basename ./build/libs/*.jar)
+artifacts:
+  files:
+    - build/libs/*.jar
+    - scripts/**
+    - appspec.yml
+  discard-paths: yes
