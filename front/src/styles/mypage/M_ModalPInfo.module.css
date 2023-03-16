@@ -8,11 +8,35 @@
    margin: 10px 0;
 }
 
-.inputDiv > input{
+ .inputDiv .bottomInput {
+    display: flex;
+  
+
+ }
+
+ .inputDiv .bottomInput .hnw{
+    display: flex;
+    flex-direction: column;
+ }
+
+ .inputDiv .bottomInput .hnw label{
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+ }
+
+.inputDiv .info{
     border: 1px solid #B1B1B1;
     width: 340px;
     height: 25px;
     padding: 2px 5px;
+}
+
+.inputDiv .hInfo{
+    border: 1px solid #B1B1B1;
+    height: 25px;
+    padding: 2px 5px;
+    width: 150px;
 }
 
 .inputDiv .inputP{
@@ -23,6 +47,16 @@
     margin-top: 20px;
  }
 
+
+#genderDiv {
+    text-align: center;
+    margin: 10px 30px 0;
+
+}
+
+.innerGenderDiv{
+    display: flex;
+}
 
 #clearBtn {
     width: 123px;
