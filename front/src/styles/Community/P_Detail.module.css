@@ -15,22 +15,7 @@
   display: grid;
   grid-row-gap: 20px;
 }
-.UserProfile {
-  display: flex;
-  margin-top: 3px;
-  align-items: center;
-  justify-content: flex-end;
-}
-.UserPhoto {
-  width: 40px;
-  margin-right: 8px;
-}
-.UserName {
-  margin-right: 20px;
-  color: var(--main);
-  font-weight: bold;
-  font-size: var(--h6);
-}
+
 .Category {
   color: var(--main);
   font-weight: bold;

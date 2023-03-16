@@ -1,11 +1,8 @@
 import style from '../../styles/Community/P_Detail.module.css';
 import React, { useState } from 'react';
+import UserNav from './C_Community/UserNav';
 
 const DetailP = () => {
-  const [userProfile, setUserProfile] = useState(
-    '../../assets/Community/UserProfile.svg'
-  );
-  const [userName, setUserName] = useState('User');
   const [writeCommnet, setWriteCommnet] = useState('');
 
   const handleSubmit = (e: React.KeyboardEvent) => {
@@ -31,14 +28,7 @@ const DetailP = () => {
     <>
       <div className={style.allInput}>
         <div className={style.UserProfile}>
-          <img
-            src={userProfile}
-            className={style.UserPhoto}
-            onError={() =>
-              setUserProfile('../../assets/Community/UserProfile.svg')
-            }
-          />
-          <div className={style.UserName}>{userName}</div>
+          <UserNav />
         </div>
         <div className={style.Category}>헬스 갤러리</div>
         <div className={style.Title}>홍대 헬스장 가려면 어디로 가야 해요? </div>
