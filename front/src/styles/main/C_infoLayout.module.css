@@ -1,5 +1,4 @@
 .container {
-  display: block;
   width: 750px;
   height: 470px;
   background: white;
@@ -24,6 +23,7 @@
 
 .moreBtn {
   color: var(--text_5);
+  margin-left: 4px;
 }
 
 .moreBtn:hover {

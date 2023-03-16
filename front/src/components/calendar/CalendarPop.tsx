@@ -33,8 +33,8 @@ const ReaderPop = ({ date, open, setOpen }) => {
         axios
           .post(url, body, headers)
           .then((res) => console.log(res))
-          .catch((error) => alert('내용을 입력해 주세요'));
-      }
+          .catch((error) => console.log(error));
+      } else alert('로그인 후 이용해 주세요');
     }
   };
 
@@ -49,7 +49,7 @@ const ReaderPop = ({ date, open, setOpen }) => {
         };
         axios
           .patch(`${url}/${calendarId}`, postBody, headers)
-          .catch((error) => console.log(error));
+          .catch((error) => alert('로그인 후 이용해 주세요'));
       }
     }
   };
@@ -66,7 +66,7 @@ const ReaderPop = ({ date, open, setOpen }) => {
         axios
           .delete(`${url}/${calendarId}`, headers)
           .catch((error) => alert('삭제되지 않았습니다'));
-      }
+      } else alert('로그인 후 이용해 주세요');
     }
   };
   // ! 1안 : 서버에 데이터가 undefined면 get, 있으면 patch

@@ -4,7 +4,7 @@
   align-items: flex-end;
   justify-content: space-between;
   max-width: 750px;
-  margin-bottom: 40px;
+  padding-bottom: 40px;
 }
 
 .h3 {
@@ -68,4 +68,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.container {
+  width: 750px;
+  display: flex;
+  flex-direction: column;
 }
