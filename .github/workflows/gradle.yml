@@ -58,9 +58,9 @@ jobs:
       - name: Upload to S3
         run: aws s3 cp --region ap-northeast-2 $ZIP_FILE s3://$S3_BUCKET_NAME/$ZIP_FILE
 
-#      - name: Code Deploy
-#        run: >
-#          aws deploy create-deployment --application-name $APPLICATION_NAME
-#          --deployment-group-name $APPLICATION_GROUP_NAME
-#          --deployment-config-name CodeDeployDefault.AllAtOnce
-#          --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$ZIP_FILE
+      - name: CodeDeploy
+        run: >
+          aws deploy create-deployment --application-name $APPLICATION_NAME
+          --deployment-group-name $APPLICATION_GROUP_NAME
+          --deployment-config-name CodeDeployDefault.AllAtOnce
+          --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$ZIP_FILE
