@@ -5,6 +5,7 @@ import DropdownC, { Option } from './C_Community/Dropdown';
 import Tag from './C_Community/Tag';
 import Btn from '../loginc/Buttons';
 import UserNav from './C_Community/UserNav';
+import axios from 'axios';
 
 const options: Option[] = [
   { key: 'health', text: '헬스 갤러리', value: 'health' },
@@ -15,9 +16,35 @@ const options: Option[] = [
 ];
 
 const WritePostBox = () => {
-  const [editorInput, setEditorInput] = useState('');
+  const [category, setCategory] = useState('');
+  const [tags, setTags] = useState<any[]>([]);
+  const [title, setTitle] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [fileName, setFileName] = useState<string>('No file selected');
+  const [editorInput, setEditorInput] = useState('');
+
+  const handlePostButtonClick = () => {
+    console.log({
+      category: category,
+      tags: tags,
+      title: title,
+      files: selectedFile,
+      content: editorInput
+    });
+  };
+
+  const handleTagAdd = (newTags: string[]) => {
+    setTags(newTags);
+  };
+  const handleDropdownChange = (event, data) => {
+    setCategory(data.value);
+  };
+  const handleTitleInputChange = (event) => {
+    setTitle(event.target.value);
+  };
+  const handleEditorInput = (content: string) => {
+    setEditorInput(content);
+  };
 
   const handleFileInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -32,28 +59,33 @@ const WritePostBox = () => {
     }
   };
 
-  const handleEditorInput = (content: string) => {
-    setEditorInput(content);
-  };
-
   return (
     <>
       <div className={style.allInput}>
         <div className={style.UserProfile}>
           <UserNav />
         </div>
+
+        {/* 카테고리 */}
+
         <div className={style.category}>
           <div className={style.Text}>카테고리</div>
           <div className={style.dropdown}>
-            <DropdownC options={options} />
+            <DropdownC options={options} onChange={handleDropdownChange} />
           </div>
         </div>
+
+        {/* 테그 */}
+
         <div className={style.tag}>
           <div className={style.Text}>태그</div>
           <div className={style.dropdown}>
-            <Tag placeholder='Enter tags' label='Add Tag' />
+            <Tag onTagAdd={handleTagAdd} />
           </div>
         </div>
+
+        {/* 제목 */}
+
         <div className={style.title}>
           <div className={style.Text}>Title</div>
           <div className={style.TitleInput}>
@@ -61,9 +93,14 @@ const WritePostBox = () => {
               type='text'
               placeholder='Write your Title...'
               className={style.TitleInput}
+              value={title}
+              onChange={handleTitleInputChange}
             />
           </div>
         </div>
+
+        {/* 사진첨부 */}
+
         <div>
           <div className={style.Text}>사진</div>
           <div className={style.line}>
@@ -82,13 +119,19 @@ const WritePostBox = () => {
                 <p className={style.FileNameOver}>{fileName}</p>
               </div>
             </div>
+
+            {/* 게시글 등록 버튼 */}
+
             <Btn
               className={style.button}
               text='게시글 등록'
-              onClick={() => console.log('게시글 작성 버튼을 눌렀습니다.')}
+              onClick={handlePostButtonClick}
             />
           </div>
         </div>
+
+        {/* 내용 작성 에디터 */}
+
         <div className={style.editorBox}>
           <Editor
             editorInput={editorInput}

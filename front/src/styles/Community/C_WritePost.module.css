@@ -68,7 +68,9 @@
   height: 30px;
   background-color: white;
   width: 300px;
-  border-radius: 10px;
+  border-radius: 5px;
+  padding-left: 5px;
+  color: var(--text_5);
 }
 .FileNameOver {
   white-space: nowrap;

@@ -1,20 +1,63 @@
-import React from 'react';
-import { Input } from 'semantic-ui-react';
+import { useState } from 'react';
+import style from '../../../styles/Community/C_Tag.module.css';
 
-interface InputProps {
-  placeholder: string;
-  label: string;
+export interface TagProps {
+  onTagAdd: (newTags: string[]) => void;
 }
 
-const Tag: React.FC<InputProps> = ({ placeholder, label }) => (
-  <Input
-    icon='tags'
-    iconPosition='left'
-    labelPosition='right'
-    placeholder={placeholder}
-    className='tagicon'
-    label={{ tag: true, content: label, color: 'blue' }}
-  />
-);
+const Tag: React.FC<TagProps> = ({ onTagAdd }) => {
+  const [tags, setTags] = useState<string[]>([]);
+  const [tag, setTag] = useState<string>('');
+
+  const removeTag = (i: number) => {
+    const newTags = [...tags];
+    newTags.splice(i, 1);
+    setTags(newTags);
+    onTagAdd(newTags);
+  };
+
+  const addTag = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newTag = e.target.value.trim();
+    if (newTag.length > 10) {
+      return;
+    }
+    setTag(newTag);
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleClick();
+    }
+  };
+
+  const handleClick = () => {
+    const newTags = [...tags, tag];
+    setTags(newTags);
+    setTag('');
+    onTagAdd(newTags);
+  };
+
+  return (
+    <div>
+      <div className={style.TagContainer}>
+        <input
+          className={style.InputBox}
+          placeholder='Press enter to add tags ...'
+          onChange={(e) => addTag(e)}
+          onKeyPress={(e) => handleKeyPress(e)}
+          value={tag}
+        />
+        {tags.map((e, i) => (
+          <div className={style.Hash} key={i}>
+            <div className={style.HashName}>{e}</div>
+            <div className={style.HashBtn} onClick={() => removeTag(i)}>
+              x
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 export default Tag;
