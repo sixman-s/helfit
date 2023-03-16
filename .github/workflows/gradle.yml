@@ -23,7 +23,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: back/helfit
+        working-directory: back
 
     steps:
       - uses: actions/checkout@v3
