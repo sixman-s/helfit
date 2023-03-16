@@ -36,7 +36,12 @@
 }
 
 .context {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   width: 100%;
+  height: 100%;
+  overflow: hidden;
   color: var(--text_3);
   margin-bottom: 10px;
 }
