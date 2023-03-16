@@ -76,6 +76,7 @@ public class CalculatorHelper {
             result += 0;
 
         return Math.round(result*100/100.0);
+        //
     }
     public static Double calculateResultWithGender(ActivityLevel activityLevel, Goal goal,User user){
         Double bmr;

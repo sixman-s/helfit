@@ -13,6 +13,7 @@ public enum ExceptionCode {
     INVALID_ACCESS_TOKEN(400, "잘못된 토큰입니다."),
     INVALID_REFRESH_TOKEN(400, "잘못된 리프레쉬 토큰입니다."),
 
+    EXPIRED_TOKEN(400, "만료된 토큰입니다."),
     NOT_EXPIRED_TOKEN_YET(400, "만료되지 않은 토큰입니다."),
     NOT_CHANGED_PASSWORD(400, "최근 사용한 비밀번호입니다. 다른 비밀번호를 선택해 주세요."),
 
@@ -27,22 +28,18 @@ public enum ExceptionCode {
      *
      */
     ACCESS_DENIED(403, "접근이 거부되었습니다."),
+    EMAIL_NOT_CONFIRMED(403, "이메일 인증이 완료되지 않았습니다."),
 
     /*
      * # 404 NOT_FOUND
      *
      */
-
-    CATEGORY_NOT_FOUNT(404,"카테고리가 존재하지 않습니다."),
     NOT_FOUND(404,"결과가 존재하지 않습니다."),
     USERS_NOT_FOUND(404, "등록되지 않은 사용자입니다."),
     CALCULATOR_NOT_FOUND(404,"결과가 존재하지 않습니다."),
     CALCULATOR_NO_USER_INFO(404,"사용자의 신체 정보를 입력하세요"),
-
-
-
     BOARD_NOT_FOUND(404,"게시글이 존재하지 않습니다."),
-
+    CATEGORY_NOT_FOUNT(404,"카테고리가 존재하지 않습니다."),
 
 
     /*

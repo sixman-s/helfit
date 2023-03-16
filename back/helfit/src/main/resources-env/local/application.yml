@@ -1,6 +1,8 @@
 running: local
-front:
-  domain: http://localhost:3000
+
+domain:
+  front: http://localhost:3000
+  back: http://localhost:8080
 
 chat-gpt:
   secret-key: ${CHAT_GPT_SECRET_KEY}
@@ -46,22 +48,27 @@ spring:
     init:
       mode: always
       data-locations: classpath*:db/h2/data.sql
-
-  #  mail:
-#    host: smtp.gmail.com
-#    port: 587
-#    username: ${gmail_username}
-#    password: ${gmail_password}
-#    properties:
-#      mail:
-#        smtp:
-#          starttls:
-#            enable: true
-#            required: true
-#          auth: true
-#          connectiontimeout: 5000
-#          timeout: 5000
-#          writetimeout: 5000
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    encoding: UTF-8
+    check-template-location: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${GMAIL_ID}           # 앱 비밀번호 발급 google gmail 계정
+    password: ${GMAIL_PASSWORD}     # 앱 비밀번호
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+            required: true
+          auth: true
+          connection-timeout: 5000
+          timeout: 5000
+          write timeout: 5000
 
   security:
     oauth2:
@@ -130,13 +137,6 @@ app:
     authorizedRedirectUris:
       - http://localhost:3000/oauth2/receive
 
-#  thymeleaf:
-#    prefix: classpath:/mail-templates/
-#    suffix: .html
-#    mode: HTML
-#    encoding: UTF-8
-#    check-template-location: true
-
-#mail:
-#  address:
-#    admin: ${admin_mail}
+mail:
+  address:
+    admin: ${ADMIN_MAIL}

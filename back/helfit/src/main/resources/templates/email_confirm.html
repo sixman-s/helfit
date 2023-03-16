@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="x-apple-disable-message-reformatting">
+    <title>Helfit</title>
+    <style>
+        table, td, div, h1, p {font-family: Arial, sans-serif;}
+        table, td {border: 0 solid transparent !important;}
+    </style>
+</head>
+<body style="margin:0;padding:50px;">
+<table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;background:#ffffff;">
+    <tr>
+        <td align="center" style="padding:0;">
+            <table role="presentation" style="width:602px;border-collapse:collapse;border:1px solid #cccccc;border-spacing:0;text-align:left;">
+                <tr>
+                    <td style="padding:0;">
+                        <table role="presentation" style="width:602px;border-collapse:collapse;border:1px solid #cccccc;border-spacing:0;text-align:left;">
+                            <tr>
+                                <td style="padding:0; text-align: center; font-size:40px;">
+                                    Helfit
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 20px 0 20px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:0; text-align: center; font-size: 24px;">
+                                    회원가입 이메일 인증이 완료되었습니다.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 20px 0 20px; text-align: center;">
+                                    아래 링크를 통해 서비스 페이지로 돌아가실 수 있습니다.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:0; text-align: center;">
+                                    <a th:href="${link}" target="_parent">서비스 페이지로 돌아가기</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
