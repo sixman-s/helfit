@@ -136,7 +136,3 @@ app:
   oauth2:
     authorizedRedirectUris:
       - http://localhost:3000/oauth2/receive
-
-mail:
-  address:
-    admin: ${ADMIN_MAIL}

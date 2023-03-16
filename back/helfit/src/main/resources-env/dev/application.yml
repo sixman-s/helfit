@@ -26,9 +26,9 @@ spring:
       max-file-size: 10MB
       max-request-size: 10MB
   datasource:
-    url: ${datasource_url}
-    username: ${datasource_username}
-    password: ${datasource_password}
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database: mysql
@@ -37,6 +37,10 @@ spring:
       ddl-auto: update
     show-sql: true
     defer-datasource-initialization : true
+  sql:
+    init:
+      mode: always
+      data-locations: classpath*:db/h2/data.sql
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
@@ -112,7 +116,7 @@ logging:
 cors:
   allowed-origins: "*"
   allowed-headers: "*"
-  allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+  allowed-methods: GET,POST,PATCH,PUT,DELETE,OPTIONS
   max-age: 3600
 
 # Auth & OAuth
@@ -124,7 +128,3 @@ app:
   oauth2:
     authorizedRedirectUris:
       - http://localhost:3000/oauth2/receive
-
-mail:
-  address:
-    admin: ${ADMIN_MAIL}
