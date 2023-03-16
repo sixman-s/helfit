@@ -7,8 +7,15 @@ phases:
   build:
     commands:
       - echo Build Starting on `date`
+      - cd back/helfit
       - chmod +x ./gradlew
       - ./gradlew clean build
   post_build:
     commands:
-      - echo $(basename ./build/libs/*.jar)
+      - echo $(basename ./back/helfit/build/libs/*.jar)
+artifacts:
+  files:
+    - back/helfit/build/libs/*.jar
+    - back/helfit/scripts/**
+    - back/helfit/appspec.yml
+  discard-paths: yes
