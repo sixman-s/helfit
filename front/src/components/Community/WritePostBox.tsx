@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import style from '../../styles/Community/C_WritePost.module.css';
 import Editor from './C_Community/Editor';
 import DropdownC, { Option } from './C_Community/Dropdown';
 import Tag from './C_Community/Tag';
 import Btn from '../loginc/Buttons';
+import UserNav from './C_Community/UserNav';
 
 const options: Option[] = [
   { key: 'health', text: '헬스 갤러리', value: 'health' },
@@ -14,25 +15,8 @@ const options: Option[] = [
 ];
 
 const WritePostBox = () => {
-  const [userProfile, setUserProfile] = useState(
-    '../assets/Community/UserProfile.svg'
-  );
   const [editorInput, setEditorInput] = useState('');
-  const [userName, setUserName] = useState('User');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-
-  const handleUserProfile = (userProfileData: string) => {
-    if (userProfileData) {
-      setUserProfile(userProfileData);
-    }
-  };
-
-  const handleUserName = (userNameData: string) => {
-    if (userNameData) {
-      setUserName(userNameData);
-    }
-  };
-
   const [fileName, setFileName] = useState<string>('No file selected');
 
   const handleFileInputChange = (
@@ -56,14 +40,7 @@ const WritePostBox = () => {
     <>
       <div className={style.allInput}>
         <div className={style.UserProfile}>
-          <img
-            src={userProfile}
-            className={style.UserPhoto}
-            onError={() =>
-              setUserProfile('../assets/Community/UserProfile.svg')
-            }
-          />
-          <div className={style.UserName}>{userName}</div>
+          <UserNav />
         </div>
         <div className={style.category}>
           <div className={style.Text}>카테고리</div>

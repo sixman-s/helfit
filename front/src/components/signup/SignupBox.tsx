@@ -1,5 +1,5 @@
 import axios from 'axios';
-import style from '../../../styles/Signup/C_SignupBox.module.css';
+import style from '../../styles/Signup/C_SignupBox.module.css';
 import OAuthBox from '@/components/loginc/OAuth';
 import Checkbox from './Checkbox';
 import Btn from '@/components/loginc/Buttons';
@@ -33,7 +33,8 @@ const SignupBox = () => {
         password: data.password,
         email: data.email,
         nickname: data.nickname,
-        birth: data.birth
+        birth: data.birth,
+        personalInfoAgreement: 'Y'
       })
       .then((response) => {
         router.push('/login');

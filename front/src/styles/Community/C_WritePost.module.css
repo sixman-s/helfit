@@ -16,23 +16,6 @@
   margin: 20px 40px;
 }
 
-.UserProfile {
-  display: flex;
-  margin-top: 3px;
-  align-items: center;
-  justify-content: flex-end;
-}
-.UserPhoto {
-  width: 40px;
-  margin-right: 8px;
-}
-.UserName {
-  margin-right: 20px;
-  color: var(--main);
-  font-weight: bold;
-  font-size: var(--h6);
-}
-
 .Text {
   font-size: var(--h6);
   font-weight: bold;
