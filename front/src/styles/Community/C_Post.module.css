@@ -1,0 +1,78 @@
+.List {
+  width: 100%;
+}
+
+.ListHeader {
+  background-color: #e6ecfc;
+  display: grid;
+  grid-template-areas: 'No title title author date tag tag views';
+  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.12);
+  border-radius: 10px;
+  height: 40px;
+  align-items: center;
+}
+
+.ListItem {
+  margin-top: 40px;
+  color: black;
+  display: grid;
+  grid-template-areas:
+    'No title title author date tag tag views'
+    'No title title author date tag tag views'
+    'No title title author date tag tag views'
+    'No title title author date tag tag views'
+    'No title title author date tag tag views';
+}
+
+.ListHeader_No,
+.No {
+  grid-area: No;
+  width: 30px;
+  margin-left: 20px;
+}
+.ListHeader_Title,
+.title {
+  grid-area: title;
+  width: 250px;
+}
+.ListHeader_Author,
+.author {
+  grid-area: author;
+  width: 40px;
+}
+.ListHeader_Date,
+.date {
+  grid-area: date;
+  width: 40px;
+}
+.ListHeader_Tag,
+.tag {
+  grid-area: tag;
+  width: 100px;
+}
+.ListHeader_Views,
+.views {
+  grid-area: views;
+  width: 40px;
+}
+.button {
+  background-color: var(--main);
+  color: white;
+  border-radius: 10px;
+  width: 130px;
+  height: 40px;
+  margin-bottom: 20px;
+}
+.button:hover {
+  background-color: blue;
+  transition: 0.7s;
+}
+.pagenation {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+.buttonline {
+  display: flex;
+  justify-content: flex-end;
+}

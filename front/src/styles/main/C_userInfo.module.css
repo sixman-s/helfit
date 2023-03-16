@@ -1,0 +1,71 @@
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
+  max-width: 750px;
+  margin-bottom: 40px;
+}
+
+.h3 {
+  font-size: var(--h2);
+  font-weight: 500;
+  line-height: 48px;
+  color: var(--text_1);
+  margin-bottom: 0px;
+}
+
+.username {
+  color: var(--main);
+  font-weight: 700;
+}
+
+.Btn {
+  color: white;
+  background: var(--main);
+  border-radius: 30px;
+  padding: 7px 16.5px 9px 16.5px;
+  margin-top: 20px;
+}
+
+.chartContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+.chartContainer .chart:first-child {
+  margin-right: 10px !important;
+}
+.chart {
+  width: 370px;
+  height: 334px;
+  background: white;
+  box-shadow: 0px 4px 6px rgba(15, 73, 166, 0.08);
+  border-radius: 30px;
+  padding: 20px 32px;
+  margin: 0px !important;
+}
+
+.chartInfo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.chartTitle {
+  font-size: var(--h3);
+  font-weight: 700;
+  color: var(--text_6);
+}
+
+.chartCaption {
+  color: var(--text_4);
+  margin-left: 10px;
+}
+
+.chartView {
+  height: 238px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

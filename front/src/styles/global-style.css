@@ -2,6 +2,7 @@
 *,
 *:before,
 *:after {
+  font-family: 'pretendard' !important;
   box-sizing: border-box;
   border: none;
   list-style: none;
@@ -10,7 +11,7 @@
 }
 html,
 body {
-  font-family: 'pretendard';
+  
   font-size: 14px;
   width: 100vw;
   height: 100vh;
@@ -23,10 +24,9 @@ main {
 }
 section {
   position: inherit;
-  padding: 60px 80px 60px 320px;
   width: 100%;
   min-height: 100vh;
-  background-color: #f2f2f2;
+  background-color: var(--bg_2);
 }
 a {
   text-decoration: none;

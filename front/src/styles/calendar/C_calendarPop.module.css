@@ -1,0 +1,157 @@
+.article {
+  top: 0;
+  right: 0;
+  position: fixed;
+  height: 100vh;
+  width: 444px;
+  background: white;
+  box-shadow: -6px 0px 20px rgba(15, 73, 166, 0.06);
+  animation: mySlide 0.2s ease-in-out;
+}
+@keyframes mySlide {
+  from {
+    right: -100px;
+    opacity: 0;
+  }
+  to {
+    right: 0;
+    opacity: 1;
+  }
+}
+
+.disable {
+  display: none;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.closeBtn {
+  padding: 12px;
+  background: none;
+  font-size: var(--h3);
+  color: var(--line_1);
+  text-align: center;
+  line-height: 14px;
+}
+
+.closeBtn:hover {
+  background: var(--bg_1);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  margin: 20px 40px;
+}
+
+.title {
+  width: 100%;
+  font-family: 'pretendard';
+  font-weight: 600;
+  font-size: var(--h2);
+  color: var(--text_3);
+  resize: none;
+  word-break: break-all;
+  overflow: visible;
+}
+.memo::placeholder,
+.title::placeholder {
+  color: #d5d9e1;
+}
+
+.calInput:focus,
+.memo:focus,
+.title:focus {
+  outline: none;
+}
+
+.infoUl {
+  margin-top: 20px;
+}
+
+.infoLi {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.cate {
+  display: flex;
+  flex-direction: row;
+}
+
+.icon {
+  width: 16px;
+  filter: invert(70%) sepia(0%) saturate(90%) hue-rotate(180deg)
+    brightness(220%) contrast(93%);
+}
+
+.label {
+  font-size: 14px;
+  color: #c4cad5;
+  margin-left: 6px;
+}
+.calInput,
+.memo,
+.innerText {
+  font-size: 14px;
+  color: var(--text_4);
+}
+
+.calInput {
+  width: auto;
+  text-align: end;
+  margin-right: 4px;
+}
+
+.calInput::-webkit-outer-spin-button,
+.calInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+.memoLi {
+  width: 100%;
+  height: 100%;
+  border-top: 1px solid var(--line_2);
+  border-bottom: 1px solid var(--line_2);
+  padding-top: 20px;
+}
+
+.memo {
+  width: 100%;
+  height: 100%;
+  font-family: 'pretendard';
+  resize: none;
+  color: var(--text_2);
+  padding: 10px 0px;
+}
+
+.btnSet {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn {
+  font-family: 'pretendard';
+  font-weight: 700;
+  padding: 12px 60px;
+  border-radius: 4px;
+}
+
+.deletebtn {
+  background: #b1b1b1;
+  color: white;
+  margin-right: 10px;
+}
+
+.submitbtn {
+  background: var(--main);
+  color: white;
+}

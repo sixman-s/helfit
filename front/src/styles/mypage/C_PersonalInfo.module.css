@@ -1,0 +1,65 @@
+.pInfoContainer{
+    display: flex;
+    flex-direction: column;
+}
+
+.mypageTitle{
+    margin: 62px 0 50px 35px;
+}
+
+.topContainer{
+    display: flex;
+    align-items: center;
+    margin-left: 35px;
+}
+
+.topContainer .idDiv{
+    display: flex;
+    flex-direction: column;
+    padding-left: 17px;
+    padding-right: 5px;
+}
+
+.topContainer .buttonDiv{
+    padding: 5.5px 10.5px;
+    color: var(--text_3);
+    background-color: var(--vg_2);
+    border: 1px solid var(--line_1);
+    border-radius: 10px;
+    /* margin-left: 5px; */
+}
+
+.topContainer #infoBtn {
+   margin-bottom: 10px;
+} 
+
+.topContainer .divBtn {
+    display: flex;
+    flex-direction: column;
+    margin-left: 120px;
+}
+
+.topContainer .idDiv .welcome{
+    font-size: var(--h6);
+    color: var(--text_5);
+}
+
+.topContainer .idDiv .id{
+    font-size: var(--h3);
+    color: var(--text_3);
+}
+
+.bottomContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    margin: 50px 35px 0;
+}
+
+.bottomContainer p {
+    margin-bottom: 30px;
+}
+
+.bottomContainer span{
+    margin-left: 10px;
+}

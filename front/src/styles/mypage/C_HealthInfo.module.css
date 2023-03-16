@@ -1,0 +1,41 @@
+.hInfoContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.titleDiv{
+    display: flex;
+    align-items: center;
+    margin-left: 35px;
+    margin-top: 30px;
+}
+
+.titleDiv .button {
+    margin-left: 150px;
+    padding: 11.5px 23.5px;
+    color: var(--text_3);
+    background-color: var(--vg_2);
+    border: 1px solid var(--line_1);
+    border-radius: 10px;
+    
+}
+
+.bottomContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    margin: 50px 35px 0;
+}
+
+.list {
+    margin-bottom: 30px;
+}
+
+.question {
+    font-size: var(--h6);
+}
+
+.answer {
+    margin-left: 10px;
+}
+

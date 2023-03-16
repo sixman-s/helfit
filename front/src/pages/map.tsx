@@ -1,13 +1,12 @@
 import Layout from '@/components/MainLayout';
+import KakaoMap from '@/components/map/KakaoMap';
 
-export default function Map() {
-  const style = {
-    height: 1000,
-    background: '#ddd'
-  };
+const Map = () => {
   return (
     <Layout>
-      <h1 style={style}>map</h1>
+      <KakaoMap address={'천호 현대 백화점'} />
     </Layout>
   );
-}
+};
+
+export default Map;

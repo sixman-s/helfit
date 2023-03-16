@@ -1,0 +1,17 @@
+.container {
+  position: inherit;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
+  row-gap: 20px !important;
+  column-gap: 20px !important;
+  padding: 40px 60px 40px 300px;
+  grid-area: auto;
+}
+
+@media screen and (max-width: 1440px) {
+  .container {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(4, 1fr);
+  }
+}
