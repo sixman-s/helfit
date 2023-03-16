@@ -6,13 +6,29 @@ import ModalPassword from './modal/ModalPassword';
 import ModalContainer from './modal/ModalContainer';
 import ModalImage from './modal/ModalImage';
 
-const PersonalInfo = () => {
+export interface detailProps {
+  userId: number;
+  id: string;
+  email: string;
+  nickname: string;
+  profileImageUrl: string;
+  birth: number;
+  gender: string;
+  height: number;
+  weight: number;
+}
+
+const PersonalInfo = ({ detail }: { detail: detailProps }) => {
   const [modalContents, setModalContents] = useState<JSX.Element>(<></>);
   const [showModal, setShowMoadal] = useState<boolean>(false);
 
+  const birth = String(detail.birth);
+  const setBirth =
+    birth.slice(0, 4) + '.' + birth.slice(4, 6) + '.' + birth.slice(6, 8);
+
   const clickModalP = () => {
     setShowMoadal(true);
-    setModalContents(<ModalPInfo />);
+    setModalContents(<ModalPInfo detail={detail} />);
   };
   const clickModalPW = () => {
     setShowMoadal(true);
@@ -37,7 +53,7 @@ const PersonalInfo = () => {
         </div>
         <div className={s.idDiv}>
           <span className={s.welcome}>good day</span>
-          <span className={s.id}>hfhfhf</span>
+          <span className={s.id}>{detail.id}</span>
         </div>
         <div className={s.divBtn}>
           <button id={s.infoBtn} className={s.buttonDiv} onClick={clickModalP}>
@@ -54,21 +70,21 @@ const PersonalInfo = () => {
             src='../../../assets/mypage/nickName.svg'
             className={s.profile_option}
           />
-          <span>eggkim</span>
+          <span>{detail.nickname}</span>
         </p>
         <p className={s.bhContainer}>
           <img
             src='../../../assets/mypage/birthday.svg'
             className={s.profile_option}
           />
-          <span>1990.01.01</span>
+          <span>{setBirth}</span>
         </p>
         <p className={s.emailContainer}>
           <img
             src='../../../assets/mypage/email.svg'
             className={s.profile_option}
           />
-          <span>helfit01@gmail.com</span>
+          <span>{detail.email}</span>
         </p>
       </div>
       <ModalContainer
