@@ -1,0 +1,20 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: corretto11
+  build:
+    commands:
+      - cd back/helfit
+      - chmod +x ./gradlew
+      - ./gradlew clean build
+  post_build:
+    commands:
+      - echo $(basename ./back/helfit/build/libs/*.jar)
+artifacts:
+  files:
+    - back/helfit/build/libs/*.jar
+    - back/helfit/scripts/**
+    - back/helfit/appspec.yml
+  discard-paths: yes
