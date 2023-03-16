@@ -12,13 +12,7 @@ const CalendarInfo = () => {
     '테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다.';
 
   return (
-    <article className={layout.container}>
-      <header className={layout.header}>
-        <h2 className={layout.title}>Calendar</h2>
-        <Link className={layout.moreBtn} href='/calendar'>
-          More
-        </Link>
-      </header>
+    <>
       <form className={styled.form}>
         <input
           max={DateView(new Date())}
@@ -68,7 +62,7 @@ const CalendarInfo = () => {
           <li className={styled.infoLi}></li>
         </ul>
       </div>
-    </article>
+    </>
   );
 };
 

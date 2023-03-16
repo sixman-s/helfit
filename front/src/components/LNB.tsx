@@ -1,8 +1,10 @@
 import styled from '../styles/lnb.module.css';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useState, useEffect } from 'react';
 
 const LNB = () => {
+  const [token, setToken] = useState('');
   const router = useRouter();
   const category: string[] = [
     'Index',
@@ -30,6 +32,18 @@ const LNB = () => {
       return false;
     }
   };
+
+  const logout = () => {
+    localStorage.clear();
+    setToken('');
+    window.location.href = '/';
+  };
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setToken(localStorage.getItem('accessToken'));
+    }
+  }, []);
 
   return (
     <nav className={styled.container}>
@@ -65,12 +79,16 @@ const LNB = () => {
           );
         })}
         <li className={styled.menu}>
-          <Link className={styled.loginMenu} href='/login'>
+          <Link
+            className={styled.loginMenu}
+            href={token ? '/' : '/login'}
+            onClick={() => (token ? logout() : null)}
+          >
             <img
               src='../../assets/lnb_lnout_icn.svg'
               className={styled.lnbIcon}
             />
-            <span className={styled.lnbFont}>{'login'}</span>
+            <span className={styled.lnbFont}>{token ? 'Logout' : 'login'}</span>
           </Link>
         </li>
       </ul>
