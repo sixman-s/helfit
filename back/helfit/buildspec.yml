@@ -15,7 +15,7 @@ phases:
       - echo $(basename .back/helfit/build/libs/*.jar)
 artifacts:
   files:
-    - back/helfit/build/libs/*.jar
-    - back/helfit/scripts/**
-    - back/helfit/appspec.yml
+    - helfit/build/libs/*.jar
+    - helfit/scripts/**
+    - helfit/appspec.yml
   discard-paths: yes
