@@ -6,14 +6,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import sixman.helfit.audit.Auditable;
+import sixman.helfit.domain.category.entity.Category;
+import sixman.helfit.domain.comment.entity.Comment;
 import sixman.helfit.domain.user.entity.User;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
-@Entity
-@Table(name = "BOARDS")
+@Entity(name = "BOARDS")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -28,19 +28,26 @@ public class Board extends Auditable {
     @Column(name = "text", length = 20000)
     private String text;
 
-    @Column(name = "image")
-    private byte[] image;
+    @Column(length = 512)
+    private String boardImageUrl;
 
-    private Long categoryId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
 
-    @Column(name = "likes", nullable = false, columnDefinition = "int default 0")
-    private int likes;
+    @OneToMany(mappedBy = "board",cascade = CascadeType.PERSIST)
+    private List<BoardLike> boardLikes = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name ="user_id")
     private User user;
 
-    @OneToMany(mappedBy = "board")
-    private Set<BoardTag> boardTags = new HashSet<>();
+    @OneToMany(mappedBy = "board",cascade = CascadeType.PERSIST)
+    private List<BoardTag> boardTags = new ArrayList<>();
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.PERSIST)
+    private List<Comment> comments = new ArrayList<>();
+
+
 
 }

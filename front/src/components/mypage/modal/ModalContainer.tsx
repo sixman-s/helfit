@@ -13,9 +13,7 @@ const ModalContainer = ({
   showModal,
   children
 }: PropsWithChildren<ModalDefaultType>) => {
-  useEffect(() => {
-    console.log(children);
-  }, [children]);
+  useEffect(() => {}, [children]);
 
   return showModal ? (
     <div className={s.modalContainer} onClick={exitModal}>

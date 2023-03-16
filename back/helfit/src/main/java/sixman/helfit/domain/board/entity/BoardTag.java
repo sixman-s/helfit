@@ -9,13 +9,11 @@ import sixman.helfit.domain.tag.entity.Tag;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "BOARD_TAGS")
+@Entity(name = "BOARD_TAGS")
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class BoardTag extends Auditable {
+public class BoardTag{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long boardTagId;
@@ -28,6 +26,15 @@ public class BoardTag extends Auditable {
     @JoinColumn(name = "TAG_ID")
     private Tag tag;
 
+    public void addBoard(Board board){
+        this.board = board;
+        this.board.getBoardTags().add(this);
+    }
+
+    public void addTag(Tag tag) {
+        this.tag = tag;
+        this.tag.getBoardTags().add(this);
+    }
 
 
 }

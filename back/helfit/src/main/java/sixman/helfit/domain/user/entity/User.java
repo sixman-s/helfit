@@ -5,10 +5,15 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import sixman.helfit.audit.Auditable;
+import sixman.helfit.domain.comment.entity.Comment;
 import sixman.helfit.security.entity.ProviderType;
 import sixman.helfit.security.entity.RoleType;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -16,7 +21,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "USERS")
-public class User {
+public class User extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
@@ -31,9 +36,6 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(length = 30, nullable = false)
-    private String name;
-
     @Column(length = 30)
     private String nickname;
 
@@ -46,8 +48,13 @@ public class User {
     private Integer height;
     private Integer weight;
 
+    private Integer failureCnt = 0;
+
     @Enumerated(value = EnumType.STRING)
-    private EmailVerified emailEmailVerifiedYn;
+    private EmailVerified emailVerifiedYn;
+
+    @Enumerated(value = EnumType.STRING)
+    private PersonalInfoAgreement personalInfoAgreementYn;
 
     @Enumerated(value = EnumType.STRING)
     private Gender gender;
@@ -59,33 +66,54 @@ public class User {
     @Enumerated(EnumType.STRING)
     private ProviderType providerType;
 
+    @Enumerated(EnumType.STRING)
+    private UserStatus userStatus = UserStatus.USER_ACTIVE;
+
     public User(
         String id,
         String email,
-        String name,
         String nickname,
         String profileImageUrl,
         Integer birth,
         Integer height,
         Integer weight,
-        EmailVerified emailEmailVerifiedYn,
+        EmailVerified emailVerifiedYn,
+        PersonalInfoAgreement personalInfoAgreementYn,
         Gender gender,
         ProviderType providerType,
         RoleType roleType
     ) {
         this.id = id;
         this.email = email != null ? email : "NO_EMAIL";
-        this.name = name;
         this.nickname = nickname != null ? nickname : "";
         this.password = "NO_PASS";
-        this.emailEmailVerifiedYn = emailEmailVerifiedYn;
         this.profileImageUrl = profileImageUrl != null ? profileImageUrl : "";
         this.birth = birth;
         this.height = height;
         this.weight = weight;
+        this.emailVerifiedYn = emailVerifiedYn;
+        this.personalInfoAgreementYn = personalInfoAgreementYn;
         this.gender = gender;
         this.providerType = providerType;
         this.roleType = roleType;
+    }
+
+    public enum UserStatus {
+        USER_ACTIVE("활동중"),
+        USER_SLEEP("휴면 상태"),
+        USER_QUIT("탈퇴 상태");
+
+        @Getter
+        private String status;
+
+        UserStatus(String status) {
+            this.status = status;
+        }
+    }
+
+    public enum PersonalInfoAgreement {
+        Y
+        ;
     }
 
     public enum EmailVerified {
@@ -96,7 +124,10 @@ public class User {
 
     public enum Gender {
         MALE,
-        FEMALE,
+        FEMALE
         ;
     }
+
+    @OneToMany(mappedBy = "user")
+    private List<Comment> comments = new ArrayList<>();
 }

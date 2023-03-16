@@ -1,9 +1,30 @@
 running: dev
 
+domain:
+  front: http://helfit.life
+  back: http://ec2-3-34-96-242.ap-northeast-2.compute.amazonaws.com/
+
+chat-gpt:
+  secret-key: ${CHAT_GPT_SECRET_KEY}
+
+cloud:
+  aws:
+    s3bucket: helfit.life/files
+    access-key: ${AWS_ACCESS_KEY}
+    secret-key: ${AWS_SECRET_KEY}
+    stack:
+      auto: false
+    region:
+      static: ap-northeast-2
+
 spring:
   profiles:
     include: common
     active: dev
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
   datasource:
     url: ${datasource_url}
     username: ${datasource_username}
@@ -15,12 +36,18 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-
+    defer-datasource-initialization : true
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    encoding: UTF-8
+    check-template-location: true
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ${gmail_username}
-    password: ${gmail_password}
+    username: ${GMAIL_ID}
+    password: ${GMAIL_PASSWORD}
     properties:
       mail:
         smtp:
@@ -28,35 +55,76 @@ spring:
             enable: true
             required: true
           auth: true
-          connectiontimeout: 5000
+          connection-timeout: 5000
           timeout: 5000
-          writetimeout: 5000
+          write timeout: 5000
+
   security:
     oauth2:
       client:
         registration:
           google:
-            clientId: ${google_client_id}
-            clientSecret: ${google_client_secret}
+            clientId: ${GOOGLE_CLIENT_ID}
+            clientSecret: ${GOOGLE_CLIENT_SECRET}
             scope:
               - email
               - profile
-  thymeleaf:
-    prefix: classpath:/mail-templates/
-    suffix: .html
-    mode: HTML
-    encoding: UTF-8
-    check-template-location: true
+          naver:
+            clientId: ${NAVER_CLIENT_ID}
+            clientSecret: ${NAVER_CLIENT_SECRET}
+            clientAuthenticationMethod: post
+            authorizationGrantType: authorization_code
+            redirectUri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
+            scope:
+              - name
+              - nickname
+              - email
+              - profile_image
+            clientName: Naver
+          kakao:
+            clientId: ${KAKAO_CLIENT_ID}
+            clientSecret: ${KAKAO_CLIENT_SECRET}
+            clientAuthenticationMethod: post
+            authorizationGrantType: authorization_code
+            redirectUri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
+            scope:
+              - profile_nickname
+              - profile_image
+              - account_email
+            clientName: Kakao
+        provider:
+          naver:
+            authorizationUri: https://nid.naver.com/oauth2.0/authorize
+            tokenUri: https://nid.naver.com/oauth2.0/token
+            userInfoUri: https://openapi.naver.com/v1/nid/me
+            userNameAttribute: response
+          kakao:
+            authorizationUri: https://kauth.kakao.com/oauth/authorize
+            tokenUri: https://kauth.kakao.com/oauth/token
+            userInfoUri: https://kapi.kakao.com/v2/user/me
+            userNameAttribute: id
 
 logging:
   level:
     org.hibernate.SQL: trace
 
-jwt:
-  secret: ${secret_key}
-  access-token-expiration-minutes: 1800000
-  refresh-token-expiration-minutes: 604800000
+# Cors
+cors:
+  allowed-origins: "*"
+  allowed-headers: "*"
+  allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+  max-age: 3600
+
+# Auth & OAuth
+app:
+  auth:
+    tokenSecret: ${JWT_SECRET_KEY}
+    tokenExpiry: 1800000
+    refreshTokenExpiry: 604800000
+  oauth2:
+    authorizedRedirectUris:
+      - http://localhost:3000/oauth2/receive
 
 mail:
   address:
-    admin: ${admin_mail}
+    admin: ${ADMIN_MAIL}

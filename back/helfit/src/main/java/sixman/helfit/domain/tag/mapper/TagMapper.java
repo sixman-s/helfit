@@ -7,5 +7,7 @@ import sixman.helfit.domain.tag.entity.Tag;
 @Mapper(componentModel = "spring")
 public interface TagMapper {
 
-    Tag tagPostToTag(TagDto.Post postDto);
+    Tag tagGetToTag(TagDto.Get getDto);
+    TagDto.GetResponse tagToTagResponse(Tag tag);
+
 }

@@ -1,6 +1,7 @@
 package sixman.helfit.security.config;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -42,6 +43,9 @@ import java.util.Arrays;
 )
 @RequiredArgsConstructor
 public class SecurityConfig {
+    @Value("${domain.front}")
+    private String frontDomain;
+
     private final CorsProperties corsProperties;
     private final AppProperties appProperties;
 
@@ -63,11 +67,17 @@ public class SecurityConfig {
                 .csrf().disable()
                 .formLogin().disable()
                 .httpBasic().disable()
-                .exceptionHandling()
-                    .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-                    .accessDeniedHandler(new CustomAccessDeniedHandler())
+                .logout()
+                    .logoutSuccessUrl(frontDomain)
+                    .invalidateHttpSession(true)
+                    .clearAuthentication(true)
+                    .deleteCookies("JSESSIONID", "refresh_token")
             .and()
                 .apply(new CustomFilterConfigurer())
+            .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                .accessDeniedHandler(new CustomAccessDeniedHandler())
             .and()
                 .authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
@@ -82,7 +92,11 @@ public class SecurityConfig {
                     "/**/*.css",
                     "/**/*.js"
                 ).permitAll()
-                .antMatchers("/api/**/users/signup", "/api/**/users/login").permitAll()
+                .antMatchers(
+                    "/api/**/users/signup",
+                    "/api/**/users/login",
+                    "/api/**/users/confirm-email"
+                ).permitAll()
                 .antMatchers("/api/**/users/**").hasAnyAuthority(RoleType.USER.getCode())
                 .antMatchers("/api/**/admin/**").hasAnyAuthority(RoleType.ADMIN.getCode())
                 .antMatchers("/api/**").permitAll()
@@ -111,6 +125,10 @@ public class SecurityConfig {
                             .antMatchers("/h2/**");
     }
 
+    /*
+     * # AuthenticationManager
+     *
+     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
@@ -177,7 +195,7 @@ public class SecurityConfig {
         CorsConfiguration corsConfig = new CorsConfiguration();
         corsConfig.setAllowedHeaders(Arrays.asList(corsProperties.getAllowedHeaders().split(",")));
         corsConfig.setAllowedMethods(Arrays.asList(corsProperties.getAllowedMethods().split(",")));
-        corsConfig.setAllowedOrigins(Arrays.asList(corsProperties.getAllowedOrigins().split(",")));
+        corsConfig.setAllowedOriginPatterns(Arrays.asList(corsProperties.getAllowedOrigins().split(",")));
         corsConfig.setAllowCredentials(true);
         corsConfig.setMaxAge(corsConfig.getMaxAge());
 

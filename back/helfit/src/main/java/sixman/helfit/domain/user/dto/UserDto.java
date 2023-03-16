@@ -2,13 +2,16 @@ package sixman.helfit.domain.user.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.lang.Nullable;
-import sixman.helfit.domain.user.entity.User;
 import sixman.helfit.global.annotations.ValidEnum;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+
+import java.time.LocalDateTime;
 
 import static sixman.helfit.domain.user.entity.User.*;
 
@@ -24,15 +27,20 @@ public class UserDto {
         )
         private String password;
 
-        @Pattern(regexp = "^\\S+(\\s?\\S+)*$", message = "이름은 공백이 아니어야 합니다.")
-        private String name;
-
-        @NotBlank
+        @Pattern(regexp = "^\\S+(\\s?\\S+)*$", message = "별명은 공백을 포함할 수 없습니다.")
         private String nickname;
 
         @NotBlank
         @Email
         private String email;
+
+        @NotNull
+        @ValidEnum(
+            enumClass = PersonalInfoAgreement.class,
+            message = "개인정보 제공 동의 항목은 필수입력값 입니다. : 기대값: ['Y']",
+            ignoreCase = true
+        )
+        private String personalInfoAgreement;
 
         @Nullable
         private String profileImageUrl;
@@ -47,8 +55,12 @@ public class UserDto {
         private Integer weight;
 
         @Nullable
-        @ValidEnum(enumClass = Gender.class)
-        private Gender gender;
+        @ValidEnum(
+            enumClass = Gender.class,
+            message = "잘못된 입력값입니다. : 기대값: ['MALE', FEMALE]",
+            ignoreCase = true
+        )
+        private String gender;
     }
 
     @Getter
@@ -61,20 +73,10 @@ public class UserDto {
     }
 
     @Getter
-    public static class Patch {
+    public static class Update {
         @Nullable
-        @Email
-        private String email;
-
-        @Nullable
+        @Pattern(regexp = "^\\S+(\\s?\\S+)*$", message = "별명은 공백을 포함할 수 없습니다.")
         private String nickname;
-
-        @Nullable
-        @Pattern(
-            regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!@#$%^&*()_\\-\"',.+/])[A-Za-z\\d!@#$%^&*()_\\-\"',.+/]{8,}$",
-            message = "비밀번호는 영어(대/소문자), 숫자, 특수문자 포함 8자 이상으로 구성되어야 합니다."
-        )
-        private String password;
 
         @Nullable
         private String profileImageUrl;
@@ -89,16 +91,25 @@ public class UserDto {
         private Integer weight;
 
         @Nullable
-        @ValidEnum(enumClass = Gender.class)
-        private Gender gender;
+        @ValidEnum(enumClass = Gender.class, ignoreCase = true)
+        private String gender;
     }
 
-    @AllArgsConstructor
     @Getter
+    public static class Password {
+        @Pattern(
+            regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!@#$%^&*()_\\-\"',.+/])[A-Za-z\\d!@#$%^&*()_\\-\"',.+/]{8,}$",
+            message = "비밀번호는 영어(대/소문자), 숫자, 특수문자 포함 8자 이상으로 구성되어야 합니다."
+        )
+        private String password;
+    }
+
+
+    @Getter
+    @AllArgsConstructor
     public static class Response {
         private Long userId;
         private String id;
-        private String name;
         private String nickname;
         private String email;
         private String emailVerifiedYn;
@@ -108,5 +119,7 @@ public class UserDto {
         private Integer weight;
         private Gender gender;
         private String providerType;
+        private LocalDateTime createdAt;
+        private LocalDateTime modifiedAt;
     }
 }

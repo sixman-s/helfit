@@ -1,10 +1,30 @@
 running: local
-domain: http://localhost:8080
+
+domain:
+  front: http://localhost:3000
+  back: http://localhost:8080
+
+chat-gpt:
+  secret-key: ${CHAT_GPT_SECRET_KEY}
+
+cloud:
+  aws:
+    s3bucket: helfit.life/files
+    access-key: ${AWS_ACCESS_KEY}
+    secret-key: ${AWS_SECRET_KEY}
+    stack:
+      auto: false
+    region:
+      static: ap-northeast-2
 
 spring:
   profiles:
     include: common
     active: local
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
   h2:
     console:
       enabled: true
@@ -23,21 +43,33 @@ spring:
         format_sql: true
         highlight_sql: true
         use_sql_comments: true
-#  mail:
-#    host: smtp.gmail.com
-#    port: 587
-#    username: ${gmail_username}
-#    password: ${gmail_password}
-#    properties:
-#      mail:
-#        smtp:
-#          starttls:
-#            enable: true
-#            required: true
-#          auth: true
-#          connectiontimeout: 5000
-#          timeout: 5000
-#          writetimeout: 5000
+    defer-datasource-initialization : true
+  sql:
+    init:
+      mode: always
+      data-locations: classpath*:db/h2/data.sql
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    encoding: UTF-8
+    check-template-location: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${GMAIL_ID}           # 앱 비밀번호 발급 google gmail 계정
+    password: ${GMAIL_PASSWORD}     # 앱 비밀번호
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+            required: true
+          auth: true
+          connection-timeout: 5000
+          timeout: 5000
+          write timeout: 5000
+
   security:
     oauth2:
       client:
@@ -90,28 +122,21 @@ logging:
 
 # Cors
 cors:
-  allowed-origins: "*"
   allowed-headers: "*"
-  allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+  allowed-origins: "*"
+  allowed-methods: GET,POST,PATCH,PUT,DELETE,OPTIONS
   max-age: 3600
 
 # Auth & OAuth
 app:
   auth:
     tokenSecret: ${JWT_SECRET_KEY}
-    tokenExpiry: 1800000
-    refreshTokenExpiry: 604800000
+    tokenExpiry: 864000000
+    refreshTokenExpiry: 864000000
   oauth2:
     authorizedRedirectUris:
-      - http://localhost:3000/recieve.html
+      - http://localhost:3000/oauth2/receive
 
-#  thymeleaf:
-#    prefix: classpath:/mail-templates/
-#    suffix: .html
-#    mode: HTML
-#    encoding: UTF-8
-#    check-template-location: true
-
-#mail:
-#  address:
-#    admin: ${admin_mail}
+mail:
+  address:
+    admin: ${ADMIN_MAIL}

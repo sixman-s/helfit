@@ -3,13 +3,19 @@ package sixman.helfit.domain.user.controller;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
+import sixman.helfit.domain.file.service.FileService;
 import sixman.helfit.domain.user.dto.UserDto;
 import sixman.helfit.domain.user.entity.User;
 import sixman.helfit.domain.user.entity.UserRefreshToken;
@@ -19,6 +25,8 @@ import sixman.helfit.domain.user.service.UserService;
 import sixman.helfit.exception.BusinessLogicException;
 import sixman.helfit.exception.ExceptionCode;
 import sixman.helfit.response.ApiResponse;
+import sixman.helfit.security.mail.entity.EmailConfirmToken;
+import sixman.helfit.security.mail.service.EmailConfirmTokenService;
 import sixman.helfit.security.properties.AppProperties;
 import sixman.helfit.security.entity.RoleType;
 import sixman.helfit.security.entity.UserPrincipal;
@@ -28,11 +36,11 @@ import sixman.helfit.utils.CookieUtil;
 import sixman.helfit.utils.HeaderUtil;
 import sixman.helfit.utils.UriUtil;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import javax.validation.constraints.Positive;
 import java.net.URI;
 import java.util.Date;
 
@@ -42,29 +50,50 @@ import java.util.Date;
 @RequestMapping("/api/v1/users")
 @Validated
 public class UserController {
+    @Value("${domain.front}")
+    private String frontDomain;
+
     private static final String DEFAULT_URI = "/api/v1/users";
 
     private final AppProperties appProperties;
     private final AuthTokenProvider authTokenProvider;
     private final AuthenticationManager authenticationManager;
-    private final UserRefreshTokenRepository userRefreshTokenRepository;
     private final UserService userService;
     private final UserMapper userMapper;
+    private final FileService fileService;
+    private final EmailConfirmTokenService emailConfirmTokenService;
+
+    private final UserRefreshTokenRepository userRefreshTokenRepository;
 
     private final static long THREE_DAYS_MSE = 259200000;
     private final static String REFRESH_TOKEN = "refresh_token";
 
+    /*
+     * # Local 회원 가입
+     *
+     */
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@Valid @RequestBody UserDto.Signup requestBody) {
+    public ResponseEntity<?> signup(@Valid @RequestBody UserDto.Signup requestBody) throws MessagingException {
         User user = userService.createUser(userMapper.userDtoSignupToUser(requestBody));
+
+        EmailConfirmToken emailConfirmToken = emailConfirmTokenService.createEmailConfirmToken(user.getUserId());
+        emailConfirmTokenService.sendEmail(user.getEmail(), emailConfirmToken.getTokenId());
 
         URI uri = UriUtil.createUri(DEFAULT_URI, user.getUserId());
 
-        return ResponseEntity.created(uri).body(ApiResponse.ok("message", "회원등록이 완료됐습니다."));
+        return ResponseEntity.created(uri).body(ApiResponse.created());
     }
 
+    /*
+     * # Local 회원 로그인
+     *
+     */
     @PostMapping("/login")
-    public ResponseEntity<?> login(HttpServletRequest request, HttpServletResponse response, @Valid @RequestBody UserDto.Login requestBody) {
+    public ResponseEntity<?> login(
+        HttpServletRequest request,
+        HttpServletResponse response,
+        @Valid @RequestBody UserDto.Login requestBody
+    ) {
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
                 requestBody.getId(),
@@ -72,8 +101,16 @@ public class UserController {
             )
         );
 
-        String id = requestBody.getId();
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        User user = userPrincipal.getUser();
+
+        // ! 이메일 인증 프로세스 예외처리 미적용 (RDS 연동시 주석 제거)
+        // if (user.getEmailVerifiedYn().equals(User.EmailVerified.N))
+        //     throw new BusinessLogicException(ExceptionCode.EMAIL_NOT_CONFIRMED);
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        String id = user.getId();
         Date now = new Date();
 
         // # Access Token 생성
@@ -105,14 +142,12 @@ public class UserController {
         return ResponseEntity.ok().body(ApiResponse.ok("accessToken", accessToken.getToken()));
     }
 
-    @GetMapping("{user-id}")
-    public ResponseEntity<?> getUser(@Positive @PathVariable("user-id") Long userId) {
-        User user = userService.findVerifiedUserByUserId(userId);
-
-        return ResponseEntity.ok().body(ApiResponse.ok("data", user));
-    }
-
-    @GetMapping("/refresh")
+    /*
+     * # 사용자 refresh-token 재발급
+     *
+     */
+    @GetMapping("/refresh-token")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> refreshToken(HttpServletRequest request, HttpServletResponse response) {
         // # Access Token
         String accessToken = HeaderUtil.getAccessToken(request);
@@ -170,15 +205,118 @@ public class UserController {
         return ResponseEntity.ok().body(ApiResponse.ok("access_token", authAccessToken.getToken()));
     }
 
-    @PatchMapping("{user-id}")
-    public ResponseEntity<?> patchUser(
-        @Positive @PathVariable("user-id") Long userId,
-        @Valid @RequestBody UserDto.Patch requestBody
-    ) {
-        User user = userService.updateUser(userId, userMapper.userDtoPatchToUser(requestBody));
+    /*
+     * # 사용자 이메일 인증
+     *
+     */
+    @GetMapping("/confirm-email")
+    public ModelAndView confirmEmail(@RequestParam("token-id") String tokenId) {
+        EmailConfirmToken verifiedConfirmToken =
+            emailConfirmTokenService.findVerifiedConfirmTokenByTokenId(tokenId);
+        emailConfirmTokenService.updateEmailConfirmToken(verifiedConfirmToken.getTokenId());
+        userService.updateUserEmailVerifiedYn(verifiedConfirmToken.getUserId());
 
-        UserDto.Response response = userMapper.userToUserDtoResponse(user);
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("email_confirm");
+        modelAndView.addObject("link", frontDomain);
+
+        return modelAndView;
+    }
+
+    /*
+     * # 사용자 이메일 인증 재발송
+     *
+     */
+    @GetMapping("/resend-confirm-email")
+    public void resendConfirmEmail(@AuthenticationPrincipal UserPrincipal userPrincipal) throws MessagingException {
+        EmailConfirmToken verifiedConfirmToken =
+            emailConfirmTokenService.findVerifiedConfirmTokenByUserId(userPrincipal.getUser().getUserId());
+
+        emailConfirmTokenService.sendEmail(userPrincipal.getUser().getEmail(), verifiedConfirmToken.getTokenId());
+    }
+
+    /*
+     * # 사용자 정보 조회
+     *
+     */
+    @GetMapping
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> getUser(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        User user = userService.findUserByUserId(userPrincipal.getUser().getUserId());
+
+        return ResponseEntity.ok().body(ApiResponse.ok("data", user));
+    }
+
+    /*
+     * # 사용자 정보 변경
+     *
+     */
+    @PatchMapping
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> updateUser(
+        @Valid @RequestBody UserDto.Update requestBody,
+        @AuthenticationPrincipal UserPrincipal userPrincipal
+    ) {
+        User updatedUser = userService.updateUser(userPrincipal.getUser().getUserId(), userMapper.userDtoPatchToUser(requestBody));
+
+        UserDto.Response response = userMapper.userToUserDtoResponse(updatedUser);
 
         return ResponseEntity.ok().body(ApiResponse.ok("data", response));
+    }
+
+    /*
+     * # 사용자 비밀번호 변경
+     *
+     */
+    @PatchMapping("/password")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> updateUserPassword(
+        @Valid @RequestBody UserDto.Password requestBody,
+        @AuthenticationPrincipal UserPrincipal userPrincipal
+    ) {
+        userService.updateUserPassword(
+            userPrincipal.getUser().getUserId(),
+            userMapper.userDtoPasswordToUser(requestBody)
+        );
+
+        return ResponseEntity.ok().body(ApiResponse.ok());
+    }
+
+    /*
+     * # 회원 프로필 이미지 등록&수정
+     *
+     */
+    @PostMapping("/profile-image")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> updateUserProfileImage(
+        @RequestParam MultipartFile multipartFile,
+        @AuthenticationPrincipal UserPrincipal userPrincipal
+    ) throws Exception {
+        String imagePath = fileService.uploadFile(multipartFile);
+        userService.updateUserProfileImage(userPrincipal.getUser().getUserId(), imagePath);
+
+        return ResponseEntity.ok().body(ApiResponse.ok());
+    }
+
+    /*
+     * # 회원 프로필 이미지 삭제
+     *
+     */
+    @DeleteMapping("/profile-image")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> updateUserProfileImage(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        userService.updateUserProfileImage(userPrincipal.getUser().getUserId(), null);
+
+        return ResponseEntity.ok().body(ApiResponse.noContent());
+    }
+
+    /*
+     * # 회원 탈퇴 (UserStatus 변경)
+     *
+     */
+    @DeleteMapping("/withdraw")
+    public ResponseEntity<?> withdrawUser() {
+
+        return ResponseEntity.noContent().build();
     }
 }

@@ -1,6 +1,7 @@
 package sixman.helfit.security.handler;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -9,6 +10,8 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
+import sixman.helfit.exception.BusinessLogicException;
+import sixman.helfit.exception.ExceptionCode;
 import sixman.helfit.security.properties.AppProperties;
 import sixman.helfit.security.entity.ProviderType;
 import sixman.helfit.security.entity.RoleType;
@@ -29,12 +32,16 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import static sixman.helfit.security.repository.OAuth2AuthorizationRequestBasedOnCookieRepository.*;
 
 @RequiredArgsConstructor
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+    @Value("${domain.front}")
+    private String frontDomain;
+
     private final AppProperties appProperties;
     private final AuthTokenProvider authTokenProvider;
     private final UserRefreshTokenRepository userRefreshTokenRepository;
@@ -54,16 +61,13 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     }
 
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        Optional<String> redirectUri = CookieUtil.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
-                                           .map(Cookie::getValue);
+        Optional<String> redirectUri = CookieUtil.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME).map(Cookie::getValue);
 
         if (redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri.get())) {
             throw new IllegalArgumentException(
-                "Sorry! We've got an Unauthorized Redirect URI and can't proceed with the authentication"
+                "승인되지 않은 리디렉션 'URI' 가 있어 인증을 진행할 수 없습니다."
             );
         }
-
-        String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
 
         OAuth2AuthenticationToken authToken = (OAuth2AuthenticationToken) authentication;
         ProviderType providerType = ProviderType.valueOf(authToken.getAuthorizedClientRegistrationId().toUpperCase());
@@ -138,17 +142,17 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     }
 
     private URI createURI(AuthToken accessToken, AuthToken refreshToken) {
+        List<String> authorizedRedirectUris = appProperties.getOauth2().getAuthorizedRedirectUris();
+        String callback = authorizedRedirectUris.stream().filter(d -> d.contains(frontDomain)).findAny()
+                       .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ACCESS_DENIED));
+
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
         queryParams.add("access_token", accessToken.getToken());
-        queryParams.add("refresh_token", refreshToken.getToken());
+        // ! Cookie 정보 전달로 대체함
+        // queryParams.add("refresh_token", refreshToken.getToken());
 
-        return UriComponentsBuilder.newInstance()
-                   .scheme("http")
-                   .host("localhost")
-                   .port(3000)
-                   .path("/receive.html")
-                   .queryParams(queryParams)
-                   .build()
-                   .toUri();
+        return UriComponentsBuilder.fromUriString(callback)
+                      .queryParams(queryParams)
+                      .build().toUri();
     }
 }

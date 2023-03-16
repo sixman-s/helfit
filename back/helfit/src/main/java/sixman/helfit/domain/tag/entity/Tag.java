@@ -8,11 +8,12 @@ import sixman.helfit.audit.Auditable;
 import sixman.helfit.domain.board.entity.BoardTag;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-@Entity
-@Table(name = "TAGS")
+@Entity(name = "TAGS")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -25,6 +26,6 @@ public class Tag extends Auditable {
     private String tagName;
 
     @OneToMany(mappedBy = "tag")
-    private Set<BoardTag> boardTags = new HashSet<>();
+    private List<BoardTag> boardTags = new ArrayList<>();
 
 }

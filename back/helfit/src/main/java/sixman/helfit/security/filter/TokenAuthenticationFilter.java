@@ -5,8 +5,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.filter.OncePerRequestFilter;
+import sixman.helfit.exception.ExceptionCode;
 import sixman.helfit.exception.TokenValidFailedException;
+import sixman.helfit.response.ErrorResponse;
 import sixman.helfit.security.token.AuthToken;
 import sixman.helfit.security.token.AuthTokenProvider;
 import sixman.helfit.utils.HeaderUtil;
@@ -28,12 +31,18 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         String tokenStr = HeaderUtil.getAccessToken(request);
         AuthToken token = authTokenProvider.convertAuthToken(tokenStr);
 
-        if (token.validate()) {
-            Authentication authentication = getAuthentication(token);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        }
+        // Global Advice 진입전 예외 처리
+        try {
+            if (token.validate()) {
+                Authentication authentication = getAuthentication(token);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
 
-        filterChain.doFilter(request, response);
+            filterChain.doFilter(request, response);
+
+        } catch (UsernameNotFoundException e) {
+            ErrorResponse.sendErrorResponse(response, ExceptionCode.USERS_NOT_FOUND);
+        }
     }
 
     @Override
@@ -44,29 +53,10 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private Authentication getAuthentication(AuthToken authToken) {
-        if (authToken.validate()) {
-            UserDetails userDetails = customUserDetailsService.loadUserByUsername(authToken.getTokenClaims().getSubject());
-            return new UsernamePasswordAuthenticationToken(userDetails, authToken, userDetails.getAuthorities());
-        } else {
-            throw new TokenValidFailedException();
-        }
-    }
+        if (!authToken.validate()) throw new TokenValidFailedException();
 
-    // ! FilterChange 선순위 오류 수정
-    // private Authentication getAuthentication(AuthToken authToken) {
-    //     if (authToken.validate()) {
-    //         Claims claims = authToken.getTokenClaims();
-    //
-    //         Collection<? extends GrantedAuthority> authorities =
-    //             Arrays.stream(new String[]{claims.get("role").toString()})
-    //                 .map(SimpleGrantedAuthority::new)
-    //                 .collect(Collectors.toList());
-    //
-    //         User principal = new User(claims.getSubject(), "", authorities);
-    //
-    //         return new UsernamePasswordAuthenticationToken(principal, authToken, authorities);
-    //     } else {
-    //         throw new TokenValidFailedException();
-    //     }
-    // }
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(authToken.getTokenClaims().getSubject());
+
+        return new UsernamePasswordAuthenticationToken(userDetails, authToken, userDetails.getAuthorities());
+    }
 }

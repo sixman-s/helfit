@@ -13,8 +13,7 @@ import javax.persistence.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "COMMENTS")
+@Entity(name = "COMMENTS")
 @Getter
 @Setter
 public class Comment extends Auditable {
@@ -23,11 +22,14 @@ public class Comment extends Auditable {
     private Long commentId;
     @Column(nullable = false, length = 20000)
     private String commentBody;
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="user_id")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "board_id")
+    @JoinColumn(name ="board_id")
     private Board board;
+
+
 }

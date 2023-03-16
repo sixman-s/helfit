@@ -4,8 +4,12 @@ import sixman.helfit.global.annotations.ValidEnum;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-public class EnumValidator implements ConstraintValidator<ValidEnum, Enum<?>> {
+public class EnumValidator implements ConstraintValidator<ValidEnum, String> {
     private ValidEnum annotation;
 
     @Override
@@ -14,13 +18,14 @@ public class EnumValidator implements ConstraintValidator<ValidEnum, Enum<?>> {
     }
 
     @Override
-    public boolean isValid(Enum value, ConstraintValidatorContext context) {
+    public boolean isValid(String value, ConstraintValidatorContext context) {
         boolean result = false;
-        Object[] enumValues = this.annotation.enumClass().getEnumConstants();
 
-        if (enumValues != null) {
-            for (Object enumValue : enumValues) {
-                if (value == enumValue) {
+        Object[] enumConstants = annotation.enumClass().getEnumConstants();
+
+        if (value != null) {
+            for (Object v : enumConstants) {
+                if (value.equals(v.toString()) || (this.annotation.ignoreCase() && value.equalsIgnoreCase(v.toString()))) {
                     result = true;
                     break;
                 }

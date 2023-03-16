@@ -10,8 +10,11 @@ import sixman.helfit.domain.user.entity.User;
 import sixman.helfit.domain.user.repository.UserRepository;
 import sixman.helfit.exception.BusinessLogicException;
 import sixman.helfit.exception.ExceptionCode;
+import sixman.helfit.security.mail.entity.EmailConfirmToken;
+import sixman.helfit.security.mail.service.EmailConfirmTokenService;
 import sixman.helfit.utils.CustomBeanUtil;
 
+import javax.mail.MessagingException;
 import java.util.Optional;
 
 import static sixman.helfit.domain.user.entity.User.*;
@@ -19,16 +22,18 @@ import static sixman.helfit.domain.user.entity.User.*;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    private final CustomBeanUtil<User> customBeanUtil;
-    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CustomBeanUtil<User> customBeanUtil;
+
+    private final UserRepository userRepository;
 
     public User createUser(User user) {
         verifyExistsUserId(user.getId());
+        verifyExistsUserEmail(user.getEmail());
 
         String encryptedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encryptedPassword);
-        user.setEmailEmailVerifiedYn(EmailVerified.N);
+        user.setEmailVerifiedYn(EmailVerified.N);
         user.setRoleType(RoleType.USER);
         user.setProviderType(ProviderType.LOCAL);
 
@@ -36,19 +41,42 @@ public class UserService {
     }
 
     public User updateUser(Long userId, User user) {
-        User verifiedUser = findVerifiedUserByUserId(userId);
+        User verifiedUser = findUserByUserId(userId);
 
         User updatedUser = customBeanUtil.copyNonNullProperties(user, verifiedUser);
 
         return userRepository.save(updatedUser);
     }
 
-    public void updateUserPassword(Long userId) {
+    public void updateUserEmailVerifiedYn(Long userId) {
+        User verifiedUser = findUserByUserId(userId);
 
+        verifiedUser.setEmailVerifiedYn(EmailVerified.Y);
+
+        userRepository.save(verifiedUser);
+    }
+
+    public void updateUserPassword(Long userId, User user) {
+        User verifiedUser = findUserByUserId(userId);
+
+        if (passwordEncoder.matches(user.getPassword(), verifiedUser.getPassword()))
+            throw new BusinessLogicException(ExceptionCode.NOT_CHANGED_PASSWORD);
+
+        verifiedUser.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        userRepository.save(verifiedUser);
+    }
+
+    public void updateUserProfileImage(Long userId, String imagePath) {
+        User verifiedUser = findUserByUserId(userId);
+
+        verifiedUser.setProfileImageUrl(imagePath);
+
+        userRepository.save(verifiedUser);
     }
 
     @Transactional(readOnly = true)
-    public User findVerifiedUserByUserId(Long userId) {
+    public User findUserByUserId(Long userId) {
         Optional<User> byUserId = userRepository.findByUserId(userId);
 
         return byUserId.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USERS_NOT_FOUND));
@@ -57,7 +85,14 @@ public class UserService {
     @Transactional(readOnly = true)
     public void verifyExistsUserId(String id) {
         userRepository.findById(id).ifPresent((e) -> {
-            throw new BusinessLogicException(ExceptionCode.USERS_EXISTS);
+            throw new BusinessLogicException(ExceptionCode.ALREADY_EXISTS_ID);
+        });
+    }
+
+    @Transactional(readOnly = true)
+    public void verifyExistsUserEmail(String email) {
+        userRepository.findByEmail(email).ifPresent((e) -> {
+            throw new BusinessLogicException(ExceptionCode.ALREADY_EXISTS_EMAIL);
         });
     }
 }

@@ -1,26 +1,55 @@
 package sixman.helfit.domain.board.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import sixman.helfit.domain.board.dto.BoardDto;
+import sixman.helfit.domain.board.entity.Board;
 import sixman.helfit.domain.board.mapper.BoardMapper;
 import sixman.helfit.domain.board.service.BoardService;
 import sixman.helfit.response.ApiResponse;
+import sixman.helfit.utils.UriUtil;
+
+import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/board")
 public class BoardController {
-    private final BoardMapper boardMapper;
+    private final static String BOARD_DEFAULT_URL = "/api/v1/boards";
+    private final BoardMapper mapper;
     private final BoardService boardService;
 
-    public BoardController(BoardMapper boardMapper, BoardService boardService) {
-        this.boardMapper = boardMapper;
+    public BoardController(BoardMapper mapper, BoardService boardService) {
+        this.mapper = mapper;
         this.boardService = boardService;
     }
 
-//    @GetMapping
-//    public ApiResponse getBoards(){
-//
-//    }
+    @PostMapping("/{category-id}/{user-id}")
+    public ResponseEntity postBoards(@Positive @PathVariable ("category-id") long categoryId,
+                                     @Positive @PathVariable ("user-id") long userId,
+                                     @Valid @RequestBody BoardDto.Post requestBody){
+        Board board = boardService.createBoard(mapper.boardPostToBoard(requestBody,categoryId,userId));
+        URI location = UriUtil.createUri(BOARD_DEFAULT_URL,board.getBoardId());
+
+        return ResponseEntity.created(location).body(ApiResponse.created());
+    }
+    @GetMapping("/{category-id}/{user-id}/{board-id}")
+    public ResponseEntity getBoard(@Positive @PathVariable ("category-id") Long categoryId,
+                                    @Positive @PathVariable ("user-id") Long userId,
+                                    @Positive @PathVariable ("board-id") Long boardId) {
+        Board board = boardService.findBoardByAllId(categoryId, userId, boardId);
+
+        return new ResponseEntity(mapper.boardToResponse(board),HttpStatus.OK);
+    }
+    @GetMapping()
+    public ResponseEntity getBoards(@Positive @RequestParam int page) {
+        Page<Board> pageBoards = boardService.findBoards(page-1);
+        List<Board> listBoards = pageBoards.getContent();
+
+        return new ResponseEntity(mapper.boardsToResponses(listBoards),HttpStatus.OK);
+    }
 }
