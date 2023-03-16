@@ -11,4 +11,4 @@ phases:
       - ./gradlew clean build
   post_build:
     commands:
-      - echo $(basename ./helfit/build/libs/*.jar)
+      - echo $(basename ./build/libs/*.jar)
