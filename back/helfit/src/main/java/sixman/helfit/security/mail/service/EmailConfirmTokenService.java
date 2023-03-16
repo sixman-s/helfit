@@ -39,17 +39,24 @@ public class EmailConfirmTokenService {
     }
 
     public void updateEmailConfirmToken(String tokenId) {
-        EmailConfirmToken verifiedConfirmToken = findVerifiedConfirmToken(tokenId);
+        EmailConfirmToken verifiedConfirmToken = findVerifiedConfirmTokenByTokenId(tokenId);
         verifiedConfirmToken.setExpired(true);
 
         emailConfirmTokenRepository.save(verifiedConfirmToken);
     }
 
-    public EmailConfirmToken findVerifiedConfirmToken(String tokenId) {
-        Optional<EmailConfirmToken> emailConfirmTokenById =
+    public EmailConfirmToken findVerifiedConfirmTokenByTokenId(String tokenId) {
+        Optional<EmailConfirmToken> emailConfirmTokenByTokenId =
             emailConfirmTokenRepository.findEmailConfirmTokenByTokenId(tokenId);
 
-        return emailConfirmTokenById.orElseThrow(() -> new BusinessLogicException(ExceptionCode.EXPIRED_TOKEN));
+        return emailConfirmTokenByTokenId.orElseThrow(() -> new BusinessLogicException(ExceptionCode.EXPIRED_TOKEN));
+    }
+
+    public EmailConfirmToken findVerifiedConfirmTokenByUserId(Long userId) {
+        Optional<EmailConfirmToken> emailConfirmTokenByUserId =
+            emailConfirmTokenRepository.findEmailConfirmTokenByUserId(userId);
+
+        return emailConfirmTokenByUserId.orElseThrow(() -> new BusinessLogicException(ExceptionCode.EXPIRED_TOKEN));
     }
 
     @Async

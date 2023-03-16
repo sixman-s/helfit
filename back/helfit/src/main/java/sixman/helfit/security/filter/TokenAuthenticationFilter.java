@@ -1,11 +1,6 @@
 package sixman.helfit.security.filter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,14 +15,11 @@ import sixman.helfit.security.token.AuthTokenProvider;
 import sixman.helfit.utils.HeaderUtil;
 import sixman.helfit.security.service.CustomUserDetailService;
 
-import javax.security.sasl.AuthenticationException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-
-import static sixman.helfit.response.ErrorResponse.sendErrorResponse;
 
 @RequiredArgsConstructor
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
@@ -39,6 +31,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         String tokenStr = HeaderUtil.getAccessToken(request);
         AuthToken token = authTokenProvider.convertAuthToken(tokenStr);
 
+        // Global Advice 진입전 예외 처리
         try {
             if (token.validate()) {
                 Authentication authentication = getAuthentication(token);
@@ -46,6 +39,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             }
 
             filterChain.doFilter(request, response);
+
         } catch (UsernameNotFoundException e) {
             ErrorResponse.sendErrorResponse(response, ExceptionCode.USERS_NOT_FOUND);
         }
@@ -59,43 +53,10 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private Authentication getAuthentication(AuthToken authToken) {
-        if (authToken.validate()) {
-            UserDetails userDetails = customUserDetailsService.loadUserByUsername(authToken.getTokenClaims().getSubject());
-            return new UsernamePasswordAuthenticationToken(userDetails, authToken, userDetails.getAuthorities());
-        } else {
-            throw new TokenValidFailedException();
-        }
+        if (!authToken.validate()) throw new TokenValidFailedException();
+
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(authToken.getTokenClaims().getSubject());
+
+        return new UsernamePasswordAuthenticationToken(userDetails, authToken, userDetails.getAuthorities());
     }
-
-    // private void sendErrorResponse(HttpServletResponse response, ExceptionCode exceptionCode) {
-    //     ObjectMapper objectMapper = new ObjectMapper();
-    //
-    //     response.setStatus(exceptionCode.getStatus());
-    //     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-    //     ErrorResponse errorResponse = ErrorResponse.of(exceptionCode);
-    //
-    //     try {
-    //         response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
-    //     } catch (IOException e) {
-    //         e.printStackTrace();
-    //     }
-    // }
-
-    // ! FilterChange 선순위 오류 수정 전 기록
-    // private Authentication getAuthentication(AuthToken authToken) {
-    //     if (authToken.validate()) {
-    //         Claims claims = authToken.getTokenClaims();
-    //
-    //         Collection<? extends GrantedAuthority> authorities =
-    //             Arrays.stream(new String[]{claims.get("role").toString()})
-    //                 .map(SimpleGrantedAuthority::new)
-    //                 .collect(Collectors.toList());
-    //
-    //         User principal = new User(claims.getSubject(), "", authorities);
-    //
-    //         return new UsernamePasswordAuthenticationToken(principal, authToken, authorities);
-    //     } else {
-    //         throw new TokenValidFailedException();
-    //     }
-    // }
 }

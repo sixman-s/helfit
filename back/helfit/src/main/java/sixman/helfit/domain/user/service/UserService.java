@@ -95,11 +95,4 @@ public class UserService {
             throw new BusinessLogicException(ExceptionCode.ALREADY_EXISTS_EMAIL);
         });
     }
-
-    @Transactional(readOnly = true)
-    public void verifyExistsUserEmailConfirmToken(String email) {
-        userRepository.findByEmail(email).ifPresent((e) -> {
-            throw new BusinessLogicException(ExceptionCode.ALREADY_EXISTS_EMAIL);
-        });
-    }
 }

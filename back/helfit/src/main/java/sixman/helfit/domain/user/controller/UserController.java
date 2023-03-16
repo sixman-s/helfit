@@ -41,7 +41,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import javax.validation.constraints.Positive;
 import java.net.URI;
 import java.util.Date;
 
@@ -213,16 +212,27 @@ public class UserController {
     @GetMapping("/confirm-email")
     public ModelAndView confirmEmail(@RequestParam("token-id") String tokenId) {
         EmailConfirmToken verifiedConfirmToken =
-            emailConfirmTokenService.findVerifiedConfirmToken(tokenId);
-
+            emailConfirmTokenService.findVerifiedConfirmTokenByTokenId(tokenId);
+        emailConfirmTokenService.updateEmailConfirmToken(verifiedConfirmToken.getTokenId());
         userService.updateUserEmailVerifiedYn(verifiedConfirmToken.getUserId());
-        emailConfirmTokenService.updateEmailConfirmToken(tokenId);
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("email_confirm");
         modelAndView.addObject("link", frontDomain);
 
         return modelAndView;
+    }
+
+    /*
+     * # 사용자 이메일 인증 재발송
+     *
+     */
+    @GetMapping("/resend-confirm-email")
+    public void resendConfirmEmail(@AuthenticationPrincipal UserPrincipal userPrincipal) throws MessagingException {
+        EmailConfirmToken verifiedConfirmToken =
+            emailConfirmTokenService.findVerifiedConfirmTokenByUserId(userPrincipal.getUser().getUserId());
+
+        emailConfirmTokenService.sendEmail(userPrincipal.getUser().getEmail(), verifiedConfirmToken.getTokenId());
     }
 
     /*
