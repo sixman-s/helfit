@@ -7,7 +7,6 @@ phases:
   build:
     commands:
       - echo Build Starting on `date`s
-      - cd helfit
       - chmod +x ./gradlew
       - ./gradlew clean build
   post_build:
