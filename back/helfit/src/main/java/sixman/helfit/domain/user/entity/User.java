@@ -5,11 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import sixman.helfit.audit.Auditable;
 import sixman.helfit.domain.comment.entity.Comment;
 import sixman.helfit.security.entity.ProviderType;
 import sixman.helfit.security.entity.RoleType;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "USERS")
-public class User {
+public class User extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
@@ -45,6 +47,8 @@ public class User {
 
     private Integer height;
     private Integer weight;
+
+    private Integer failureCnt = 0;
 
     @Enumerated(value = EnumType.STRING)
     private EmailVerified emailVerifiedYn;
