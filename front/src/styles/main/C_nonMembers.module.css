@@ -1,1 +1,37 @@
+.container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 32px;
+}
 
+.errIcon {
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: var(--h4);
+  color: var(--text_3);
+  font-weight: 700;
+}
+
+.loginBtn {
+  font-size: var(--h6);
+  font-weight: 600;
+  background-color: var(--main);
+  color: white;
+  padding: 14px 120px;
+  border-radius: 6px;
+}
+.signupGuide {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  font-size: var(--h6);
+  color: var(--text_3);
+
+  padding-top: 30px;
+}
