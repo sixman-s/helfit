@@ -17,7 +17,7 @@ env:
 
 jobs:
   backend:
-    name: CI with Gradle
+    name: CI/CD
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -25,6 +25,7 @@ jobs:
         working-directory: back/helfit
 
     steps:
+      - name: Checkout
       - uses: actions/checkout@v3
 
       - name: Set up JDK 11
@@ -33,14 +34,14 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
 
-      - name: Permission gradlew
+      - name: Permission for gradlew
         run: chmod +x ./gradlew
 
-      - name: Build with Gradle
+      - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
-        with:
-          version: 7.6.1
-          arguments: build
+
+      - name: Execute Gradle build
+        run: ./gradlew clean build
 
       - name: Make zip file
         run: zip -r ./$ZIP_FILE .
