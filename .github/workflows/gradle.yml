@@ -12,7 +12,8 @@ permissions:
 env:
   APPLICATION_NAME: helfit
   APPLICATION_GROUP_NAME: helfit-group
-  S3_BUCKET_NAME: helfit.life/backend
+  S3_BUCKET_NAME: helfit.life
+  S3_BUCKET_DIRECTORY: /backend
   ZIP_FILE: helfit-backend.zip
 
 jobs:
@@ -56,11 +57,11 @@ jobs:
           aws-region: ap-northeast-2
 
       - name: Upload to S3
-        run: aws s3 cp --region ap-northeast-2 $ZIP_FILE s3://$S3_BUCKET_NAME/$ZIP_FILE
+        run: aws s3 cp --region ap-northeast-2 $ZIP_FILE s3://$S3_BUCKET_NAME/$S3_BUCKET_DIRECTORY/$ZIP_FILE
 
       - name: CodeDeploy
         run: >
           aws deploy create-deployment --application-name $APPLICATION_NAME
           --deployment-group-name $APPLICATION_GROUP_NAME
           --deployment-config-name CodeDeployDefault.AllAtOnce
-          --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$ZIP_FILE
+          --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$S3_BUCKET_DIRECTORY/$ZIP_FILE
