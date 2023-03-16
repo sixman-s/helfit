@@ -22,8 +22,23 @@ const WritePostBox = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [fileName, setFileName] = useState<string>('No file selected');
   const [editorInput, setEditorInput] = useState('');
+  const [titleError, setTitleError] = useState('');
+
+  useEffect(() => {
+    if (title) setTitleError(validateTitle(title));
+  }, [title]);
+
+  const validateTitle = (title) => {
+    if (title.length === 0) return 'title cannot be empty';
+  };
 
   const handlePostButtonClick = () => {
+    const titleError = validateTitle(title);
+
+    if (titleError) {
+      setTitleError(titleError);
+      return;
+    }
     console.log({
       category: category,
       tags: tags,
@@ -95,7 +110,9 @@ const WritePostBox = () => {
               className={style.TitleInput}
               value={title}
               onChange={handleTitleInputChange}
+              onBlur={() => setTitleError(validateTitle(title))}
             />
+            {titleError && <div className={style.error}>{titleError}</div>}
           </div>
         </div>
 
