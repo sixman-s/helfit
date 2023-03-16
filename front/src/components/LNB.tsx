@@ -14,6 +14,10 @@ const LNB = () => {
     'Mypage'
   ];
 
+  if (token === null) {
+    category.pop();
+  }
+
   const linkPath = (menu: string) => {
     if (menu === 'Index') {
       return '/';
