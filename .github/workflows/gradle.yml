@@ -19,7 +19,6 @@ jobs:
   backend:
     name: CI with Gradle
     runs-on: ubuntu-latest
-
     defaults:
       run:
         shell: bash
@@ -36,6 +35,12 @@ jobs:
 
       - name: Permission gradlew
         run: chmod +x ./gradlew
+
+      - name: Save state
+        run: echo "{name}={value}" >> $GITHUB_STATE
+
+      - name: Set output
+        run: echo "{name}={value}" >> $GITHUB_OUTPUT
 
       - name: Build with Gradle
         uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
@@ -56,9 +61,9 @@ jobs:
       - name: Upload to S3
         run: aws s3 cp --region ap-northeast-2 ./helfit.zip s3://$S3_BUCKET_NAME/$ZIP_FILE
 
-      - name: Code Deploy
-        run: >
-          aws deploy create-deployment --application-name $APPLICATION_NAME
-          --deployment-group-name $APPLICATION_GROUP_NAME
-          --deployment-config-name CodeDeployDefault.AllAtOnce
-          --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$ZIP_FILE
+#      - name: Code Deploy
+#        run: >
+#          aws deploy create-deployment --application-name $APPLICATION_NAME
+#          --deployment-group-name $APPLICATION_GROUP_NAME
+#          --deployment-config-name CodeDeployDefault.AllAtOnce
+#          --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$ZIP_FILE
