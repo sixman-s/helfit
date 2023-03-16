@@ -75,7 +75,8 @@ public class CalculatorHelper {
         } else if (goal.equals(Goal.KEEP))
             result += 0;
 
-        return result;
+        return Math.round(result*100/100.0);
+        //
     }
     public static Double calculateResultWithGender(ActivityLevel activityLevel, Goal goal,User user){
         Double bmr;
