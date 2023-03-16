@@ -7,7 +7,7 @@ files:
 
 hooks:
   BeforeInstall:
-    - location: scripts/server_clear.sh
+    - location: server_clear.sh
       timeout: 3000
       runas: root
   AfterInstall:
