@@ -15,6 +15,7 @@ import sixman.helfit.domain.user.entity.User;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
@@ -55,11 +56,10 @@ public interface BoardMapper {
         if ( board == null ) {
             return null;
         }
-
+        Long boardId = null;
         String title = null;
         String text = null;
         String boardImageUrl = null;
-        List<CommentDto.responseDto> comments = new ArrayList<>();
         List<TagDto.GetResponse> tagNames = new ArrayList<>();
         LocalDateTime createdAt = null;
         LocalDateTime modifiedAt = null;
@@ -67,25 +67,19 @@ public interface BoardMapper {
         title = board.getTitle();
         text = board.getText();
         boardImageUrl = board.getBoardImageUrl();
-        List<Comment> listComment = board.getComments();
-        if ( listComment != null ) {
-            for(Comment comment : listComment){
-                CommentDto.responseDto responseDto = new CommentDto.responseDto(comment.getCommentBody(),
-                        comment.getCreatedAt(),comment.getModifiedAt());
-                comments.add(responseDto);
-            }
-        }
+
         createdAt = board.getCreatedAt();
         modifiedAt = board.getModifiedAt();
+        boardId = board.getBoardId();
 
         List<BoardTag> listBoardTag = board.getBoardTags();
-        if(!listBoardTag.isEmpty()){
+        if (!listBoardTag.isEmpty()) {
             for(BoardTag boardTag : listBoardTag){
                 TagDto.GetResponse responseDto = new TagDto.GetResponse(boardTag.getTag().getTagId(),boardTag.getTag().getTagName());
                 tagNames.add(responseDto);
             }
         }
-        return new BoardDto.Response(title,text,boardImageUrl,comments,tagNames,createdAt,modifiedAt);
+        return new BoardDto.Response(boardId,title,text,boardImageUrl,tagNames,createdAt,modifiedAt);
 
     }
     List<BoardDto.Response> boardsToResponses(List<Board> boards);
