@@ -39,7 +39,7 @@ const ModalPInfo = ({ detail }: { detail: detailProps }) => {
             {
               console.log(data);
               if (data.status === 200) {
-                router.push('/');
+                router.reload();
               }
             }
           })

@@ -3,7 +3,6 @@ import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 
 import s from '../../../styles/mypage/M_ModalHInfo.module.css';
-import { createNoSubstitutionTemplateLiteral } from 'typescript';
 
 export interface detailProps {
   userId: number;
@@ -45,10 +44,8 @@ const ModalHInfo = ({ detail }: { detail: detailProps }) => {
             .then((data) => {
               {
                 console.log(data);
-                if (data.status === 200) {
-                  alert('완료되었습니다.');
-                  router.push('/mypage');
-                }
+                // alert('완료되었습니다.');
+                // router.reload();
               }
             })
             .catch((err) => console.log(err));

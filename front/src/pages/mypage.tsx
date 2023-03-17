@@ -9,27 +9,108 @@ import MyPage from '../styles/mypage/P_mypage.module.css';
 
 export default function Mypage() {
   const [detail, setDetail] = useState({});
+  const [cDetail, setCDetail] = useState();
+  const [calorie, setCalorie] = useState<number>();
+
+  const [token, setToken] = useState<any>('');
 
   const url = process.env.NEXT_PUBLIC_URL;
-  const accessToken = localStorage.getItem('accessToken');
 
-  // const loginInfo = JSON.parse(localStorage.UserInfo);
-  // console.log(accessToken);
   useEffect(() => {
-    axios
-      .get(`${url}/api/v1/users`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
-      })
-      .then((res) => {
-        setDetail(res.data.body.data);
-        // console.log(detail);
-      })
-      .catch((err) => console.log(err));
+    const accessToken = localStorage.getItem('accessToken');
+    setToken(accessToken);
+    initMyPage(accessToken);
   }, []);
 
-  // console.log(detail);
+  const initMyPage = async (token) => {
+    const userId = await getUserInfo(token);
+    await getCalculateInfo({ userId, token });
+  };
+
+  const getUserInfo = async (token) => {
+    console.log('token : ' + token);
+
+    if (token) {
+      try {
+        const res = await axios.get(`${url}/api/v1/users`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        setDetail(res.data.body.data);
+        const userId = res.data.body.data.userId;
+        console.log('userId :' + userId);
+        return userId;
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  };
+
+  const getCalculateInfo = async ({ userId, token }) => {
+    console.log(userId);
+    if (userId) {
+      try {
+        const res = await axios.get(`${url}/api/v1/calculate/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        //   .then((res) => console.log('!!!!' + res))
+        //   .catch((err) => console.log(err));
+        // console.log('!!!!!!!!!' + res);
+
+        const {
+          data: {
+            body: { data: cDetailData }
+          }
+        } = res;
+        const { result: calorieData } = cDetailData;
+        console.log('cDetailData : ' + cDetailData);
+        console.log('calorieData : ' + calorieData);
+        setCDetail(cDetailData);
+        setCalorie(calorieData);
+      } catch (error) {
+        console.log(error);
+        const cDetailData = undefined;
+        const calorieData = 0;
+
+        setCDetail(cDetailData);
+        setCalorie(calorieData);
+      }
+    }
+  };
+
+  // const getCalculateInfo = async ({ userId, token }) => {
+  //   console.log(userId);
+  //   if (userId) {
+  //     try {
+  //       const res = await axios.get(`${url}/api/v1/calculate/${userId}`, {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`
+  //         }
+  //       });
+  //       console.log('!!!!!!!!!' + res);
+  //       const {
+  //         data: {
+  //           body: { data: cDetailData }
+  //         }
+  //       } = res;
+  //       const { result: calorieData } = cDetailData;
+  //       console.log('cDetailData : ' + cDetailData);
+  //       console.log('calorieData : ' + calorieData);
+  //       setCDetail(cDetailData);
+  //       setCalorie(calorieData);
+  //     } catch (error) {
+  //       console.log(error);
+  //       const cDetailData = undefined;
+  //       const calorieData = 0;
+
+  //       setCDetail(cDetailData);
+  //       setCalorie(calorieData);
+  //     }
+  //   }
+  // };
   return (
     <Layout>
       <div className={MyPage.myPageContainer}>
@@ -40,10 +121,10 @@ export default function Mypage() {
           <MyList />
         </div>
         <div className={MyPage.healthInfo}>
-          <HealthInfo detail={detail} />
+          <HealthInfo detail={detail} cDetail={cDetail} />
         </div>
         <div className={MyPage.calorieInfo}>
-          <CalorieInfo />
+          <CalorieInfo calorie={calorie} />
         </div>
       </div>
     </Layout>

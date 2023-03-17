@@ -63,3 +63,8 @@
 .bottomContainer span{
     margin-left: 10px;
 }
+
+.profile {
+    width: 60px;
+    height: 60px;
+}
