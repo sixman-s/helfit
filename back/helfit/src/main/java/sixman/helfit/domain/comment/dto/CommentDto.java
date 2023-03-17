@@ -23,8 +23,8 @@ public class CommentDto {
     @Getter
     @AllArgsConstructor
     public static class responseDto {
-//        private String userNickname;
-//        private String userProfileUrl;
+        private String userNickname;
+        private String userProfileUrl;
         private String commentBody;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;

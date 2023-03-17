@@ -8,6 +8,7 @@ import sixman.helfit.audit.Auditable;
 import sixman.helfit.domain.tag.entity.Tag;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity(name = "BOARD_TAGS")
 @NoArgsConstructor
