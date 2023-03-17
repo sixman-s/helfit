@@ -9,6 +9,7 @@ import sixman.helfit.domain.calculator.entity.Calculator;
 @Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CalculatorMapper {
     Calculator calculatorPostToCalculator(CalculatorDto.Post requestBody);
+    CalculatorDto.PostResponse calculatorToPostResponse(Calculator calculator);
     Calculator calculatorPatchToCalculator(CalculatorDto.Patch requestBody);
     CalculatorDto.Response calculatorToResponse(Calculator calculator);
 }

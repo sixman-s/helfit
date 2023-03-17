@@ -3,6 +3,7 @@ package sixman.helfit.domain.statistics.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,10 +42,14 @@ public class StatController {
 
         return ResponseEntity.ok().body(ApiResponse.ok("data", responses));
     }
-    @GetMapping("/Board")
+    @GetMapping("/board/{category-id}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> getBoardStat(){
-        return null;
+    public ResponseEntity<?> getBoardStat(@Positive @PathVariable ("category-id") Long categoryId) {
+        List<Stat> boardList = statService.getBoardByRecent(categoryId);
+
+        List<StatDto.boardResponse> responses = statMapper.statListToStatDtoBoardResponseList(boardList);
+
+        return ResponseEntity.ok().body(ApiResponse.ok("data", responses));
     }
 
 }
