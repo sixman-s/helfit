@@ -44,7 +44,7 @@ public class CalculatorService {
             Calculator calculator = optionalCalculator.get();
             return calculator;
         } else  {
-            throw new NotFoundException("해당 사용자의 계산 결과를 찾을 수 없습니다.");
+            throw new BusinessLogicException(ExceptionCode.CALCULATOR_NO_USER_INFO);
         }
     }
 

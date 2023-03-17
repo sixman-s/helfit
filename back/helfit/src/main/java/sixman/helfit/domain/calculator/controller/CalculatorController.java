@@ -48,10 +48,11 @@ public class CalculatorController {
                 calculatorMapper.calculatorPostToCalculator(requestBody),
                 userPrincipal.getUser());
         URI uri = UriUtil.createUri(DEFAULT_URL, calculator.getCalculatorId());
-        return ResponseEntity.created(uri).body(ApiResponse.created());
+        CalculatorDto.PostResponse postResponse = calculatorMapper.calculatorToPostResponse(calculator);
+        postResponse.setUserId(userPrincipal.getUser().getUserId());
+        postResponse.setCalculatorId(calculator.getCalculatorId());
+        return ResponseEntity.created(uri).body(ApiResponse.ok("data", postResponse));
     }
-
-    //return new ResponseEntity<>(calculatorMapper.calculatorToPostResponse(calculator), HttpStatus.CREATED);
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{user-id}")
     public ResponseEntity<?> getResult(@PathVariable("user-id") @Positive Long userId,

@@ -31,4 +31,7 @@ public class Stat extends Auditable {
     private Category category;
     private Integer kcal;
     private String recodedAt;
+    private String boardImageUrl;
+    private String title;
+    private String text;
 }
