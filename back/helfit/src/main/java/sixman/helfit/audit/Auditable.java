@@ -15,7 +15,7 @@ import java.time.format.DateTimeFormatter;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class Auditable {
 
-    @CreatedDate()
+    @CreatedDate
     @Column(name = "createdAt", updatable = false)
     private LocalDateTime createdAt;
 
