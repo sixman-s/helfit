@@ -21,6 +21,9 @@ spring:
   profiles:
     include: common
     active: local
+  batch:
+    job:
+      enabled: false
   servlet:
     multipart:
       max-file-size: 10MB

@@ -38,12 +38,8 @@ public class InitDB {
                 "tester@tester.com",
                 "tester",
                 null,
-                20001231,
-                185,
-                85,
                 EmailVerified.Y,
                 PersonalInfoAgreement.Y,
-                Gender.MALE,
                 ProviderType.LOCAL,
                 RoleType.USER
             );

@@ -50,14 +50,7 @@ public class CalendarService {
     }
 
     @Transactional(readOnly = true)
-    public Calendar findVerifiedCalendar(Long calendarId) {
-        Optional<Calendar> byCalendarId = calendarRepository.findByCalendarId(calendarId);
-
-        return byCalendarId.orElseThrow(() -> new BusinessLogicException(ExceptionCode.NOT_FOUND));
-    }
-
-    @Transactional(readOnly = true)
-    public Calendar findVerifiedCalendarWithUserId(Long calendarId, Long userId) {
+    public Calendar findCalendarByUserId(Long calendarId, Long userId) {
         Optional<Calendar> byCalendarId = calendarRepository.findByCalendarId(calendarId);
 
         Calendar calendar = byCalendarId.orElseThrow(() -> new BusinessLogicException(ExceptionCode.NOT_FOUND));
