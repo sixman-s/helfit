@@ -71,12 +71,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             userInfo.getEmail(),
             userInfo.getNickname(),
             userInfo.getImageUrl(),
-            null,
-            null,
-            null,
             EmailVerified.Y,
             PersonalInfoAgreement.Y,
-            null,
             providerType,
             RoleType.USER
         );
