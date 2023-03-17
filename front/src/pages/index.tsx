@@ -19,13 +19,7 @@ export default function Home() {
   return (
     <Layout>
       <section className={styled.container}>
-        {token ? (
-          <UserInfo />
-        ) : (
-          <VisitantInfo>
-            <NonMembers />
-          </VisitantInfo>
-        )}
+        {token ? <UserInfo token={token} /> : <VisitantInfo />}
         {token ? (
           <LoginServiceLayout title='Calendar' href='/calendar'>
             <CalendarInfo />

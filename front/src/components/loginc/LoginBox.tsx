@@ -53,10 +53,10 @@ const LoginBox = () => {
             localStorage.setItem('UserInfo', JSON.stringify(UserInfo));
             // console.log(JSON.parse(localStorage.UserInfo).email);
           })
+          .then(() => router.push('/'))
           .catch((error) => {
             console.log(error);
           });
-        router.push('/');
       })
 
       .catch((error) => {

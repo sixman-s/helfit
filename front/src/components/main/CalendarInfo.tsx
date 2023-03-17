@@ -3,17 +3,44 @@ import { useState } from 'react';
 import layout from '../../styles/main/C_infoLayout.module.css';
 import styled from '../../styles/main/C_calendarInfo.module.css';
 import { DateView } from '../calendar/utils/DateView';
+import axios from 'axios';
 
 const CalendarInfo = () => {
-  const [date, setDate] = useState(DateView(new Date()));
-  const calorie = 1000;
-  const title = '제목을 입력해 주세요';
-  const innerText =
-    '테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다. 테스트 텍스트입니다.';
+  const [date, setDate] = useState('0000-00-00');
+  const [title, setTitle] = useState('제목 없음');
+  const [calorie, setCalorie] = useState(0);
+  const [innerText, setInnerText] = useState('내용 없음');
+  const url = `${process.env.NEXT_PUBLIC_URL}/api/v1/calendar?recodedAt=${date}`;
+
+  const searchHandller = () => {
+    if (typeof window !== 'undefined') {
+      const token: string = localStorage.accessToken;
+      if (token) {
+        const headers = {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        };
+        axios
+          .get(url, headers)
+          .then((res) => {
+            const data = res.data.body.data;
+            setTitle(data.title);
+            setCalorie(data.kcal);
+            setInnerText(data.content);
+          })
+          .catch((error) => {
+            setTitle('제목 없음');
+            setCalorie(0);
+            setInnerText('내용 없음');
+          });
+      } else alert('로그인 후 이용해 주세요');
+    }
+  };
 
   return (
     <>
-      <form className={styled.form}>
+      <div className={styled.form}>
         <input
           max={DateView(new Date())}
           className={styled.dateInput}
@@ -22,8 +49,10 @@ const CalendarInfo = () => {
           required
           onChange={(e) => setDate(e.target.value)}
         />
-        <button className={styled.submitBtn}>Search</button>
-      </form>
+        <button className={styled.submitBtn} onClick={() => searchHandller()}>
+          Search
+        </button>
+      </div>
       <div>
         <ul className={styled.infoUl}>
           <li className={styled.infoLi}>
