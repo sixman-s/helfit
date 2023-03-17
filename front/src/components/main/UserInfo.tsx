@@ -1,46 +1,15 @@
 import styled from '../../styles/main/C_userInfo.module.css';
 import Link from 'next/link';
-import { useEffect, useState, useRef } from 'react';
-import { axisBottom, axisRight, scaleBand, scaleLinear, select } from 'd3';
-import axios from 'axios';
+import KcalChart from './util/KcalChart';
 
 const UserInfo = ({ token }) => {
-  const [name, setName] = useState('');
-  // const [kcal, setKcal] = useState(null);
-  // const svgRef = useRef(null);
-  // const data = [21, 32, 53, 64, 75];
-  // useEffect(() => {
-  //   const svg = select(svgRef.current);
-  // }, []);
-
-  let userData = JSON.parse(localStorage.getItem('UserInfo'));
-  console.log(userData);
-  useEffect(() => {
-    if (userData !== null && userData !== undefined) {
-      setName(userData.nickname);
-      if (token) {
-        const headers = {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        };
-        const url = `${process.env.NEXT_PUBLIC_URL}/api/v1/stat/calendar/${userData.userId}`;
-        axios
-          .get(url, headers)
-          .then((res) => {
-            const data = res.data.body.data;
-            // setKcal(data);
-          })
-          .catch((error) => console.log(error));
-      }
-    }
-  }, [userData]);
+  const userData = JSON.parse(localStorage.getItem('UserInfo'));
 
   return (
     <article>
       <header className={styled.header}>
         <h3 className={styled.h3}>
-          <span className={styled.username}>{`${name}님`}</span>
+          <span className={styled.username}>{`${userData.nickname}님`}</span>
           <br />
           핏한 하루 되셨나요?
         </h3>
@@ -51,17 +20,19 @@ const UserInfo = ({ token }) => {
       <div className={styled.chartContainer}>
         <figure className={styled.chart}>
           <div className={styled.chartInfo}>
-            <span className={styled.chartTitle}>1800</span>
+            <span className={styled.chartTitle}>{userData.height}</span>
             <figcaption className={styled.chartCaption}>weight</figcaption>
           </div>
-          {/* <svg className={styled.chartView} ref={svgRef}></svg> */}
+          <div className={styled.chartView}>몸무게 그래프</div>
         </figure>
         <figure className={styled.chart}>
           <div className={styled.chartInfo}>
-            <span className={styled.chartTitle}>{'1280'}</span>
+            <span className={styled.chartTitle}>{'2000'}</span>
             <figcaption className={styled.chartCaption}>kcal</figcaption>
           </div>
-          <div className={styled.chartView}>칼로리 그래프</div>
+          <div className={styled.chartView}>
+            <KcalChart token={token} userId={userData.userId} />
+          </div>
         </figure>
       </div>
     </article>
