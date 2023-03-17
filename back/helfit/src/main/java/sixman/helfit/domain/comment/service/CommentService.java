@@ -1,6 +1,7 @@
 package sixman.helfit.domain.comment.service;
 
 import org.springframework.stereotype.Service;
+import sixman.helfit.domain.board.entity.Board;
 import sixman.helfit.domain.board.service.BoardService;
 import sixman.helfit.domain.comment.entity.Comment;
 import sixman.helfit.domain.comment.repository.CommentRepository;

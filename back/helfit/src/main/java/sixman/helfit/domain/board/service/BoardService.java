@@ -3,6 +3,7 @@ package sixman.helfit.domain.board.service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import sixman.helfit.domain.board.entity.Board;
 import sixman.helfit.domain.board.entity.BoardTag;
@@ -12,10 +13,13 @@ import sixman.helfit.domain.category.service.CategoryService;
 
 import sixman.helfit.domain.tag.service.TagService;
 
+import sixman.helfit.domain.user.entity.User;
 import sixman.helfit.domain.user.service.UserService;
 import sixman.helfit.exception.BusinessLogicException;
 import sixman.helfit.exception.ExceptionCode;
+import sixman.helfit.security.entity.UserPrincipal;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -34,10 +38,10 @@ public class BoardService {
         this.userService = userService;
     }
 
-    public Board createBoard(Board board){
-        verifyBoard(board);
+    public Board createBoard(Board board, UserPrincipal userPrincipal){
+        verifyBoard(board,userPrincipal);
         for (BoardTag boardTag: board.getBoardTags()) {
-            boardTag.setTag(tagService.findTag(boardTag.getTag()));
+            boardTag.addTag(tagService.findTag(boardTag.getTag()));
         }
         return boardRepository.save(board);
     }
@@ -47,9 +51,16 @@ public class BoardService {
                 Sort.by("boardId").descending()));
     }
 
-    private void verifyBoard(Board board) {
-        userService.findUserByUserId(board.getUser().getUserId());
+    public Page<Board> findBoards(Long categoryId, int page) {
+        return boardRepository.findBoardByCategoryId(categoryId,PageRequest.of(page,10,
+                Sort.by("boardId").descending()));
+    }
 
+    private void verifyBoard(Board board,UserPrincipal userPrincipal) {
+        User user = userService.findUserByUserId(board.getUser().getUserId());
+        if(!Objects.equals(user.getUserId(), userPrincipal.getUser().getUserId())) {
+            throw new BusinessLogicException(ExceptionCode.MISS_MATCH_USERID);
+        }
         categoryService.verifiedCategoryById(board.getCategory().getCategoryId());
     }
 

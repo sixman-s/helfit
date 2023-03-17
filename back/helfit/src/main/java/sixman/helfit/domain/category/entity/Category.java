@@ -25,13 +25,5 @@ public class Category {
     @Column(nullable = false, length = 10)
     private String categoryName;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.PERSIST)
-    private List<Board> boards = new ArrayList<>();
-
-    public void addBoard(Board board){
-        if(!this.boards.contains(board)){
-            this.boards.add(board);
-        }
-    }
 
 }
