@@ -7,6 +7,8 @@ import sixman.helfit.global.annotations.ValidEnum;
 
 import javax.validation.constraints.*;
 
+import java.time.LocalDateTime;
+
 import static sixman.helfit.domain.physical.entity.Physical.*;
 
 public class PhysicalDto {
@@ -70,5 +72,7 @@ public class PhysicalDto {
         private Integer height;
         private Integer weight;
         private Gender gender;
+        private LocalDateTime createdAt;
+        private LocalDateTime modifiedAt;
     }
 }

@@ -1,24 +1,23 @@
 package sixman.helfit.domain.physical.repository;
 
-import com.querydsl.core.types.Expression;
-import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.*;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
+import org.springframework.stereotype.Repository;
 import sixman.helfit.domain.physical.entity.Physical;
-import sixman.helfit.domain.physical.entity.QPhysical;
 import sixman.helfit.domain.physical.repository.custom.PhysicalRepositoryCustom;
 
 import javax.persistence.EntityManager;
-import java.sql.Date;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
 import static sixman.helfit.domain.physical.entity.QPhysical.physical;
 
+@Repository
 public class PhysicalRepositoryImpl implements PhysicalRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
@@ -31,7 +30,7 @@ public class PhysicalRepositoryImpl implements PhysicalRepositoryCustom {
         return Optional.ofNullable(
             queryFactory.selectFrom(physical)
                 .where(
-                    userId(userId),
+                    userIdEq(userId),
                     withinToday(LocalDateTime.now())
                 )
                 .fetchFirst()
@@ -39,14 +38,24 @@ public class PhysicalRepositoryImpl implements PhysicalRepositoryCustom {
     }
 
     @Override
-    public List<Physical> findAllPhysicalByUserId(Long userId) {
-        return queryFactory.selectFrom(physical)
-            .where(userId(userId))
-            .orderBy(physical.createdAt.desc())
-            .fetch();
+    public Page<Physical> findAllPhysicalByUserId(Long userId, Pageable pageable) {
+        List<Physical> fetch = queryFactory.selectFrom(physical)
+                                   .where(userIdEq(userId))
+                                   .orderBy(physical.createdAt.desc())
+                                   .offset(pageable.getOffset())
+                                   .limit(pageable.getPageSize())
+                                   .fetch();
+
+        Long count = queryFactory.select(physical.count())
+                         .from(physical)
+                         .where(userIdEq(userId))
+                         .fetchOne();
+
+        assert count != null;
+        return PageableExecutionUtils.getPage(fetch, pageable, count::longValue);
     }
 
-    private BooleanExpression userId(Long userId) {
+    private BooleanExpression userIdEq(Long userId) {
         return userId != null ? physical.user.userId.eq(userId) : null;
     }
 

@@ -5,6 +5,8 @@ import org.mapstruct.factory.Mappers;
 import sixman.helfit.domain.physical.dto.PhysicalDto;
 import sixman.helfit.domain.physical.entity.Physical;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface PhysicalMapper {
     PhysicalMapper INSTANCE = Mappers.getMapper(PhysicalMapper.class);
@@ -14,4 +16,6 @@ public interface PhysicalMapper {
     Physical physicalDtoPatchToPhysical(PhysicalDto.Patch requestBody);
 
     PhysicalDto.Response physicalToPhysicalDtoResponse(Physical physical);
+
+    List<PhysicalDto.Response> physicalToPhysicalDtoResponseList(List<Physical> physical);
 }

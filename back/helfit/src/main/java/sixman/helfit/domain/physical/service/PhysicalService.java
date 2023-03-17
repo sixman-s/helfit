@@ -1,15 +1,19 @@
 package sixman.helfit.domain.physical.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sixman.helfit.domain.physical.dto.PhysicalDto;
 import sixman.helfit.domain.physical.entity.Physical;
+import sixman.helfit.domain.physical.mapper.PhysicalMapper;
 import sixman.helfit.domain.physical.repository.PhysicalRepository;
 import sixman.helfit.domain.user.entity.User;
 import sixman.helfit.exception.BusinessLogicException;
 import sixman.helfit.exception.ExceptionCode;
 import sixman.helfit.utils.CustomBeanUtil;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -45,10 +49,10 @@ public class PhysicalService {
     }
 
     @Transactional(readOnly = true)
-    public Physical findAllPhysicalByUserId(Long userId) {
-        Optional<Physical> physicalByUserIdWithOrderBy = physicalRepository.findPhysicalByUserIdWithinToday(userId);
+    public Page<Physical> findAllPhysicalByUserId(Long userId, Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page <= 0 ? 0 : page - 1, size, Sort.Direction.ASC, "modifiedAt");
 
-        return physicalByUserIdWithOrderBy.orElseThrow(() -> new BusinessLogicException(ExceptionCode.NOT_FOUND));
+        return physicalRepository.findAllPhysicalByUserId(userId, pageable);
     }
 
     @Transactional(readOnly = true)

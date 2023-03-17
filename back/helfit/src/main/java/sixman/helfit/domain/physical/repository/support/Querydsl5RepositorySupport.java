@@ -37,7 +37,8 @@ public abstract class Querydsl5RepositorySupport {
     @Autowired
     public void setEntityManager(EntityManager entityManager) {
         Assert.notNull(entityManager, "EntityManager must not be null!");
-        JpaEntityInformation<?, ?> entityInformation = JpaEntityInformationSupport.getEntityInformation(domainClass, entityManager);
+        JpaEntityInformation<?, ?> entityInformation =
+            JpaEntityInformationSupport.getEntityInformation(domainClass, entityManager);
         SimpleEntityPathResolver resolver = SimpleEntityPathResolver.INSTANCE;
         EntityPath<?> path = resolver.createPath(entityInformation.getJavaType());
 
@@ -85,7 +86,8 @@ public abstract class Querydsl5RepositorySupport {
 
     protected <T> Page<T> applyPagination(
         Pageable pageable,
-        Function<JPAQueryFactory, JPAQuery<T>> contentQuery, Function<JPAQueryFactory, JPAQuery<T>> countQuery
+        Function<JPAQueryFactory, JPAQuery<T>> contentQuery,
+        Function<JPAQueryFactory, JPAQuery<T>> countQuery
     ) {
         JPAQuery<T> jpaContentQuery = contentQuery.apply(getQueryFactory());
         List<T> content = getQuerydsl().applyPagination(pageable, jpaContentQuery).fetch();

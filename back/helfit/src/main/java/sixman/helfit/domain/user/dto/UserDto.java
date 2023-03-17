@@ -41,9 +41,6 @@ public class UserDto {
             ignoreCase = true
         )
         private String personalInfoAgreement;
-
-        @Nullable
-        private String profileImageUrl;
     }
 
     @Getter
@@ -60,9 +57,6 @@ public class UserDto {
         @Nullable
         @Pattern(regexp = "^\\S+(\\s?\\S+)*$", message = "별명은 공백을 포함할 수 없습니다.")
         private String nickname;
-
-        @Nullable
-        private String profileImageUrl;
     }
 
     @Getter
