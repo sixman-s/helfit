@@ -43,7 +43,11 @@ public class CalculatorController {
 
         URI uri = UriUtil.createUri(DEFAULT_URL, calculator.getCalculatorId());
 
-        return ResponseEntity.created(uri).body(ApiResponse.created());
+        CalculatorDto.PostResponse postResponse = calculatorMapper.calculatorToPostResponse(calculator);
+        postResponse.setUserId(userPrincipal.getUser().getUserId());
+        postResponse.setCalculatorId(calculator.getCalculatorId());
+
+        return ResponseEntity.created(uri).body(ApiResponse.ok("data", postResponse));
     }
 
     @PreAuthorize("isAuthenticated()")

@@ -1,6 +1,7 @@
 package sixman.helfit.domain.calculator.service;
 
 import com.amazonaws.services.kms.model.NotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sixman.helfit.domain.calculator.entity.Calculator;
@@ -18,14 +19,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CalculatorService {
     private final CalculatorRepository calculatorRepository;
     private final CustomBeanUtil<Calculator> customBeanUtil;
-
-    public CalculatorService(CalculatorRepository calculatorRepository, UserService userService, CustomBeanUtil<Calculator> customBeanUtil) {
-        this.calculatorRepository = calculatorRepository;
-        this.customBeanUtil = customBeanUtil;
-    }
 
     public Calculator createResult(Calculator calculator, User user, Physical physical) {
         if (physical.getWeight() == null || physical.getHeight() == null || physical.getGender() == null) {
@@ -43,7 +40,7 @@ public class CalculatorService {
             Calculator calculator = optionalCalculator.get();
             return calculator;
         } else  {
-            throw new NotFoundException("해당 사용자의 계산 결과를 찾을 수 없습니다.");
+            throw new BusinessLogicException(ExceptionCode.CALCULATOR_NO_USER_INFO);
         }
     }
 
