@@ -47,10 +47,21 @@ const WritePostBox = () => {
       .post(`${URL}/api/v1/board/${category}/${userID}`, {
         title: title,
         text: editorInput,
-        boardTags: tags.map((tag) => ({ tagName: tag })),
-        files: selectedFile
+        boardTags: tags.map((tag) => ({ tagName: tag }))
       })
-      .then(() => router.push('/community'))
+      // .then(() => {
+      //   const accessToken = localStorage.accessToken;
+      //   const formData = new FormData();
+      //   formData.append('multipartFile', selectedFile);
+      //   axios.post(`${URL}/api/v1/file/upload`, formData, {
+      //     headers: {
+      //       'content-type': 'multipart/form-data',
+      //       Authorization: `Bearer ${accessToken}`
+      //     }
+      //   });
+      // })
+      .then(() => alert(`userid: ${userID}  게시글 등록 성공`))
+      // .then(() => router.push('/community'))
       .catch((err) => {
         alert(err);
       });
