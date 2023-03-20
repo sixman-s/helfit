@@ -33,6 +33,10 @@ public class PhysicalController {
     private final PhysicalService physicalService;
     private final PhysicalMapper physicalMapper;
 
+    /*
+     * # 회원 개인(신체정보) 생성
+     *
+     */
     @PostMapping
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> postPhysical(
@@ -49,6 +53,11 @@ public class PhysicalController {
         return ResponseEntity.created(uri).build();
     }
 
+
+    /*
+     * # 회원 개인(신체)정보 수정
+     *
+     */
     @PatchMapping
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> patchPhysical(
@@ -65,6 +74,11 @@ public class PhysicalController {
         return ResponseEntity.ok().body(ApiResponse.ok("data", response));
     }
 
+
+    /*
+     * # 회원 개인(신체)정보 조회 (당일 기준)
+     *
+     */
     @GetMapping("/today")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> getPhysicalWithinToday(@AuthenticationPrincipal UserPrincipal userPrincipal) {
@@ -74,6 +88,21 @@ public class PhysicalController {
 
         return ResponseEntity.ok().body(ApiResponse.ok("data", response));
     }
+
+    /*
+     * # 회원 개인(신체)정보 조회 (최신 수정일 기준)
+     *
+     */
+    @GetMapping("/recent")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> getPhysical(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        Physical physical = physicalService.findPhysicalByUserId(userPrincipal.getUser().getUserId());
+
+        PhysicalDto.Response response = physicalMapper.physicalToPhysicalDtoResponse(physical);
+
+        return ResponseEntity.ok().body(ApiResponse.ok("data", response));
+    }
+
 
     @GetMapping
     @PreAuthorize("isAuthenticated()")

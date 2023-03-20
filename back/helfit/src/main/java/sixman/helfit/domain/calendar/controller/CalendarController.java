@@ -67,7 +67,7 @@ public class CalendarController {
     }
 
     /*
-     * # 캘린더 등록일자 기준 조회
+     * # 캘린더 등록일 기준 조회
      *
      */
     @GetMapping(params = { "recodedAt" })

@@ -49,6 +49,13 @@ public class PhysicalService {
     }
 
     @Transactional(readOnly = true)
+    public Physical findPhysicalByUserId(Long userId) {
+        Optional<Physical> physicalByUserIdWithOrderBy = physicalRepository.findPhysicalByUserId(userId);
+
+        return physicalByUserIdWithOrderBy.orElseThrow(() -> new BusinessLogicException(ExceptionCode.NOT_FOUND));
+    }
+
+    @Transactional(readOnly = true)
     public Page<Physical> findAllPhysicalByUserId(Long userId, Integer page, Integer size) {
         PhysicalCondition physicalCondition = new PhysicalCondition();
         physicalCondition.setUserId(userId);

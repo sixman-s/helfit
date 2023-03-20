@@ -6,7 +6,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
-import org.springframework.stereotype.Repository;
 import sixman.helfit.domain.physical.entity.Physical;
 import sixman.helfit.domain.physical.repository.custom.PhysicalRepositoryCustom;
 
@@ -33,6 +32,16 @@ public class PhysicalRepositoryImpl implements PhysicalRepositoryCustom {
                     userIdEq(userId),
                     withinToday(LocalDateTime.now())
                 )
+                .fetchFirst()
+        );
+    }
+
+    @Override
+    public Optional<Physical> findPhysicalByUserId(Long userId) {
+        return Optional.ofNullable(
+            queryFactory.selectFrom(physical)
+                .where(userIdEq(userId))
+                .orderBy(physical.createdAt.desc())
                 .fetchFirst()
         );
     }

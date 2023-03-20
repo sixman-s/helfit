@@ -8,5 +8,6 @@ import java.util.Optional;
 
 public interface PhysicalRepositoryCustom {
     Optional<Physical> findPhysicalByUserIdWithinToday(Long userId);
+    Optional<Physical> findPhysicalByUserId(Long userId);
     Page<Physical> findAllPhysicalByUserId(Long userId, Pageable pageable);
 }
