@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import style from '../../styles/Community/C_Post.module.css';
-import Btn from '../loginc/Buttons';
-import Pagenation from './C_Community/Pagenation';
+import style from '../../../styles/Community/C_Post.module.css';
+import Btn from '../../loginc/Buttons';
+import { Pagination } from 'semantic-ui-react';
 import axios from 'axios';
 
 interface Post {
@@ -17,7 +17,6 @@ interface Post {
 type Props = {
   posts: Post[];
 };
-
 const URL = process.env.NEXT_PUBLIC_URL;
 
 const HealthPost: React.FC = () => {
@@ -25,7 +24,7 @@ const HealthPost: React.FC = () => {
 
   useEffect(() => {
     axios
-      .get(`${URL}/api/v1/board/1?page=1`)
+      .get(`${URL}/api/v1/board/2?page=1`)
       .then((res) => setFetchedPosts(res.data))
       .catch((err) => console.log(err));
   }, []);
@@ -36,7 +35,6 @@ const HealthPost: React.FC = () => {
   }) => {
     const { title, tags, createdAt } = post;
 
-    // Convert createdAt date string to localized date string
     const createdAtString = new Date(createdAt)
       .toLocaleDateString('en-KR', {
         year: '2-digit',
@@ -82,13 +80,22 @@ const HealthPost: React.FC = () => {
           <ul>
             {fetchedPosts.map((post, index) => (
               <li key={post.boardId}>
-                <PostCard post={post} order={index + 1} />
+                <Link href={`/community/crossfit/${post.boardId}`}>
+                  <PostCard post={post} order={index + 1} />
+                </Link>
               </li>
             ))}
           </ul>
         </div>
         <div className={style.pagenation}>
-          <Pagenation />
+          <Pagination
+            defaultActivePage={1}
+            firstItem={null}
+            lastItem={null}
+            pointing
+            secondary
+            totalPages={7}
+          />
         </div>
       </div>
     </>

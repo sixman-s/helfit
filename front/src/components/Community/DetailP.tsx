@@ -1,10 +1,26 @@
 import style from '../../styles/Community/P_Detail.module.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import UserNav from './C_Community/UserNav';
+import axios from 'axios';
+import { useRouter } from 'next/router';
+
+interface BoardData {
+  boardId: number;
+  title: string;
+  text: string;
+  boardImageUrl: string | null;
+  tags: {
+    tagId: number;
+    tagName: string;
+  }[];
+  createdAt: string;
+  modifiedAt: string;
+}
 
 const DetailP = () => {
+  const URL = process.env.NEXT_PUBLIC_URL;
   const [writeCommnet, setWriteCommnet] = useState('');
-
+  const [fetchedData, setFetchedData] = useState<BoardData | null>(null);
   const handleSubmit = (e: React.KeyboardEvent) => {
     // 댓글 작성 후 서버에 전송하는 로직 작성
     console.log('Comment submitted:', writeCommnet);
@@ -22,7 +38,32 @@ const DetailP = () => {
     console.log('Click!');
   };
 
-  const imgSrc = '../../assets/Community/하입보이.png';
+  const router = useRouter();
+  const { id } = router.query;
+  const boardID = id ? parseInt(id[id.length - 1]) : null;
+  const currentPage = router.asPath.split('/')[2];
+
+  let pageNumber: Number;
+  switch (currentPage) {
+    case 'health':
+      pageNumber = 1;
+      break;
+    case 'crossfit':
+      pageNumber = 2;
+      break;
+    case 'pilates':
+      pageNumber = 4;
+      break;
+    default:
+      pageNumber = null;
+  }
+
+  useEffect(() => {
+    axios
+      .get(`${URL}/api/v1/board/${pageNumber}/2/${boardID}`)
+      .then((res) => setFetchedData(res.data))
+      .catch((err) => console.log(err));
+  }, [boardID]);
 
   return (
     <>
@@ -31,10 +72,10 @@ const DetailP = () => {
           <UserNav />
         </div>
         <div className={style.Category}>헬스 갤러리</div>
-        <div className={style.Title}>홍대 헬스장 가려면 어디로 가야 해요? </div>
+        <div className={style.Title}>{fetchedData?.title}</div>
         <div className={style.PostNav}>
           <div>작성자</div>
-          <div>createdAt</div>
+          <div>{fetchedData?.createdAt}</div>
           <div>조회수</div>
           <div className={style.PostLike}>
             <img
@@ -45,15 +86,15 @@ const DetailP = () => {
           </div>
         </div>
         <div className={style.Content}>
-          <div className={style.Content_Text}>
-            뉴진스의 Hype Boy 빼고 알려주세요 제발
-          </div>
-          {imgSrc && (
+          <div className={style.Content_Text}>{fetchedData?.text}</div>
+          {fetchedData?.boardImageUrl && (
             <div style={{ width: '250px', height: '250px' }}>
-              <img src={imgSrc} className={style.Content_Img} />
+              <img
+                src={fetchedData?.boardImageUrl}
+                className={style.Content_Img}
+              />
             </div>
           )}
-          {!imgSrc && <div style={{ display: 'none' }}></div>}
         </div>
         <div className={style.CommentWrite}>
           <div className={style.CommnetSVG}>
