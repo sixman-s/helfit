@@ -43,12 +43,21 @@ const WritePostBox = () => {
       setTitleError(titleError);
       return;
     }
+    const accessToken = localStorage.accessToken;
     axios
-      .post(`${URL}/api/v1/board/${category}/${userID}`, {
-        title: title,
-        text: editorInput,
-        boardTags: tags.map((tag) => ({ tagName: tag }))
-      })
+      .post(
+        `${URL}/api/v1/board/${category}/${userID}`,
+        {
+          title: title,
+          text: editorInput,
+          boardTags: tags.map((tag) => ({ tagName: tag }))
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        }
+      )
       // .then(() => {
       //   const accessToken = localStorage.accessToken;
       //   const formData = new FormData();
@@ -61,7 +70,7 @@ const WritePostBox = () => {
       //   });
       // })
       .then(() => alert(`userid: ${userID}  게시글 등록 성공`))
-      // .then(() => router.push('/community'))
+      .then(() => router.push('/community'))
       .catch((err) => {
         alert(err);
       });

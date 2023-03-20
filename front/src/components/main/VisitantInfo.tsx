@@ -1,5 +1,5 @@
 import userInfo from '../../styles/main/C_userInfo.module.css';
-import layout from '../../styles/main/C_infoLayout.module.css';
+import layout from '../../styles/main/C_header.module.css';
 import styled from '../../styles/main/C_nonMembers.module.css';
 import Link from 'next/link';
 

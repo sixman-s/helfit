@@ -1,0 +1,7 @@
+.line {
+  color: var(--line_1);
+}
+
+.line > line {
+  display: none;
+}

@@ -1,16 +1,30 @@
 import axios from 'axios';
 import { useRef } from 'react';
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 
 import s from '../../../styles/mypage/M_ModalImage.module.css';
 
-const ModalImage = () => {
+interface detailProps {
+  userId: number;
+  id: string;
+  email: string;
+  nickname: string;
+  profileImageUrl: string;
+  birth: number;
+  gender: string;
+  height: number;
+  weight: number;
+}
+
+const ModalImage = ({ detail }: { detail: detailProps }) => {
+  const router = useRouter();
   const firstImageUrl = '../../../../assets/mypage/profile.svg';
 
   const url = process.env.NEXT_PUBLIC_URL;
   const accessToken = localStorage.getItem('accessToken');
 
-  const [fileURL, setFileURL] = useState<string>('');
+  const [fileURL, setFileURL] = useState<string>(detail.profileImageUrl);
   const [file, setFile] = useState<FileList | null>();
   const imgUploadInput = useRef<HTMLInputElement | null>(null);
 
@@ -26,9 +40,29 @@ const ModalImage = () => {
   };
 
   const onImageRemove = (): void => {
-    URL.revokeObjectURL(fileURL);
-    setFileURL('');
-    setFile(null);
+    // URL.revokeObjectURL(fileURL);
+    // setFileURL('');
+    // setFile(null);
+
+    if (confirm('삭제하시겠습니까?')) {
+      try {
+        axios
+          .delete(`${url}/api/v1/users/profile-image`, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`
+            }
+          })
+          .then((res) => {
+            console.log(res.status);
+            if (res.status === 200) {
+              router.reload();
+            }
+          });
+      } catch (error: any) {
+        console.log('이미지업로드 에러 발생');
+        throw new Error(error);
+      }
+    }
   };
 
   const submitHandler = async (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -40,20 +74,25 @@ const ModalImage = () => {
     if (file) {
       formData.append('multipartFile', file[0]);
 
-      // try {
-      await axios
-        .post(`${url}/api/v1/users/profile-image`, formData, {
-          headers: {
-            'content-type': 'multipart/form-data',
-            Authorization: `Bearer ${accessToken}`
-          }
-        })
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err));
-      // } catch (error: any) {
-      //   console.log('이미지업로드 에러 발생');
-      //   throw new Error(error);
-      // }
+      try {
+        await axios
+          .post(`${url}/api/v1/users/profile-image`, formData, {
+            headers: {
+              'content-type': 'multipart/form-data',
+              Authorization: `Bearer ${accessToken}`
+            }
+          })
+          .then((res) => {
+            if (res.status === 200) {
+              console.log('res : ' + res);
+              router.reload();
+            }
+          })
+          .catch((err) => console.log(err));
+      } catch (error: any) {
+        console.log('이미지업로드 에러 발생');
+        throw new Error(error);
+      }
     } else {
       alert('업로드할 이미지가 없습니다');
     }

@@ -1,4 +1,4 @@
-import { axisBottom, axisLeft, scaleBand, scaleLinear, select, path } from 'd3';
+import d3, { axisBottom, axisLeft, scaleBand, scaleLinear, select } from 'd3';
 import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import {
@@ -7,7 +7,6 @@ import {
   AxisLeftProps,
   BarsProps
 } from './types';
-import styled from '../../../styles/main/C_chart.module.css';
 
 const AxisBottom = ({ scale, transform }: AxisBottomProps) => {
   const ref = useRef<SVGGElement>(null);
@@ -18,7 +17,7 @@ const AxisBottom = ({ scale, transform }: AxisBottomProps) => {
     }
   }, [scale]);
 
-  return <g ref={ref} transform={transform} className={styled.line} />;
+  return <g ref={ref} transform={transform} color='#a3b1cc' />;
 };
 
 const AxisLeft = ({ scale }: AxisLeftProps) => {
@@ -30,19 +29,19 @@ const AxisLeft = ({ scale }: AxisLeftProps) => {
     }
   }, [scale]);
 
-  return <g ref={ref} className={styled.line} />;
+  return <g ref={ref} color='#a3b1cc' />;
 };
 
 const ChartBars = ({ data, height, scaleX, scaleY }: BarsProps) => {
   return (
     <>
-      {data.map(({ recodedAt, kcal }) => (
+      {data.map(({ modifiedAt, weight }) => (
         <rect
-          key={`bar-${recodedAt}`}
-          x={scaleX(recodedAt)}
-          y={scaleY(kcal)}
+          key={`bar-${modifiedAt}`}
+          x={scaleX(modifiedAt)}
+          y={scaleY(weight)}
           width={scaleX.bandwidth()}
-          height={height - scaleY(kcal)}
+          height={height - scaleY(weight)}
           fill='#3361ff'
         />
       ))}
@@ -50,16 +49,14 @@ const ChartBars = ({ data, height, scaleX, scaleY }: BarsProps) => {
   );
 };
 
-const KcalChart = ({ token, userId }: BarChartProps) => {
-  const [kcal, setKcal] = useState([]);
-
+const WeightChart = ({ token, userId }: BarChartProps) => {
+  const [weight, setweight] = useState([]);
   const DateLengthFour = (date: string) => {
     return date.slice(5, date.length).replaceAll('-', '.');
   };
-
-  const kcalData = kcal.map((data) =>
-    data.recodedAt.length > 8
-      ? { ...data, recodedAt: DateLengthFour(data.recodedAt) }
+  const weightData = weight.map((data) =>
+    data.modifiedAt.length > 8
+      ? { ...data, modifiedAt: DateLengthFour(data.modifiedAt) }
       : data
   );
 
@@ -70,11 +67,12 @@ const KcalChart = ({ token, userId }: BarChartProps) => {
           Authorization: `Bearer ${token}`
         }
       };
-      const url = `${process.env.NEXT_PUBLIC_URL}/api/v1/stat/calendar/${userId}`;
+      const url = `${process.env.NEXT_PUBLIC_URL}/api/v1/stat/physical`;
       axios
         .get(url, headers)
         .then((res) => {
-          setKcal(res.data.body.data);
+          console.log(res.data.body.data);
+          setweight(res.data.body.data);
         })
         .catch((error) => console.log(error));
     }
@@ -85,16 +83,17 @@ const KcalChart = ({ token, userId }: BarChartProps) => {
   const height = 240 - margin.top - margin.bottom;
 
   const scaleX = scaleBand()
-    .domain(kcalData.map(({ recodedAt }) => (recodedAt ? recodedAt : null)))
+    .domain(
+      weightData.map(({ modifiedAt }) => (modifiedAt ? modifiedAt : null))
+    )
     .range([0, width])
     .padding(0.4);
-
   const scaleY = scaleLinear()
     .domain([
       0,
       Math.max(
-        ...kcalData
-          .map(({ kcal }) => kcal)
+        ...weightData
+          .map(({ weight }) => weight)
           .sort(function (a, b) {
             return a - b;
           })
@@ -111,7 +110,7 @@ const KcalChart = ({ token, userId }: BarChartProps) => {
         <AxisBottom scale={scaleX} transform={`translate(0, ${height})`} />
         <AxisLeft scale={scaleY} />
         <ChartBars
-          data={kcalData}
+          data={weightData}
           height={height}
           scaleX={scaleX}
           scaleY={scaleY}
@@ -121,4 +120,4 @@ const KcalChart = ({ token, userId }: BarChartProps) => {
   );
 };
 
-export default KcalChart;
+export default WeightChart;

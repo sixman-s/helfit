@@ -1,14 +1,37 @@
 import style from '../../styles/Community/P_Detail.module.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import UserNav from './C_Community/UserNav';
+import axios from 'axios';
+import { useRouter } from 'next/router';
+import Btn from '../loginc/Buttons';
+import Modal from './C_Community/DeletePost';
+
+interface BoardData {
+  boardId: number;
+  title: string;
+  text: string;
+  boardImageUrl: string | null;
+  tags: {
+    tagId: number;
+    tagName: string;
+  }[];
+  createdAt: string;
+  modifiedAt: string;
+}
 
 const DetailP = () => {
+  const URL = process.env.NEXT_PUBLIC_URL;
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [writeCommnet, setWriteCommnet] = useState('');
-
+  const [fetchedData, setFetchedData] = useState<BoardData | null>(null);
   const handleSubmit = (e: React.KeyboardEvent) => {
     // 댓글 작성 후 서버에 전송하는 로직 작성
     console.log('Comment submitted:', writeCommnet);
     setWriteCommnet('');
+  };
+
+  const handleDeletePostClick = () => {
+    setIsModalOpen(true);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -21,8 +44,44 @@ const DetailP = () => {
     handleSubmit(keyboardEvent);
     console.log('Click!');
   };
+  const createdAtString = new Date(fetchedData?.createdAt)
+    .toLocaleDateString('en-KR', {
+      year: '2-digit',
+      month: '2-digit',
+      day: '2-digit'
+    })
+    .split('/')
+    .join('.');
+  const router = useRouter();
+  const { id } = router.query;
+  const boardID = id ? parseInt(id[id.length - 1]) : null;
+  const currentPage = router.asPath.split('/')[2];
+  let categoryname: string;
+  let pageNumber: Number;
+  switch (currentPage) {
+    case 'health':
+      pageNumber = 1;
+      categoryname = '헬스 갤러리';
+      break;
+    case 'crossfit':
+      pageNumber = 2;
+      categoryname = '크로스핏 갤러리';
+      break;
+    case 'pilates':
+      pageNumber = 4;
+      categoryname = '필라테스 갤러리';
+      break;
+    default:
+      pageNumber = null;
+  }
 
-  const imgSrc = '../../assets/Community/하입보이.png';
+  useEffect(() => {
+    const userID: number = JSON.parse(localStorage.UserInfo).userId;
+    axios
+      .get(`${URL}/api/v1/board/${pageNumber}/${userID}/${boardID}`)
+      .then((res) => setFetchedData(res.data))
+      .catch((err) => console.log(err));
+  }, [boardID]);
 
   return (
     <>
@@ -30,30 +89,55 @@ const DetailP = () => {
         <div className={style.UserProfile}>
           <UserNav />
         </div>
-        <div className={style.Category}>헬스 갤러리</div>
-        <div className={style.Title}>홍대 헬스장 가려면 어디로 가야 해요? </div>
-        <div className={style.PostNav}>
-          <div>작성자</div>
-          <div>createdAt</div>
-          <div>조회수</div>
-          <div className={style.PostLike}>
-            <img
-              src='../../assets/Community/Like.svg'
-              className={style.PostLikeSVG}
+        <div className={style.Category}>{categoryname}</div>
+        <div className={style.Title}>{fetchedData?.title}</div>
+        <div className={style.Nav}>
+          <div className={style.PostNav}>
+            <div>작성자</div>
+            <div>{createdAtString}</div>
+            <div>조회수</div>
+            <div className={style.PostLike}>
+              <img
+                src='../../assets/Community/Like.svg'
+                className={style.PostLikeSVG}
+              />
+              <div>좋아요</div>
+            </div>
+          </div>
+          <div className={style.Buttons}>
+            <Btn
+              text='게시글 삭제'
+              type='submit'
+              className={style.ButtonD}
+              onClick={handleDeletePostClick}
             />
-            <div>좋아요</div>
+            {isModalOpen && (
+              <Modal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+              />
+            )}
+
+            <Btn text='게시글 수정' type='submit' className={style.ButtonU} />
           </div>
         </div>
         <div className={style.Content}>
-          <div className={style.Content_Text}>
-            뉴진스의 Hype Boy 빼고 알려주세요 제발
+          <div>
+            <div className={style.tag}>
+              {fetchedData?.tags.map((tag) => (
+                <span className={style.tagItem}>{tag.tagName}</span>
+              ))}
+            </div>
+            <div className={style.Content_Text}>{fetchedData?.text}</div>
           </div>
-          {imgSrc && (
+          {fetchedData?.boardImageUrl && (
             <div style={{ width: '250px', height: '250px' }}>
-              <img src={imgSrc} className={style.Content_Img} />
+              <img
+                src={fetchedData?.boardImageUrl}
+                className={style.Content_Img}
+              />
             </div>
           )}
-          {!imgSrc && <div style={{ display: 'none' }}></div>}
         </div>
         <div className={style.CommentWrite}>
           <div className={style.CommnetSVG}>
