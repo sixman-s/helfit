@@ -3,6 +3,7 @@ package sixman.helfit.domain.physical.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.lang.Nullable;
+import sixman.helfit.domain.user.dto.UserDto;
 import sixman.helfit.global.annotations.ValidEnum;
 
 import javax.validation.constraints.*;

@@ -1,9 +1,9 @@
-package sixman.helfit.domain.physical.repository.support;
+package sixman.helfit.domain.physical.repository.condition;
 
 import lombok.Data;
 
 @Data
-public class PhysicalTestCond {
+public class PhysicalCondition {
     private Long physicalId;
     private Integer birth;
     private Integer height;

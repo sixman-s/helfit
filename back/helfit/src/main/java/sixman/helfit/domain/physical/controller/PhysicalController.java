@@ -2,8 +2,6 @@ package sixman.helfit.domain.physical.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -12,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import sixman.helfit.domain.physical.dto.PhysicalDto;
 import sixman.helfit.domain.physical.entity.Physical;
 import sixman.helfit.domain.physical.mapper.PhysicalMapper;
+import sixman.helfit.domain.physical.repository.PhysicalRepositorySupport;
 import sixman.helfit.domain.physical.service.PhysicalService;
 import sixman.helfit.response.ApiResponse;
 import sixman.helfit.security.entity.UserPrincipal;

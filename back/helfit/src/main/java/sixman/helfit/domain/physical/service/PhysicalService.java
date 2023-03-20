@@ -4,22 +4,22 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sixman.helfit.domain.physical.dto.PhysicalDto;
 import sixman.helfit.domain.physical.entity.Physical;
-import sixman.helfit.domain.physical.mapper.PhysicalMapper;
 import sixman.helfit.domain.physical.repository.PhysicalRepository;
+import sixman.helfit.domain.physical.repository.PhysicalRepositorySupport;
+import sixman.helfit.domain.physical.repository.condition.PhysicalCondition;
 import sixman.helfit.domain.user.entity.User;
 import sixman.helfit.exception.BusinessLogicException;
 import sixman.helfit.exception.ExceptionCode;
 import sixman.helfit.utils.CustomBeanUtil;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class PhysicalService {
     private final PhysicalRepository physicalRepository;
+    private final PhysicalRepositorySupport physicalRepositorySupport;
     private final CustomBeanUtil<Physical> customBeanUtil;
 
     public Physical createPhysical(Physical physical, User user) {
@@ -50,8 +50,13 @@ public class PhysicalService {
 
     @Transactional(readOnly = true)
     public Page<Physical> findAllPhysicalByUserId(Long userId, Integer page, Integer size) {
+        PhysicalCondition physicalCondition = new PhysicalCondition();
+        physicalCondition.setUserId(userId);
+
         Pageable pageable = PageRequest.of(page <= 0 ? 0 : page - 1, size, Sort.Direction.ASC, "modifiedAt");
 
+        // ~ Support
+        // return physicalRepositorySupport.searchWithApply(physicalCondition, pageable);
         return physicalRepository.findAllPhysicalByUserId(userId, pageable);
     }
 
@@ -62,6 +67,5 @@ public class PhysicalService {
         physicalByUserIdWithOrderBy.ifPresent((e) -> {
             throw new BusinessLogicException(ExceptionCode.ALREADY_EXISTS_INFORMATION);
         });
-
     }
 }

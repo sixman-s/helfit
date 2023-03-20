@@ -23,7 +23,7 @@ public class PhysicalScheduler {
     private final Job job;
     private final JobLauncher jobLauncher;
 
-    @Scheduled(fixedDelay = 1000 * 60 * 60)
+    @Scheduled(fixedDelay = 1000 * 60 * 60) // 1h
     public void startJob() {
         try {
             JobParameters parameters = new JobParameters(new HashMap<>() {{
@@ -38,7 +38,7 @@ public class PhysicalScheduler {
 
             JobExecution jobExecution = jobLauncher.run(job, parameters);
 
-            while (jobExecution.isRunning()) log.info("isRunning...");
+            while (jobExecution.isRunning()) log.info("Jobs isRunning...");
         } catch (
               JobExecutionAlreadyRunningException
               | JobRestartException

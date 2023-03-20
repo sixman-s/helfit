@@ -13,6 +13,7 @@ import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.builder.JpaItemWriterBuilder;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
+import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -30,18 +31,17 @@ public class BatchConfig {
     private final StepBuilderFactory stepBuilderFactory;
     private final EntityManagerFactory entityManagerFactory;
 
-    // exampleJob 생성
     @Bean
     public Job physicalJob() throws Exception {
         return jobBuilderFactory.get("physicalJob")
                    .start(physicalStep()).build();
     }
 
-    // exampleStep 생성
     @Bean
     @JobScope
     public Step physicalStep() throws Exception {
-        return stepBuilderFactory.get("physicalStep").<Physical, Physical>chunk(10)
+        return stepBuilderFactory.get("physicalStep")
+                   .<Physical, Physical>chunk(10) // <In, Out>chunk()
                    .reader(reader(null))
                    .processor(processor(null))
                    .writer(writer(null))
@@ -50,9 +50,7 @@ public class BatchConfig {
 
     @Bean
     @StepScope
-    public ItemReader<? extends Physical> reader(
-        @Value("#{jobParameters[requestDate]}") String requestDate
-    ) throws Exception {
+    public ItemReader<? extends Physical> reader(@Value("#{jobParameters[requestDate]}") String requestDate) throws Exception {
         log.info("==> reader value : " + requestDate);
 
         Map<String, Object> parameterValues = new HashMap<>();
@@ -68,9 +66,7 @@ public class BatchConfig {
 
     @Bean
     @StepScope
-    public ItemProcessor<? super Physical, ? extends Physical> processor(
-        @Value("#{jobParameters[requestDate]}") String requestDate
-    ) {
+    public ItemProcessor<? super Physical, ? extends Physical> processor(@Value("#{jobParameters[requestDate]}") String requestDate) {
         return new ItemProcessor<Physical, Physical>() {
             @Override
             public Physical process(Physical physical) throws Exception {
@@ -85,9 +81,7 @@ public class BatchConfig {
 
     @Bean
     @StepScope
-    public ItemWriter<? super Physical> writer(
-        @Value("#{jobParameters[requestDate]}") String requestDate
-    ) {
+    public ItemWriter<? super Physical> writer(@Value("#{jobParameters[requestDate]}") String requestDate) {
         log.info("==> writer value : " + requestDate);
 
         return new JpaItemWriterBuilder<Physical>()

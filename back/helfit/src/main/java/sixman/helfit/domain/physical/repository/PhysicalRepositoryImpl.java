@@ -1,6 +1,7 @@
 package sixman.helfit.domain.physical.repository;
 
 import com.querydsl.core.types.dsl.*;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +18,6 @@ import java.util.Optional;
 
 import static sixman.helfit.domain.physical.entity.QPhysical.physical;
 
-@Repository
 public class PhysicalRepositoryImpl implements PhysicalRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
@@ -46,13 +46,12 @@ public class PhysicalRepositoryImpl implements PhysicalRepositoryCustom {
                                    .limit(pageable.getPageSize())
                                    .fetch();
 
-        Long count = queryFactory.select(physical.count())
-                         .from(physical)
-                         .where(userIdEq(userId))
-                         .fetchOne();
+        JPAQuery<Long> count = queryFactory
+                                   .select(physical.count())
+                                   .from(physical)
+                                   .where(userIdEq(userId));
 
-        assert count != null;
-        return PageableExecutionUtils.getPage(fetch, pageable, count::longValue);
+        return PageableExecutionUtils.getPage(fetch, pageable, count::fetchOne);
     }
 
     private BooleanExpression userIdEq(Long userId) {
