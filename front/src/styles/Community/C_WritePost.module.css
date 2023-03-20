@@ -77,3 +77,17 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.error {
+  color: red;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 5px;
+}
+.titleMessage {
+  display: flex;
+}
+.Subtext {
+  color: var(--text_5);
+  margin-left: 30px;
+  font-size: 12px;
+}

@@ -6,13 +6,16 @@ import Tag from './C_Community/Tag';
 import Btn from '../loginc/Buttons';
 import UserNav from './C_Community/UserNav';
 import axios from 'axios';
+import { useRouter } from 'next/router';
+
+const URL = process.env.NEXT_PUBLIC_URL;
 
 const options: Option[] = [
-  { key: 'health', text: '헬스 갤러리', value: 'health' },
-  { key: 'pilates', text: '필라테스 갤러리', value: 'pilates' },
-  { key: 'crossfit', text: '크로스핏 갤러리', value: 'crossfit' },
-  { key: 'oww', text: '오운완 갤러리', value: 'oww' },
-  { key: 'diet', text: '식단 갤러리', value: 'diet' }
+  { key: 'health', text: '헬스 갤러리', value: '1' },
+  { key: 'crossfit', text: '크로스핏 갤러리', value: '2' },
+  { key: 'pilates', text: '필라테스 갤러리', value: '4' },
+  { key: 'oww', text: '오운완 갤러리', value: '5' },
+  { key: 'diet', text: '식단 갤러리', value: '6' }
 ];
 
 const WritePostBox = () => {
@@ -22,15 +25,46 @@ const WritePostBox = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [fileName, setFileName] = useState<string>('No file selected');
   const [editorInput, setEditorInput] = useState('');
+  const [titleError, setTitleError] = useState('');
+
+  useEffect(() => {
+    if (title) setTitleError(validateTitle(title));
+  }, [title]);
+
+  const validateTitle = (title) => {
+    if (title.length === 0) return '제목은 반드시 입력해야 합니다.';
+  };
+  const router = useRouter();
 
   const handlePostButtonClick = () => {
-    console.log({
-      category: category,
-      tags: tags,
-      title: title,
-      files: selectedFile,
-      content: editorInput
-    });
+    const titleError = validateTitle(title);
+    const userID = JSON.parse(localStorage.UserInfo).userId;
+    if (titleError) {
+      setTitleError(titleError);
+      return;
+    }
+    axios
+      .post(`${URL}/api/v1/board/${category}/${userID}`, {
+        title: title,
+        text: editorInput,
+        boardTags: tags.map((tag) => ({ tagName: tag }))
+      })
+      // .then(() => {
+      //   const accessToken = localStorage.accessToken;
+      //   const formData = new FormData();
+      //   formData.append('multipartFile', selectedFile);
+      //   axios.post(`${URL}/api/v1/file/upload`, formData, {
+      //     headers: {
+      //       'content-type': 'multipart/form-data',
+      //       Authorization: `Bearer ${accessToken}`
+      //     }
+      //   });
+      // })
+      .then(() => alert(`userid: ${userID}  게시글 등록 성공`))
+      // .then(() => router.push('/community'))
+      .catch((err) => {
+        alert(err);
+      });
   };
 
   const handleTagAdd = (newTags: string[]) => {
@@ -42,8 +76,8 @@ const WritePostBox = () => {
   const handleTitleInputChange = (event) => {
     setTitle(event.target.value);
   };
-  const handleEditorInput = (content: string) => {
-    setEditorInput(content);
+  const handleEditorInput = (text: string) => {
+    setEditorInput(text);
   };
 
   const handleFileInputChange = (
@@ -69,25 +103,39 @@ const WritePostBox = () => {
         {/* 카테고리 */}
 
         <div className={style.category}>
-          <div className={style.Text}>카테고리</div>
-          <div className={style.dropdown}>
-            <DropdownC options={options} onChange={handleDropdownChange} />
+          <div className={style.titleMessage}>
+            <div className={style.Text}>카테고리</div>
+            <div className={style.Subtext}>
+              카테고리는 반드시 설정해주어야 합니다.
+            </div>
           </div>
+          <DropdownC options={options} onChange={handleDropdownChange} />
         </div>
 
         {/* 테그 */}
 
         <div className={style.tag}>
-          <div className={style.Text}>태그</div>
-          <div className={style.dropdown}>
-            <Tag onTagAdd={handleTagAdd} />
+          <div className={style.titleMessage}>
+            <div className={style.Text}>태그</div>
+            <div className={style.Subtext}>
+              태그는 최대 5개까지 추가할 수 있습니다.
+            </div>
           </div>
+          <Tag onTagAdd={handleTagAdd} />
         </div>
 
         {/* 제목 */}
 
         <div className={style.title}>
-          <div className={style.Text}>Title</div>
+          <div className={style.titleMessage}>
+            <div className={style.Text}>Title</div>
+            <div
+              className={style.Subtext}
+              style={{ color: titleError ? 'red' : 'var(--text_5)' }}
+            >
+              {titleError || '제목은 반드시 입력해야 합니다.'}
+            </div>
+          </div>
           <div className={style.TitleInput}>
             <input
               type='text'
@@ -95,6 +143,7 @@ const WritePostBox = () => {
               className={style.TitleInput}
               value={title}
               onChange={handleTitleInputChange}
+              onBlur={() => setTitleError(validateTitle(title))}
             />
           </div>
         </div>

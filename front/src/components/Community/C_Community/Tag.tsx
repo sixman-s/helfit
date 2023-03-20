@@ -18,7 +18,7 @@ const Tag: React.FC<TagProps> = ({ onTagAdd }) => {
 
   const addTag = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTag = e.target.value.trim();
-    if (newTag.length > 10) {
+    if (newTag.length > 10 || tags.length >= 5) {
       return;
     }
     setTag(newTag);
@@ -31,6 +31,9 @@ const Tag: React.FC<TagProps> = ({ onTagAdd }) => {
   };
 
   const handleClick = () => {
+    if (tags.length >= 5) {
+      return alert('tag는 최대 5개까지 추가할 수 있습니다.');
+    }
     const newTags = [...tags, tag];
     setTags(newTags);
     setTag('');

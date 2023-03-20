@@ -11,6 +11,8 @@ interface EditorProps {
   handleValidation?: () => void;
   errorMsg?: boolean;
   setNewAnswer?: Dispatch<SetStateAction<string>>;
+  editorError?: string;
+  onBlur?: any;
 }
 
 const modules = {
@@ -48,7 +50,8 @@ function Editor({
   formValues,
   handleValidation,
   errorMsg,
-  setNewAnswer
+  setNewAnswer,
+  editorError
 }: EditorProps) {
   const handleText = (content: string) => {
     if (setNewAnswer) {
