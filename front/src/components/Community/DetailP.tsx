@@ -56,17 +56,20 @@ const DetailP = () => {
   const { id } = router.query;
   const boardID = id ? parseInt(id[id.length - 1]) : null;
   const currentPage = router.asPath.split('/')[2];
-
+  let categoryname: string;
   let pageNumber: Number;
   switch (currentPage) {
     case 'health':
       pageNumber = 1;
+      categoryname = '헬스 갤러리';
       break;
     case 'crossfit':
       pageNumber = 2;
+      categoryname = '크로스핏 갤러리';
       break;
     case 'pilates':
       pageNumber = 4;
+      categoryname = '필라테스 갤러리';
       break;
     default:
       pageNumber = null;
@@ -86,7 +89,7 @@ const DetailP = () => {
         <div className={style.UserProfile}>
           <UserNav />
         </div>
-        <div className={style.Category}>헬스 갤러리</div>
+        <div className={style.Category}>{categoryname}</div>
         <div className={style.Title}>{fetchedData?.title}</div>
         <div className={style.Nav}>
           <div className={style.PostNav}>
