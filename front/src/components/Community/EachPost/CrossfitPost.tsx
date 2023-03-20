@@ -52,7 +52,9 @@ const HealthPost: React.FC = () => {
           <div className={style.nickName}>닉네임</div>
           <div className={style.date}>{createdAtString}</div>
           <div className={style.tag}>
-            {tags.map((tag) => tag.tagName).join(', ')}
+            {tags.map((tag) => (
+              <span className={style.tagItem}>{tag.tagName}</span>
+            ))}
           </div>
           <div className={style.views}>조회수</div>
         </li>
