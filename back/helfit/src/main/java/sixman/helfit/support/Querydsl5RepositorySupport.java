@@ -1,4 +1,4 @@
-package sixman.helfit.domain.physical.repository.support;
+package sixman.helfit.support;
 
 import com.querydsl.core.types.EntityPath;
 import com.querydsl.core.types.Expression;
@@ -19,7 +19,9 @@ import org.springframework.util.Assert;
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
+import java.util.function.LongSupplier;
 
 @Repository
 public abstract class Querydsl5RepositorySupport {
@@ -37,7 +39,8 @@ public abstract class Querydsl5RepositorySupport {
     @Autowired
     public void setEntityManager(EntityManager entityManager) {
         Assert.notNull(entityManager, "EntityManager must not be null!");
-        JpaEntityInformation<?, ?> entityInformation = JpaEntityInformationSupport.getEntityInformation(domainClass, entityManager);
+        JpaEntityInformation<?, ?> entityInformation =
+            JpaEntityInformationSupport.getEntityInformation(domainClass, entityManager);
         SimpleEntityPathResolver resolver = SimpleEntityPathResolver.INSTANCE;
         EntityPath<?> path = resolver.createPath(entityInformation.getJavaType());
 
@@ -65,32 +68,24 @@ public abstract class Querydsl5RepositorySupport {
         return entityManager;
     }
 
-    protected <T> JPAQuery<T> select(Expression<T> expr) {
-        return getQueryFactory().select(expr);
+    protected <T> JPAQuery<T> select(Expression<T> exp) {
+        return getQueryFactory().select(exp);
     }
 
-    protected <T> JPAQuery<T> selectFrom(EntityPath<T> from) {
-        return getQueryFactory().selectFrom(from);
-    }
-
-    protected <T> Page<T> applyPagination(
-        Pageable pageable,
-        Function<JPAQueryFactory, JPAQuery<T>> contentQuery
-    ) {
-        JPAQuery<T> jpaQuery = contentQuery.apply(getQueryFactory());
-        List<T> content = getQuerydsl().applyPagination(pageable, jpaQuery).fetch();
-
-        return PageableExecutionUtils.getPage(content, pageable, () -> jpaQuery.fetch().size());
+    protected <T> JPAQuery<T> selectFrom(EntityPath<T> ep) {
+        return getQueryFactory().selectFrom(ep);
     }
 
     protected <T> Page<T> applyPagination(
         Pageable pageable,
-        Function<JPAQueryFactory, JPAQuery<T>> contentQuery, Function<JPAQueryFactory, JPAQuery<T>> countQuery
+        Function<JPAQueryFactory, JPAQuery<T>> contentQuery,
+        Function<JPAQueryFactory, JPAQuery<?>> countQuery
     ) {
         JPAQuery<T> jpaContentQuery = contentQuery.apply(getQueryFactory());
-        List<T> content = getQuerydsl().applyPagination(pageable, jpaContentQuery).fetch();
-        JPAQuery<T> countResult = countQuery.apply(getQueryFactory());
+        JPAQuery<?> jpaCountQuery = countQuery.apply(getQueryFactory());
 
-        return PageableExecutionUtils.getPage(content, pageable, () -> countResult.fetch().size());
+        List<T> content = getQuerydsl().applyPagination(pageable, jpaContentQuery).fetch();
+
+        return PageableExecutionUtils.getPage(content, pageable, () -> (long) jpaCountQuery.fetchOne());
     }
 }

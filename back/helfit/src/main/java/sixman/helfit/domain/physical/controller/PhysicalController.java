@@ -1,6 +1,7 @@
 package sixman.helfit.domain.physical.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -9,13 +10,18 @@ import org.springframework.web.bind.annotation.*;
 import sixman.helfit.domain.physical.dto.PhysicalDto;
 import sixman.helfit.domain.physical.entity.Physical;
 import sixman.helfit.domain.physical.mapper.PhysicalMapper;
+import sixman.helfit.domain.physical.repository.PhysicalRepositorySupport;
 import sixman.helfit.domain.physical.service.PhysicalService;
 import sixman.helfit.response.ApiResponse;
 import sixman.helfit.security.entity.UserPrincipal;
+import sixman.helfit.utils.PageUtil;
 import sixman.helfit.utils.UriUtil;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import java.net.URI;
+import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/physical")
@@ -71,11 +77,19 @@ public class PhysicalController {
 
     @GetMapping
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> getAllPhysicalWithinToday(@AuthenticationPrincipal UserPrincipal userPrincipal) {
-        Physical physical = physicalService.findAllPhysicalByUserId(userPrincipal.getUser().getUserId());
+    public ResponseEntity<?> getAllPhysicalWithinToday(
+        @Positive @RequestParam Integer page,
+        @Positive @RequestParam Integer size,
+        @AuthenticationPrincipal UserPrincipal userPrincipal
+    ) {
+        Page<Physical> physicalPage = physicalService.findAllPhysicalByUserId(userPrincipal.getUser().getUserId(), page, size);
+        List<PhysicalDto.Response> physicalList = physicalMapper.physicalToPhysicalDtoResponseList(physicalPage.getContent());
 
-        PhysicalDto.Response response = physicalMapper.physicalToPhysicalDtoResponse(physical);
+        HashMap<String, Object> responses = new HashMap<>() {{
+            put("physical", physicalList);
+            put("pageInfo", PageUtil.getPageInfo(physicalPage));
+        }};
 
-        return ResponseEntity.ok().body(ApiResponse.ok("data", response));
+        return ResponseEntity.ok().body(ApiResponse.ok("data", responses));
     }
 }
