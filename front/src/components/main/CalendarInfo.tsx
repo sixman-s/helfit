@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useState } from 'react';
-import layout from '../../styles/main/C_infoLayout.module.css';
+import layout from '../../styles/main/C_header.module.css';
 import styled from '../../styles/main/C_calendarInfo.module.css';
 import { DateView } from '../calendar/utils/DateView';
 import axios from 'axios';
@@ -76,7 +76,10 @@ const CalendarInfo = () => {
               />
               <label className={styled.label}>칼로리</label>
             </picture>
-            <span className={styled.innerIext}>{calorie}</span>
+            <p className={styled.innerIext}>
+              {calorie}
+              <span>{' kcal'}</span>
+            </p>
           </li>
           <li className={styled.infoLi}>
             <picture className={styled.cate}>

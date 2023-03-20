@@ -1,25 +1,24 @@
-import Link from 'next/link';
-import layout from '../../styles/main/C_infoLayout.module.css';
-import NonMembers from './NonMembers';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
+import styled from '../../styles/main/C_dietInfo.module.css';
+import { DotPulse } from '@uiball/loaders';
 
 const DietInfo = () => {
-  const { height, weight } = JSON.parse(localStorage.getItem('UserInfo'));
-  const [answer, setAnser] = useState('답변 대기 중입니다.');
-  const question = `키 ${height}cm, 몸무게 ${weight}kg, 하루 권장 소비 칼로리 4500kcal 벌크업 식단 알려줘. 하루 운동량은 가벼운 활동량이야. `;
+  const [answer, setAnser] = useState('');
+  const setLodingComponent = () => {
+    return (
+      <p className={styled.loading}>
+        <DotPulse size={20} speed={1.3} color='#3361ff' />
+      </p>
+    );
+  };
+  const question = `하루 권장 소비 칼로리 2000kcal 벌크업 식단 나열하고 총 칼로리까지만 알려줘. 하루 운동량은 가벼운 활동량이야.`;
+  const questionView = '오늘의 식단 알려줘.';
   const url = `${process.env.NEXT_PUBLIC_URL}/api/v1/ai/question`;
   const body = {
     question
   };
-
-  const answerData = (answer: string) => {
-    answer.split('').map((str) => {
-      if (str === 'g ') {
-      }
-    });
-  };
+  const [dietAnswer] = answer.split('*');
 
   useEffect(() => {
     axios.post(url, body).then((res) => {
@@ -28,14 +27,21 @@ const DietInfo = () => {
   }, []);
   return (
     <>
-      <article>
-        <figure>
+      <article className={styled.container}>
+        <figure className={styled.figure}>
           <img src='assets/mainP/questioner_icon.svg' alt='anwer icon' />
-          <figcaption>{question}</figcaption>
+          <p className={styled.question}>{questionView}</p>
         </figure>
-        <figure>
+        <figure className={styled.figure}>
           <img src='assets/mainP/anser_icon.svg' alt='anwer icon' />
-          <figcaption>{answer}</figcaption>
+          {answer === '' ? (
+            setLodingComponent()
+          ) : (
+            <p className={styled.answer}>
+              {dietAnswer.replace(/-/g, '')}
+              <br />
+            </p>
+          )}
         </figure>
       </article>
     </>
