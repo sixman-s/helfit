@@ -12,8 +12,8 @@ const URL = process.env.NEXT_PUBLIC_URL;
 
 const options: Option[] = [
   { key: 'health', text: '헬스 갤러리', value: '1' },
-  { key: 'pilates', text: '필라테스 갤러리', value: '4' },
   { key: 'crossfit', text: '크로스핏 갤러리', value: '2' },
+  { key: 'pilates', text: '필라테스 갤러리', value: '4' },
   { key: 'oww', text: '오운완 갤러리', value: '5' },
   { key: 'diet', text: '식단 갤러리', value: '6' }
 ];
