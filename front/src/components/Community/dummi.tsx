@@ -1,7 +1,7 @@
 interface Post {
   id: number;
   title: string;
-  author: string;
+  nickName: string;
   date: string;
   tag: string;
   views: string;
@@ -12,7 +12,7 @@ const examplePosts: Post[] = [
   {
     id: 1,
     title: '안녕하세요 첫 번째 글을 남기게 되었습니다.   ',
-    author: '김세훈',
+    nickName: '김세훈',
     date: '23.01.01',
     tag: 'Health',
     views: '1202',
@@ -22,7 +22,7 @@ const examplePosts: Post[] = [
   {
     id: 2,
     title: '가슴운동 루틴 공유점',
-    author: '김준희',
+    nickName: '김준희',
     date: '23.01.01',
     tag: 'Health',
     views: '565',
@@ -32,7 +32,7 @@ const examplePosts: Post[] = [
   {
     id: 3,
     title: '오운완 페이지는 어디에 있나요?    ',
-    author: '윤영원',
+    nickName: '윤영원',
     date: '23.01.01',
     tag: 'Health',
     views: '402',
@@ -42,7 +42,7 @@ const examplePosts: Post[] = [
   {
     id: 4,
     title: '홍대헬스장 가려면 어디로 가야 해요??    ',
-    author: '개똥이',
+    nickName: '개똥이',
     date: '23.01.01',
     tag: 'Health',
     views: '182',
@@ -52,7 +52,7 @@ const examplePosts: Post[] = [
   {
     id: 5,
     title: '뉴진스의 Hype Boy요 ',
-    author: 'C.Bumstead',
+    nickName: 'C.Bumstead',
     date: '23.01.01',
     tag: 'Health',
     views: '444',
@@ -62,7 +62,7 @@ const examplePosts: Post[] = [
   {
     id: 6,
     title: '커쟈아아아아아    ',
-    author: '김태형',
+    nickName: '김태형',
     date: '23.01.01',
     tag: 'Health',
     views: '2',
@@ -72,7 +72,7 @@ const examplePosts: Post[] = [
   {
     id: 7,
     title: '메인프로젝트 화이팅',
-    author: '김지열',
+    nickName: '김지열',
     date: '23.01.01',
     tag: 'Health',
     views: '12',
@@ -82,7 +82,7 @@ const examplePosts: Post[] = [
   {
     id: 8,
     title: '멘트가 생각이 안나네요   ',
-    author: '현지원',
+    nickName: '현지원',
     date: '23.01.01',
     tag: 'Health',
     views: '102',
@@ -92,7 +92,7 @@ const examplePosts: Post[] = [
   {
     id: 9,
     title: '아무거나 적어봤습니다. ',
-    author: '윤성빈',
+    nickName: '윤성빈',
     date: '23.01.01',
     tag: 'Health',
     views: '122',
@@ -102,7 +102,7 @@ const examplePosts: Post[] = [
   {
     id: 10,
     title: '운동을 가야되는데 알배겨서 가기가 싫음',
-    author: '윤석열',
+    nickName: '윤석열',
     date: '23.01.01',
     tag: 'Health',
     views: '1202',

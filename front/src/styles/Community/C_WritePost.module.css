@@ -16,23 +16,6 @@
   margin: 20px 40px;
 }
 
-.UserProfile {
-  display: flex;
-  margin-top: 3px;
-  align-items: center;
-  justify-content: flex-end;
-}
-.UserPhoto {
-  width: 40px;
-  margin-right: 8px;
-}
-.UserName {
-  margin-right: 20px;
-  color: var(--main);
-  font-weight: bold;
-  font-size: var(--h6);
-}
-
 .Text {
   font-size: var(--h6);
   font-weight: bold;
@@ -85,10 +68,26 @@
   height: 30px;
   background-color: white;
   width: 300px;
-  border-radius: 10px;
+  border-radius: 5px;
+  padding-left: 5px;
+  color: var(--text_5);
 }
 .FileNameOver {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.error {
+  color: red;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 5px;
+}
+.titleMessage {
+  display: flex;
+}
+.Subtext {
+  color: var(--text_5);
+  margin-left: 30px;
+  font-size: 12px;
 }

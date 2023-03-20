@@ -4,13 +4,6 @@ import Btn from './Buttons';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
-// import { useSelector, useDispatch } from 'react-redux';
-// import { ThunkDispatch } from 'redux-thunk';
-// import { fetchUser } from '../../store/userSlice';
-// import { RootState } from '../../store/rootReducer';
-// import { AppDispatch } from '../../store/store';
-
-// const dispatch: ThunkDispatch<RootState, null, AppDispatch> = useDispatch();
 
 const URL = process.env.NEXT_PUBLIC_URL;
 
@@ -41,22 +34,21 @@ const LoginBox = () => {
       .then((res) => {
         const accessToken = res.data.body.accessToken;
         localStorage.setItem('accessToken', accessToken);
-        // dispatch(fetchUser(res.data.body.accessToken));
+        axios.defaults.headers.common[
+          'Authorization'
+        ] = `Bearer ${accessToken}`;
+
         axios
-          .get(`${URL}/api/v1/users`, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`
-            }
-          })
+          .get(`${URL}/api/v1/users`)
           .then((res) => {
             const UserInfo = res.data.body.data;
             localStorage.setItem('UserInfo', JSON.stringify(UserInfo));
             // console.log(JSON.parse(localStorage.UserInfo).email);
           })
+          .then(() => router.push('/'))
           .catch((error) => {
             console.log(error);
           });
-        router.push('/');
       })
 
       .catch((error) => {
