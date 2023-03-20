@@ -38,7 +38,7 @@ public class CalculatorController {
         Calculator calculator = calculatorService.createResult(
             calculatorMapper.calculatorPostToCalculator(requestBody),
             user,
-            physicalService.findPhysicalByUserIdWithinToday(user.getUserId())
+            physicalService.findPhysicalByUserId(user.getUserId())
         );
 
         URI uri = UriUtil.createUri(DEFAULT_URL, calculator.getCalculatorId());
@@ -75,7 +75,7 @@ public class CalculatorController {
         Calculator afterResult = calculatorService.updateResult(
             calculator,
             user,
-            physicalService.findPhysicalByUserIdWithinToday(user.getUserId())
+            physicalService.findPhysicalByUserId(user.getUserId())
         );
 
         CalculatorDto.Response response = calculatorMapper.calculatorToResponse(afterResult);
