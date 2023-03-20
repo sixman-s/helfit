@@ -14,6 +14,7 @@ import sixman.helfit.domain.statistics.entity.Stat;
 import sixman.helfit.domain.statistics.repository.StatRepository;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -67,13 +68,13 @@ public class StatService {
     }
     @Transactional(readOnly = true)
     public List<Stat> getWeightByUserId(Long userId){
-        Pageable pageable = PageRequest.of(0, 7, Sort.by("modifiedAt").descending());
+        Pageable pageable = PageRequest.of(1, 7, Sort.by("modifiedAt").descending());
         Page<Physical> weightList = physicalRepository.findAllPhysicalByUserId(userId,pageable);
         List<Stat> weightStatList = new ArrayList<>();
         for(Physical physical : weightList){
             Stat physicalStat = new Stat();
             physicalStat.setWeight(physical.getWeight());
-            physicalStat.setModifiedAt(physical.getModifiedAt());
+            physicalStat.setLastModifiedAt(physical.getModifiedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
             weightStatList.add(physicalStat);
         }
         return weightStatList;

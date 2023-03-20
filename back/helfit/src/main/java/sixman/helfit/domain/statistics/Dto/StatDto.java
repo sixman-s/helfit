@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class StatDto {
 
@@ -25,7 +26,7 @@ public class StatDto {
     @AllArgsConstructor
     public static class physicalResponse{
         private Integer weight;
-        private LocalDateTime modifiedAt;
+        private String lastModifiedAt;
     }
 
 }
