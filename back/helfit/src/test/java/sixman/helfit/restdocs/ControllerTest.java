@@ -21,7 +21,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import sixman.helfit.domain.user.entity.User;
 import sixman.helfit.restdocs.config.RestDocsConfig;
+import sixman.helfit.security.entity.ProviderType;
+import sixman.helfit.security.entity.RoleType;
 
 
 @Import(RestDocsConfig.class)
@@ -45,6 +48,19 @@ public abstract class ControllerTest {
                            .alwaysDo(restDocs)
                            .addFilters(new CharacterEncodingFilter("UTF-8", true))
                            .build();
+    }
+
+    protected User userResource() {
+        return new User(
+            "tester",
+            "tester@testet.com",
+            "tester",
+            "",
+            User.EmailVerified.Y,
+            User.PersonalInfoAgreement.Y,
+            ProviderType.LOCAL,
+            RoleType.USER
+        );
     }
 
     protected <T> ResultActions postResource(String url, T body) throws Exception {

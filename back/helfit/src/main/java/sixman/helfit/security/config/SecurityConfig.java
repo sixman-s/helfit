@@ -11,32 +11,26 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.header.writers.StaticHeadersWriter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import sixman.helfit.domain.user.repository.UserRefreshTokenRepository;
+import sixman.helfit.security.filter.JwtAuthenticationFilter;
+import sixman.helfit.security.handler.*;
 import sixman.helfit.security.properties.AppProperties;
 import sixman.helfit.security.properties.CorsProperties;
 import sixman.helfit.security.entity.RoleType;
-import sixman.helfit.security.filter.TokenAuthenticationFilter;
-import sixman.helfit.security.handler.CustomAccessDeniedHandler;
-import sixman.helfit.security.handler.CustomAuthenticationEntryPoint;
-import sixman.helfit.security.handler.OAuth2AuthenticationFailureHandler;
-import sixman.helfit.security.handler.OAuth2AuthenticationSuccessHandler;
+import sixman.helfit.security.filter.JwtVerificationFilter;
 import sixman.helfit.security.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import sixman.helfit.security.service.CustomOAuth2UserService;
 import sixman.helfit.security.service.CustomUserDetailService;
 import sixman.helfit.security.token.AuthTokenProvider;
 
 import java.util.Arrays;
-
-import static org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN;
 
 @Configuration
 @EnableWebSecurity
@@ -105,6 +99,7 @@ public class SecurityConfig {
                 .antMatchers(
                     "/api/**/users/signup",
                     "/api/**/users/login",
+                    "/api/**/users/login/filter",
                     "/api/**/users/confirm-email"
                 ).permitAll()
                 .antMatchers("/api/**/users/**").hasAnyAuthority(RoleType.USER.getCode())
@@ -154,12 +149,26 @@ public class SecurityConfig {
     }
 
     /*
-     * # 토큰 필터 설정
+     * # 토큰 검증 필터
      *
      */
     @Bean
-    public TokenAuthenticationFilter tokenAuthenticationFilter() {
-        return new TokenAuthenticationFilter(authTokenProvider, customUserDetailService);
+    public JwtVerificationFilter jwtVerificationFilter() {
+        return new JwtVerificationFilter(authTokenProvider, customUserDetailService);
+    }
+
+    /*
+     * # 토큰 필터
+     *  ! 필터 핸들러 필요시 로그인 프로세스 절차 변경
+     *
+     */
+    public JwtAuthenticationFilter jwtAuthenticationFilter(AuthenticationManager authenticationManager) {
+        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(appProperties, authenticationManager, authTokenProvider, userRefreshTokenRepository);
+        jwtAuthenticationFilter.setFilterProcessesUrl("/api/v1/users/login");
+        jwtAuthenticationFilter.setAuthenticationSuccessHandler(new CustomAuthenticationSuccessHandler());
+        jwtAuthenticationFilter.setAuthenticationFailureHandler(new CustomAuthenticationFailureHandler());
+
+        return jwtAuthenticationFilter;
     }
 
     /*
@@ -216,7 +225,11 @@ public class SecurityConfig {
     public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity> {
         @Override
         public void configure(HttpSecurity builder) throws Exception {
-            builder.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+            // ! 필터 핸들러 필요시 로그인 프로세스 절차 변경
+            // AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
+
+            // builder.addFilter(jwtAuthenticationFilter(authenticationManager));
+            builder.addFilterBefore(jwtVerificationFilter(), UsernamePasswordAuthenticationFilter.class);
         }
     }
 }

@@ -43,8 +43,6 @@ public class User extends Auditable {
     @Column(length = 512)
     private String profileImageUrl;
 
-    private Integer failureCnt = 0;
-
     @Enumerated(value = EnumType.STRING)
     private EmailVerified emailVerifiedYn;
 
