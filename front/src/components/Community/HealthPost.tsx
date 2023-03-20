@@ -1,23 +1,67 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import style from '../../styles/Community/C_Post.module.css';
 import Btn from '../loginc/Buttons';
 import Pagenation from './C_Community/Pagenation';
+import axios from 'axios';
 
-type Post = {
-  id: number;
+interface Post {
+  boardId: number;
+  boardImageUrl: string | null;
+  createdAt: string;
+  modifiedAt: string;
+  tags: { tagId: number; tagName: string }[];
+  text: string;
   title: string;
-  nickName: string;
-  date: string;
-  tag: string;
-  views: string;
-};
-
+}
 type Props = {
   posts: Post[];
 };
 
-const HealthPost: React.FC<Props> = ({ posts }) => {
+const URL = process.env.NEXT_PUBLIC_URL;
+
+const HealthPost: React.FC = () => {
+  const [fetchedPosts, setFetchedPosts] = useState<Post[]>([]);
+
+  useEffect(() => {
+    axios
+      .get(`${URL}/api/v1/board/1?page=1`)
+      .then((res) => setFetchedPosts(res.data))
+      .catch((err) => console.log(err));
+  }, []);
+
+  const PostCard: React.FC<{ post: Post; order: number }> = ({
+    post,
+    order
+  }) => {
+    const { title, tags, createdAt } = post;
+
+    // Convert createdAt date string to localized date string
+    const createdAtString = new Date(createdAt)
+      .toLocaleDateString('en-KR', {
+        year: '2-digit',
+        month: '2-digit',
+        day: '2-digit'
+      })
+      .split('/')
+      .join('.');
+
+    return (
+      <div>
+        <li className={style.ListItem}>
+          <div className={style.No}>{order}.</div>
+          <div className={style.title}>{title}</div>
+          <div className={style.nickName}>닉네임</div>
+          <div className={style.date}>{createdAtString}</div>
+          <div className={style.tag}>
+            {tags.map((tag) => tag.tagName).join(', ')}
+          </div>
+          <div className={style.views}>조회수</div>
+        </li>
+      </div>
+    );
+  };
+
   return (
     <>
       <div className={style.List}>
@@ -36,17 +80,10 @@ const HealthPost: React.FC<Props> = ({ posts }) => {
         </div>
         <div className={style.ListBody}>
           <ul>
-            {posts.map((post) => (
-              <Link href={`/community/health/${post.id}`} key={post.id}>
-                <li className={style.ListItem}>
-                  <div className={style.No}>{post.id}.</div>
-                  <div className={style.title}>{post.title}</div>
-                  <div className={style.nickName}>{post.nickName}</div>
-                  <div className={style.date}>{post.date}</div>
-                  <div className={style.tag}>{post.tag}</div>
-                  <div className={style.views}>{post.views}</div>
-                </li>
-              </Link>
+            {fetchedPosts.map((post, index) => (
+              <li key={post.boardId}>
+                <PostCard post={post} order={index + 1} />
+              </li>
             ))}
           </ul>
         </div>
