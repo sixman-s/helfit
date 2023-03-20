@@ -9,6 +9,8 @@ import sixman.helfit.domain.category.entity.Category;
 import sixman.helfit.domain.user.entity.User;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -34,4 +36,6 @@ public class Stat extends Auditable {
     private String boardImageUrl;
     private String title;
     private String text;
+    private Integer weight;
+    private LocalDateTime modifiedAt;
 }

@@ -1,13 +1,14 @@
 package sixman.helfit.domain.statistics.controller;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import sixman.helfit.domain.calendar.dto.CalendarDto;
 import sixman.helfit.domain.calendar.entity.Calendar;
 import sixman.helfit.domain.statistics.Dto.StatDto;
@@ -35,7 +36,7 @@ public class StatController {
     @GetMapping("/calendar/{user-id}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> getKcalStat(@Positive @PathVariable("user-id") Long userId,
-            @AuthenticationPrincipal UserPrincipal userPrincipal){
+                                         @AuthenticationPrincipal UserPrincipal userPrincipal){
         List<Stat> allKcalByUserId = statService.getCalendarByUserId(userPrincipal.getUser().getUserId());
 
         List<StatDto.calendarResponse> responses = statMapper.statListToStatDtoResponseList(allKcalByUserId);
@@ -48,6 +49,14 @@ public class StatController {
         List<Stat> boardList = statService.getBoardByRecent(categoryId);
 
         List<StatDto.boardResponse> responses = statMapper.statListToStatDtoBoardResponseList(boardList);
+
+        return ResponseEntity.ok().body(ApiResponse.ok("data", responses));
+    }
+    @GetMapping("/physical")
+    public ResponseEntity<?> getWeightStat(@AuthenticationPrincipal UserPrincipal userPrincipal){
+        List<Stat> allWeightByUserId = statService.getWeightByUserId(userPrincipal.getUser().getUserId());
+
+        List<StatDto.physicalResponse> responses = statMapper.statListToStatDtoPhysicalResponseList((allWeightByUserId));
 
         return ResponseEntity.ok().body(ApiResponse.ok("data", responses));
     }
