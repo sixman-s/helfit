@@ -2,7 +2,7 @@ import style from '../../../styles/Community/P_Community.module.css';
 import Layout from '@/components/MainLayout';
 import Categoty from '@/components/Community/Category';
 import Searchbar from '@/components/Community/SearchBar';
-import HealthPost from '@/components/Community/EachPost/HealthPost';
+import OwwPost from '@/components/Community/EachPost/OwwPost';
 
 const Community = () => {
   return (
@@ -15,7 +15,7 @@ const Community = () => {
           <Categoty />
         </div>
         <div className={style.Popular}>
-          <HealthPost />
+          <OwwPost />
         </div>
       </div>
     </Layout>
