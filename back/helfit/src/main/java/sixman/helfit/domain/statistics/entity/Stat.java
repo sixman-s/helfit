@@ -2,6 +2,7 @@ package sixman.helfit.domain.statistics.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 import sixman.helfit.audit.Auditable;
 import sixman.helfit.domain.calculator.entity.Calculator;
 import sixman.helfit.domain.calendar.entity.Calendar;
@@ -37,5 +38,6 @@ public class Stat extends Auditable {
     private String title;
     private String text;
     private Integer weight;
+
     private LocalDateTime modifiedAt;
 }

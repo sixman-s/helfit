@@ -41,7 +41,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
 
         } catch (UsernameNotFoundException e) {
-            ErrorResponse.sendErrorResponse(response, ExceptionCode.USERS_NOT_FOUND);
+            ErrorResponse.sendErrorResponse(response, ExceptionCode.USER_NOT_FOUND);
         }
     }
 
