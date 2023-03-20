@@ -8,22 +8,6 @@
    margin: 10px 0;
 }
 
- .inputDiv .bottomInput {
-    display: flex;
-  
-
- }
-
- .inputDiv .bottomInput .hnw{
-    display: flex;
-    flex-direction: column;
- }
-
- .inputDiv .bottomInput .hnw label{
-    display: flex;
-    flex-direction: column;
-    margin-top: 10px;
- }
 
 .inputDiv .info{
     border: 1px solid #B1B1B1;
@@ -32,45 +16,20 @@
     padding: 2px 5px;
 }
 
-.inputDiv .hInfo{
-    border: 1px solid #B1B1B1;
-    height: 25px;
-    padding: 2px 5px;
-    width: 150px;
-}
-
 .inputDiv .inputP{
-    margin: 40px 40px 20px;
+    margin-top: 20px;
+    text-align: right;
 }
 
 .inputDiv span{
     margin-top: 20px;
  }
 
-
-#genderDiv {
-    text-align: center;
-    margin: 10px 30px 0;
-
-}
-
-.innerGenderDiv{
-    display: flex;
-}
-
-#clearBtn {
-    width: 123px;
-    height: 27px;
-    border-radius: 2px;
-    background-color: #B1B1B1;
-    color: white;
-}
-
 #submitBtn {
-    width: 123px;
+    width: 80px;
     height: 27px;
     border-radius: 2px;
     color: white;
     background-color: var(--main);
-    margin-left: 10px;
+    
 }

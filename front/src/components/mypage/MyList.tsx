@@ -41,7 +41,7 @@ const MyList = () => {
         <Pagenation />
       </div>
       <div className={s.topLine}>
-        <h1>Answer</h1>
+        <h1>내 답변</h1>
         <span>더보기</span>
       </div>
       <table className={s.table}>
