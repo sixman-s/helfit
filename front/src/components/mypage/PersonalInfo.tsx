@@ -23,9 +23,6 @@ const PersonalInfo = ({ detail }: { detail: detailProps }) => {
   const [showModal, setShowMoadal] = useState<boolean>(false);
 
   console.log('detail : ' + detail);
-  const birth = String(detail.birth);
-  const setBirth =
-    birth.slice(0, 4) + '.' + birth.slice(4, 6) + '.' + birth.slice(6, 8);
 
   const checkImage = detail.profileImageUrl
     ? detail.profileImageUrl
