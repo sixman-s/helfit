@@ -17,26 +17,19 @@
 }
 
 .inputDiv .inputP{
-    margin: 40px 40px 20px;
+    margin-top: 20px;
+    text-align: right;
 }
 
 .inputDiv span{
     margin-top: 20px;
  }
 
-#clearBtn {
-    width: 123px;
-    height: 27px;
-    border-radius: 2px;
-    background-color: #B1B1B1;
-    color: white;
-}
-
 #submitBtn {
-    width: 123px;
+    width: 80px;
     height: 27px;
     border-radius: 2px;
     color: white;
     background-color: var(--main);
-    margin-left: 10px;
+    
 }

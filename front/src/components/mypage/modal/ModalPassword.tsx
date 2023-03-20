@@ -93,7 +93,7 @@ const ModalPassword = () => {
 
         <p className={s.submitP}>
           <button id={s.submitBtn} disabled={!formState.isValid}>
-            Submit password
+            비밀번호 변경
           </button>
         </p>
       </div>

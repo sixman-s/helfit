@@ -31,7 +31,7 @@ const ModalPInfo = ({ detail }: { detail: detailProps }) => {
         await new Promise((r) => setTimeout(r, 1000));
         console.log(data);
         axios
-          .patch(`${url}/api/v1/physical`, data, {
+          .patch(`${url}/api/v1/users`, data, {
             headers: {
               Authorization: `Bearer ${accessToken}`
             }
@@ -39,9 +39,7 @@ const ModalPInfo = ({ detail }: { detail: detailProps }) => {
           .then((data) => {
             {
               console.log(data);
-              if (data.status === 200) {
-                router.reload();
-              }
+              router.reload();
             }
           })
           .catch((err) => console.log(err));
@@ -58,9 +56,8 @@ const ModalPInfo = ({ detail }: { detail: detailProps }) => {
         ></input>
 
         <p className={s.inputP}>
-          <button id={s.clearBtn}>Clear profile</button>
           <button type='submit' id={s.submitBtn}>
-            Submit profile
+            저장
           </button>
         </p>
       </div>

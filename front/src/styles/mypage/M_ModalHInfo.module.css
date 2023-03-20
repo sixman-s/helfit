@@ -16,8 +16,8 @@
 }
 
 .inputDiv .submitP{
-    margin: 40px 40px 20px;
-    text-align: center;
+    margin-top: 20px;
+    text-align: right;
 }
 
 .inputDiv select {
@@ -29,8 +29,6 @@
 
 .inputDiv .bottomInput {
     display: flex;
-  
-
  }
 
  .inputDiv .bottomInput .hnw{
@@ -59,17 +57,20 @@
 }
 
 #genderDiv {
-    text-align: center;
     margin: 10px 30px 0;
-
 }
 
 .innerGenderDiv{
     display: flex;
 }
 
+.error{
+    font-size: 12px;
+    color: red;
+}
+
 #submitBtn {
-    width: 123px;
+    width: 80px;
     height: 27px;
     border-radius: 2px;
     color: white;

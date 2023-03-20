@@ -9,7 +9,7 @@ import MyPage from '../styles/mypage/P_mypage.module.css';
 
 export default function Mypage() {
   const [detail, setDetail] = useState<object>({});
-  const [hDetail, setHDetail] = useState();
+  const [hDetail, setHDetail] = useState({});
   const [cDetail, setCDetail] = useState();
   const [calorie, setCalorie] = useState<number>();
 
@@ -24,9 +24,13 @@ export default function Mypage() {
   }, []);
 
   const initMyPage = async (token) => {
-    const userId = await getUserInfo(token);
-    await getPhysicalInfo(token);
-    await getCalculateInfo({ userId, token });
+    try {
+      const userId = await getUserInfo(token);
+      await getPhysicalInfo(token);
+      await getCalculateInfo({ userId, token });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const getUserInfo = async (token) => {
@@ -53,14 +57,13 @@ export default function Mypage() {
     if (detail) {
       console.log(token);
       try {
-        const res = await axios.get(`${url}/api/v1/physical`, {
+        const res = await axios.get(`${url}/api/v1/physical/recent`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
         });
         console.log('info : ' + res.data.body.data);
         setHDetail(res.data.body.data);
-        console.log(hDetail);
         console.log('hDetail : ' + JSON.stringify(hDetail));
       } catch (error) {
         console.log(error);
@@ -78,6 +81,8 @@ export default function Mypage() {
           }
         });
 
+        console.log(`계산기 요청 결과 : ${res.data.body.data}`);
+        console.log(res.data.body.data);
         const {
           data: {
             body: { data: cDetailData }
@@ -99,36 +104,6 @@ export default function Mypage() {
     }
   };
 
-  // const getCalculateInfo = async ({ userId, token }) => {
-  //   console.log(userId);
-  //   if (userId) {
-  //     try {
-  //       const res = await axios.get(`${url}/api/v1/calculate/${userId}`, {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`
-  //         }
-  //       });
-  //       console.log('!!!!!!!!!' + res);
-  //       const {
-  //         data: {
-  //           body: { data: cDetailData }
-  //         }
-  //       } = res;
-  //       const { result: calorieData } = cDetailData;
-  //       console.log('cDetailData : ' + cDetailData);
-  //       console.log('calorieData : ' + calorieData);
-  //       setCDetail(cDetailData);
-  //       setCalorie(calorieData);
-  //     } catch (error) {
-  //       console.log(error);
-  //       const cDetailData = undefined;
-  //       const calorieData = 0;
-
-  //       setCDetail(cDetailData);
-  //       setCalorie(calorieData);
-  //     }
-  //   }
-  // };
   return (
     <Layout>
       <div className={MyPage.myPageContainer}>
@@ -139,7 +114,7 @@ export default function Mypage() {
           <MyList />
         </div>
         <div className={MyPage.healthInfo}>
-          <HealthInfo detail={detail} cDetail={cDetail} />
+          <HealthInfo detail={detail} hDetail={hDetail} cDetail={cDetail} />
         </div>
         <div className={MyPage.calorieInfo}>
           <CalorieInfo calorie={calorie} />

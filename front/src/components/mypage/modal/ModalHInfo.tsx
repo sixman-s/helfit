@@ -5,15 +5,43 @@ import { useRouter } from 'next/router';
 import s from '../../../styles/mypage/M_ModalHInfo.module.css';
 
 export interface detailProps {
-  userId: number;
-  birth: number;
-  gender: string;
-  height: number;
-  weight: number;
+  result: {
+    detail: {
+      userId: number;
+    };
+    hDetail: {
+      birth: number;
+      gender: string;
+      height: number;
+      weight: number;
+    };
+    cDetail: {
+      calculatorId: number;
+      activityLevel: string;
+      goal: string;
+    };
+  };
 }
 
-const ModalHInfo = ({ detail }: { detail: detailProps }) => {
-  const { register, handleSubmit } = useForm();
+interface HeathForm {
+  height: number;
+  weight: number;
+  birth: number;
+  gender: string;
+}
+
+const ModalHInfo = ({
+  detail,
+  hDetail,
+  cDetail
+}: {
+  detail;
+  hDetail;
+  cDetail: detailProps;
+}) => {
+  const { register, handleSubmit, formState } = useForm<HeathForm>({
+    mode: 'all'
+  });
   const router = useRouter();
 
   const url = process.env.NEXT_PUBLIC_URL;
@@ -40,22 +68,39 @@ const ModalHInfo = ({ detail }: { detail: detailProps }) => {
             console.log(`health RES : ${res}`);
           })
           .catch((err) => console.log(err));
-
-        await axios
-          .post(
-            `${url}/api/v1/calculate/${detail.userId}`,
-            { activityLevel, goal },
-            {
-              headers: {
-                Authorization: `Bearer ${accessToken}`
+        if (cDetail) {
+          await axios
+            .patch(
+              `${url}/api/v1/calculate/${cDetail.calculatorId}`,
+              { activityLevel, goal },
+              {
+                headers: {
+                  Authorization: `Bearer ${accessToken}`
+                }
               }
-            }
-          )
-          .then((res) => {
-            console.log(`calculate RES : ${res}`);
-            router.reload();
-          })
-          .catch((err) => console.log(err));
+            )
+            .then((res) => {
+              console.log(`calculate RES : ${res}`);
+              router.reload();
+            })
+            .catch((err) => console.log(err));
+        } else {
+          await axios
+            .post(
+              `${url}/api/v1/calculate/${detail.userId}`,
+              { activityLevel, goal },
+              {
+                headers: {
+                  Authorization: `Bearer ${accessToken}`
+                }
+              }
+            )
+            .then((res) => {
+              console.log(`calculate RES : ${res}`);
+              router.reload();
+            })
+            .catch((err) => console.log(err));
+        }
       })}
     >
       <div className={s.inputDiv}>
@@ -63,30 +108,51 @@ const ModalHInfo = ({ detail }: { detail: detailProps }) => {
           <div className={s.hnw}>
             <label htmlFor='height'>키</label>
             <input
-              type='text'
+              type='number'
               id='height'
               className={s.hInfo}
-              defaultValue={detail.height}
-              {...register('height')}
+              defaultValue={hDetail.height}
+              {...register('height', {
+                required: true,
+                maxLength: {
+                  value: 3,
+                  message: '세자리 이하이어야 합니다.'
+                }
+              })}
             ></input>
+            <p className={s.error}>{formState.errors.height?.message}</p>
 
             <label htmlFor='weight'>몸무게</label>
             <input
-              type='text'
+              type='number'
               id='weight'
               className={s.hInfo}
-              defaultValue={detail.weight}
-              {...register('weight')}
+              defaultValue={hDetail.weight}
+              {...register('weight', {
+                required: true,
+                maxLength: {
+                  value: 3,
+                  message: '세자리 이하이어야 합니다.'
+                }
+              })}
             ></input>
+            <p className={s.error}>{formState.errors.weight?.message}</p>
 
             <label htmlFor='birthDay'>생년월일</label>
             <input
-              type='text'
+              type='number'
               id='birthDay'
               className={s.info}
-              defaultValue={detail.birth}
-              {...register('birth')}
+              defaultValue={hDetail.birth}
+              {...register('birth', {
+                required: true,
+                maxLength: {
+                  value: 8,
+                  message: '여덟 자리 이하이어야 합니다.'
+                }
+              })}
             />
+            <p className={s.error}>{formState.errors.birth?.message}</p>
           </div>
           <div id={s.genderDiv}>
             <span>성별</span>
@@ -96,7 +162,7 @@ const ModalHInfo = ({ detail }: { detail: detailProps }) => {
                   type='radio'
                   id='man'
                   value='MALE'
-                  defaultChecked={detail.gender === 'MALE'}
+                  defaultChecked={hDetail.gender === 'MALE'}
                   {...register('gender')}
                 />
                 <label htmlFor='man'>남</label>
@@ -106,7 +172,7 @@ const ModalHInfo = ({ detail }: { detail: detailProps }) => {
                   type='radio'
                   id='woman'
                   value='FEMALE'
-                  defaultChecked={detail.gender === 'FEMALE'}
+                  defaultChecked={hDetail.gender === 'FEMALE'}
                   {...register('gender')}
                 />
                 <label htmlFor='woman'>여</label>
@@ -137,7 +203,7 @@ const ModalHInfo = ({ detail }: { detail: detailProps }) => {
         </select>
         <p className={s.submitP}>
           <button type='submit' id={s.submitBtn}>
-            Submit
+            저장
           </button>
         </p>
       </div>

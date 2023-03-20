@@ -22,7 +22,7 @@ const PersonalInfo = ({ detail }: { detail: detailProps }) => {
   const [modalContents, setModalContents] = useState<JSX.Element>(<></>);
   const [showModal, setShowMoadal] = useState<boolean>(false);
 
-  console.log('detail : ' + detail);
+  // console.log('detail : ' + detail);
 
   const checkImage = detail.profileImageUrl
     ? detail.profileImageUrl
