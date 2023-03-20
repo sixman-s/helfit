@@ -6,7 +6,7 @@ import DietInfo from '@/components/main/DietInfo';
 import CommunityInfo from '@/components/main/CommunityInfo';
 import NonMembers from '@/components/main/NonMembers';
 import VisitantInfo from '@/components/main/VisitantInfo';
-import LoginServiceLayout from '@/components/main/LoginServiceLayout';
+import Header from '@/components/main/Header';
 import { useEffect, useState } from 'react';
 
 export default function Home() {
@@ -21,22 +21,22 @@ export default function Home() {
       <section className={styled.container}>
         {token ? <UserInfo token={token} /> : <VisitantInfo />}
         {token ? (
-          <LoginServiceLayout title='Calendar' href='/calendar'>
+          <Header title='Calendar' href='/calendar'>
             <CalendarInfo />
-          </LoginServiceLayout>
+          </Header>
         ) : (
-          <LoginServiceLayout title='Calendar' href='/calendar'>
+          <Header title='Calendar' href='/calendar'>
             <NonMembers />
-          </LoginServiceLayout>
+          </Header>
         )}
         {token ? (
-          <LoginServiceLayout title={`Today's Diet`} href='/'>
+          <Header title={`Today's Diet`} href='/'>
             <DietInfo />
-          </LoginServiceLayout>
+          </Header>
         ) : (
-          <LoginServiceLayout title={`Today's Diet`} href='/'>
+          <Header title={`Today's Diet`} href='/'>
             <NonMembers />
-          </LoginServiceLayout>
+          </Header>
         )}
         <CommunityInfo />
       </section>

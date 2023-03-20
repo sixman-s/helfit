@@ -1,5 +1,5 @@
 import styled from '../../styles/calendar/C_calendarPop.module.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { DateView } from './utils/DateView';
 import axios from 'axios';
 
@@ -11,6 +11,7 @@ interface PostData {
 }
 
 const ReaderPop = ({ date, open, setOpen }) => {
+  const modalRef = useRef<HTMLDivElement>(null);
   const [data, setData] = useState([]);
   const [title, setTitle] = useState('');
   const [kcal, setKcal] = useState(0);
@@ -112,8 +113,17 @@ const ReaderPop = ({ date, open, setOpen }) => {
     }
   }, [date]);
 
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) =>
+      modalRef.current && !modalRef.current.contains(e.target as Node)
+        ? setOpen(false)
+        : setOpen(true);
+    window.addEventListener('mousedown', handleClick);
+    return () => window.removeEventListener('mousedown', handleClick);
+  }, []);
+
   return (
-    <section className={open ? styled.article : styled.disable}>
+    <section ref={modalRef} className={open ? styled.article : styled.disable}>
       <header className={styled.header}>
         <button className={styled.closeBtn} onClick={() => setOpen(false)}>
           {'»'}
@@ -146,7 +156,7 @@ const ReaderPop = ({ date, open, setOpen }) => {
               <input
                 type='number'
                 className={styled.calInput}
-                placeholder={kcal.toString()}
+                value={kcal.toString()}
                 onChange={(e) => setKcal(e.target.valueAsNumber)}
               />
               kcal

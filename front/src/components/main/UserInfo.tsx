@@ -1,6 +1,7 @@
 import styled from '../../styles/main/C_userInfo.module.css';
 import Link from 'next/link';
 import KcalChart from './util/KcalChart';
+import WeightChart from './util/WeightChart';
 
 const UserInfo = ({ token }) => {
   const userData = JSON.parse(localStorage.getItem('UserInfo'));
@@ -20,10 +21,10 @@ const UserInfo = ({ token }) => {
       <div className={styled.chartContainer}>
         <figure className={styled.chart}>
           <div className={styled.chartInfo}>
-            <span className={styled.chartTitle}>{userData.height}</span>
+            <span className={styled.chartTitle}>{'78'}</span>
             <figcaption className={styled.chartCaption}>weight</figcaption>
           </div>
-          <div className={styled.chartView}>몸무게 그래프</div>
+          <WeightChart token={token} userId={userData.userId} />
         </figure>
         <figure className={styled.chart}>
           <div className={styled.chartInfo}>
