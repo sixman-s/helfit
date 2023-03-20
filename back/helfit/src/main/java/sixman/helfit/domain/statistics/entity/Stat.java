@@ -37,5 +37,5 @@ public class Stat extends Auditable {
     private String title;
     private String text;
     private Integer weight;
-    private LocalDateTime modifiedAt;
+    private String lastModifiedAt;
 }
