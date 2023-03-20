@@ -8,7 +8,8 @@ import { useEffect, useState } from 'react';
 import MyPage from '../styles/mypage/P_mypage.module.css';
 
 export default function Mypage() {
-  const [detail, setDetail] = useState({});
+  const [detail, setDetail] = useState<object>({});
+  const [hDetail, setHDetail] = useState();
   const [cDetail, setCDetail] = useState();
   const [calorie, setCalorie] = useState<number>();
 
@@ -24,12 +25,11 @@ export default function Mypage() {
 
   const initMyPage = async (token) => {
     const userId = await getUserInfo(token);
+    await getPhysicalInfo(token);
     await getCalculateInfo({ userId, token });
   };
 
   const getUserInfo = async (token) => {
-    console.log('token : ' + token);
-
     if (token) {
       try {
         const res = await axios.get(`${url}/api/v1/users`, {
@@ -38,8 +38,10 @@ export default function Mypage() {
           }
         });
         setDetail(res.data.body.data);
+        console.log('info : ' + res.data.body.data);
         const userId = res.data.body.data.userId;
         console.log('userId :' + userId);
+
         return userId;
       } catch (err) {
         console.error(err);
@@ -47,18 +49,34 @@ export default function Mypage() {
     }
   };
 
+  const getPhysicalInfo = async (token) => {
+    if (detail) {
+      console.log(token);
+      try {
+        const res = await axios.get(`${url}/api/v1/physical`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        console.log('info : ' + res.data.body.data);
+        setHDetail(res.data.body.data);
+        console.log(hDetail);
+        console.log('hDetail : ' + JSON.stringify(hDetail));
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
   const getCalculateInfo = async ({ userId, token }) => {
-    console.log(userId);
-    if (userId) {
+    if (hDetail) {
+      console.log(userId);
       try {
         const res = await axios.get(`${url}/api/v1/calculate/${userId}`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
         });
-        //   .then((res) => console.log('!!!!' + res))
-        //   .catch((err) => console.log(err));
-        // console.log('!!!!!!!!!' + res);
 
         const {
           data: {

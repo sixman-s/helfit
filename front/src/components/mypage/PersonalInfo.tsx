@@ -10,14 +10,11 @@ import { useEffect } from 'react';
 export interface detailProps {
   info: {
     userId: number;
+    birth: number;
     id: string;
     email: string;
     nickname: string;
     profileImageUrl: string;
-    birth: number;
-    gender: string;
-    height: number;
-    weight: number;
   };
 }
 
@@ -65,7 +62,7 @@ const PersonalInfo = ({ detail }: { detail: detailProps }) => {
         </div>
         <div className={s.divBtn}>
           <button id={s.infoBtn} className={s.buttonDiv} onClick={clickModalP}>
-            개인정보 변경
+            닉네임 변경
           </button>
           <button className={s.buttonDiv} onClick={clickModalPW}>
             비밀번호 변경
@@ -74,24 +71,11 @@ const PersonalInfo = ({ detail }: { detail: detailProps }) => {
       </div>
       <div className={s.bottomContainer}>
         <p className={s.nnContainer}>
-          <img
-            src='../../../assets/mypage/nickName.svg'
-            className={s.profile_option}
-          />
+          <img src='../../../assets/mypage/nickName.svg' />
           <span>{detail.nickname}</span>
         </p>
-        <p className={s.bhContainer}>
-          <img
-            src='../../../assets/mypage/birthday.svg'
-            className={s.profile_option}
-          />
-          <span>{setBirth}</span>
-        </p>
         <p className={s.emailContainer}>
-          <img
-            src='../../../assets/mypage/email.svg'
-            className={s.profile_option}
-          />
+          <img src='../../../assets/mypage/email.svg' />
           <span>{detail.email}</span>
         </p>
       </div>

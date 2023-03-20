@@ -6,10 +6,6 @@ import s from '../../../styles/mypage/M_ModalHInfo.module.css';
 
 export interface detailProps {
   userId: number;
-  id: string;
-  email: string;
-  nickname: string;
-  profileImageUrl: string;
   birth: number;
   gender: string;
   height: number;
@@ -27,32 +23,97 @@ const ModalHInfo = ({ detail }: { detail: detailProps }) => {
     <form
       onSubmit={handleSubmit(async (data) => {
         await new Promise((r) => setTimeout(r, 1000));
-        if (!data.activityLevel && !data.goal) {
-          alert('활동 정도와 운동 목적을 입력해주세요.');
-        } else if (!data.activityLevel) {
-          alert('활동 정도를 입력해주세요.');
-        } else if (!data.goal) {
-          alert('운동 목적을 입력해주세요.');
-        } else {
-          console.log(data);
-          axios
-            .post(`${url}/api/v1/calculate/${detail.userId}`, data, {
+
+        const { birth, height, weight, gender, activityLevel, goal } = data;
+
+        await axios
+          .post(
+            `${url}/api/v1/physical`,
+            { birth, height, weight, gender },
+            {
               headers: {
                 Authorization: `Bearer ${accessToken}`
               }
-            })
-            .then((data) => {
-              {
-                console.log(data);
-                // alert('완료되었습니다.');
-                // router.reload();
+            }
+          )
+          .then((res) => {
+            console.log(`health RES : ${res}`);
+          })
+          .catch((err) => console.log(err));
+
+        await axios
+          .post(
+            `${url}/api/v1/calculate/${detail.userId}`,
+            { activityLevel, goal },
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`
               }
-            })
-            .catch((err) => console.log(err));
-        }
+            }
+          )
+          .then((res) => {
+            console.log(`calculate RES : ${res}`);
+            router.reload();
+          })
+          .catch((err) => console.log(err));
       })}
     >
       <div className={s.inputDiv}>
+        <div className={s.bottomInput}>
+          <div className={s.hnw}>
+            <label htmlFor='height'>키</label>
+            <input
+              type='text'
+              id='height'
+              className={s.hInfo}
+              defaultValue={detail.height}
+              {...register('height')}
+            ></input>
+
+            <label htmlFor='weight'>몸무게</label>
+            <input
+              type='text'
+              id='weight'
+              className={s.hInfo}
+              defaultValue={detail.weight}
+              {...register('weight')}
+            ></input>
+
+            <label htmlFor='birthDay'>생년월일</label>
+            <input
+              type='text'
+              id='birthDay'
+              className={s.info}
+              defaultValue={detail.birth}
+              {...register('birth')}
+            />
+          </div>
+          <div id={s.genderDiv}>
+            <span>성별</span>
+            <div className={s.innerGenderDiv}>
+              <div>
+                <input
+                  type='radio'
+                  id='man'
+                  value='MALE'
+                  defaultChecked={detail.gender === 'MALE'}
+                  {...register('gender')}
+                />
+                <label htmlFor='man'>남</label>
+              </div>
+              <div>
+                <input
+                  type='radio'
+                  id='woman'
+                  value='FEMALE'
+                  defaultChecked={detail.gender === 'FEMALE'}
+                  {...register('gender')}
+                />
+                <label htmlFor='woman'>여</label>
+              </div>
+            </div>
+          </div>
+        </div>
         <label htmlFor='activity'>활동 정도</label>
         <select {...register('activityLevel')}>
           <option value='' selected disabled hidden>

@@ -54,27 +54,6 @@ const ModalPassword = () => {
       })}
     >
       <div className={s.inputDiv}>
-        {/* <label htmlFor='password'>현재 비밀번호</label>
-        <input
-          type='password'
-          id='password'
-          name='password'
-          placeholder='현재 비밀번호를 입력해주세요.'
-          {...register('password', {
-            required: true,
-            minLength: {
-              value: 8,
-              message: '8글자 이상이어야 합니다.'
-            },
-            pattern: {
-              value:
-                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-              message: '대/소문자, 숫자, 특수문자가 1개 이상 포함되어야 합니다.'
-            }
-          })}
-        />
-        <p className='error'>{formState.errors.password?.message}</p> */}
-
         <label htmlFor='checkPW'>새 비밀번호</label>
         <input
           type='password'
@@ -97,7 +76,7 @@ const ModalPassword = () => {
               trigger('passwordConfirm')
           })}
         />
-        <p className='error'>{formState.errors.password?.message}</p>
+        <p className={s.error}>{formState.errors.password?.message}</p>
 
         <label htmlFor='doubleCheckPW'>새 비밀번호 확인</label>
         <input
@@ -110,7 +89,7 @@ const ModalPassword = () => {
               value === watch('password') ? true : '비밀번호를 확인해주세요'
           })}
         />
-        <p className='error'>{formState.errors.passwordConfirm?.message}</p>
+        <p className={s.error}>{formState.errors.passwordConfirm?.message}</p>
 
         <p className={s.submitP}>
           <button id={s.submitBtn} disabled={!formState.isValid}>

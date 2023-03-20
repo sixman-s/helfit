@@ -64,7 +64,31 @@
     margin-left: 10px;
 }
 
-.profile {
+.profileDiv{
+    position: relative;
     width: 60px;
     height: 60px;
+ 
+}
+
+.profileDiv img {
+    width: 100%;
+    /* position: absolute; */
+    /* top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); */
+}
+
+
+.profile_option{
+    width: 24px;
+    height: 25px;
+    position: absolute;
+    top: 50%;
+    left: 90%;
+    transform: translate(-40%, 40%);
+}
+
+.profile_option:hover{
+    cursor: pointer;
 }

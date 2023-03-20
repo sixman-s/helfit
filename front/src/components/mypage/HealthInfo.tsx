@@ -7,10 +7,6 @@ export interface detailProps {
   result: {
     detail: {
       userId: number;
-      id: string;
-      email: string;
-      nickname: string;
-      profileImageUrl: string;
       birth: number;
       gender: string;
       height: number;
@@ -28,15 +24,19 @@ const HealthInfo = ({ detail, cDetail }: { detail; cDetail: detailProps }) => {
   const [activity, setActivity] = useState(false);
   const [purpose, setPurpose] = useState(false);
 
-  console.log(detail.gender);
-  console.log(cDetail.goal);
+  // console.log(detail.gender);
+  // console.log(cDetail.goal);
+
+  const birth = String(detail.birth);
+  const setBirth =
+    birth.slice(0, 4) + '.' + birth.slice(4, 6) + '.' + birth.slice(6, 8);
 
   useEffect(() => {
     if (cDetail) {
       setActivity(true);
       setPurpose(true);
     }
-  }, [cDetail]);
+  }, [detail, cDetail]);
 
   const chagneGenderName = detail.gender === 'MALE' ? '남' : '여';
 
@@ -55,15 +55,27 @@ const HealthInfo = ({ detail, cDetail }: { detail; cDetail: detailProps }) => {
       <div className={s.bottomContainer}>
         <p className={s.list}>
           <span className={s.question}>성별</span>
-          <span className={s.answer}>{chagneGenderName}</span>
+          <span className={s.answer}>
+            {detail.gender ? chagneGenderName : '정보를 입력해주세요.'}
+          </span>
         </p>
         <p className={s.list}>
           <span className={s.question}>키</span>
-          <span className={s.answer}>{detail.height}</span>
+          <span className={s.answer}>
+            {detail.height ? detail.height : '정보를 입력해주세요.'}
+          </span>
         </p>
         <p className={s.list}>
           <span className={s.question}>몸무게</span>
-          <span className={s.answer}>{detail.weight}</span>
+          <span className={s.answer}>
+            {detail.weight ? detail.weight : '정보를 입력해주세요.'}
+          </span>
+        </p>
+        <p className={s.bhContainer}>
+          <span className={s.question}>생년월일</span>
+          <span className={s.answer}>
+            {detail.birth ? setBirth : '정보를 입력해주세요.'}
+          </span>
         </p>
         {activity ? (
           <p className={s.list}>
