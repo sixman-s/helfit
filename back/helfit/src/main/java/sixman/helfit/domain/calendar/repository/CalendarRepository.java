@@ -20,8 +20,7 @@ public interface CalendarRepository extends JpaRepository<Calendar, Long> {
     @Query("select c from Calendar c where c.user.userId = :userId and c.recodedAt = :recodedAt")
     Optional<Calendar> findByUserIdAndRecodedAt(Long userId, String recodedAt);
 
-//    @Query("select c from Calendar c where c.user.userId = :userId")
-//    List<Calendar> findTop7ByUserIdOrderByRecodedAtAsc(Long userId);
-@Query("SELECT c FROM Calendar c WHERE c.user.userId = :userId ORDER BY c.recodedAt DESC")
-List<Calendar> findTop7ByUserIdOrderByRecodedAtDesc(Long userId, Pageable pageable);
+
+    @Query("SELECT c FROM Calendar c WHERE c.user.userId = :userId ORDER BY c.recodedAt DESC")
+    List<Calendar> findTop7ByUserIdOrderByRecodedAtDesc(Long userId, Pageable pageable);
 }

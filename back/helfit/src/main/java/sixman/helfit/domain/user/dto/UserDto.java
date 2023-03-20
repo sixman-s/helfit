@@ -41,26 +41,6 @@ public class UserDto {
             ignoreCase = true
         )
         private String personalInfoAgreement;
-
-        @Nullable
-        private String profileImageUrl;
-
-        @Nullable
-        private Integer birth;
-
-        @Nullable
-        private Integer height;
-
-        @Nullable
-        private Integer weight;
-
-        @Nullable
-        @ValidEnum(
-            enumClass = Gender.class,
-            message = "잘못된 입력값입니다. : 기대값: ['MALE', FEMALE]",
-            ignoreCase = true
-        )
-        private String gender;
     }
 
     @Getter
@@ -77,22 +57,6 @@ public class UserDto {
         @Nullable
         @Pattern(regexp = "^\\S+(\\s?\\S+)*$", message = "별명은 공백을 포함할 수 없습니다.")
         private String nickname;
-
-        @Nullable
-        private String profileImageUrl;
-
-        @Nullable
-        private Integer birth;
-
-        @Nullable
-        private Integer height;
-
-        @Nullable
-        private Integer weight;
-
-        @Nullable
-        @ValidEnum(enumClass = Gender.class, ignoreCase = true)
-        private String gender;
     }
 
     @Getter
@@ -114,12 +78,6 @@ public class UserDto {
         private String email;
         private String emailVerifiedYn;
         private String profileImageUrl;
-        private Integer birth;
-        private Integer height;
-        private Integer weight;
-        private Gender gender;
         private String providerType;
-        private LocalDateTime createdAt;
-        private LocalDateTime modifiedAt;
     }
 }

@@ -21,5 +21,5 @@ public interface StatMapper {
 
     List<StatDto.boardResponse> statListToStatDtoBoardResponseList(List<Stat> stats);
 
-    //Page<StatDto.calendarResponse> statPageToStatDtoResponsePage(Page<Stat> stats);
+    List<StatDto.physicalResponse> statListToStatDtoPhysicalResponseList(List<Stat> stats);
 }

@@ -8,6 +8,8 @@ import sixman.helfit.domain.board.entity.Board;
 import sixman.helfit.domain.board.repository.BoardRepository;
 import sixman.helfit.domain.calendar.entity.Calendar;
 import sixman.helfit.domain.calendar.repository.CalendarRepository;
+import sixman.helfit.domain.physical.entity.Physical;
+import sixman.helfit.domain.physical.repository.PhysicalRepositoryImpl;
 import sixman.helfit.domain.statistics.entity.Stat;
 import sixman.helfit.domain.statistics.repository.StatRepository;
 
@@ -23,6 +25,7 @@ import java.util.stream.Collectors;
 public class StatService {
     private final CalendarRepository calendarRepository;
     private final BoardRepository boardRepository;
+    private final PhysicalRepositoryImpl physicalRepository;
 
     @Transactional(readOnly = true)
     public List<Stat> getCalendarByUserId(Long userId) {
@@ -61,5 +64,18 @@ public class StatService {
             boardStatList.add(boardStat);
         }
         return boardStatList;
+    }
+    @Transactional(readOnly = true)
+    public List<Stat> getWeightByUserId(Long userId){
+        Pageable pageable = PageRequest.of(1, 7, Sort.by("modifiedAt").descending());
+        Page<Physical> weightList = physicalRepository.findAllPhysicalByUserId(userId,pageable);
+        List<Stat> weightStatList = new ArrayList<>();
+        for(Physical physical : weightList){
+            Stat physicalStat = new Stat();
+            physicalStat.setWeight(physical.getWeight());
+            physicalStat.setModifiedAt(physical.getModifiedAt());
+            weightStatList.add(physicalStat);
+        }
+        return weightStatList;
     }
 }

@@ -52,5 +52,13 @@ public class StatController {
 
         return ResponseEntity.ok().body(ApiResponse.ok("data", responses));
     }
+    @GetMapping("/physical")
+    public ResponseEntity<?> getWeightStat(@AuthenticationPrincipal UserPrincipal userPrincipal){
+        List<Stat> allWeightByUserId = statService.getWeightByUserId(userPrincipal.getUser().getUserId());
+
+        List<StatDto.physicalResponse> responses = statMapper.statListToStatDtoPhysicalResponseList((allWeightByUserId));
+
+        return ResponseEntity.ok().body(ApiResponse.ok("data", responses));
+    }
 
 }

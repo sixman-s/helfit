@@ -42,10 +42,10 @@ public class BoardDto {
     @Setter
     @AllArgsConstructor
     public static class Response {
+        private long boardId;
         private String title;
         private String text;
         private String boardImageUrl;
-        private List<CommentDto.responseDto> comments;
         private List<TagDto.GetResponse> tags;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;

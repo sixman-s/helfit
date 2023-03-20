@@ -1,5 +1,7 @@
 package sixman.helfit.domain.board.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,4 +19,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     @Query(value = "SELECT b FROM BOARDS b WHERE b.category.id = :categoryId ORDER BY b.createdAt DESC")
     List<Board> findTop3ByCategoryIdOrderByCreatedAtDesc(@Param("categoryId") Long categoryId, Pageable pageable);
     //^태형 만듬
+
+    @Query(value = "SELECT b FROM BOARDS b WHERE b.category.categoryId = :categoryId")
+    Page<Board> findBoardByCategoryId(@Param("categoryId") Long categoryId, PageRequest pageable);
 }
