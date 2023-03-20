@@ -1,4 +1,4 @@
-import d3, { axisBottom, axisLeft, scaleBand, scaleLinear, select } from 'd3';
+import { axisBottom, axisLeft, scaleBand, scaleLinear, select, path } from 'd3';
 import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import {
@@ -7,6 +7,7 @@ import {
   AxisLeftProps,
   BarsProps
 } from './types';
+import styled from '../../../styles/main/C_chart.module.css';
 
 const AxisBottom = ({ scale, transform }: AxisBottomProps) => {
   const ref = useRef<SVGGElement>(null);
@@ -17,7 +18,7 @@ const AxisBottom = ({ scale, transform }: AxisBottomProps) => {
     }
   }, [scale]);
 
-  return <g ref={ref} transform={transform} color='#a3b1cc' />;
+  return <g ref={ref} transform={transform} className={styled.line} />;
 };
 
 const AxisLeft = ({ scale }: AxisLeftProps) => {
@@ -29,7 +30,7 @@ const AxisLeft = ({ scale }: AxisLeftProps) => {
     }
   }, [scale]);
 
-  return <g ref={ref} color='#a3b1cc' />;
+  return <g ref={ref} className={styled.line} />;
 };
 
 const ChartBars = ({ data, height, scaleX, scaleY }: BarsProps) => {
@@ -51,9 +52,11 @@ const ChartBars = ({ data, height, scaleX, scaleY }: BarsProps) => {
 
 const KcalChart = ({ token, userId }: BarChartProps) => {
   const [kcal, setKcal] = useState([]);
+
   const DateLengthFour = (date: string) => {
     return date.slice(5, date.length).replaceAll('-', '.');
   };
+
   const kcalData = kcal.map((data) =>
     data.recodedAt.length > 8
       ? { ...data, recodedAt: DateLengthFour(data.recodedAt) }
@@ -85,6 +88,7 @@ const KcalChart = ({ token, userId }: BarChartProps) => {
     .domain(kcalData.map(({ recodedAt }) => (recodedAt ? recodedAt : null)))
     .range([0, width])
     .padding(0.4);
+
   const scaleY = scaleLinear()
     .domain([
       0,
