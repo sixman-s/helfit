@@ -37,6 +37,11 @@ public class Board extends Auditable {
     @JoinColumn(name = "category_id")
     private Category category;
 
+
+//    @OneToMany(mappedBy = "board",cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
+//    private List<BoardLike> boardLikes = new ArrayList<>();
+
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="user_id")
     private User user;

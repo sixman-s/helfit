@@ -24,6 +24,7 @@ public class CommentDto {
     @AllArgsConstructor
     public static class responseDto {
         private long commentId;
+        private long userId;
         private String userNickname;
         private String userProfileUrl;
         private String commentBody;
