@@ -41,7 +41,7 @@ public class Board extends Auditable {
     @JoinColumn(name ="user_id")
     private User user;
 
-    @OneToMany(mappedBy = "board" ,cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "board" ,cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
     private List<BoardTag> boardTags = new ArrayList<>();
 
 
