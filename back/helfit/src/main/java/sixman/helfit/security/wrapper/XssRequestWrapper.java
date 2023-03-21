@@ -41,7 +41,6 @@ public class XssRequestWrapper extends HttpServletRequestWrapper {
         return new BufferedReader(new InputStreamReader(servletStream));
     }
 
-
     private static class ResettableServletInputStream extends ServletInputStream {
 
         private InputStream stream;

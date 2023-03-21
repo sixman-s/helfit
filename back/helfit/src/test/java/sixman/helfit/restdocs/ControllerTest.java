@@ -95,6 +95,15 @@ public abstract class ControllerTest {
         );
     }
 
+    protected <T> ResultActions postResource(String url, T body, Object... pathVariables) throws Exception {
+        return mockMvc.perform(
+            RestDocumentationRequestBuilders.post(url, pathVariables)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(gson.toJson(body))
+        );
+    }
+
     protected ResultActions getResource(String url) throws Exception {
         return mockMvc.perform(
             RestDocumentationRequestBuilders.get(url)

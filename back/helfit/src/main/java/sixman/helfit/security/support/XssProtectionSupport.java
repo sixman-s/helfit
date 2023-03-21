@@ -32,6 +32,8 @@ public class XssProtectionSupport extends CharacterEscapes {
             new LookupTranslator(EntityArrays.HTML40_EXTENDED_ESCAPE),
             new LookupTranslator(
                 new HashMap<>() {{
+                    put("<", "&#12296;");
+                    put(">", "&#12297;");
                     put("(",  "&#40;");
                     put(")",  "&#41;");
                     put("#",  "&#35;");
@@ -49,6 +51,7 @@ public class XssProtectionSupport extends CharacterEscapes {
     @Override
     public SerializableString getEscapeSequence(int ch) {
         SerializedString serializedString = null;
+
         char charAt = (char) ch;
 
         if (Character.isHighSurrogate(charAt) || Character.isLowSurrogate(charAt)) {
@@ -56,8 +59,8 @@ public class XssProtectionSupport extends CharacterEscapes {
 
             serializedString = new SerializedString(emoji);
         } else {
-            serializedString = new SerializedString(translator.translate(Character.toString((char) ch)));
-            // serializedString = new SerializedString(StringEscapeUtils.escapeHtml4(Character.toString(charAt)));
+            // serializedString = new SerializedString(translator.translate(Character.toString((char) ch)));
+            serializedString = new SerializedString(StringEscapeUtils.escapeHtml4(Character.toString(charAt)));
         }
 
         return serializedString;
