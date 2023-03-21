@@ -9,7 +9,7 @@ import sixman.helfit.security.properties.AppProperties;
 import sixman.helfit.security.properties.CorsProperties;
 
 @EnableJpaAuditing
-// @EnableBatchProcessing
+@EnableBatchProcessing
 @EnableConfigurationProperties({
 	CorsProperties.class,
 	AppProperties.class

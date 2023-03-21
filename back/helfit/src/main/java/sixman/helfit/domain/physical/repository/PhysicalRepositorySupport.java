@@ -12,8 +12,7 @@ import sixman.helfit.support.Querydsl5RepositorySupport;
 
 import java.util.List;
 
-import static sixman.helfit.domain.physical.entity.QPhysical.*;
-import static sixman.helfit.domain.user.entity.QUser.*;
+import static sixman.helfit.domain.physical.entity.QPhysical.physical;
 
 @Repository
 public class PhysicalRepositorySupport extends Querydsl5RepositorySupport {
@@ -25,7 +24,6 @@ public class PhysicalRepositorySupport extends Querydsl5RepositorySupport {
     public Page<Physical> searchWithPageable(PhysicalCondition condition, Pageable pageable) {
         JPAQuery<Physical> query =
             selectFrom(physical)
-                .leftJoin(physical.user, user)
                 .fetchJoin()
                 .where(userIdEq(condition.getUserId()));
 

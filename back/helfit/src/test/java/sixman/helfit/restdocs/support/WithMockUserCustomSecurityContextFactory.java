@@ -11,6 +11,7 @@ import sixman.helfit.security.entity.ProviderType;
 import sixman.helfit.security.entity.RoleType;
 import sixman.helfit.security.entity.UserPrincipal;
 
+import java.util.Collections;
 import java.util.List;
 
 import static sixman.helfit.domain.user.entity.User.*;
@@ -20,7 +21,7 @@ public class WithMockUserCustomSecurityContextFactory implements WithSecurityCon
     @Override
     public SecurityContext createSecurityContext(WithMockUserCustom annotation) {
         User user = new User(
-                annotation.username(),
+                annotation.id(),
                 "tester@testet.com",
                 "tester",
                 "",
@@ -29,12 +30,16 @@ public class WithMockUserCustomSecurityContextFactory implements WithSecurityCon
                 ProviderType.LOCAL,
                 RoleType.USER
             );
+        user.setUserId(annotation.userId());
 
-        UserPrincipal userPrincipal = new UserPrincipal(user, List.of(new SimpleGrantedAuthority(annotation.role())));
+        UserPrincipal userPrincipal = new UserPrincipal(
+            user,
+            Collections.singletonList(new SimpleGrantedAuthority(RoleType.USER.getCode()))
+        );
 
         UsernamePasswordAuthenticationToken authentication =
             new UsernamePasswordAuthenticationToken(
-                userPrincipal.getUser(),
+                userPrincipal,
                 "NO_PASS"
             );
 

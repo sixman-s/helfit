@@ -18,19 +18,21 @@ import sixman.helfit.domain.user.entity.User;
 import sixman.helfit.domain.user.repository.UserRepository;
 
 import javax.persistence.EntityManagerFactory;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static sixman.helfit.domain.user.entity.User.*;
 
 
-// @Configuration
+@Configuration
 @RequiredArgsConstructor
 @Slf4j
 public class BatchConfig {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
-    private final EntityManagerFactory entityManagerFactory;
     private final UserRepository userRepository;
 
     @Bean
@@ -59,10 +61,10 @@ public class BatchConfig {
     ) throws Exception {
         log.info("reader = {}", requestDate);
 
-        List<User> byModifiedAtAndUserStatusEquals = userRepository.findByModifiedAtAndUserStatusEquals(
-            LocalDateTime.now().minusDays(1),
-            UserStatus.USER_ACTIVE
-        );
+        List<User> byModifiedAtAndUserStatusEquals = userRepository.findByModifiedAtBeforeAndUserStatusEquals(
+                LocalDateTime.of(LocalDateTime.now().toLocalDate().minusYears(1), LocalTime.MIN),
+                UserStatus.USER_ACTIVE
+            );
 
         return new QueueItemReader<>(byModifiedAtAndUserStatusEquals);
     }
