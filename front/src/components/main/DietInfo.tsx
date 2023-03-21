@@ -7,9 +7,9 @@ const DietInfo = () => {
   const [answer, setAnser] = useState('');
   const setLodingComponent = () => {
     return (
-      <p className={styled.loading}>
+      <span className={styled.loading}>
         <DotPulse size={20} speed={1.3} color='#3361ff' />
-      </p>
+      </span>
     );
   };
   const question = `하루 권장 소비 칼로리 2000kcal 벌크업 식단 나열하고 총 칼로리까지만 알려줘. 하루 운동량은 가벼운 활동량이야.`;
@@ -37,10 +37,10 @@ const DietInfo = () => {
           {answer === '' ? (
             setLodingComponent()
           ) : (
-            <p className={styled.answer}>
+            <div className={styled.answer}>
               {dietAnswer.replace(/-/g, '')}
               <br />
-            </p>
+            </div>
           )}
         </figure>
       </article>

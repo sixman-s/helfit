@@ -1,4 +1,4 @@
-import KcalChart from '@/components/main/util/KcalChart';
+import KcalChart from '@/components/main/util/UserKcalChart';
 import { useEffect, useState } from 'react';
 
 const Chart = () => {

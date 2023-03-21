@@ -1,8 +1,8 @@
 import Link from 'next/link';
-import layout from '../../styles/main/C_header.module.css';
-import styled from '../../styles/main/C_nonMembers.module.css';
+import layout from '../../../styles/main/C_header.module.css';
+import styled from '../../../styles/main/C_nonMembers.module.css';
 
-const NonMembers = () => {
+const SignupGuide = () => {
   return (
     <form className={styled.container}>
       <img className={styled.errIcon} src='/assets/mainP/error_icon.svg' />
@@ -21,4 +21,4 @@ const NonMembers = () => {
   );
 };
 
-export default NonMembers;
+export default SignupGuide;
