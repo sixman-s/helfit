@@ -56,6 +56,7 @@ const DetailP = () => {
       pageNumber = null;
   }
 
+  // 상세페이지 글이랑 댓글 불러오기
   useEffect(() => {
     axios
       .get(`${URL}/api/v1/board/${pageNumber}/${boardID}`)
@@ -63,8 +64,8 @@ const DetailP = () => {
       .then(() => {
         axios
           .get(`${URL}/api/v1/comment/${boardID}`)
-          .then((res) => console.log(res.data[0].commentId))
-          //.then((res) => setComments(res.data))
+          //.then((res) => console.log(res.data))
+          .then((res) => setComments(res.data))
           .catch((err) => console.log(err));
       })
       .catch((err) => console.log(err));
