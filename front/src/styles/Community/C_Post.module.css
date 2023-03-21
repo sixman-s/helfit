@@ -41,6 +41,8 @@
 .author {
   grid-area: author;
   width: 40px;
+  font-size: 12px;
+  white-space: nowrap;
 }
 .ListHeader_Date,
 .date {

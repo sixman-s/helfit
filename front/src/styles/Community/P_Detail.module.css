@@ -4,9 +4,8 @@
 }
 .box {
   margin-top: 30px;
-  margin-bottom: 30px;
   background-color: white;
-  height: 800px;
+  height: 100%;
   border-radius: 15px;
   box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.12);
 }
@@ -35,6 +34,14 @@
   width: 400px;
   color: var(--text_4);
   font-size: 12px;
+}
+.postUser {
+  display: flex;
+}
+.postUserImg {
+  width: 30px;
+  margin-right: 10px;
+  margin-top: -8px;
 }
 .ButtonD {
   margin-left: 20px;
@@ -165,4 +172,27 @@
 .tag {
   overflow: hidden;
   white-space: nowrap;
+}
+.commentImage {
+  width: 30px;
+  margin-right: 10px;
+  margin-top: 10px;
+  border-radius: 50px;
+}
+.userCommentInfo {
+  display: flex;
+}
+.commentBody {
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--line_2);
+  margin-left: 40px;
+  margin-top: -10px;
+  display: flex;
+}
+.userNickname {
+  font-size: 12px;
+}
+.deleteSVG {
+  width: 15px;
+  margin-left: 40px;
 }

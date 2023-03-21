@@ -13,6 +13,7 @@ interface Post {
   tags: { tagId: number; tagName: string }[];
   text: string;
   title: string;
+  userNickname: string;
 }
 type Props = {
   posts: Post[];
@@ -25,6 +26,7 @@ const HealthPost: React.FC = () => {
   useEffect(() => {
     axios
       .get(`${URL}/api/v1/board/1?page=1`)
+      //.then((res) => console.log(res))
       .then((res) => setFetchedPosts(res.data))
       .catch((err) => console.log(err));
   }, []);
@@ -33,7 +35,7 @@ const HealthPost: React.FC = () => {
     post,
     order
   }) => {
-    const { title, tags, createdAt } = post;
+    const { title, tags, createdAt, userNickname } = post;
 
     const createdAtString = new Date(createdAt)
       .toLocaleDateString('en-KR', {
@@ -49,7 +51,7 @@ const HealthPost: React.FC = () => {
         <li className={style.ListItem}>
           <div className={style.No}>{order}.</div>
           <div className={style.title}>{title}</div>
-          <div className={style.nickName}>닉네임</div>
+          <div className={style.author}>{userNickname}</div>
           <div className={style.date}>{createdAtString}</div>
           <div className={style.tag}>
             {tags.map((tag) => (
@@ -96,7 +98,7 @@ const HealthPost: React.FC = () => {
             lastItem={null}
             pointing
             secondary
-            totalPages={7}
+            totalPages={5}
           />
         </div>
       </div>
