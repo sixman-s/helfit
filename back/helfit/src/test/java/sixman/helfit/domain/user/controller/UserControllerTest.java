@@ -59,6 +59,5 @@ class UserControllerTest extends ControllerTest {
     void signupTest() {
         given(userService.createUser(Mockito.any(User.class)))
             .willReturn(userResource());
-
     }
 }

@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.*;
 
 public class XssRequestWrapper extends HttpServletRequestWrapper {
-
     private byte[] rawData;
     private final HttpServletRequest request;
     private final ResettableServletInputStream servletStream;

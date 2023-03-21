@@ -19,7 +19,7 @@ import java.util.HashMap;
 // @Component
 @RequiredArgsConstructor
 @Slf4j
-public class PhysicalScheduler {
+public class InactiveUserScheduler {
     private final Job job;
     private final JobLauncher jobLauncher;
 

@@ -24,6 +24,8 @@ spring:
   batch:
     job:
       enabled: false
+    jdbc:
+      initialize-schema: embedded
   servlet:
     multipart:
       max-file-size: 10MB

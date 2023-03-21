@@ -9,19 +9,20 @@ import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
-import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.batch.item.database.builder.JpaItemWriterBuilder;
-import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
-import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import sixman.helfit.domain.physical.entity.Physical;
+import sixman.helfit.batch.reader.QueueItemReader;
+import sixman.helfit.domain.user.entity.User;
+import sixman.helfit.domain.user.repository.UserRepository;
 
 import javax.persistence.EntityManagerFactory;
-import java.util.HashMap;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static sixman.helfit.domain.user.entity.User.*;
+
 
 // @Configuration
 @RequiredArgsConstructor
@@ -30,62 +31,57 @@ public class BatchConfig {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
     private final EntityManagerFactory entityManagerFactory;
+    private final UserRepository userRepository;
 
     @Bean
     public Job physicalJob() throws Exception {
-        return jobBuilderFactory.get("physicalJob")
-                   .start(physicalStep()).build();
+        return jobBuilderFactory.get("inactiveUserJob")
+                   .preventRestart()
+                   .start(inactiveUserJob())
+                   .build();
     }
 
     @Bean
     @JobScope
-    public Step physicalStep() throws Exception {
+    public Step inactiveUserJob() throws Exception {
         return stepBuilderFactory.get("physicalStep")
-                   .<Physical, Physical>chunk(10) // <In, Out>chunk()
-                   .reader(reader(null))
-                   .processor(processor(null))
-                   .writer(writer(null))
+                   .<User, User>chunk(10) // <In, Out>chunk()
+                   .reader(inactiveUserReader(null))
+                   .processor(inactiveUserProcessor())
+                   .writer(inactiveUserWriter())
                    .build();
     }
 
     @Bean
     @StepScope
-    public ItemReader<? extends Physical> reader(@Value("#{jobParameters[requestDate]}") String requestDate) throws Exception {
-        log.info("==> reader value : " + requestDate);
+    public QueueItemReader<? extends User> inactiveUserReader(
+        @Value("#{jobParameters[requestDate]}") final String requestDate
+    ) throws Exception {
+        log.info("reader = {}", requestDate);
 
-        Map<String, Object> parameterValues = new HashMap<>();
+        List<User> byModifiedAtAndUserStatusEquals = userRepository.findByModifiedAtAndUserStatusEquals(
+            LocalDateTime.now().minusDays(1),
+            UserStatus.USER_ACTIVE
+        );
 
-        return new JpaPagingItemReaderBuilder<Physical>()
-                   .pageSize(10)
-                   .parameterValues(parameterValues)
-                   .queryString("SELECT p FROM Physical p WHERE p.userId = :userId")
-                   .entityManagerFactory(entityManagerFactory)
-                   .name("JpaPagingItemReader")
-                   .build();
+        return new QueueItemReader<>(byModifiedAtAndUserStatusEquals);
     }
 
     @Bean
     @StepScope
-    public ItemProcessor<? super Physical, ? extends Physical> processor(@Value("#{jobParameters[requestDate]}") String requestDate) {
-        return new ItemProcessor<Physical, Physical>() {
+    public ItemProcessor<? super User, ? extends User> inactiveUserProcessor() {
+        return new ItemProcessor<User, User>() {
             @Override
-            public Physical process(Physical physical) throws Exception {
-
-                log.info("==> processor value : " + requestDate);
-                log.info("==> processor Physical : " + physical);
-
-                return physical;
+            public User process(User user) throws Exception {
+                user.setUserStatus(UserStatus.USER_INACTIVE);
+                return user;
             }
         };
     }
 
     @Bean
     @StepScope
-    public ItemWriter<? super Physical> writer(@Value("#{jobParameters[requestDate]}") String requestDate) {
-        log.info("==> writer value : " + requestDate);
-
-        return new JpaItemWriterBuilder<Physical>()
-                   .entityManagerFactory(entityManagerFactory)
-                   .build();
+    public ItemWriter<? super User> inactiveUserWriter() {
+        return userRepository::saveAll;
     }
 }

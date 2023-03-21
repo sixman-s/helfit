@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import sixman.helfit.domain.physical.dto.PhysicalDto;
 import sixman.helfit.domain.physical.entity.Physical;
 import sixman.helfit.domain.physical.mapper.PhysicalMapper;
-import sixman.helfit.domain.physical.repository.PhysicalRepositorySupport;
 import sixman.helfit.domain.physical.service.PhysicalService;
 import sixman.helfit.response.ApiResponse;
 import sixman.helfit.security.entity.UserPrincipal;

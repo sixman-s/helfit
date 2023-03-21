@@ -1,21 +1,15 @@
 package sixman.helfit.domain.calculator.service;
 
-import com.amazonaws.services.kms.model.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import sixman.helfit.domain.calculator.entity.Calculator;
 import sixman.helfit.domain.calculator.helper.CalculatorHelper;
 import sixman.helfit.domain.calculator.repository.CalculatorRepository;
-import sixman.helfit.domain.calendar.entity.Calendar;
 import sixman.helfit.domain.physical.entity.Physical;
-import sixman.helfit.domain.user.entity.User;
-import sixman.helfit.domain.user.service.UserService;
 import sixman.helfit.exception.BusinessLogicException;
 import sixman.helfit.exception.ExceptionCode;
 import sixman.helfit.utils.CustomBeanUtil;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,7 +18,7 @@ public class CalculatorService {
     private final CalculatorRepository calculatorRepository;
     private final CustomBeanUtil<Calculator> customBeanUtil;
 
-    public Calculator createResult(Calculator calculator, User user, Physical physical) {
+    public Calculator createResult(Calculator calculator, sixman.helfit.domain.user.entity.User user, Physical physical) {
         if (physical.getWeight() == null || physical.getHeight() == null || physical.getGender() == null) {
             throw new BusinessLogicException(ExceptionCode.CALCULATOR_NO_USER_INFO);
         }
@@ -44,7 +38,7 @@ public class CalculatorService {
         }
     }
 
-    public Calculator updateResult(Calculator calculator, User user, Physical physical) {
+    public Calculator updateResult(Calculator calculator, sixman.helfit.domain.user.entity.User user, Physical physical) {
 
         calculator.setResult(CalculatorHelper.calculateResultWithGender(calculator.getActivityLevel(),calculator.getGoal(), physical));
         calculator.setUser(user);
