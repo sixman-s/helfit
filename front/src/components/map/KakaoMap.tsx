@@ -9,15 +9,19 @@ declare global {
 }
 
 const KakaoMap: FC<{ address: string }> = ({ address }) => {
+  console.log(address);
   useEffect(() => {
     const onLoadKakaoMap = () => {
       window.kakao.maps.load(() => {
         const geocoder = new window.kakao.maps.services.Geocoder(); // 주소-좌표 반환 객체를 생성
         // 주소로 좌표를 검색
         geocoder.addressSearch(address, (result: any, status: any) => {
-          if (status === window.kakao.maps.services.Status.OK) {
+          if (address) {
             // 정상적으로 검색이 완료됐으면
-            var coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
+            var coords = new window.kakao.maps.LatLng(
+              JSON.parse(address).coordinates.lat,
+              JSON.parse(address).coordinates.lng
+            );
             // 지도를 생성
             const container = document.getElementById('map');
             const options = {
