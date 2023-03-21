@@ -1,3 +1,4 @@
+
 //package sixman.helfit.domain.board.entity;
 //
 //import lombok.Getter;
@@ -40,3 +41,4 @@
 //    }
 //
 //}
+

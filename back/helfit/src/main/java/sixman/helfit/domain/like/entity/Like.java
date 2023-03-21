@@ -8,12 +8,13 @@ import sixman.helfit.domain.user.entity.User;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "LIKES")
 @Getter
+@Table(name = "LIKES")
 public class Like extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long likeId;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BOARD_ID")
