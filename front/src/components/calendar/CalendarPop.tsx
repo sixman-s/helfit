@@ -129,7 +129,7 @@ const ReaderPop = ({ date, open, setOpen }) => {
           {'»'}
         </button>
       </header>
-      <form className={styled.content}>
+      <div className={styled.content}>
         <textarea
           className={styled.title}
           placeholder={'제목 없음'}
@@ -188,7 +188,7 @@ const ReaderPop = ({ date, open, setOpen }) => {
             Submit
           </button>
         </div>
-      </form>
+      </div>
     </section>
   );
 };
