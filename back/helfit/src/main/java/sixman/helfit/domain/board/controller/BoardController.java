@@ -84,4 +84,15 @@ public class BoardController {
         boardService.deleteBoard(categoryId,boardId,userPrincipal);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
+    @PostMapping("/view/{board-id}")
+    public ResponseEntity addViewBoard(@Positive @PathVariable ("board-id") Long boardId){
+        boardService.addView(boardId);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @GetMapping("/view/{board-id}")
+    public ResponseEntity getViewBoard(@Positive @PathVariable ("board-id") Long boardId) {
+        Board board = boardService.findBoardById(boardId);
+        return new ResponseEntity(mapper.boardToBoardView(board),HttpStatus.OK);
+    }
 }

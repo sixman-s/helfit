@@ -65,4 +65,10 @@ public class BoardDto {
         private String boardImageUrl;
         private List<BoardTagDto> boardTags;
     }
+
+    @Getter
+    @AllArgsConstructor
+    public static class View {
+        private long view;
+    }
 }

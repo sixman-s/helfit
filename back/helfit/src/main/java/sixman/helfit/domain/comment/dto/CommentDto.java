@@ -23,6 +23,7 @@ public class CommentDto {
     @Getter
     @AllArgsConstructor
     public static class responseDto {
+        private long commentId;
         private String userNickname;
         private String userProfileUrl;
         private String commentBody;

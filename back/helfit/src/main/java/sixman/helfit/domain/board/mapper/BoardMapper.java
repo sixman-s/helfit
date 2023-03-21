@@ -114,5 +114,5 @@ public interface BoardMapper {
 
         return board;
     };
-
+    BoardDto.View boardToBoardView(Board board);
 }
