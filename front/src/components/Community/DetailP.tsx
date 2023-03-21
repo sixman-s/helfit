@@ -17,16 +17,36 @@ interface BoardData {
   }[];
   createdAt: string;
   modifiedAt: string;
+  userId: number;
+  userNickname: string;
+  userProfileUrl: any;
+}
+interface UserInfo {
+  userId: number;
 }
 
 const DetailP = () => {
   const URL = process.env.NEXT_PUBLIC_URL;
+  const userInfo: UserInfo = JSON.parse(localStorage.UserInfo);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [writeCommnet, setWriteCommnet] = useState('');
+  const [comments, setComments] = useState([]);
   const [fetchedData, setFetchedData] = useState<BoardData | null>(null);
+
+  // 댓글 작성
   const handleSubmit = (e: React.KeyboardEvent) => {
-    // 댓글 작성 후 서버에 전송하는 로직 작성
-    console.log('Comment submitted:', writeCommnet);
+    axios
+      .post(`${URL}/api/v1/comment/${userInfo.userId}/${fetchedData.boardId}`, {
+        commentBody: writeCommnet
+      })
+      .then(() => {
+        axios
+          .get(`${URL}/api/v1/comment/${boardID}`)
+          .then((res) => setComments(res.data))
+          .catch((err) => console.log(err));
+      })
+      .then((res) => console.log(res));
+
     setWriteCommnet('');
   };
 
@@ -42,7 +62,6 @@ const DetailP = () => {
   const handleClick = (e: React.MouseEvent<HTMLImageElement>) => {
     const keyboardEvent = e as unknown as React.KeyboardEvent;
     handleSubmit(keyboardEvent);
-    console.log('Click!');
   };
   const createdAtString = new Date(fetchedData?.createdAt)
     .toLocaleDateString('en-KR', {
@@ -76,10 +95,16 @@ const DetailP = () => {
   }
 
   useEffect(() => {
-    const userID: number = JSON.parse(localStorage.UserInfo).userId;
     axios
-      .get(`${URL}/api/v1/board/${pageNumber}/${userID}/${boardID}`)
+      .get(`${URL}/api/v1/board/${pageNumber}/${boardID}`)
       .then((res) => setFetchedData(res.data))
+      .then(() => {
+        axios
+          .get(`${URL}/api/v1/comment/${boardID}`)
+          //.then((res) => console.log(res.data))
+          .then((res) => setComments(res.data))
+          .catch((err) => console.log(err));
+      })
       .catch((err) => console.log(err));
   }, [boardID]);
 
@@ -93,7 +118,21 @@ const DetailP = () => {
         <div className={style.Title}>{fetchedData?.title}</div>
         <div className={style.Nav}>
           <div className={style.PostNav}>
-            <div>작성자</div>
+            <div className={style.postUser}>
+              {fetchedData?.userProfileUrl ? (
+                <img
+                  src={fetchedData?.userProfileUrl}
+                  alt='user profile'
+                  className={style.postUserImg}
+                />
+              ) : (
+                <img
+                  src={'../../assets/Community/UserProfile.svg'}
+                  className={style.postUserImg}
+                />
+              )}
+              <div>{fetchedData?.userNickname}</div>
+            </div>
             <div>{createdAtString}</div>
             <div>조회수</div>
             <div className={style.PostLike}>
@@ -105,20 +144,23 @@ const DetailP = () => {
             </div>
           </div>
           <div className={style.Buttons}>
-            <Btn
-              text='게시글 삭제'
-              type='submit'
-              className={style.ButtonD}
-              onClick={handleDeletePostClick}
-            />
+            {fetchedData?.userId === userInfo.userId && (
+              <Btn
+                text='게시글 삭제'
+                type='submit'
+                className={style.ButtonD}
+                onClick={handleDeletePostClick}
+              />
+            )}
             {isModalOpen && (
               <Modal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
               />
             )}
-
-            <Btn text='게시글 수정' type='submit' className={style.ButtonU} />
+            {fetchedData?.userId === userInfo.userId && (
+              <Btn text='게시글 수정' type='submit' className={style.ButtonU} />
+            )}
           </div>
         </div>
         <div className={style.Content}>
@@ -158,9 +200,27 @@ const DetailP = () => {
             style={{ cursor: 'pointer' }}
           />
         </div>
-        <div className={style.Commnet}>
-          <div> 댓글 </div>
-          <div> 댓글 박스</div>
+        <div className={style.Comment}>
+          {comments.map((comment) => (
+            <div key={comment.id} className={style.userComment}>
+              <div className={style.userCommentInfo}>
+                {comment.userProfileUrl ? (
+                  <img
+                    src={comment.userProfileUrl}
+                    alt='user profile'
+                    className={style.commentImage}
+                  />
+                ) : (
+                  <img
+                    src={'../../assets/Community/UserProfile.svg'}
+                    className={style.commentImage}
+                  />
+                )}
+                <div className={style.userNickname}>{comment.userNickname}</div>
+              </div>
+              <div className={style.commentBody}>{comment.commentBody}</div>
+            </div>
+          ))}
         </div>
       </div>
     </>
