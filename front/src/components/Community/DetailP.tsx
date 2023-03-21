@@ -257,11 +257,14 @@ const DetailP = () => {
               </div>
               <div className={style.commentBody}>
                 <div>{comment.commentBody}</div>
-                <img
-                  src={'../../assets/Community/Delete.svg'}
-                  className={style.deleteSVG}
-                  onClick={() => handleDeleteComment(comment.commentId)}
-                />
+                {comment.userId ===
+                  JSON.parse(localStorage.UserInfo).userId && (
+                  <img
+                    src={'../../assets/Community/Delete.svg'}
+                    className={style.deleteSVG}
+                    onClick={() => handleDeleteComment(comment.commentId)}
+                  />
+                )}
               </div>
             </div>
           ))}
