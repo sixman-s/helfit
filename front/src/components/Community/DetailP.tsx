@@ -35,7 +35,10 @@ const DetailP = () => {
 
   const router = useRouter();
   const { id } = router.query;
-  const boardID = id ? parseInt(id[id.length - 1]) : null;
+  let boardID: number | null = null;
+  if (typeof id === 'string') {
+    boardID = parseInt(id.split('/').pop() as string);
+  }
   const currentPage = router.asPath.split('/')[2];
   let categoryname: string;
   let pageNumber: Number;
@@ -121,7 +124,9 @@ const DetailP = () => {
         alert(err);
       });
   };
-
+  const handlePatch = () => {
+    router.push(`/community/patchpost/${currentPage}/${boardID}`);
+  };
   const handleDeletePostClick = () => {
     setIsModalOpen(true);
   };
@@ -196,7 +201,12 @@ const DetailP = () => {
               />
             )}
             {fetchedData?.userId === userInfo.userId && (
-              <Btn text='게시글 수정' type='submit' className={style.ButtonU} />
+              <Btn
+                text='게시글 수정'
+                type='submit'
+                className={style.ButtonU}
+                onClick={handlePatch}
+              />
             )}
           </div>
         </div>
@@ -257,11 +267,14 @@ const DetailP = () => {
               </div>
               <div className={style.commentBody}>
                 <div>{comment.commentBody}</div>
-                <img
-                  src={'../../assets/Community/Delete.svg'}
-                  className={style.deleteSVG}
-                  onClick={() => handleDeleteComment(comment.commentId)}
-                />
+                {comment.userId ===
+                  JSON.parse(localStorage.UserInfo).userId && (
+                  <img
+                    src={'../../assets/Community/Delete.svg'}
+                    className={style.deleteSVG}
+                    onClick={() => handleDeleteComment(comment.commentId)}
+                  />
+                )}
               </div>
             </div>
           ))}

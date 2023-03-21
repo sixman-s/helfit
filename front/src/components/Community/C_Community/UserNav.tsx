@@ -4,7 +4,7 @@ import style from '../../../styles/Community/C_Community.module.css';
 const UserNav = () => {
   const [userName, setUserName] = useState('User');
   const [userProfile, setUserProfile] = useState(
-    '../../assets/Community/UserProfile.svg'
+    '../../../assets/Community/UserProfile.svg'
   );
   const handleUserProfile = (userProfileData: string) => {
     if (userProfileData) {
@@ -26,7 +26,7 @@ const UserNav = () => {
           src={userProfile}
           className={style.UserPhoto}
           onError={() =>
-            setUserProfile('../../assets/Community/UserProfile.svg')
+            setUserProfile('../../../assets/Community/UserProfile.svg')
           }
         />
         <div className={style.UserName}>{userName}</div>

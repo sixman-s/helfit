@@ -91,3 +91,26 @@
   margin-left: 30px;
   font-size: 12px;
 }
+
+/* patch 페이지 */
+
+.PatchCategoty {
+  display: flex;
+  background-color: white;
+  width: 300px;
+  height: 30px;
+  border-radius: 10px;
+  align-items: center;
+  padding-left: 20px;
+  color: var(--text_4);
+}
+.Patchpicture {
+  display: flex;
+  background-color: white;
+  width: 200px;
+  height: 30px;
+  border-radius: 10px;
+  align-items: center;
+  padding-left: 20px;
+  color: red;
+}

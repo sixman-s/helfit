@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import style from '../../../styles/Community/C_Post.module.css';
 import Btn from '../../loginc/Buttons';
-import { Pagination } from 'semantic-ui-react';
+import { Pagination, PaginationProps } from 'semantic-ui-react';
 import axios from 'axios';
 
 interface Post {
@@ -22,14 +22,22 @@ const URL = process.env.NEXT_PUBLIC_URL;
 
 const HealthPost: React.FC = () => {
   const [fetchedPosts, setFetchedPosts] = useState<Post[]>([]);
+  const [activePage, setActivePage] = useState(1);
+
+  const handlePageChange = (
+    event: React.MouseEvent<HTMLAnchorElement>,
+    data: PaginationProps
+  ) => {
+    setActivePage(data.activePage as number);
+  };
 
   useEffect(() => {
     axios
-      .get(`${URL}/api/v1/board/1?page=1`)
+      .get(`${URL}/api/v1/board/1?page=${activePage}`)
       //.then((res) => console.log(res))
       .then((res) => setFetchedPosts(res.data))
       .catch((err) => console.log(err));
-  }, []);
+  }, [activePage]);
 
   const PostCard: React.FC<{ post: Post; order: number }> = ({
     post,
@@ -93,7 +101,8 @@ const HealthPost: React.FC = () => {
         </div>
         <div className={style.pagenation}>
           <Pagination
-            defaultActivePage={1}
+            activePage={activePage}
+            onPageChange={handlePageChange}
             firstItem={null}
             lastItem={null}
             pointing
