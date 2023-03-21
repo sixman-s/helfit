@@ -1,4 +1,3 @@
-
 //package sixman.helfit.domain.board.entity;
 //
 //import lombok.Getter;
@@ -9,10 +8,11 @@
 //
 //import javax.persistence.*;
 //
-//@NoArgsConstructor
+//@Entity
 //@Getter
 //@Setter
-//@Entity(name = "BOARD_LIKES")
+//@NoArgsConstructor
+//@Table(name = "BOARD_LIKES")
 //public class BoardLike {
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,19 +26,6 @@
 //    @JoinColumn(name = "LIKE_ID")
 //    private Like like;
 //
-//    public void addBoard(Board board){
-//        this.board = board;
-//        if(!this.board.getBoardLikes().contains(this)){
-//            this.board.getBoardLikes().add(this);
-//        }
-//    }
 //
-//    public void addLike(Like like){
-//        this.like = like;
-//        if(!this.like.getBoardLikes().contains(this)) {
-//            this.like.getBoardLikes().add(this);
-//        }
-//    }
 //
 //}
-

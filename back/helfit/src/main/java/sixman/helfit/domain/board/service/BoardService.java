@@ -81,8 +81,7 @@ public class BoardService {
         List<BoardTag> updatedBoardTags = board.getBoardTags();
         if (updatedBoardTags != null) {
             for(BoardTag boardTag : findBoard.getBoardTags()){
-                // ! 주석 처리
-                // boardTag.getTag().removeBoardTags(boardTag);
+                boardTag.getTag().removeBoardTags(boardTag);
                 boardTagRepository.delete(boardTag);
             }
                 findBoard.getBoardTags().clear();
