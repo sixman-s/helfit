@@ -12,6 +12,9 @@ import sixman.helfit.domain.board.repository.BoardRepository;
 import sixman.helfit.domain.board.repository.BoardTagRepository;
 import sixman.helfit.domain.category.service.CategoryService;
 
+import sixman.helfit.domain.comment.entity.Comment;
+import sixman.helfit.domain.comment.repository.CommentRepository;
+import sixman.helfit.domain.comment.service.CommentService;
 import sixman.helfit.domain.tag.entity.Tag;
 import sixman.helfit.domain.tag.service.TagService;
 
@@ -35,14 +38,16 @@ public class BoardService {
 
     private final UserService userService;
     private final BoardTagRepository boardTagRepository;
+    private final CommentRepository commentRepository;
 
     public BoardService(BoardRepository boardRepository, TagService tagService, CategoryService categoryService,
-                        UserService userService, BoardTagRepository boardTagRepository) {
+                        UserService userService, BoardTagRepository boardTagRepository, CommentRepository commentRepository) {
         this.boardRepository = boardRepository;
         this.tagService = tagService;
         this.categoryService = categoryService;
         this.userService = userService;
         this.boardTagRepository = boardTagRepository;
+        this.commentRepository = commentRepository;
     }
 
     public Board createBoard(Board board, UserPrincipal userPrincipal){
@@ -63,10 +68,9 @@ public class BoardService {
                 Sort.by("boardId").descending()));
     }
 
-    public Board updateBoard(Board board,Long categoryId,Long userId, Long boardId, UserPrincipal userPrincipal){
+    public Board updateBoard(Board board,Long categoryId, Long boardId, UserPrincipal userPrincipal){
         Board findBoard = findBoardByAllId(categoryId,boardId);
         verifyBoard(findBoard,userPrincipal);
-
 
         Optional.ofNullable(board.getTitle())
                 .ifPresent(findBoard::setTitle);
@@ -77,17 +81,26 @@ public class BoardService {
         List<BoardTag> updatedBoardTags = board.getBoardTags();
         if (updatedBoardTags != null) {
             for(BoardTag boardTag : findBoard.getBoardTags()){
+                boardTag.getTag().removeBoardTags(boardTag);
                 boardTagRepository.delete(boardTag);
             }
-            findBoard.getBoardTags().clear();
+                findBoard.getBoardTags().clear();
             for (BoardTag updatedBoardTag : updatedBoardTags) {
-                updatedBoardTag.setBoard(findBoard);
+                updatedBoardTag.addBoard(findBoard);
                 Tag tag = tagService.findTag(updatedBoardTag.getTag());
                 updatedBoardTag.addTag(tag);
+                boardTagRepository.save(updatedBoardTag);
             }
-            board.setBoardTags(updatedBoardTags);
         }
         return boardRepository.save(findBoard);
+    }
+
+    public void deleteBoard(Long categoryId, Long boardId, UserPrincipal userPrincipal) {
+        Board findBoard = findBoardByAllId(categoryId,boardId);
+        verifyBoard(findBoard,userPrincipal);
+        List<Comment> comments = commentRepository.findComments(boardId);
+        commentRepository.deleteAll(comments);
+        boardRepository.delete(findBoard);
     }
 
     private void verifyBoard(Board board,UserPrincipal userPrincipal) {

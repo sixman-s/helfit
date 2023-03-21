@@ -64,16 +64,24 @@ public class BoardController {
         return new ResponseEntity(mapper.boardsToResponses(listBoards),HttpStatus.OK);
     }
     @PreAuthorize("isAuthenticated()")
-    @PatchMapping("{category-id}/{user-id}/{board-id}")
+    @PatchMapping("{category-id}/{board-id}")
     public ResponseEntity patchBoard(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                      @Positive @PathVariable ("category-id") Long categoryId,
-                                     @Positive @PathVariable ("user-id") Long userId,
                                      @Positive @PathVariable ("board-id") Long boardId,
                                      @Valid @RequestBody BoardDto.Patch requestBody) {
-        Board board = boardService.updateBoard(mapper.boardPatchToBoard(requestBody,categoryId,userId)
-                ,categoryId,userId,boardId,userPrincipal);
+        Board board = boardService.updateBoard(mapper.boardPatchToBoard(requestBody,categoryId)
+                ,categoryId,boardId,userPrincipal);
 
 
         return new ResponseEntity(mapper.boardToResponse(board),HttpStatus.OK);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @DeleteMapping("{category-id}/{board-id}")
+    public ResponseEntity deleteBoard(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                      @Positive @PathVariable ("category-id") Long categoryId,
+                                      @Positive @PathVariable ("board-id") Long boardId) {
+        boardService.deleteBoard(categoryId,boardId,userPrincipal);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }
