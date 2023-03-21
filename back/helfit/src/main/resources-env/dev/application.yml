@@ -25,13 +25,15 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
+  batch:
+    job:
+      enabled: false
+    jdbc:
+      initialize-schema: always
   datasource:
-#    url: ${DATASOURCE_URL}
-#    username: ${DATASOURCE_USERNAME}
-#    password: ${DATASOURCE_PASSWORD}
-    url: jdbc:mysql://localhost:3306/helfit?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC"
-    username: root
-    password: 0000
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database: mysql

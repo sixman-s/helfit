@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "LIKES")
 @Getter
+@Table(name = "LIKES")
 public class Like extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,6 +20,4 @@ public class Like extends Auditable {
 
     @OneToMany(mappedBy = "like")
     private List<BoardLike> boardLikes = new ArrayList<>();
-
-
 }

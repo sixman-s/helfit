@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import sixman.helfit.domain.file.service.FileService;
@@ -19,6 +21,8 @@ import sixman.helfit.restdocs.annotations.WithMockUserCustom;
 import sixman.helfit.security.mail.service.EmailConfirmTokenService;
 import sixman.helfit.security.properties.AppProperties;
 import sixman.helfit.security.token.AuthTokenProvider;
+
+import java.util.Map;
 
 import static org.mockito.BDDMockito.given;
 
@@ -52,7 +56,6 @@ class UserControllerTest extends ControllerTest {
 
     @BeforeEach
     void setup() {
-
     }
 
     @Test
