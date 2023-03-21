@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import sixman.helfit.security.filter.XssProtectionFilter;
@@ -25,9 +24,9 @@ public class XssProtectionConfig {
         FilterRegistrationBean<XssProtectionFilter> registrationBean = new FilterRegistrationBean<>();
 
         registrationBean.setFilter(new XssProtectionFilter());
-        registrationBean.addUrlPatterns("/h2/*");
+        registrationBean.addUrlPatterns("/db/h2/*");
         registrationBean.setInitParameters(new HashMap<>() {{
-            put("excludePatterns", "/h2/*");
+            put("excludePatterns", "/db/h2/*");
         }});
         registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
 
