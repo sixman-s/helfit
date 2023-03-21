@@ -7,7 +7,9 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import sixman.helfit.domain.file.service.FileService;
+import sixman.helfit.domain.user.dto.UserDto;
 import sixman.helfit.domain.user.entity.User;
 import sixman.helfit.domain.user.mapper.UserMapper;
 import sixman.helfit.domain.user.repository.UserRefreshTokenRepository;
@@ -20,9 +22,9 @@ import sixman.helfit.security.token.AuthTokenProvider;
 
 import static org.mockito.BDDMockito.given;
 
-@WebMvcTest(UserControllerTest.class)
+@WebMvcTest(UserController.class)
 class UserControllerTest extends ControllerTest {
-    String DEFAULT_URI = "/api/v1/users";
+    final String DEFAULT_URL = "/api/v1/users";
 
     @MockBean
     AppProperties appProperties;
@@ -55,9 +57,22 @@ class UserControllerTest extends ControllerTest {
 
     @Test
     @DisplayName("[테스트] 회원 가입 : LOCAL")
-    @WithMockUserCustom
     void signupTest() {
-        given(userService.createUser(Mockito.any(User.class)))
-            .willReturn(userResource());
+        // given(userService.createUser(Mockito.any(User.class)))
+        //     .willReturn((User) userResource().get("user"));
+    }
+
+    @Test
+    @DisplayName("[테스트] 회원 정보 조회")
+    @WithMockUserCustom
+    void getUserTest() throws Exception {
+        given(userService.findUserByUserId(Mockito.anyLong()))
+            .willReturn((User) userResource().get("user"));
+
+        given(userMapper.userToUserDtoResponse(Mockito.any(User.class)))
+            .willReturn((UserDto.Response) userResource().get("userDtoResponse"));
+
+        getResource(DEFAULT_URL)
+            .andExpect(MockMvcResultMatchers.status().isOk());
     }
 }

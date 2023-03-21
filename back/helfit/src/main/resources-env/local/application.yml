@@ -53,6 +53,7 @@ spring:
     init:
       mode: always
       data-locations: classpath*:db/h2/data.sql
+      schema-locations:
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
