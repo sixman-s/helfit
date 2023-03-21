@@ -2,12 +2,15 @@ package sixman.helfit.domain.comment.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import sixman.helfit.domain.comment.dto.CommentDto;
 import sixman.helfit.domain.comment.entity.Comment;
 import sixman.helfit.domain.comment.mapper.CommentMapper;
 import sixman.helfit.domain.comment.service.CommentService;
 import sixman.helfit.response.ApiResponse;
+import sixman.helfit.security.entity.UserPrincipal;
 import sixman.helfit.utils.UriUtil;
 
 import javax.validation.Valid;

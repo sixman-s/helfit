@@ -30,7 +30,6 @@ public class BoardTag {
 
     public void addBoard(Board board) {
         this.board = board;
-        this.board.getBoardTags().add(this);
         if(!this.board.getBoardTags().contains(this)){
             this.board.getBoardTags().add(this);
         }
@@ -38,7 +37,6 @@ public class BoardTag {
 
     public void addTag(Tag tag) {
         this.tag = tag;
-        this.tag.getBoardTags().add(this);
         if(!this.tag.getBoardTags().contains(this)) {
             this.tag.getBoardTags().add(this);
         }

@@ -41,8 +41,8 @@ public class Board extends Auditable {
     @JoinColumn(name ="user_id")
     private User user;
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.PERSIST)
-    private List<BoardLike> boardLikes = new ArrayList<>();
+//    @OneToMany(mappedBy = "board", cascade = CascadeType.PERSIST)
+//    private List<BoardLike> boardLikes = new ArrayList<>();
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.PERSIST)
     private List<BoardTag> boardTags = new ArrayList<>();

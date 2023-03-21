@@ -20,6 +20,7 @@ public interface CommentMapper {
         LocalDateTime createdAt = null;
         LocalDateTime modifiedAt = null;
         Long commentId =null;
+        Long userId = null;
 
         commentBody = comment.getCommentBody();
         createdAt = comment.getCreatedAt();
@@ -27,8 +28,9 @@ public interface CommentMapper {
         userNickname = comment.getUser().getNickname();
         userProfileUrl = comment.getUser().getProfileImageUrl();
         commentId = comment.getCommentId();
+        userId = comment.getUser().getUserId();
 
-        return new CommentDto.responseDto(commentId,userNickname,userProfileUrl, commentBody, createdAt, modifiedAt );
+        return new CommentDto.responseDto(commentId,userId,userNickname,userProfileUrl, commentBody, createdAt, modifiedAt );
     };
     List<CommentDto.responseDto> commentsToResponseDtos(List<Comment> comments);
 }
