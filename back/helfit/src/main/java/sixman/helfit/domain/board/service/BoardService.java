@@ -11,6 +11,7 @@ import sixman.helfit.domain.board.entity.BoardTag;
 import sixman.helfit.domain.board.repository.BoardRepository;
 import sixman.helfit.domain.category.service.CategoryService;
 
+import sixman.helfit.domain.tag.entity.Tag;
 import sixman.helfit.domain.tag.service.TagService;
 
 import sixman.helfit.domain.user.entity.User;
@@ -19,6 +20,9 @@ import sixman.helfit.exception.BusinessLogicException;
 import sixman.helfit.exception.ExceptionCode;
 import sixman.helfit.security.entity.UserPrincipal;
 
+import javax.validation.constraints.Null;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -55,6 +59,28 @@ public class BoardService {
         return boardRepository.findBoardByCategoryId(categoryId,PageRequest.of(page,10,
                 Sort.by("boardId").descending()));
     }
+
+//    public Board updateBoard(Board board,Long categoryId,Long userId, Long boardId, UserPrincipal userPrincipal){
+//        Board findBoard = findBoardByAllId(categoryId,userId,boardId);
+//        verifyBoard(findBoard,userPrincipal);
+//        findBoard.removeBoardTag();
+//
+//        Optional.ofNullable(board.getTitle())
+//                .ifPresent(findBoard::setTitle);
+//        Optional.ofNullable(board.getText())
+//                .ifPresent(findBoard::setText);
+//        Optional.ofNullable(board.getBoardImageUrl())
+//                .ifPresent(findBoard::setBoardImageUrl);
+//        Optional.ofNullable(board.getBoardTags())
+//                .ifPresent(boardTags -> {
+//                    for(BoardTag boardtag : boardTags){
+//                        boardtag.addTag(tagService.findTag(boardtag.getTag()));
+//                        findBoard.addBoardTag(boardtag);
+//                    }
+//                });
+//
+//        return boardRepository.save(findBoard);
+//    }
 
     private void verifyBoard(Board board,UserPrincipal userPrincipal) {
         User user = userService.findUserByUserId(board.getUser().getUserId());

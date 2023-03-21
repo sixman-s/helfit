@@ -7,7 +7,6 @@ import lombok.Setter;
 
 import sixman.helfit.audit.Auditable;
 import sixman.helfit.domain.category.entity.Category;
-import sixman.helfit.domain.comment.entity.Comment;
 import sixman.helfit.domain.user.entity.User;
 
 import javax.persistence.*;
@@ -42,7 +41,7 @@ public class Board extends Auditable {
     @JoinColumn(name ="user_id")
     private User user;
 
-    @OneToMany(mappedBy = "board",cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "board" ,cascade = CascadeType.PERSIST)
     private List<BoardTag> boardTags = new ArrayList<>();
 
 
