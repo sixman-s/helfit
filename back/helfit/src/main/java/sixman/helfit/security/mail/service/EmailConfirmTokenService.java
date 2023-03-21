@@ -23,7 +23,7 @@ import java.util.Optional;
 @EnableAsync
 public class EmailConfirmTokenService {
     @Value("${domain.back}")
-    private String frontDomain;
+    private String backDomain;
     private final String SEND_MAIL_URI = "/api/v1/users/confirm-email?token-id=";
 
     private final JavaMailSender javaMailSender;
@@ -65,7 +65,7 @@ public class EmailConfirmTokenService {
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
         Context context = new Context();
-        context.setVariable("link", frontDomain + SEND_MAIL_URI + tokenId);
+        context.setVariable("link", backDomain + SEND_MAIL_URI + tokenId);
 
         // # classpath:/mail-templates/email.html
         String template = templateEngine.process("email", context);
