@@ -46,4 +46,6 @@ public class Board extends Auditable {
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.PERSIST)
     private List<BoardTag> boardTags = new ArrayList<>();
+
+    private long view = 0;
 }

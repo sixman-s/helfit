@@ -10,11 +10,12 @@ import sixman.helfit.domain.tag.entity.Tag;
 import javax.persistence.*;
 import java.util.Set;
 
-@Entity(name = "BOARD_TAGS")
+@Entity
 @NoArgsConstructor
 @Getter
 @Setter
-public class BoardTag{
+@Table(name = "BOARD_TAGS")
+public class BoardTag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long boardTagId;
@@ -27,8 +28,9 @@ public class BoardTag{
     @JoinColumn(name = "TAG_ID")
     private Tag tag;
 
-    public void addBoard(Board board){
+    public void addBoard(Board board) {
         this.board = board;
+        this.board.getBoardTags().add(this);
         if(!this.board.getBoardTags().contains(this)){
             this.board.getBoardTags().add(this);
         }
@@ -36,6 +38,7 @@ public class BoardTag{
 
     public void addTag(Tag tag) {
         this.tag = tag;
+        this.tag.getBoardTags().add(this);
         if(!this.tag.getBoardTags().contains(this)) {
             this.tag.getBoardTags().add(this);
         }

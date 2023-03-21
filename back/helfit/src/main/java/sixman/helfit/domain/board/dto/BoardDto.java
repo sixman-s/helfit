@@ -18,14 +18,14 @@ import java.util.List;
 public class BoardDto {
     @Getter
     @AllArgsConstructor
-    public static class Post{
+    public static class Post {
         @NotNull
-        @Size(min=1, max=2000)
+        @Size(min = 1, max = 2000)
         @NoKoreanCurseWords
         private String title;
 
         @NotNull
-        @Size(min=1, max=16383)
+        @Size(min = 1, max = 16383)
         @NoKoreanCurseWords
         private String text;
 
@@ -55,10 +55,10 @@ public class BoardDto {
     @Getter
     @AllArgsConstructor
     public static class Patch {
-        @Size(min=1, max=2000)
+        @Size(min = 1, max = 2000)
         @NoKoreanCurseWords
         private String title;
-        @Size(min=1, max=20000)
+        @Size(min = 1, max = 20000)
         @NoKoreanCurseWords
         private String text;
         private String boardImageUrl;

@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
-    @Query(value = "SELECT b FROM Board b WHERE b.category.categoryId = :categoryId AND b.user.userId = :userId AND b.boardId =:boardId")
-    Optional<Board> findBoardByIds(@Param("categoryId") Long categoryId,@Param("userId") Long userId,@Param("boardId") Long boardId);
+    @Query(value = "SELECT b FROM Board b WHERE b.category.categoryId = :categoryId AND b.boardId =:boardId")
+    Optional<Board> findBoardByIds(@Param("categoryId") Long categoryId, @Param("boardId") Long boardId);
 
     @Query(value = "SELECT b FROM Board b WHERE b.category.categoryId = :categoryId ORDER BY b.createdAt DESC")
     List<Board> findTop3ByCategoryIdOrderByCreatedAtDesc(@Param("categoryId") Long categoryId, Pageable pageable);
@@ -22,4 +22,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     @Query(value = "SELECT b FROM Board b WHERE b.category.categoryId = :categoryId")
     Page<Board> findBoardByCategoryId(@Param("categoryId") Long categoryId, PageRequest pageable);
+
+    @Query(value = "SELECT b FROM Board b WHERE b.boardId = :boardId")
+    Optional<Board> findBoardByBoardId(@Param("boardId") Long boardId);
 }
