@@ -120,4 +120,12 @@ public class BoardService {
         Optional<Board> optionalBoard = boardRepository.findBoardByIds(categoryId, boardId);
         return optionalBoard.orElseThrow(() -> new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND));
     }
+
+    public void addView(Long boardId){
+        Board findBoard = findBoardById(boardId);
+        long view = findBoard.getView();
+        findBoard.setView(view+1);
+        boardRepository.save(findBoard);
+    }
+
 }
