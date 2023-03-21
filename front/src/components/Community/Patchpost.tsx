@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import style from '../../styles/Community/C_WritePost.module.css';
 import Editor from './C_Community/Editor';
-import DropdownC, { Option } from './C_Community/Dropdown';
 import Tag from './C_Community/Tag';
 import Btn from '../loginc/Buttons';
 import UserNav from './C_Community/UserNav';
@@ -10,15 +9,18 @@ import { useRouter } from 'next/router';
 
 const URL = process.env.NEXT_PUBLIC_URL;
 
-const options: Option[] = [
-  { key: 'health', text: '헬스 갤러리', value: '1' },
-  { key: 'crossfit', text: '크로스핏 갤러리', value: '2' },
-  { key: 'pilates', text: '필라테스 갤러리', value: '4' },
-  { key: 'oww', text: '오운완 갤러리', value: '5' },
-  { key: 'diet', text: '식단 갤러리', value: '6' }
-];
+interface BoardData {
+  boardId: number;
+  title: string;
+  text: string;
+  boardImageUrl: string | null;
+  tags: {
+    tagId: number;
+    tagName: string;
+  }[];
+}
 
-const WritePostBox = () => {
+const PatchPostBox = () => {
   const [category, setCategory] = useState('');
   const [tags, setTags] = useState<any[]>([]);
   const [title, setTitle] = useState('');
@@ -26,6 +28,43 @@ const WritePostBox = () => {
   const [fileName, setFileName] = useState<string>('No file selected');
   const [editorInput, setEditorInput] = useState('');
   const [titleError, setTitleError] = useState('');
+  const [fetchedData, setFetchedData] = useState<BoardData | null>(null);
+
+  const router = useRouter();
+  const { id } = router.query;
+  const boardID = id ? parseInt(id[id.length - 1]) : null;
+  const currentPage = router.asPath.split('/')[3];
+  let categoryname: string;
+  let pageNumber: Number;
+  switch (currentPage) {
+    case 'health':
+      pageNumber = 1;
+      categoryname = '헬스 갤러리';
+      break;
+    case 'crossfit':
+      pageNumber = 2;
+      categoryname = '크로스핏 갤러리';
+      break;
+    case 'pilates':
+      pageNumber = 4;
+      categoryname = '필라테스 갤러리';
+      break;
+    default:
+      pageNumber = null;
+  }
+
+  // 상세페이지 글불러오기
+  useEffect(() => {
+    axios
+      .get(`${URL}/api/v1/board/${pageNumber}/${boardID}`)
+      .then((res) => {
+        setFetchedData(res.data);
+        setTitle(res.data.title);
+        setEditorInput(res.data.text);
+        setSelectedFile(res.data.boardImageUrl);
+      })
+      .catch((err) => console.log(err));
+  }, [boardID]);
 
   useEffect(() => {
     if (title) setTitleError(validateTitle(title));
@@ -34,7 +73,6 @@ const WritePostBox = () => {
   const validateTitle = (title) => {
     if (title.length === 0) return '제목은 반드시 입력해야 합니다.';
   };
-  const router = useRouter();
 
   const handlePostButtonClick = () => {
     const titleError = validateTitle(title);
@@ -45,8 +83,8 @@ const WritePostBox = () => {
     }
     const accessToken = localStorage.accessToken;
     axios
-      .post(
-        `${URL}/api/v1/board/${category}/${userID}`,
+      .patch(
+        `${URL}/api/v1/board/${pageNumber}/${boardID}`,
         {
           title: title,
           text: editorInput,
@@ -69,8 +107,8 @@ const WritePostBox = () => {
       //     }
       //   });
       // })
-      .then(() => alert(`userid: ${userID}  게시글 등록 성공`))
-      .then(() => router.push('/community'))
+      .then(() => alert(`userid: ${userID}  게시글 수정 성공`))
+      .then(() => router.push(`/community`))
       .catch((err) => {
         alert(err);
       });
@@ -114,11 +152,11 @@ const WritePostBox = () => {
         <div className={style.category}>
           <div className={style.titleMessage}>
             <div className={style.Text}>카테고리</div>
-            <div className={style.Subtext}>
-              카테고리는 반드시 설정해주어야 합니다.
-            </div>
+            <div className={style.Subtext}>카테고리는 변경할 수 없습니다.</div>
           </div>
-          <DropdownC options={options} onChange={handleDropdownChange} />
+          <div className={style.PatchCategoty}>
+            <div>{categoryname}</div>
+          </div>
         </div>
 
         {/* 테그 */}
@@ -148,7 +186,7 @@ const WritePostBox = () => {
           <div className={style.TitleInput}>
             <input
               type='text'
-              placeholder='Write your Title...'
+              placeholder={'입력 필요'}
               className={style.TitleInput}
               value={title}
               onChange={handleTitleInputChange}
@@ -182,7 +220,7 @@ const WritePostBox = () => {
 
             <Btn
               className={style.button}
-              text='게시글 등록'
+              text='게시글 수정'
               onClick={handlePostButtonClick}
             />
           </div>
@@ -201,4 +239,4 @@ const WritePostBox = () => {
   );
 };
 
-export default WritePostBox;
+export default PatchPostBox;

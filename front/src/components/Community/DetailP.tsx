@@ -121,7 +121,9 @@ const DetailP = () => {
         alert(err);
       });
   };
-
+  const handlePatch = () => {
+    router.push(`/community/patchpost/${currentPage}/${boardID}`);
+  };
   const handleDeletePostClick = () => {
     setIsModalOpen(true);
   };
@@ -196,7 +198,12 @@ const DetailP = () => {
               />
             )}
             {fetchedData?.userId === userInfo.userId && (
-              <Btn text='게시글 수정' type='submit' className={style.ButtonU} />
+              <Btn
+                text='게시글 수정'
+                type='submit'
+                className={style.ButtonU}
+                onClick={handlePatch}
+              />
             )}
           </div>
         </div>
