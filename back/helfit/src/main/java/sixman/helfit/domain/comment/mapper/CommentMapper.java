@@ -19,14 +19,16 @@ public interface CommentMapper {
         String userProfileUrl = null;
         LocalDateTime createdAt = null;
         LocalDateTime modifiedAt = null;
+        Long commentId =null;
 
         commentBody = comment.getCommentBody();
         createdAt = comment.getCreatedAt();
         modifiedAt = comment.getModifiedAt();
         userNickname = comment.getUser().getNickname();
         userProfileUrl = comment.getUser().getProfileImageUrl();
+        commentId = comment.getCommentId();
 
-        return new CommentDto.responseDto(userNickname,userProfileUrl, commentBody, createdAt, modifiedAt );
+        return new CommentDto.responseDto(commentId,userNickname,userProfileUrl, commentBody, createdAt, modifiedAt );
     };
     List<CommentDto.responseDto> commentsToResponseDtos(List<Comment> comments);
 }

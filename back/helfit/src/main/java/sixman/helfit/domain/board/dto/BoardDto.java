@@ -42,11 +42,32 @@ public class BoardDto {
     @AllArgsConstructor
     public static class Response {
         private long boardId;
+        private long userId;
+        private String userNickname;
         private String title;
         private String text;
         private String boardImageUrl;
         private List<TagDto.GetResponse> tags;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class Patch {
+        @Size(min=1, max=2000)
+        @NoKoreanCurseWords
+        private String title;
+        @Size(min=1, max=20000)
+        @NoKoreanCurseWords
+        private String text;
+        private String boardImageUrl;
+        private List<BoardTagDto> boardTags;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class View {
+        private long view;
     }
 }

@@ -42,11 +42,10 @@ public class BoardController {
         return ResponseEntity.created(location).body(ApiResponse.created());
     }
 
-    @GetMapping("/{category-id}/{user-id}/{board-id}")
+    @GetMapping("/{category-id}/{board-id}")
     public ResponseEntity getBoard(@Positive @PathVariable ("category-id") Long categoryId,
-                                    @Positive @PathVariable ("user-id") Long userId,
-                                    @Positive @PathVariable ("board-id") Long boardId) {
-        Board board = boardService.findBoardByAllId(categoryId, userId, boardId);
+                                   @Positive @PathVariable ("board-id") Long boardId) {
+        Board board = boardService.findBoardByAllId(categoryId, boardId);
 
         return new ResponseEntity(mapper.boardToResponse(board),HttpStatus.OK);
     }
@@ -63,5 +62,37 @@ public class BoardController {
         Page<Board> pageBoards = boardService.findBoards(categoryId,page-1);
         List<Board> listBoards = pageBoards.getContent();
         return new ResponseEntity(mapper.boardsToResponses(listBoards),HttpStatus.OK);
+    }
+    @PreAuthorize("isAuthenticated()")
+    @PatchMapping("{category-id}/{board-id}")
+    public ResponseEntity patchBoard(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                     @Positive @PathVariable ("category-id") Long categoryId,
+                                     @Positive @PathVariable ("board-id") Long boardId,
+                                     @Valid @RequestBody BoardDto.Patch requestBody) {
+        Board board = boardService.updateBoard(mapper.boardPatchToBoard(requestBody,categoryId)
+                ,categoryId,boardId,userPrincipal);
+
+
+        return new ResponseEntity(mapper.boardToResponse(board),HttpStatus.OK);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @DeleteMapping("{category-id}/{board-id}")
+    public ResponseEntity deleteBoard(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                      @Positive @PathVariable ("category-id") Long categoryId,
+                                      @Positive @PathVariable ("board-id") Long boardId) {
+        boardService.deleteBoard(categoryId,boardId,userPrincipal);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+    @PostMapping("/view/{board-id}")
+    public ResponseEntity addViewBoard(@Positive @PathVariable ("board-id") Long boardId){
+        boardService.addView(boardId);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @GetMapping("/view/{board-id}")
+    public ResponseEntity getViewBoard(@Positive @PathVariable ("board-id") Long boardId) {
+        Board board = boardService.findBoardById(boardId);
+        return new ResponseEntity(mapper.boardToBoardView(board),HttpStatus.OK);
     }
 }

@@ -19,22 +19,26 @@ public class BoardTag{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long boardTagId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BOARD_ID")
     private Board board;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TAG_ID")
     private Tag tag;
 
     public void addBoard(Board board){
         this.board = board;
-        this.board.getBoardTags().add(this);
+        if(!this.board.getBoardTags().contains(this)){
+            this.board.getBoardTags().add(this);
+        }
     }
 
     public void addTag(Tag tag) {
         this.tag = tag;
-        this.tag.getBoardTags().add(this);
+        if(!this.tag.getBoardTags().contains(this)) {
+            this.tag.getBoardTags().add(this);
+        }
     }
 
 

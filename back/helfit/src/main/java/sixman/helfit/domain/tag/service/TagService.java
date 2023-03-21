@@ -15,13 +15,11 @@ public class TagService {
         this.tagRepository = tagRepository;
     }
 
-    public Tag createTag(Tag tag){
-        return tagRepository.save(tag);
-    }
+
     public Tag findTag(Tag tag) {
         Optional<Tag> optionalTag = tagRepository.findByTagName(tag.getTagName());
         if(optionalTag.isEmpty()){
-            return createTag(tag);
+            return tagRepository.save(tag);
         }
         else return optionalTag.get();
     }

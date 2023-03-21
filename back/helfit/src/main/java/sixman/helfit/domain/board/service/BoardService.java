@@ -9,8 +9,13 @@ import sixman.helfit.domain.board.entity.Board;
 import sixman.helfit.domain.board.entity.BoardTag;
 
 import sixman.helfit.domain.board.repository.BoardRepository;
+import sixman.helfit.domain.board.repository.BoardTagRepository;
 import sixman.helfit.domain.category.service.CategoryService;
 
+import sixman.helfit.domain.comment.entity.Comment;
+import sixman.helfit.domain.comment.repository.CommentRepository;
+import sixman.helfit.domain.comment.service.CommentService;
+import sixman.helfit.domain.tag.entity.Tag;
 import sixman.helfit.domain.tag.service.TagService;
 
 import sixman.helfit.domain.user.entity.User;
@@ -19,6 +24,9 @@ import sixman.helfit.exception.BusinessLogicException;
 import sixman.helfit.exception.ExceptionCode;
 import sixman.helfit.security.entity.UserPrincipal;
 
+import javax.validation.constraints.Null;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -29,13 +37,17 @@ public class BoardService {
     private final CategoryService categoryService;
 
     private final UserService userService;
+    private final BoardTagRepository boardTagRepository;
+    private final CommentRepository commentRepository;
 
-    public BoardService(BoardRepository boardRepository, TagService tagService,
-                        CategoryService categoryService, UserService userService) {
+    public BoardService(BoardRepository boardRepository, TagService tagService, CategoryService categoryService,
+                        UserService userService, BoardTagRepository boardTagRepository, CommentRepository commentRepository) {
         this.boardRepository = boardRepository;
         this.tagService = tagService;
         this.categoryService = categoryService;
         this.userService = userService;
+        this.boardTagRepository = boardTagRepository;
+        this.commentRepository = commentRepository;
     }
 
     public Board createBoard(Board board, UserPrincipal userPrincipal){
@@ -56,6 +68,41 @@ public class BoardService {
                 Sort.by("boardId").descending()));
     }
 
+    public Board updateBoard(Board board,Long categoryId, Long boardId, UserPrincipal userPrincipal){
+        Board findBoard = findBoardByAllId(categoryId,boardId);
+        verifyBoard(findBoard,userPrincipal);
+
+        Optional.ofNullable(board.getTitle())
+                .ifPresent(findBoard::setTitle);
+        Optional.ofNullable(board.getText())
+                .ifPresent(findBoard::setText);
+        Optional.ofNullable(board.getBoardImageUrl())
+                .ifPresent(findBoard::setBoardImageUrl);
+        List<BoardTag> updatedBoardTags = board.getBoardTags();
+        if (updatedBoardTags != null) {
+            for(BoardTag boardTag : findBoard.getBoardTags()){
+                boardTag.getTag().removeBoardTags(boardTag);
+                boardTagRepository.delete(boardTag);
+            }
+                findBoard.getBoardTags().clear();
+            for (BoardTag updatedBoardTag : updatedBoardTags) {
+                updatedBoardTag.addBoard(findBoard);
+                Tag tag = tagService.findTag(updatedBoardTag.getTag());
+                updatedBoardTag.addTag(tag);
+                boardTagRepository.save(updatedBoardTag);
+            }
+        }
+        return boardRepository.save(findBoard);
+    }
+
+    public void deleteBoard(Long categoryId, Long boardId, UserPrincipal userPrincipal) {
+        Board findBoard = findBoardByAllId(categoryId,boardId);
+        verifyBoard(findBoard,userPrincipal);
+        List<Comment> comments = commentRepository.findComments(boardId);
+        commentRepository.deleteAll(comments);
+        boardRepository.delete(findBoard);
+    }
+
     private void verifyBoard(Board board,UserPrincipal userPrincipal) {
         User user = userService.findUserByUserId(board.getUser().getUserId());
         if(!Objects.equals(user.getUserId(), userPrincipal.getUser().getUserId())) {
@@ -69,8 +116,16 @@ public class BoardService {
         return optionalBoard.orElseThrow(() -> new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND));
     }
 
-    public Board findBoardByAllId(Long categoryId,Long userId, Long boardId){
-        Optional<Board> optionalBoard = boardRepository.findBoardByIds(categoryId, userId, boardId);
+    public Board findBoardByAllId(Long categoryId, Long boardId){
+        Optional<Board> optionalBoard = boardRepository.findBoardByIds(categoryId, boardId);
         return optionalBoard.orElseThrow(() -> new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND));
     }
+
+    public void addView(Long boardId){
+        Board findBoard = findBoardById(boardId);
+        long view = findBoard.getView();
+        findBoard.setView(view+1);
+        boardRepository.save(findBoard);
+    }
+
 }
