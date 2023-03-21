@@ -16,18 +16,16 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class BoardDto {
-
     @Getter
     @AllArgsConstructor
     public static class Post{
-
         @NotNull
         @Size(min=1, max=2000)
         @NoKoreanCurseWords
         private String title;
 
         @NotNull
-        @Size(min=1, max=20000)
+        @Size(min=1, max=16383)
         @NoKoreanCurseWords
         private String text;
 
@@ -38,6 +36,7 @@ public class BoardDto {
         private List<BoardTagDto> boardTags;
 
     }
+
     @Getter
     @Setter
     @AllArgsConstructor
