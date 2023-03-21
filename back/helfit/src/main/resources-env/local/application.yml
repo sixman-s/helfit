@@ -51,9 +51,8 @@ spring:
     defer-datasource-initialization : true
   sql:
     init:
-      mode: always
+      mode:
       data-locations: classpath*:db/h2/data.sql
-      schema-locations:
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html

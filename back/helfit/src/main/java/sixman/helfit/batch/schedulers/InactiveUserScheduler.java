@@ -25,7 +25,7 @@ public class InactiveUserScheduler {
     // # 1Day
     private final int fixedDelay = 1000 * 60 * 60 * 24;
 
-    @Scheduled(fixedDelay = fixedDelay)
+    @Scheduled(fixedDelay = fixedDelay, initialDelay = fixedDelay)
     public void startJob() {
         try {
             JobParameters parameters = new JobParameters(new HashMap<>() {{
