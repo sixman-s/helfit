@@ -3,11 +3,13 @@ import style from '../../../styles/Community/P_Detail.module.css';
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onDelete: () => void;
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onDelete }) => {
   const handleDeleteButtonClick = () => {
-    // delete post logic here
+    // call the onDelete callback function
+    onDelete();
     onClose();
   };
 

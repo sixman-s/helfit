@@ -50,6 +50,24 @@ const DetailP = () => {
     setWriteCommnet('');
   };
 
+  // 게시글 삭제
+  const handleDeletePost = () => {
+    const accessToken = localStorage.accessToken;
+    axios
+      .delete(`${URL}/api/v1/board/${pageNumber}/${boardID}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      })
+      .then(() => {
+        alert('성공적으로 삭제되었습니다.');
+        router.push(`/community/${currentPage}`);
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
+
   const handleDeletePostClick = () => {
     setIsModalOpen(true);
   };
@@ -156,6 +174,7 @@ const DetailP = () => {
               <Modal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
+                onDelete={handleDeletePost}
               />
             )}
             {fetchedData?.userId === userInfo.userId && (
