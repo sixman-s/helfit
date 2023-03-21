@@ -95,4 +95,12 @@ public class BoardController {
         Board board = boardService.findBoardById(boardId);
         return new ResponseEntity(mapper.boardToBoardView(board),HttpStatus.OK);
     }
+
+    @PostMapping("/likes/{board-id}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity postLike(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                   @PathVariable ("board-id") @Positive Long boardId) {
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
 }
