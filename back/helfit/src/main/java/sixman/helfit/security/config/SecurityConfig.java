@@ -99,7 +99,6 @@ public class SecurityConfig {
                 .antMatchers(
                     "/api/**/users/signup",
                     "/api/**/users/login",
-                    "/api/**/users/login/filter",
                     "/api/**/users/confirm-email"
                 ).permitAll()
                 .antMatchers("/api/**/users/**").hasAnyAuthority(RoleType.USER.getCode())
@@ -127,7 +126,7 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
-                            .antMatchers("/h2/**");
+                            .antMatchers("/db/h2/**");
     }
 
     /*

@@ -24,7 +24,7 @@ public class Board extends Auditable {
     @Column(nullable = false, length = 2000)
     private String title;
 
-    @Column(name = "text", length = 20000)
+    @Column(length = 20000)
     private String text;
 
     @Column(length = 512)
@@ -41,10 +41,10 @@ public class Board extends Auditable {
     @JoinColumn(name ="user_id")
     private User user;
 
-    @OneToMany(mappedBy = "board" ,cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "board" ,cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
     private List<BoardTag> boardTags = new ArrayList<>();
 
-
+    private long view =0;
 
 
 }

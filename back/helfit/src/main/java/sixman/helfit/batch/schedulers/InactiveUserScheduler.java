@@ -15,15 +15,17 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
-// @EnableScheduling
-// @Component
+@EnableScheduling
+@Component
 @RequiredArgsConstructor
 @Slf4j
 public class InactiveUserScheduler {
     private final Job job;
     private final JobLauncher jobLauncher;
+    // # 1Day
+    private final int fixedDelay = 1000 * 60 * 60 * 24;
 
-    @Scheduled(fixedDelay = 1000 * 60 * 60) // 1h
+    @Scheduled(fixedDelay = fixedDelay)
     public void startJob() {
         try {
             JobParameters parameters = new JobParameters(new HashMap<>() {{

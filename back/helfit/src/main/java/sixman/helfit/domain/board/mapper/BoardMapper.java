@@ -89,8 +89,8 @@ public interface BoardMapper {
     }
     List<BoardDto.Response> boardsToResponses(List<Board> boards);
 
-    default Board boardPatchToBoard(BoardDto.Patch patchDto,Long categoryId, Long userId) {
-        if ( patchDto == null || categoryId == null || userId == null ) {
+    default Board boardPatchToBoard(BoardDto.Patch patchDto,Long categoryId) {
+        if ( patchDto == null || categoryId == null ) {
             return null;
         }
 
@@ -114,5 +114,5 @@ public interface BoardMapper {
 
         return board;
     };
-
+    BoardDto.View boardToBoardView(Board board);
 }
