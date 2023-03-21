@@ -16,6 +16,7 @@ public enum ExceptionCode {
     EXPIRED_TOKEN(400, "만료된 토큰입니다."),
     NOT_EXPIRED_TOKEN_YET(400, "만료되지 않은 토큰입니다."),
     NOT_CHANGED_PASSWORD(400, "최근 사용한 비밀번호입니다. 다른 비밀번호를 선택해 주세요."),
+    MISS_MATCH_PASSWORD(400, "비밀번호가 일치하지 않습니다."),
     MISS_MATCH_USERID(400,"유저 아이디가 일치하지 않습니다."),
 
     /*
@@ -36,7 +37,8 @@ public enum ExceptionCode {
      *
      */
     NOT_FOUND(404,"결과가 존재하지 않습니다."),
-    USERS_NOT_FOUND(404, "등록되지 않은 사용자입니다."),
+    USER_NOT_FOUND(404, "등록되지 않은 사용자입니다."),
+    USER_WITHDRAW(404, "탈퇴한 사용자입니다."),
     CALCULATOR_NOT_FOUND(404,"결과가 존재하지 않습니다."),
     CALCULATOR_NO_USER_INFO(404,"사용자의 신체 정보를 입력하세요"),
     BOARD_NOT_FOUND(404,"게시글이 존재하지 않습니다."),

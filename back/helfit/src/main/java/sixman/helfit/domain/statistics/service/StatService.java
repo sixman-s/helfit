@@ -11,7 +11,6 @@ import sixman.helfit.domain.calendar.repository.CalendarRepository;
 import sixman.helfit.domain.physical.entity.Physical;
 import sixman.helfit.domain.physical.repository.PhysicalRepositoryImpl;
 import sixman.helfit.domain.statistics.entity.Stat;
-import sixman.helfit.domain.statistics.repository.StatRepository;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

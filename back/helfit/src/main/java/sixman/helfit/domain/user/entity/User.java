@@ -43,8 +43,6 @@ public class User extends Auditable {
     @Column(length = 512)
     private String profileImageUrl;
 
-    private Integer failureCnt = 0;
-
     @Enumerated(value = EnumType.STRING)
     private EmailVerified emailVerifiedYn;
 
@@ -84,7 +82,7 @@ public class User extends Auditable {
 
     public enum UserStatus {
         USER_ACTIVE("활동중"),
-        USER_SLEEP("휴면 상태"),
+        USER_INACTIVE("휴면 상태"),
         USER_QUIT("탈퇴 상태");
 
         @Getter

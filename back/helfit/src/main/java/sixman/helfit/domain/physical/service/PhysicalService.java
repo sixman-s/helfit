@@ -8,7 +8,6 @@ import sixman.helfit.domain.physical.entity.Physical;
 import sixman.helfit.domain.physical.repository.PhysicalRepository;
 import sixman.helfit.domain.physical.repository.PhysicalRepositorySupport;
 import sixman.helfit.domain.physical.repository.condition.PhysicalCondition;
-import sixman.helfit.domain.user.entity.User;
 import sixman.helfit.exception.BusinessLogicException;
 import sixman.helfit.exception.ExceptionCode;
 import sixman.helfit.utils.CustomBeanUtil;
@@ -22,7 +21,7 @@ public class PhysicalService {
     private final PhysicalRepositorySupport physicalRepositorySupport;
     private final CustomBeanUtil<Physical> customBeanUtil;
 
-    public Physical createPhysical(Physical physical, User user) {
+    public Physical createPhysical(Physical physical, sixman.helfit.domain.user.entity.User user) {
         try {
             verifyExistPhysical(user.getUserId());
             physical.setUser(user);

@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @RequiredArgsConstructor
-public class TokenAuthenticationFilter extends OncePerRequestFilter {
+public class JwtVerificationFilter extends OncePerRequestFilter {
     private final AuthTokenProvider authTokenProvider;
     private final CustomUserDetailService customUserDetailsService;
 
@@ -41,7 +41,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
 
         } catch (UsernameNotFoundException e) {
-            ErrorResponse.sendErrorResponse(response, ExceptionCode.USERS_NOT_FOUND);
+            ErrorResponse.sendErrorResponse(response, ExceptionCode.USER_NOT_FOUND);
         }
     }
 

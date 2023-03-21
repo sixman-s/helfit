@@ -9,7 +9,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +23,7 @@ import sixman.helfit.domain.user.repository.UserRefreshTokenRepository;
 import sixman.helfit.domain.user.service.UserService;
 import sixman.helfit.exception.BusinessLogicException;
 import sixman.helfit.exception.ExceptionCode;
+import sixman.helfit.global.annotations.CurrentUser;
 import sixman.helfit.response.ApiResponse;
 import sixman.helfit.security.mail.entity.EmailConfirmToken;
 import sixman.helfit.security.mail.service.EmailConfirmTokenService;
@@ -43,6 +43,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.Date;
+
+import static sixman.helfit.domain.user.entity.User.*;
 
 @Slf4j
 @RestController
@@ -103,6 +105,10 @@ public class UserController {
 
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         User user = userPrincipal.getUser();
+
+        // ! 탈퇴 회원 로그인 시도
+        if (user.getUserStatus().equals(UserStatus.USER_QUIT))
+            throw new BusinessLogicException(ExceptionCode.USER_WITHDRAW);
 
         // ! 이메일 인증 프로세스 예외처리 미적용 (RDS 연동시 주석 제거)
         // if (user.getEmailVerifiedYn().equals(User.EmailVerified.N))
@@ -228,7 +234,7 @@ public class UserController {
      *
      */
     @GetMapping("/resend-confirm-email")
-    public void resendConfirmEmail(@AuthenticationPrincipal UserPrincipal userPrincipal) throws MessagingException {
+    public void resendConfirmEmail(@CurrentUser UserPrincipal userPrincipal) throws MessagingException {
         EmailConfirmToken verifiedConfirmToken =
             emailConfirmTokenService.findVerifiedConfirmTokenByUserId(userPrincipal.getUser().getUserId());
 
@@ -241,7 +247,7 @@ public class UserController {
      */
     @GetMapping
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> getUser(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+    public ResponseEntity<?> getUser(@CurrentUser UserPrincipal userPrincipal) {
         User user = userService.findUserByUserId(userPrincipal.getUser().getUserId());
 
         return ResponseEntity.ok().body(ApiResponse.ok("data", user));
@@ -255,7 +261,7 @@ public class UserController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> updateUser(
         @Valid @RequestBody UserDto.Update requestBody,
-        @AuthenticationPrincipal UserPrincipal userPrincipal
+        @CurrentUser UserPrincipal userPrincipal
     ) {
         User updatedUser = userService.updateUser(userPrincipal.getUser().getUserId(), userMapper.userDtoPatchToUser(requestBody));
 
@@ -272,7 +278,7 @@ public class UserController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> updateUserPassword(
         @Valid @RequestBody UserDto.Password requestBody,
-        @AuthenticationPrincipal UserPrincipal userPrincipal
+        @CurrentUser UserPrincipal userPrincipal
     ) {
         userService.updateUserPassword(
             userPrincipal.getUser().getUserId(),
@@ -290,7 +296,7 @@ public class UserController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> updateUserProfileImage(
         @RequestParam MultipartFile multipartFile,
-        @AuthenticationPrincipal UserPrincipal userPrincipal
+        @CurrentUser UserPrincipal userPrincipal
     ) throws Exception {
         String imagePath = fileService.uploadFile(multipartFile);
         userService.updateUserProfileImage(userPrincipal.getUser().getUserId(), imagePath);
@@ -304,18 +310,25 @@ public class UserController {
      */
     @DeleteMapping("/profile-image")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> updateUserProfileImage(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+    public ResponseEntity<?> updateUserProfileImage(@CurrentUser UserPrincipal userPrincipal) {
         userService.updateUserProfileImage(userPrincipal.getUser().getUserId(), null);
 
         return ResponseEntity.ok().body(ApiResponse.noContent());
     }
 
     /*
-     * # 회원 탈퇴 (UserStatus 변경)
-     *
+     * # 회원 탈퇴 (Withdraw Table 데이터 이동)
+     *q
      */
     @DeleteMapping("/withdraw")
-    public ResponseEntity<?> withdrawUser() {
+    public ResponseEntity<?> withdrawUser(
+        @Valid @RequestBody UserDto.Password requestBody,
+        @CurrentUser UserPrincipal userPrincipal
+    ) {
+        userService.withdrawUser(
+            userPrincipal.getUser().getUserId(),
+            userMapper.userDtoPasswordToUser(requestBody)
+        );
 
         return ResponseEntity.noContent().build();
     }

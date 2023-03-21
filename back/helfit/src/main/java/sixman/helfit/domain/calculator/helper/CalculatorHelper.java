@@ -3,7 +3,6 @@ package sixman.helfit.domain.calculator.helper;
 import sixman.helfit.domain.calculator.enums.ActivityLevel;
 import sixman.helfit.domain.calculator.enums.Goal;
 import sixman.helfit.domain.physical.entity.Physical;
-import sixman.helfit.domain.user.entity.User;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -33,18 +32,18 @@ public class CalculatorHelper {
         return age;
     }
 
-    public static double calculateBMR_Male(Physical physical) {
-        Integer age = CalculatorHelper.turnAge(Integer.toString(physical.getBirth()));
-        Double bmr = BMR_CONSTANT_MALE + (BMR_CONSTANT_WEIGHT_MALE * physical.getWeight())
-                + (BMR_CONSTANT_HEIGHT_MALE * physical.getHeight())
+    public static double calculateBMR_Male(Physical user) {
+        Integer age = CalculatorHelper.turnAge(Integer.toString(user.getBirth()));
+        Double bmr = BMR_CONSTANT_MALE + (BMR_CONSTANT_WEIGHT_MALE * user.getWeight())
+                + (BMR_CONSTANT_HEIGHT_MALE * user.getHeight())
                 - (BMR_CONSTANT_AGE_MALE * age);
         return bmr;
     }
 
-    public static double calculateBMR_Female(Physical physical) {
-        Integer age = CalculatorHelper.turnAge(Integer.toString(physical.getBirth()));
-        Double bmr = BMR_CONSTANT_FEMALE + (BMR_CONSTANT_WEIGHT_FEMALE * physical.getWeight())
-                + (BMR_CONSTANT_HEIGHT_FEMALE * physical.getHeight())
+    public static double calculateBMR_Female(Physical user) {
+        Integer age = CalculatorHelper.turnAge(Integer.toString(user.getBirth()));
+        Double bmr = BMR_CONSTANT_FEMALE + (BMR_CONSTANT_WEIGHT_FEMALE * user.getWeight())
+                + (BMR_CONSTANT_HEIGHT_FEMALE * user.getHeight())
                 - (BMR_CONSTANT_AGE_FEMALE * age);
         return bmr;
     }
@@ -82,12 +81,12 @@ public class CalculatorHelper {
 
     }
 
-    public static Double calculateResultWithGender(ActivityLevel activityLevel, Goal goal, Physical physical){
+    public static Double calculateResultWithGender(ActivityLevel activityLevel, Goal goal, Physical user){
         Double bmr;
-        if (physical.getGender().equals(Gender.MALE)) {
-            bmr = CalculatorHelper.calculateBMR_Male(physical);
+        if (user.getGender().equals(Gender.MALE)) {
+            bmr = CalculatorHelper.calculateBMR_Male(user);
         } else {
-            bmr = CalculatorHelper.calculateBMR_Female(physical);
+            bmr = CalculatorHelper.calculateBMR_Female(user);
         }
         Double result = CalculatorHelper.calculateResult(bmr, activityLevel, goal);
         return result;
