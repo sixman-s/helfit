@@ -187,7 +187,12 @@
   border-bottom: 1px solid var(--line_2);
   margin-left: 40px;
   margin-top: -10px;
+  display: flex;
 }
 .userNickname {
   font-size: 12px;
+}
+.deleteSVG {
+  width: 15px;
+  margin-left: 40px;
 }

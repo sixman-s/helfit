@@ -33,6 +33,43 @@ const DetailP = () => {
   const [comments, setComments] = useState([]);
   const [fetchedData, setFetchedData] = useState<BoardData | null>(null);
 
+  const router = useRouter();
+  const { id } = router.query;
+  const boardID = id ? parseInt(id[id.length - 1]) : null;
+  const currentPage = router.asPath.split('/')[2];
+  let categoryname: string;
+  let pageNumber: Number;
+  switch (currentPage) {
+    case 'health':
+      pageNumber = 1;
+      categoryname = '헬스 갤러리';
+      break;
+    case 'crossfit':
+      pageNumber = 2;
+      categoryname = '크로스핏 갤러리';
+      break;
+    case 'pilates':
+      pageNumber = 4;
+      categoryname = '필라테스 갤러리';
+      break;
+    default:
+      pageNumber = null;
+  }
+
+  useEffect(() => {
+    axios
+      .get(`${URL}/api/v1/board/${pageNumber}/${boardID}`)
+      .then((res) => setFetchedData(res.data))
+      .then(() => {
+        axios
+          .get(`${URL}/api/v1/comment/${boardID}`)
+          .then((res) => console.log(res.data[0].commentId))
+          //.then((res) => setComments(res.data))
+          .catch((err) => console.log(err));
+      })
+      .catch((err) => console.log(err));
+  }, [boardID]);
+
   // 댓글 작성
   const handleSubmit = (e: React.KeyboardEvent) => {
     axios
@@ -48,6 +85,22 @@ const DetailP = () => {
       .then((res) => console.log(res));
 
     setWriteCommnet('');
+  };
+
+  // 댓글 삭제 commentId
+  const handleDeleteComment = (commentId) => {
+    axios
+      .delete(
+        `${URL}/api/v1/comment/${userInfo.userId}/${boardID}/${commentId}`
+      )
+      .then(() => {
+        axios
+          .get(`${URL}/api/v1/comment/${boardID}`)
+          .then((res) => setComments(res.data))
+          .catch((err) => console.log(err));
+      })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
   };
 
   // 게시글 삭제
@@ -89,42 +142,6 @@ const DetailP = () => {
     })
     .split('/')
     .join('.');
-  const router = useRouter();
-  const { id } = router.query;
-  const boardID = id ? parseInt(id[id.length - 1]) : null;
-  const currentPage = router.asPath.split('/')[2];
-  let categoryname: string;
-  let pageNumber: Number;
-  switch (currentPage) {
-    case 'health':
-      pageNumber = 1;
-      categoryname = '헬스 갤러리';
-      break;
-    case 'crossfit':
-      pageNumber = 2;
-      categoryname = '크로스핏 갤러리';
-      break;
-    case 'pilates':
-      pageNumber = 4;
-      categoryname = '필라테스 갤러리';
-      break;
-    default:
-      pageNumber = null;
-  }
-
-  useEffect(() => {
-    axios
-      .get(`${URL}/api/v1/board/${pageNumber}/${boardID}`)
-      .then((res) => setFetchedData(res.data))
-      .then(() => {
-        axios
-          .get(`${URL}/api/v1/comment/${boardID}`)
-          //.then((res) => console.log(res.data))
-          .then((res) => setComments(res.data))
-          .catch((err) => console.log(err));
-      })
-      .catch((err) => console.log(err));
-  }, [boardID]);
 
   return (
     <>
@@ -237,7 +254,14 @@ const DetailP = () => {
                 )}
                 <div className={style.userNickname}>{comment.userNickname}</div>
               </div>
-              <div className={style.commentBody}>{comment.commentBody}</div>
+              <div className={style.commentBody}>
+                <div>{comment.commentBody}</div>
+                <img
+                  src={'../../assets/Community/Delete.svg'}
+                  className={style.deleteSVG}
+                  onClick={() => handleDeleteComment(comment.commentId)}
+                />
+              </div>
             </div>
           ))}
         </div>
