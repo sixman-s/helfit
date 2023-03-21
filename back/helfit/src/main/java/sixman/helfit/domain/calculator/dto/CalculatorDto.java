@@ -16,6 +16,10 @@ public class CalculatorDto {
     public static class Post{
         private Goal goal;
         private ActivityLevel activityLevel;
+
+        public Post(Goal diet, ActivityLevel extraActive) {
+
+        }
     }
     @Getter
     @Setter
