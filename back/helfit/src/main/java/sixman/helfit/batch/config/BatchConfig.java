@@ -17,11 +17,8 @@ import sixman.helfit.batch.reader.QueueItemReader;
 import sixman.helfit.domain.user.entity.User;
 import sixman.helfit.domain.user.repository.UserRepository;
 
-import javax.persistence.EntityManagerFactory;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static sixman.helfit.domain.user.entity.User.*;

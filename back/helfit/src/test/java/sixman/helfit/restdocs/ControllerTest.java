@@ -56,7 +56,7 @@ public abstract class ControllerTest {
     }
 
     protected Map<String, Object> userResource() {
-            Map<String, Object> userMap = new HashMap<>();
+        Map<String, Object> userMap = new HashMap<>();
 
         User user = new User(
             "tester",

@@ -11,16 +11,18 @@ import sixman.helfit.domain.user.entity.User;
 
 import javax.persistence.*;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Entity(name = "COMMENTS")
+@Entity
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "COMMENTS")
 public class Comment extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentId;
-    @Column(nullable = false, length = 20000)
+
+    @Column(nullable = false, length = 16383, columnDefinition = "TEXT")
     private String commentBody;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -30,6 +32,4 @@ public class Comment extends Auditable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="board_id")
     private Board board;
-
-
 }

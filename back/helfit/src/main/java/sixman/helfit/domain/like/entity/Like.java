@@ -5,11 +5,13 @@ import sixman.helfit.audit.Auditable;
 import sixman.helfit.domain.board.entity.Board;
 import sixman.helfit.domain.user.entity.User;
 
+
 import javax.persistence.*;
 
+
 @Entity
-@Table(name = "LIKES")
 @Getter
+@Table(name = "LIKES")
 public class Like extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
