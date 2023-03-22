@@ -35,6 +35,9 @@ const ReaderPop = ({ date, open, setOpen }) => {
           axios
             .post(url, body, headers)
             .then((res) => console.log(res))
+            .then(() => {
+              setKcal(kcal);
+            })
             .catch((error) => console.log(error));
         } else alert('제목과 칼로리, 메모는 필수로 입력해 주세요.');
       } else alert('로그인 후 이용해 주세요.');
@@ -129,7 +132,7 @@ const ReaderPop = ({ date, open, setOpen }) => {
           {'»'}
         </button>
       </header>
-      <div className={styled.content}>
+      <form className={styled.content}>
         <textarea
           className={styled.title}
           placeholder={'제목 없음'}
@@ -157,7 +160,11 @@ const ReaderPop = ({ date, open, setOpen }) => {
                 type='number'
                 className={styled.calInput}
                 value={kcal.toString()}
-                onChange={(e) => setKcal(e.target.valueAsNumber)}
+                onChange={(e) => {
+                  e.target.valueAsNumber > 5000
+                    ? alert('5000kcal까지 입력 가능합니다.')
+                    : setKcal(e.target.valueAsNumber);
+                }}
               />
               kcal
             </p>
@@ -188,7 +195,7 @@ const ReaderPop = ({ date, open, setOpen }) => {
             Submit
           </button>
         </div>
-      </div>
+      </form>
     </section>
   );
 };

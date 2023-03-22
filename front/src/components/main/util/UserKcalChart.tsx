@@ -1,14 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import * as d3 from 'd3';
 import styled from '../../../styles/main/C_chart.module.css';
-import {
-  axisBottom,
-  axisLeft,
-  axisRight,
-  scaleBand,
-  scaleLinear,
-  select
-} from 'd3';
+import { axisBottom, axisLeft, scaleBand, scaleLinear, select } from 'd3';
+
 const AxisBottom = ({ scale, transform }) => {
   const ref = useRef<SVGGElement>(null);
 
@@ -21,10 +14,9 @@ const AxisBottom = ({ scale, transform }) => {
   return <g ref={ref} transform={transform} className={styled.line} />;
 };
 
-const AxisLeft = ({ scale, width, goal }) => {
+const AxisLeft = ({ scale, width, goal, setTooltip }) => {
   const ref = useRef<SVGGElement>(null);
-  const Line = ~~((5000 - goal) / 20);
-  console.log(Line);
+  const Line = 200 - 0.04 * goal;
   useEffect(() => {
     if (ref.current) {
       select(ref.current)
@@ -33,23 +25,49 @@ const AxisLeft = ({ scale, width, goal }) => {
         .attr('opacity', '1')
         .attr('transform', `translate(0,${Line})`)
         .append('line')
-        .attr('stroke', '#a3b1cc')
+        .attr('stroke', '#b8c3d9')
         .attr('x2', `${width}`)
+        .attr('stroke-width', '2')
         .attr('stroke-dasharray', '5');
     }
   }, [scale]);
 
-  return <g ref={ref} className={styled.line} />;
+  return (
+    <g
+      ref={ref}
+      className={styled.line}
+      onMouseEnter={(e) => setTooltip({ x: e.clientX, y: e.clientY, goal })}
+      onMouseLeave={(e) => setTooltip(null)}
+    />
+  );
 };
 
-const ChartBars = ({
-  data,
-  height,
-  scaleX,
-  scaleY,
-  onMouseEnter,
-  onMouseLeave
-}) => {
+const ToolTipPop = ({ data }) => {
+  if (data !== null) {
+    return data.goal ? (
+      <article
+        className={styled.popup_container}
+        style={{ top: data.y, left: data.x }}
+      >
+        <p className={styled.text}>
+          목표 칼로리: {data.goal} <span>kcal</span>
+        </p>
+      </article>
+    ) : (
+      <article
+        className={styled.popup_container}
+        style={{ top: data.y, left: data.x }}
+      >
+        <p className={styled.date}>등록일: {data.recodedAt}</p>
+        <p className={styled.text}>
+          당일 칼로리: {data.kcal} <span>kcal</span>
+        </p>
+      </article>
+    );
+  } else null;
+};
+
+const ChartBars = ({ data, height, scaleX, scaleY, setTooltip }) => {
   return (
     <>
       {data.map(({ recodedAt, kcal }) => {
@@ -61,6 +79,10 @@ const ChartBars = ({
             width={scaleX.bandwidth()}
             height={height - scaleY(kcal)}
             fill='#3361ff'
+            onMouseEnter={(e) =>
+              setTooltip({ x: e.clientX, y: e.clientY, kcal, recodedAt })
+            }
+            onMouseLeave={(e) => setTooltip(null)}
           />
         );
       })}
@@ -70,8 +92,6 @@ const ChartBars = ({
 
 const UserKcalChart = ({ data, goal }) => {
   const [tooltip, setTooltip] = useState(null);
-  const kcalArr = data.map(({ kcal }) => kcal);
-  const recodedAtArr = data.map(({ recodedAt }) => recodedAt);
   const ref = useRef(null);
   const DateLengthFour = (date: string) => {
     return date.slice(5, date.length).replaceAll('-', '.');
@@ -88,30 +108,35 @@ const UserKcalChart = ({ data, goal }) => {
     .domain(kcalData.map(({ recodedAt }) => (recodedAt ? recodedAt : null)))
     .range([0, width])
     .padding(0.4);
-  const scaleY = scaleLinear().domain([0, 5000]).range([height, 0]);
+  const scaleY = scaleLinear().domain([5000, 0]).range([0, height]);
 
   return (
-    <svg
-      ref={ref}
-      width={width + margin.left + margin.right}
-      height={height + margin.top + margin.bottom}
-    >
-      <g transform={`translate(${margin.left}, ${margin.top})`}>
-        <AxisBottom scale={scaleX} transform={`translate(0, ${height})`} />
-        <AxisLeft scale={scaleY} width={width} goal={goal} />
+    <>
+      <svg
+        ref={ref}
+        width={width + margin.left + margin.right}
+        height={height + margin.top + margin.bottom}
+      >
+        <g transform={`translate(${margin.left}, ${margin.top})`}>
+          <AxisBottom scale={scaleX} transform={`translate(0, ${height})`} />
+          <AxisLeft
+            scale={scaleY}
+            width={width}
+            goal={goal}
+            setTooltip={setTooltip}
+          />
 
-        <ChartBars
-          data={kcalData}
-          height={height}
-          scaleX={scaleX}
-          scaleY={scaleY}
-          onMouseEnter={(event) => {
-            setTooltip({});
-          }}
-          onMouseLeave={() => setTooltip(null)}
-        />
-      </g>
-    </svg>
+          <ChartBars
+            data={kcalData}
+            height={height}
+            scaleX={scaleX}
+            scaleY={scaleY}
+            setTooltip={setTooltip}
+          />
+        </g>
+      </svg>
+      <ToolTipPop data={tooltip} />
+    </>
   );
 };
 export default UserKcalChart;
