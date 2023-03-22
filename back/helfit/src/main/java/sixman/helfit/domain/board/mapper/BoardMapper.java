@@ -36,10 +36,10 @@ public interface BoardMapper {
 
         if(postDto.getBoardTags() !=null) {
            List<BoardTag> boardTags = postDto.getBoardTags().stream().
-                    map(BoardTagDto -> {
+                    map(BoardTag -> {
                         BoardTag boardTag = new BoardTag();
                         Tag tag = new Tag();
-                        tag.setTagName(BoardTagDto.getTagName());
+                        tag.setTagName(BoardTag);
                         boardTag.addTag(tag);
                         boardTag.addBoard(board);
 
@@ -101,10 +101,10 @@ public interface BoardMapper {
         board.setBoardImageUrl( patchDto.getBoardImageUrl() );
         if(patchDto.getBoardTags() !=null){
             List<BoardTag> boardTags = patchDto.getBoardTags().stream()
-                    .map(BoardTagDto -> {
+                    .map(boardTagName -> {
                         BoardTag boardTag = new BoardTag();
                         Tag tag = new Tag();
-                        tag.setTagName(BoardTagDto.getTagName());
+                        tag.setTagName(boardTagName);
                         boardTag.addTag(tag);
 
                         return boardTag;
