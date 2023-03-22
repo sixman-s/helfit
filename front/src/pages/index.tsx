@@ -38,7 +38,7 @@ export default function Home() {
             <SignupGuide />
           </Header>
         )}
-        <CommunityInfo />
+        <CommunityInfo token={token} />
       </section>
     </Layout>
   );

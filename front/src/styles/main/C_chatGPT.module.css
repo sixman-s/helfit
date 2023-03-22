@@ -1,0 +1,106 @@
+.stikyBtn {
+  position: fixed;
+  width: 64px;
+  height: 64px;
+  bottom: 0;
+  right: 0;
+  background: none;
+  margin: 20px;
+  cursor: pointer;
+  transition: transform 1s;
+  border-radius: 100px;
+}
+
+.stikyBtn:hover {
+  transform: rotate(360deg);
+}
+
+.stikyBtn:active {
+  box-shadow: rgba(3, 102, 214, 0.3) 0px 0px 0px 3px;
+}
+
+.popupContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  bottom: 100px;
+  right: 20px;
+  position: fixed;
+  width: 444px;
+  height: 500px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: -6px 0px 20px rgba(15, 73, 166, 0.06);
+}
+
+.chatField {
+  flex-grow: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.inputArea {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  background: var(--bg_1);
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+  border-radius: 0px 0px 15px 15px;
+}
+
+.textinput {
+  flex-grow: 1;
+  border: 1px solid var(--line_2);
+  padding: 8px 20px;
+  margin-right: 10px;
+  border-radius: 6px;
+}
+
+.submitBtn {
+  padding: 8px 20px;
+  border-radius: 6px;
+  background-color: var(--main);
+  color: white;
+}
+
+.chatView {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+.answerArea {
+  justify-content: flex-start;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+
+.answerArea:first-child {
+  margin-top: 0px;
+}
+
+.speech {
+  width: 70%;
+  background: var(--bg_1);
+  padding: 15px 10px;
+  border-radius: 15px;
+}
+.answer {
+  margin-left: 10px;
+}
+.question {
+  margin-right: 10px;
+}
+
+.questionArea {
+  justify-content: flex-end;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-top: 20px;
+}

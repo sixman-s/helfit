@@ -10,7 +10,6 @@
 }
 
 .dateInput {
-  position: relative;
   flex-grow: 1;
   font-family: 'pretendard';
   border: 1px solid var(--line_1);
