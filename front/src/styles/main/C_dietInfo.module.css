@@ -24,10 +24,18 @@
 .answer,
 .question {
   width: 100%;
-  color: var(--text_3);
+  color: var(--text_4);
   margin-left: 20px;
-  margin-top: 5px;
   line-height: 24px;
+}
+
+.link {
+  color: var(--main);
+}
+
+.title {
+  color: var(--text_3);
+  font-weight: 600;
 }
 
 .loading {

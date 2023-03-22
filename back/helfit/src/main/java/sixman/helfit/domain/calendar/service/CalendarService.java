@@ -20,7 +20,7 @@ public class CalendarService {
     private final CustomBeanUtil<Calendar> customBeanUtil;
 
     public Calendar createCalendar(Calendar calendar, User user) {
-        verifyExistsCalendarByRecodedAt(calendar.getRecodedAt());
+        verifyExistsCalendarByRecodedAt(user.getUserId(), calendar.getRecodedAt());
 
         calendar.setUser(user);
 
@@ -50,14 +50,7 @@ public class CalendarService {
     }
 
     @Transactional(readOnly = true)
-    public Calendar findVerifiedCalendar(Long calendarId) {
-        Optional<Calendar> byCalendarId = calendarRepository.findByCalendarId(calendarId);
-
-        return byCalendarId.orElseThrow(() -> new BusinessLogicException(ExceptionCode.NOT_FOUND));
-    }
-
-    @Transactional(readOnly = true)
-    public Calendar findVerifiedCalendarWithUserId(Long calendarId, Long userId) {
+    public Calendar findCalendarByUserId(Long calendarId, Long userId) {
         Optional<Calendar> byCalendarId = calendarRepository.findByCalendarId(calendarId);
 
         Calendar calendar = byCalendarId.orElseThrow(() -> new BusinessLogicException(ExceptionCode.NOT_FOUND));
@@ -69,8 +62,8 @@ public class CalendarService {
     }
 
     @Transactional(readOnly = true)
-    public void verifyExistsCalendarByRecodedAt(String recodedAt) {
-        Optional<Calendar> byCalendarWithUserId = calendarRepository.findByRecodedAt(recodedAt);
+    public void verifyExistsCalendarByRecodedAt(Long userId, String recodedAt) {
+        Optional<Calendar> byCalendarWithUserId = calendarRepository.findByUserIdAndRecodedAt(userId, recodedAt);
 
         byCalendarWithUserId.ifPresent((e) -> {
             throw new BusinessLogicException(ExceptionCode.ALREADY_EXISTS_INFORMATION);

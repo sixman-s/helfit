@@ -10,14 +10,11 @@ import sixman.helfit.domain.calendar.dto.CalendarDto;
 import sixman.helfit.domain.calendar.entity.Calendar;
 import sixman.helfit.domain.calendar.mapper.CalendarMapper;
 import sixman.helfit.domain.calendar.service.CalendarService;
-import sixman.helfit.exception.BusinessLogicException;
-import sixman.helfit.exception.ExceptionCode;
 import sixman.helfit.response.ApiResponse;
 import sixman.helfit.security.entity.UserPrincipal;
 import sixman.helfit.utils.UriUtil;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import java.net.URI;
 import java.util.List;
@@ -62,7 +59,7 @@ public class CalendarController {
         @Positive @PathVariable("calendar-id") Long calendarId,
         @AuthenticationPrincipal UserPrincipal userPrincipal
     ) {
-        Calendar verifiedCalendarWithUserId = calendarService.findVerifiedCalendarWithUserId(calendarId, userPrincipal.getUser().getUserId());
+        Calendar verifiedCalendarWithUserId = calendarService.findCalendarByUserId(calendarId, userPrincipal.getUser().getUserId());
 
         CalendarDto.Response response = calendarMapper.calendarToCalendarDtoResponse(verifiedCalendarWithUserId);
 
@@ -70,7 +67,7 @@ public class CalendarController {
     }
 
     /*
-     * # 캘린더 등록일자 기준 조회
+     * # 캘린더 등록일 기준 조회
      *
      */
     @GetMapping(params = { "recodedAt" })
@@ -111,7 +108,7 @@ public class CalendarController {
         @RequestBody CalendarDto.Patch requestBody,
         @AuthenticationPrincipal UserPrincipal userPrincipal
     ) {
-        Calendar verifiedCalendarWithUserId = calendarService.findVerifiedCalendarWithUserId(calendarId, userPrincipal.getUser().getUserId());
+        Calendar verifiedCalendarWithUserId = calendarService.findCalendarByUserId(calendarId, userPrincipal.getUser().getUserId());
 
         Calendar calendar = calendarService.updateCalendar(
             calendarMapper.calendarDtoPatchToCalendar(requestBody),
@@ -133,7 +130,7 @@ public class CalendarController {
         @Positive @PathVariable("calendar-id") Long calendarId,
         @AuthenticationPrincipal UserPrincipal userPrincipal
     ) {
-        Calendar verifiedCalendarWithUserId = calendarService.findVerifiedCalendarWithUserId(calendarId, userPrincipal.getUser().getUserId());
+        Calendar verifiedCalendarWithUserId = calendarService.findCalendarByUserId(calendarId, userPrincipal.getUser().getUserId());
 
         calendarService.deleteCalendar(verifiedCalendarWithUserId);
 

@@ -3,6 +3,8 @@ package sixman.helfit.domain.calendar.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import sixman.helfit.audit.Auditable;
 import sixman.helfit.domain.user.entity.User;
 
@@ -24,7 +26,6 @@ public class Calendar extends Auditable {
 
     private Integer kcal;
 
-    @Column(unique = true)
     private String recodedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)

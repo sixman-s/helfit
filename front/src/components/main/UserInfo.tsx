@@ -1,6 +1,7 @@
 import styled from '../../styles/main/C_userInfo.module.css';
 import Link from 'next/link';
 import UserKcalChart from './util/UserKcalChart';
+import UserWeightChart from './util/UserWeightChart';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import NonData from './atoms/NonData';
@@ -24,19 +25,21 @@ const UserInfo = ({ token }) => {
         .then((res) => {
           setKcal(res.data.body.data);
         })
-        .catch((error) => console.log(error));
+        .catch((error) => console.log('칼로리 데이터 받아오기' + '실패'));
       axios
         .get(`${url}/api/v1/stat/physical`, headers)
         .then((res) => {
           setWeight(res.data.body.data);
         })
-        .catch((error) => console.log(error));
+        .catch((error) => console.log('몸무게 데이터 받아오기' + '실패'));
       axios
         .get(`${url}/api/v1/calculate/${userData.userId}`, headers)
         .then((res) => {
           setkcalGoal(res.data.body.data.result);
         })
-        .catch((error) => console.log(error));
+        .catch((error) =>
+          console.log('계산기 칼로리 데이터 받아오기' + '실패')
+        );
     }
   }, [token]);
 
@@ -64,7 +67,7 @@ const UserInfo = ({ token }) => {
             {weight.length === 0 ? (
               <NonData link='/mypage' btn='Mypage' />
             ) : (
-              <div />
+              <UserWeightChart data={weight} />
             )}
           </div>
         </figure>

@@ -2,6 +2,8 @@ package sixman.helfit.domain.statistics.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import sixman.helfit.domain.calendar.dto.CalendarDto;
 import sixman.helfit.domain.statistics.Dto.StatDto;
 import sixman.helfit.domain.statistics.entity.Stat;
@@ -16,5 +18,8 @@ public interface StatMapper {
     StatDto.calendarResponse statToStatDtoResponse(Stat stat);
 
     List<StatDto.calendarResponse> statListToStatDtoResponseList(List<Stat> stats);
-   // List<StatDto.Response> statListToStatDtoResponseList(List<Stat> calendarList);
+
+    List<StatDto.boardResponse> statListToStatDtoBoardResponseList(List<Stat> stats);
+
+    List<StatDto.physicalResponse> statListToStatDtoPhysicalResponseList(List<Stat> stats);
 }

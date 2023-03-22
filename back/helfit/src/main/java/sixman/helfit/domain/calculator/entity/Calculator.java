@@ -25,6 +25,7 @@ public class Calculator extends Auditable {
     private ActivityLevel ActivityLevel;
     @Column
     private Double result;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
     private User user;

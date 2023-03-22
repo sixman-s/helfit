@@ -12,8 +12,10 @@ public interface CalendarMapper {
     CalendarMapper INSTANCE = Mappers.getMapper(CalendarMapper.class);
 
     Calendar calendarDtoPostToCalendar(CalendarDto.Post requestBody);
+
     Calendar calendarDtoPatchToCalendar(CalendarDto.Patch requestBody);
 
     CalendarDto.Response calendarToCalendarDtoResponse(Calendar calendar);
+
     List<CalendarDto.Response> calendarListToCalendarDtoResponseList(List<Calendar> calendarList);
 }

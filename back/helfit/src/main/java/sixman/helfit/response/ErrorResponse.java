@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MissingPathVariableException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import sixman.helfit.exception.ExceptionCode;
 import sixman.helfit.utils.GsonUtil;
@@ -54,8 +56,24 @@ public class ErrorResponse {
     }
 
     public static ErrorResponse of(MethodArgumentTypeMismatchException e) {
-        final String value = e.getValue() == null ? "" : e.getValue().toString();
-        final List<FieldError> errors = FieldError.of(e.getName(), value, e.getErrorCode());
+        final String name = e.getName();
+        final String value = e.getValue() != null ? e.getValue().toString() : "";
+        final List<FieldError> errors = FieldError.of(name, value, e.getMessage());
+
+        return new ErrorResponse(ExceptionCode.INVALID_TYPE_VALUE, errors);
+    }
+
+    public static ErrorResponse of(MissingServletRequestParameterException e) {
+        final String name = e.getParameterName();
+        final String type = e.getParameterType();
+        final List<FieldError> errors = FieldError.of(name, type, e.getMessage());
+
+        return new ErrorResponse(ExceptionCode.INVALID_TYPE_VALUE, errors);
+    }
+
+    public static ErrorResponse of(MissingPathVariableException e) {
+        final String name = e.getVariableName();
+        final List<FieldError> errors = FieldError.of(name, "", e.getMessage());
 
         return new ErrorResponse(ExceptionCode.INVALID_TYPE_VALUE, errors);
     }

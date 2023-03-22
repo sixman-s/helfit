@@ -16,18 +16,16 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class BoardDto {
-
     @Getter
     @AllArgsConstructor
-    public static class Post{
-
+    public static class Post {
         @NotNull
-        @Size(min=1, max=2000)
+        @Size(min = 1, max = 2000)
         @NoKoreanCurseWords
         private String title;
 
         @NotNull
-        @Size(min=1, max=20000)
+        @Size(min = 1, max = 16383)
         @NoKoreanCurseWords
         private String text;
 
@@ -38,16 +36,38 @@ public class BoardDto {
         private List<BoardTagDto> boardTags;
 
     }
+
     @Getter
     @Setter
     @AllArgsConstructor
     public static class Response {
+        private long boardId;
+        private long userId;
+        private String userNickname;
         private String title;
         private String text;
         private String boardImageUrl;
-        private List<CommentDto.responseDto> comments;
         private List<TagDto.GetResponse> tags;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class Patch {
+        @Size(min = 1, max = 2000)
+        @NoKoreanCurseWords
+        private String title;
+        @Size(min = 1, max = 20000)
+        @NoKoreanCurseWords
+        private String text;
+        private String boardImageUrl;
+        private List<BoardTagDto> boardTags;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class View {
+        private long view;
     }
 }

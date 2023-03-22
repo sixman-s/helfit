@@ -1,5 +1,6 @@
 package sixman.helfit;
 
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -8,11 +9,12 @@ import sixman.helfit.security.properties.AppProperties;
 import sixman.helfit.security.properties.CorsProperties;
 
 @EnableJpaAuditing
-@SpringBootApplication
+@EnableBatchProcessing
 @EnableConfigurationProperties({
 	CorsProperties.class,
 	AppProperties.class
 })
+@SpringBootApplication
 public class HelfitApplication {
 
 	public static void main(String[] args) {

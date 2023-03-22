@@ -15,12 +15,13 @@ import sixman.helfit.domain.user.entity.User;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface BoardMapper {
     default Board boardPostToBoard(BoardDto.Post postDto,Long categoryId, Long userId){
-        if ( postDto == null ) {
+        if ( postDto == null || categoryId == null || userId == null ) {
             return null;
         }
         Board board = new Board();
@@ -44,6 +45,7 @@ public interface BoardMapper {
 
                         return boardTag;
                     }).collect(Collectors.toList());
+            board.setBoardTags(boardTags);
         }
         board.setUser(user);
         board.setCategory(category);
@@ -55,11 +57,12 @@ public interface BoardMapper {
         if ( board == null ) {
             return null;
         }
-
+        Long boardId = null;
+        Long userId = null;
+        String userNickname = null;
         String title = null;
         String text = null;
         String boardImageUrl = null;
-        List<CommentDto.responseDto> comments = new ArrayList<>();
         List<TagDto.GetResponse> tagNames = new ArrayList<>();
         LocalDateTime createdAt = null;
         LocalDateTime modifiedAt = null;
@@ -67,27 +70,49 @@ public interface BoardMapper {
         title = board.getTitle();
         text = board.getText();
         boardImageUrl = board.getBoardImageUrl();
-        List<Comment> listComment = board.getComments();
-        if ( listComment != null ) {
-            for(Comment comment : listComment){
-                CommentDto.responseDto responseDto = new CommentDto.responseDto(comment.getCommentBody(),
-                        comment.getCreatedAt(),comment.getModifiedAt());
-                comments.add(responseDto);
-            }
-        }
+
         createdAt = board.getCreatedAt();
         modifiedAt = board.getModifiedAt();
+        boardId = board.getBoardId();
+        userId =board.getUser().getUserId();
+        userNickname = board.getUser().getNickname();
 
         List<BoardTag> listBoardTag = board.getBoardTags();
-        if(!listBoardTag.isEmpty()){
+        if (!listBoardTag.isEmpty()) {
             for(BoardTag boardTag : listBoardTag){
                 TagDto.GetResponse responseDto = new TagDto.GetResponse(boardTag.getTag().getTagId(),boardTag.getTag().getTagName());
                 tagNames.add(responseDto);
             }
         }
-        return new BoardDto.Response(title,text,boardImageUrl,comments,tagNames,createdAt,modifiedAt);
+        return new BoardDto.Response(boardId,userId,userNickname,title,text,boardImageUrl,tagNames,createdAt,modifiedAt);
 
     }
     List<BoardDto.Response> boardsToResponses(List<Board> boards);
 
+    default Board boardPatchToBoard(BoardDto.Patch patchDto,Long categoryId) {
+        if ( patchDto == null || categoryId == null ) {
+            return null;
+        }
+
+        Board board = new Board();
+
+        board.setTitle( patchDto.getTitle() );
+        board.setText( patchDto.getText() );
+        board.setBoardImageUrl( patchDto.getBoardImageUrl() );
+        if(patchDto.getBoardTags() !=null){
+            List<BoardTag> boardTags = patchDto.getBoardTags().stream()
+                    .map(BoardTagDto -> {
+                        BoardTag boardTag = new BoardTag();
+                        Tag tag = new Tag();
+                        tag.setTagName(BoardTagDto.getTagName());
+                        boardTag.addTag(tag);
+
+                        return boardTag;
+                    }).collect(Collectors.toList());
+            board.setBoardTags(boardTags);
+        }
+
+        return board;
+    };
+    BoardDto.View boardToBoardView(Board board);
 }
