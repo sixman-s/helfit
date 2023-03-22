@@ -1,6 +1,7 @@
 import styled from '../../styles/main/C_userInfo.module.css';
 import Link from 'next/link';
 import UserKcalChart from './util/UserKcalChart';
+import UserWeightChart from './util/UserWeightChart';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import NonData from './atoms/NonData';
@@ -64,7 +65,7 @@ const UserInfo = ({ token }) => {
             {weight.length === 0 ? (
               <NonData link='/mypage' btn='Mypage' />
             ) : (
-              <div />
+              <UserWeightChart data={weight} />
             )}
           </div>
         </figure>
