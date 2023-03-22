@@ -33,7 +33,9 @@ public class BoardDto {
         private String boardImageUrl;
 
         @Nullable
-        private List<BoardTagDto> boardTags;
+        @NoKoreanCurseWords
+        @Size(max = 2000)
+        private List<String> boardTags;
 
     }
 
@@ -62,7 +64,7 @@ public class BoardDto {
         @NoKoreanCurseWords
         private String text;
         private String boardImageUrl;
-        private List<BoardTagDto> boardTags;
+        private List<String> boardTags;
     }
 
     @Getter
