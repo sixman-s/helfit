@@ -65,18 +65,20 @@ const HealthPost: React.FC = () => {
 
     return (
       <div>
-        <li className={style.ListItem}>
-          <div className={style.No}>{order}.</div>
-          <div className={style.title}>{title}</div>
-          <div className={style.author}>{userNickname}</div>
-          <div className={style.date}>{createdAtString}</div>
-          <div className={style.tag}>
-            {tags.map((tag) => (
-              <span className={style.tagItem}>{tag.tagName}</span>
-            ))}
-          </div>
-          <div className={style.views}>{view}</div>
-        </li>
+        <ul>
+          <li className={style.ListItem}>
+            <div className={style.No}>{order}.</div>
+            <div className={style.title}>{title}</div>
+            <div className={style.author}>{userNickname}</div>
+            <div className={style.date}>{createdAtString}</div>
+            <div className={style.tag}>
+              {tags.map((tag) => (
+                <span className={style.tagItem}>{tag.tagName}</span>
+              ))}
+            </div>
+            <div className={style.views}>{view}</div>
+          </li>
+        </ul>
       </div>
     );
   };

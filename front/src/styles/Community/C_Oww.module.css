@@ -14,7 +14,9 @@
 .ul {
   grid-area: content;
   display: flex;
+  grid-gap: 20px;
   flex-wrap: wrap;
+  justify-content: center;
 }
 .button {
   background-color: var(--main);

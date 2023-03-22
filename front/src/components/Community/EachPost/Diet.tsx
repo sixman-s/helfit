@@ -59,33 +59,35 @@ const Oww: React.FC = () => {
 
     return (
       <div>
-        <li className={style.SNSbox}>
-          <div className={style.postUser}>
-            <img
-              src={userProfile}
-              className={style.UserPhoto}
-              onError={() =>
-                setUserProfile('../../assets/Community/UserProfile.svg')
-              }
-            />
-            <div className={style.postUserName}>{userNickname}</div>
-          </div>
-          <div className={style.photo}></div>
-          <div className={style.title}>{title}</div>
-          <div className={style.postInfo}>
-            <div className={style.postLike}>
-              <img src='../../assets/Community/Like.svg' />
-              <div className={style.postInfoText}>좋아요</div>
+        <ul>
+          <li className={style.SNSbox}>
+            <div className={style.postUser}>
+              <img
+                src={userProfile}
+                className={style.UserPhoto}
+                onError={() =>
+                  setUserProfile('../../assets/Community/UserProfile.svg')
+                }
+              />
+              <div className={style.postUserName}>{userNickname}</div>
             </div>
-            <div className={style.postComment}>
-              <img src='../../assets/Community/Comment.svg' />
-              <div className={style.postInfoText}>댓글</div>
+            <div className={style.photo}></div>
+            <div className={style.title}>{title}</div>
+            <div className={style.postInfo}>
+              <div className={style.postLike}>
+                <img src='../../assets/Community/Like.svg' />
+                <div className={style.postInfoText}>좋아요</div>
+              </div>
+              <div className={style.postComment}>
+                <img src='../../assets/Community/Comment.svg' />
+                <div className={style.postInfoText}>댓글</div>
+              </div>
+              <div className={style.viewCount}>
+                <div className={style.postInfoText}>조회수 : {view}</div>
+              </div>
             </div>
-            <div className={style.viewCount}>
-              <div className={style.postInfoText}>조회수 : {view}</div>
-            </div>
-          </div>
-        </li>
+          </li>
+        </ul>
       </div>
     );
   };
