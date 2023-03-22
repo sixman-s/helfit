@@ -31,6 +31,6 @@ public class Tag extends Auditable {
     private List<BoardTag> boardTags = new ArrayList<>();
 
     public void removeBoardTags(BoardTag boardTag) {
-        boardTags.remove(boardTag);
+        this.boardTags.remove(boardTag);
     }
 }
