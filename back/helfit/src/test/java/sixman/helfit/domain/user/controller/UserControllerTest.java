@@ -6,12 +6,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import sixman.helfit.domain.file.service.FileService;
 import sixman.helfit.domain.user.dto.UserDto;
 import sixman.helfit.domain.user.entity.User;
@@ -20,18 +18,21 @@ import sixman.helfit.domain.user.repository.UserRefreshTokenRepository;
 import sixman.helfit.domain.user.service.UserService;
 import sixman.helfit.restdocs.ControllerTest;
 import sixman.helfit.restdocs.annotations.WithMockUserCustom;
+import sixman.helfit.restdocs.support.ConstrainedFields;
 import sixman.helfit.security.mail.entity.EmailConfirmToken;
 import sixman.helfit.security.mail.service.EmailConfirmTokenService;
 import sixman.helfit.security.properties.AppProperties;
 import sixman.helfit.security.token.AuthTokenProvider;
 
-import javax.mail.MessagingException;
+
+import java.util.List;
 import java.util.Map;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static sixman.helfit.restdocs.custom.CustomRequestFieldsSnippet.customRequestFields;
 
 @WebMvcTest(UserController.class)
 class UserControllerTest extends ControllerTest {
@@ -61,8 +62,14 @@ class UserControllerTest extends ControllerTest {
     @MockBean
     UserRefreshTokenRepository userRefreshTokenRepository;
 
+    private User user;
+    private UserDto.Response userDtoResponse;
+
     @BeforeEach
     void setup() {
+        Map<String, Object> userResource = userResource();
+        user = (User) userResource.get("user");
+        userDtoResponse = (UserDto.Response) userResource.get("userDtoResponse");
     }
 
     @Test
@@ -75,6 +82,28 @@ class UserControllerTest extends ControllerTest {
             .willReturn(new EmailConfirmToken());
 
         Mockito.doNothing().when(emailConfirmTokenService).sendEmail(Mockito.anyString(), Mockito.anyString());
+
+        postResource(
+            DEFAULT_URL + "/signup",
+            new UserDto.Signup(
+                user.getId(),
+                user.getPassword(),
+                user.getNickname(),
+                user.getEmail(),
+                "Y"
+            )
+        )
+            .andExpect(status().isCreated())
+            .andExpect(header().exists("Locations"))
+            .andDo(restDocs.document(
+                // customRequestFields(
+                //     "custom-request",
+                //     List.of(
+                //         constrainedFields.withPath("questionId").type(JsonFieldType.NUMBER).description("질문 식별자"),
+                //         constrainedFields.withPath("body").type(JsonFieldType.STRING).description("답변 본문 내용")
+                //     ).toArray(FieldDescriptor[]::new)
+                // )
+            ));
     }
 
     @Test
@@ -82,10 +111,10 @@ class UserControllerTest extends ControllerTest {
     @WithMockUserCustom
     void getUserTest() throws Exception {
         given(userService.findUserByUserId(Mockito.anyLong()))
-            .willReturn((User) userResource().get("user"));
+            .willReturn(user);
 
         given(userMapper.userToUserDtoResponse(Mockito.any(User.class)))
-            .willReturn((UserDto.Response) userResource().get("userDtoResponse"));
+            .willReturn(userDtoResponse);
 
         getResource(DEFAULT_URL)
             .andExpect(status().isOk())
@@ -95,6 +124,10 @@ class UserControllerTest extends ControllerTest {
                 genRelaxedResponseBodyFields("body.data")
             ));
     }
+
+    // private <T> FieldDescriptor[] genCustomRequestFields(Class<T> clazz) {
+    //     ConstrainedFields constrainedFields = new ConstrainedFields(clazz.class);
+    // }
 
     private ResponseFieldsSnippet genRelaxedResponseHeaderFields(String beneath) {
         return relaxedResponseFields(

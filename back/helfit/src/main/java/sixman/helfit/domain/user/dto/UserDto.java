@@ -17,6 +17,7 @@ import static sixman.helfit.domain.user.entity.User.*;
 
 public class UserDto {
     @Getter
+    @AllArgsConstructor
     public static class Signup {
         @NotBlank
         private String id;
@@ -44,6 +45,7 @@ public class UserDto {
     }
 
     @Getter
+    @AllArgsConstructor
     public static class Login {
         @NotBlank
         private String id;
@@ -53,6 +55,7 @@ public class UserDto {
     }
 
     @Getter
+    @AllArgsConstructor
     public static class Update {
         @Nullable
         @Pattern(regexp = "^\\S+(\\s?\\S+)*$", message = "별명은 공백을 포함할 수 없습니다.")
@@ -60,6 +63,7 @@ public class UserDto {
     }
 
     @Getter
+    @AllArgsConstructor
     public static class Password {
         @Pattern(
             regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!@#$%^&*()_\\-\"',.+/])[A-Za-z\\d!@#$%^&*()_\\-\"',.+/]{8,}$",

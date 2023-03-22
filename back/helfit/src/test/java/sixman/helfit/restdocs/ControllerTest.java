@@ -70,6 +70,7 @@ public abstract class ControllerTest {
             RoleType.USER
         );
         user.setUserId(1L);
+        user.setPassword("Test1234!@#$");
         user.setCreatedAt(LocalDateTime.now());
         user.setModifiedAt(LocalDateTime.now());
 
