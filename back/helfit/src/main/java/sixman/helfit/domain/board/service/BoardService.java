@@ -90,10 +90,13 @@ public class BoardService {
         List<BoardTag> updatedBoardTags = board.getBoardTags();
         if (updatedBoardTags != null) {
             for(BoardTag boardTag : findBoard.getBoardTags()){
-                boardTag.getTag().removeBoardTags(boardTag);
+                Tag tag = boardTag.getTag();
+                boardTag.removeFromBoard();
+                boardTag.removeFromTag();
                 boardTagRepository.delete(boardTag);
+                tagService.saveTag(tag);
             }
-                findBoard.getBoardTags().clear();
+
             for (BoardTag updatedBoardTag : updatedBoardTags) {
                 updatedBoardTag.addBoard(findBoard);
                 Tag tag = tagService.findTag(updatedBoardTag.getTag());

@@ -66,6 +66,7 @@ public interface BoardMapper {
         List<TagDto.GetResponse> tagNames = new ArrayList<>();
         LocalDateTime createdAt = null;
         LocalDateTime modifiedAt = null;
+        Long view = null;
 
         title = board.getTitle();
         text = board.getText();
@@ -76,6 +77,7 @@ public interface BoardMapper {
         boardId = board.getBoardId();
         userId =board.getUser().getUserId();
         userNickname = board.getUser().getNickname();
+        view = board.getView();
 
         List<BoardTag> listBoardTag = board.getBoardTags();
         if (!listBoardTag.isEmpty()) {
@@ -84,7 +86,7 @@ public interface BoardMapper {
                 tagNames.add(responseDto);
             }
         }
-        return new BoardDto.Response(boardId,userId,userNickname,title,text,boardImageUrl,tagNames,createdAt,modifiedAt);
+        return new BoardDto.Response(boardId,userId,view,userNickname,title,text,boardImageUrl,tagNames,createdAt,modifiedAt);
 
     }
     List<BoardDto.Response> boardsToResponses(List<Board> boards);
