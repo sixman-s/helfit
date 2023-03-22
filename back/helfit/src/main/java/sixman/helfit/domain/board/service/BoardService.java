@@ -15,6 +15,9 @@ import sixman.helfit.domain.category.service.CategoryService;
 import sixman.helfit.domain.comment.entity.Comment;
 import sixman.helfit.domain.comment.repository.CommentRepository;
 import sixman.helfit.domain.comment.service.CommentService;
+import sixman.helfit.domain.like.entity.Like;
+import sixman.helfit.domain.like.repository.LikeRepository;
+import sixman.helfit.domain.like.service.LikeService;
 import sixman.helfit.domain.tag.entity.Tag;
 import sixman.helfit.domain.tag.service.TagService;
 
@@ -40,14 +43,20 @@ public class BoardService {
     private final BoardTagRepository boardTagRepository;
     private final CommentRepository commentRepository;
 
-    public BoardService(BoardRepository boardRepository, TagService tagService, CategoryService categoryService,
-                        UserService userService, BoardTagRepository boardTagRepository, CommentRepository commentRepository) {
+    private final LikeRepository likeRepository;
+    private final LikeService likeService;
+
+
+    public BoardService(BoardRepository boardRepository, TagService tagService, CategoryService categoryService, UserService userService, BoardTagRepository boardTagRepository,
+                        CommentRepository commentRepository, LikeRepository likeRepository, LikeService likeService) {
         this.boardRepository = boardRepository;
         this.tagService = tagService;
         this.categoryService = categoryService;
         this.userService = userService;
         this.boardTagRepository = boardTagRepository;
         this.commentRepository = commentRepository;
+        this.likeRepository = likeRepository;
+        this.likeService = likeService;
     }
 
     public Board createBoard(Board board, UserPrincipal userPrincipal){
@@ -101,6 +110,25 @@ public class BoardService {
         List<Comment> comments = commentRepository.findComments(boardId);
         commentRepository.deleteAll(comments);
         boardRepository.delete(findBoard);
+    }
+
+    public Like createLike(UserPrincipal userPrincipal, Long boardId){
+        Optional<Like> optionalLike = likeRepository.findByIds(userPrincipal.getUser().getUserId(),boardId);
+        if(optionalLike.isPresent()){
+            throw new BusinessLogicException(ExceptionCode.ALREADY_LIKE_BOARD);
+        }
+        else{
+            Like like = new Like();
+            like.setUser(userPrincipal.getUser());
+            like.addBoard(findBoardById(boardId));
+            return likeRepository.save(like);
+        }
+    }
+
+    public long getBoardLikes(Long boardId){
+        Board board = findBoardById(boardId);
+
+        return board.getLikes().size();
     }
 
     private void verifyBoard(Board board,UserPrincipal userPrincipal) {

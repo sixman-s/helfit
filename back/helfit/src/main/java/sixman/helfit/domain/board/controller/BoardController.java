@@ -10,6 +10,7 @@ import sixman.helfit.domain.board.dto.BoardDto;
 import sixman.helfit.domain.board.entity.Board;
 import sixman.helfit.domain.board.mapper.BoardMapper;
 import sixman.helfit.domain.board.service.BoardService;
+import sixman.helfit.domain.like.entity.Like;
 import sixman.helfit.response.ApiResponse;
 import sixman.helfit.security.entity.UserPrincipal;
 import sixman.helfit.utils.UriUtil;
@@ -100,6 +101,22 @@ public class BoardController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity postLike(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                    @PathVariable ("board-id") @Positive Long boardId) {
+        Like like = boardService.createLike(userPrincipal,boardId);
+        URI location = UriUtil.createUri(BOARD_DEFAULT_URL +"/likes",like.getLikeId());
+
+        return ResponseEntity.created(location).body(ApiResponse.created());
+    }
+
+    @GetMapping("/likes/{board-id}")
+    public ResponseEntity getBoardLikes(@PathVariable ("board-id") @Positive Long boardId) {
+        return new ResponseEntity(boardService.getBoardLikes(boardId),HttpStatus.OK);
+    }
+
+    @DeleteMapping("/likes/{board-id}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity deleteLike(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                   @PathVariable ("board-id") @Positive Long boardId) {
+
 
         return new ResponseEntity(HttpStatus.OK);
     }

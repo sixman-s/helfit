@@ -4,7 +4,6 @@
 //import lombok.NoArgsConstructor;
 //import lombok.Setter;
 //import sixman.helfit.domain.like.entity.Like;
-//import sixman.helfit.domain.tag.entity.Tag;
 //
 //import javax.persistence.*;
 //
