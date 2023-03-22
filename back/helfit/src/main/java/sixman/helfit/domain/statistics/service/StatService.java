@@ -67,7 +67,7 @@ public class StatService {
     }
     @Transactional(readOnly = true)
     public List<Stat> getWeightByUserId(Long userId){
-        Pageable pageable = PageRequest.of(1, 7, Sort.by("modifiedAt").descending());
+        Pageable pageable = PageRequest.of(0, 7, Sort.by("modifiedAt").descending());
         Page<Physical> weightList = physicalRepository.findAllPhysicalByUserId(userId,pageable);
         List<Stat> weightStatList = new ArrayList<>();
         for(Physical physical : weightList){
