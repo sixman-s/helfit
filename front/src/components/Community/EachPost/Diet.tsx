@@ -40,14 +40,13 @@ const Oww: React.FC = () => {
     console.log(post.boardId);
     axios
       .post(`${URL}/api/v1/board/view/${post.boardId}`)
-      .then(() => router.push(`/community/oww/${post.boardId}`))
+      .then(() => router.push(`/community/diet/${post.boardId}`))
       .catch((err) => alert(err));
   };
 
   useEffect(() => {
     axios
-      .get(`${URL}/api/v1/board/5?page=${activePage}`)
-      //.then((res) => console.log(res.data))
+      .get(`${URL}/api/v1/board/6?page=${activePage}`)
       .then((res) => setFetchedPosts(res.data))
       .catch((err) => console.log(err));
   }, [activePage]);
@@ -56,7 +55,7 @@ const Oww: React.FC = () => {
     post,
     order
   }) => {
-    const { title, userNickname, view, boardImageUrl } = post;
+    const { title, userNickname, view } = post;
 
     return (
       <div>
@@ -72,7 +71,7 @@ const Oww: React.FC = () => {
               />
               <div className={style.postUserName}>{userNickname}</div>
             </div>
-            <div className={style.photo}>{boardImageUrl}</div>
+            <div className={style.photo}></div>
             <div className={style.title}>{title}</div>
             <div className={style.postInfo}>
               <div className={style.postLike}>

@@ -4,6 +4,7 @@ import style from '../../../styles/Community/C_Post.module.css';
 import Btn from '../../loginc/Buttons';
 import { Pagination, PaginationProps } from 'semantic-ui-react';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 
 interface Post {
   boardId: number;
@@ -14,6 +15,7 @@ interface Post {
   text: string;
   title: string;
   userNickname: string;
+  view: number;
 }
 type Props = {
   posts: Post[];
@@ -23,7 +25,7 @@ const URL = process.env.NEXT_PUBLIC_URL;
 const HealthPost: React.FC = () => {
   const [fetchedPosts, setFetchedPosts] = useState<Post[]>([]);
   const [activePage, setActivePage] = useState(1);
-
+  const router = useRouter();
   const handlePageChange = (
     event: React.MouseEvent<HTMLAnchorElement>,
     data: PaginationProps
@@ -31,10 +33,17 @@ const HealthPost: React.FC = () => {
     setActivePage(data.activePage as number);
   };
 
+  const handlePostView = (post: Post) => () => {
+    console.log(post.boardId);
+    axios
+      .post(`${URL}/api/v1/board/view/${post.boardId}`)
+      .then(() => router.push(`/community/crossfit/${post.boardId}`))
+      .catch((err) => alert(err));
+  };
+
   useEffect(() => {
     axios
       .get(`${URL}/api/v1/board/2?page=${activePage}`)
-      //.then((res) => console.log(res))
       .then((res) => setFetchedPosts(res.data))
       .catch((err) => console.log(err));
   }, [activePage]);
@@ -43,7 +52,7 @@ const HealthPost: React.FC = () => {
     post,
     order
   }) => {
-    const { title, tags, createdAt, userNickname } = post;
+    const { title, tags, createdAt, userNickname, view } = post;
 
     const createdAtString = new Date(createdAt)
       .toLocaleDateString('en-KR', {
@@ -56,18 +65,20 @@ const HealthPost: React.FC = () => {
 
     return (
       <div>
-        <li className={style.ListItem}>
-          <div className={style.No}>{order}.</div>
-          <div className={style.title}>{title}</div>
-          <div className={style.author}>{userNickname}</div>
-          <div className={style.date}>{createdAtString}</div>
-          <div className={style.tag}>
-            {tags.map((tag) => (
-              <span className={style.tagItem}>{tag.tagName}</span>
-            ))}
-          </div>
-          <div className={style.views}>조회수</div>
-        </li>
+        <ul>
+          <li className={style.ListItem}>
+            <div className={style.No}>{order}.</div>
+            <div className={style.title}>{title}</div>
+            <div className={style.author}>{userNickname}</div>
+            <div className={style.date}>{createdAtString}</div>
+            <div className={style.tag}>
+              {tags.map((tag) => (
+                <span className={style.tagItem}>{tag.tagName}</span>
+              ))}
+            </div>
+            <div className={style.views}>{view}</div>
+          </li>
+        </ul>
       </div>
     );
   };
@@ -91,10 +102,8 @@ const HealthPost: React.FC = () => {
         <div className={style.ListBody}>
           <ul>
             {fetchedPosts.map((post, index) => (
-              <li key={post.boardId}>
-                <Link href={`/community/crossfit/${post.boardId}`}>
-                  <PostCard post={post} order={index + 1} />
-                </Link>
+              <li key={post.boardId} onClick={handlePostView(post)}>
+                <PostCard post={post} order={index + 1} />
               </li>
             ))}
           </ul>

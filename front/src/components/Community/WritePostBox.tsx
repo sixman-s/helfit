@@ -39,10 +39,12 @@ const WritePostBox = () => {
   const handlePostButtonClick = () => {
     const titleError = validateTitle(title);
     const userID = JSON.parse(localStorage.UserInfo).userId;
+
     if (titleError) {
       setTitleError(titleError);
       return;
     }
+
     const accessToken = localStorage.accessToken;
     axios
       .post(
@@ -50,7 +52,7 @@ const WritePostBox = () => {
         {
           title: title,
           text: editorInput,
-          boardTags: tags.map((tag) => ({ tagName: tag }))
+          boardTags: tags
         },
         {
           headers: {
@@ -58,18 +60,19 @@ const WritePostBox = () => {
           }
         }
       )
-      // .then(() => {
-      //   const accessToken = localStorage.accessToken;
-      //   const formData = new FormData();
-      //   formData.append('multipartFile', selectedFile);
-      //   axios.post(`${URL}/api/v1/file/upload`, formData, {
-      //     headers: {
-      //       'content-type': 'multipart/form-data',
-      //       Authorization: `Bearer ${accessToken}`
-      //     }
-      //   });
-      // })
-      .then(() => alert(`userid: ${userID}  게시글 등록 성공`))
+      .then(() => {
+        if (selectedFile) {
+          // check if the user has selected a file
+          const formData = new FormData();
+          formData.append('multipartFile', selectedFile);
+          return axios.post(`${URL}/api/v1/file/upload`, formData, {
+            headers: {
+              'content-type': 'multipart/form-data',
+              Authorization: `Bearer ${accessToken}`
+            }
+          });
+        }
+      })
       .then(() => router.push('/community'))
       .catch((err) => {
         alert(err);
@@ -194,6 +197,7 @@ const WritePostBox = () => {
           <Editor
             editorInput={editorInput}
             setEditorInput={handleEditorInput}
+            formValues={editorInput}
           />
         </div>
       </div>

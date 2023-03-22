@@ -196,3 +196,9 @@
   width: 15px;
   margin-left: 40px;
 }
+.view {
+  display: flex;
+}
+.viewCount {
+  margin-left: 10px;
+}

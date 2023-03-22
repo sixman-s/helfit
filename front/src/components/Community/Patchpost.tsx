@@ -32,7 +32,10 @@ const PatchPostBox = () => {
 
   const router = useRouter();
   const { id } = router.query;
-  const boardID = id ? parseInt(id[id.length - 1]) : null;
+  let boardID: number | null = null;
+  if (typeof id === 'string') {
+    boardID = parseInt(id.split('/').pop() as string);
+  }
   const currentPage = router.asPath.split('/')[3];
   let categoryname: string;
   let pageNumber: Number;
@@ -48,6 +51,14 @@ const PatchPostBox = () => {
     case 'pilates':
       pageNumber = 4;
       categoryname = '필라테스 갤러리';
+      break;
+    case 'oww':
+      pageNumber = 5;
+      categoryname = '오운완 갤러리';
+      break;
+    case 'diet':
+      pageNumber = 6;
+      categoryname = '식단 갤러리';
       break;
     default:
       pageNumber = null;

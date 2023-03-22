@@ -93,3 +93,6 @@
   overflow: hidden;
   white-space: nowrap;
 }
+.ListBody {
+  cursor: pointer;
+}
