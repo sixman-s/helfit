@@ -20,11 +20,9 @@ public class XssProtectionSupport extends CharacterEscapes {
         asciiEscapes = CharacterEscapes.standardAsciiEscapesForJSON();
         asciiEscapes['<'] = CharacterEscapes.ESCAPE_CUSTOM;
         asciiEscapes['>'] = CharacterEscapes.ESCAPE_CUSTOM;
-        asciiEscapes['\"'] = CharacterEscapes.ESCAPE_CUSTOM;
         asciiEscapes['('] = CharacterEscapes.ESCAPE_CUSTOM;
         asciiEscapes[')'] = CharacterEscapes.ESCAPE_CUSTOM;
         asciiEscapes['#'] = CharacterEscapes.ESCAPE_CUSTOM;
-        asciiEscapes['\''] = CharacterEscapes.ESCAPE_CUSTOM;
 
         translator = new AggregateTranslator(
             new LookupTranslator(EntityArrays.BASIC_UNESCAPE),
@@ -37,7 +35,6 @@ public class XssProtectionSupport extends CharacterEscapes {
                     put("(",  "&#40;");
                     put(")",  "&#41;");
                     put("#",  "&#35;");
-                    put("'", "&#39;");
                 }}
             )
         );

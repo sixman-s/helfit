@@ -16,8 +16,8 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-@Component
-@Order(Ordered.HIGHEST_PRECEDENCE)
+// @Component
+// @Order(Ordered.HIGHEST_PRECEDENCE)
 public class XssProtectionFilter implements Filter {
 
     // private String excludePatterns;
@@ -58,7 +58,7 @@ public class XssProtectionFilter implements Filter {
                 );
 
                 wrappedRequest.resetInputStream(
-                    new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(newJsonObject).getBytes()
+                    new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsBytes(newJsonObject)
                 );
             }
         }

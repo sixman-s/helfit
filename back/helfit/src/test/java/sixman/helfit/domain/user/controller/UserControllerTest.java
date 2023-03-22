@@ -25,8 +25,7 @@ import sixman.helfit.security.properties.AppProperties;
 import sixman.helfit.security.token.AuthTokenProvider;
 
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -76,7 +75,10 @@ class UserControllerTest extends ControllerTest {
     @DisplayName("[테스트] 회원 가입 : LOCAL")
     void signupTest() throws Exception {
         given(userService.createUser(Mockito.any(User.class)))
-            .willReturn((User) userResource().get("user"));
+            .willReturn(user);
+
+        given(userMapper.userDtoSignupToUser(Mockito.any(UserDto.Signup.class)))
+            .willReturn(user);
 
         given(emailConfirmTokenService.createEmailConfirmToken(Mockito.anyLong()))
             .willReturn(new EmailConfirmToken());
@@ -94,15 +96,21 @@ class UserControllerTest extends ControllerTest {
             )
         )
             .andExpect(status().isCreated())
-            .andExpect(header().exists("Locations"))
+            .andExpect(header().exists("Location"))
             .andDo(restDocs.document(
-                // customRequestFields(
-                //     "custom-request",
-                //     List.of(
-                //         constrainedFields.withPath("questionId").type(JsonFieldType.NUMBER).description("질문 식별자"),
-                //         constrainedFields.withPath("body").type(JsonFieldType.STRING).description("답변 본문 내용")
-                //     ).toArray(FieldDescriptor[]::new)
-                // )
+                customRequestFields(
+                    "custom-request",
+                    genCustomRequestFields(
+                        UserDto.Signup.class,
+                        new LinkedHashMap<>() {{
+                            put("id", "회원 아이디");
+                            put("password", "회원 비밀번호");
+                            put("nickname", "회원 별명");
+                            put("email", "회원 이메일");
+                            put("personalInfoAgreement", "회원 개인정보 제공 동의 여부");
+                        }}
+                    )
+                )
             ));
     }
 
@@ -125,9 +133,26 @@ class UserControllerTest extends ControllerTest {
             ));
     }
 
-    // private <T> FieldDescriptor[] genCustomRequestFields(Class<T> clazz) {
-    //     ConstrainedFields constrainedFields = new ConstrainedFields(clazz.class);
-    // }
+    private <T> FieldDescriptor[] genCustomRequestFields(Class<T> clazz, Map<String, String> attributes) {
+        ConstrainedFields constrainedFields = new ConstrainedFields(clazz);
+        List<FieldDescriptor> attrList = new ArrayList<>();
+
+        for (String key : attributes.keySet()) {
+            FieldDescriptor fieldDescriptor = constrainedFields.withPath(key).description(attributes.get(key));
+
+            String type = key.getClass().getTypeName();
+
+            Optional<JsonFieldType> field = Arrays.stream(JsonFieldType.values())
+                                              .filter(v -> v.name().equalsIgnoreCase(type))
+                                              .findAny();
+
+            if (field.isPresent()) fieldDescriptor.type(field);
+
+            attrList.add(fieldDescriptor);
+        }
+
+        return attrList.toArray(FieldDescriptor[]::new);
+    }
 
     private ResponseFieldsSnippet genRelaxedResponseHeaderFields(String beneath) {
         return relaxedResponseFields(
@@ -143,9 +168,10 @@ class UserControllerTest extends ControllerTest {
             fieldWithPath("userId").type(JsonFieldType.NUMBER).description("회원 식별자"),
             fieldWithPath("id").type(JsonFieldType.STRING).description("회원 아이디"),
             fieldWithPath("email").type(JsonFieldType.STRING).description("회원 이메일"),
-            fieldWithPath("emailVerifiedYn").type(JsonFieldType.STRING).description("이메일 인증 여"),
+            fieldWithPath("emailVerifiedYn").type(JsonFieldType.STRING).description("이메일 인증 여부"),
+            fieldWithPath("nickname").type(JsonFieldType.STRING).description("회원 별명"),
             fieldWithPath("profileImageUrl").type(JsonFieldType.STRING).description("회원 프로필 이미지"),
-            fieldWithPath("personalInfoAgreementYn").type(JsonFieldType.STRING).description("개인정보 제공 동의 여부"),
+            fieldWithPath("personalInfoAgreementYn").type(JsonFieldType.STRING).description("회원 개인정보 제공 동의 여부"),
             fieldWithPath("roleType").type(JsonFieldType.STRING).description("회원 권한"),
             fieldWithPath("providerType").type(JsonFieldType.STRING).description("가입 경로"),
             fieldWithPath("userStatus").type(JsonFieldType.STRING).description("회원 상태"),
