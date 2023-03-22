@@ -111,8 +111,8 @@ public class UserController {
             throw new BusinessLogicException(ExceptionCode.USER_WITHDRAW);
 
         // ! 이메일 인증 프로세스 예외처리 미적용 (RDS 연동시 주석 제거)
-        // if (user.getEmailVerifiedYn().equals(User.EmailVerified.N))
-        //     throw new BusinessLogicException(ExceptionCode.EMAIL_NOT_CONFIRMED);
+        if (user.getEmailVerifiedYn().equals(User.EmailVerified.N))
+            throw new BusinessLogicException(ExceptionCode.EMAIL_NOT_CONFIRMED);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
