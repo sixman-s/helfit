@@ -33,7 +33,7 @@ public class BoardDto {
         private String boardImageUrl;
 
         @Nullable
-        @NoKoreanCurseWords
+        // @NoKoreanCurseWords
         @Size(max = 2000)
         private List<String> boardTags;
 
