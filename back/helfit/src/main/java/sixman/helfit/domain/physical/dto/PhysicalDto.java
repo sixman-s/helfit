@@ -2,6 +2,7 @@ package sixman.helfit.domain.physical.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.lang.Nullable;
 import sixman.helfit.global.annotations.ValidEnum;
 
@@ -13,6 +14,8 @@ import static sixman.helfit.domain.physical.entity.Physical.*;
 
 public class PhysicalDto {
     @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Post {
         @NotNull(message = "Null 값은 입력할 수 없습니다.")
         @Positive
@@ -39,6 +42,8 @@ public class PhysicalDto {
     }
 
     @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Patch {
         @Nullable
         @Positive
@@ -72,7 +77,5 @@ public class PhysicalDto {
         private Integer height;
         private Integer weight;
         private Gender gender;
-        private LocalDateTime createdAt;
-        private LocalDateTime modifiedAt;
     }
 }

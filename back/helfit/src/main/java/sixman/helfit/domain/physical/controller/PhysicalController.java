@@ -48,8 +48,9 @@ public class PhysicalController {
         );
 
         URI uri = UriUtil.createUri(DEFAULT_URI, physical.getPhysicalId());
+        PhysicalDto.Response response = physicalMapper.physicalToPhysicalDtoResponse(physical);
 
-        return ResponseEntity.created(uri).build();
+        return ResponseEntity.created(uri).body(ApiResponse.created("data", response));
     }
 
 
