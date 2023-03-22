@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="http://www.navercorp.com/lucy-xss-servlet">
+    <defenders>
+        <!-- XssPreventer 등록 -->
+        <defender>
+            <name>xssPreventerDefender</name>
+            <class>com.navercorp.lucy.security.xss.servletfilter.defender.XssPreventerDefender</class>
+        </defender>
+    </defenders>
+
+    <default>
+        <defender>xssPreventerDefender</defender>
+    </default>
+
+    <url-rule-set>
+        <url-rule>
+            <url disable="true">/</url>
+        </url-rule>
+        <url-rule>
+            <url>/h2</url>
+        </url-rule>
+    </url-rule-set>
+</config>

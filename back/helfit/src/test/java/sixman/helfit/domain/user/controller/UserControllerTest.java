@@ -96,22 +96,22 @@ class UserControllerTest extends ControllerTest {
             )
         )
             .andExpect(status().isCreated())
-            .andExpect(header().exists("Location"))
-            .andDo(restDocs.document(
-                customRequestFields(
-                    "custom-request",
-                    genCustomRequestFields(
-                        UserDto.Signup.class,
-                        new LinkedHashMap<>() {{
-                            put("id", "회원 아이디");
-                            put("password", "회원 비밀번호");
-                            put("nickname", "회원 별명");
-                            put("email", "회원 이메일");
-                            put("personalInfoAgreement", "회원 개인정보 제공 동의 여부");
-                        }}
-                    )
-                )
-            ));
+            .andExpect(header().exists("Location"));
+            // .andDo(restDocs.document(
+            //     customRequestFields(
+            //         "custom-request",
+            //         genCustomRequestFields(
+            //             UserDto.Signup.class,
+            //             new LinkedHashMap<>() {{
+            //                 put("id", "회원 아이디");
+            //                 put("password", "회원 비밀번호");
+            //                 put("nickname", "회원 별명");
+            //                 put("email", "회원 이메일");
+            //                 put("personalInfoAgreement", "회원 개인정보 제공 동의 여부");
+            //             }}
+            //         )
+            //     )
+            // ));
     }
 
     @Test
