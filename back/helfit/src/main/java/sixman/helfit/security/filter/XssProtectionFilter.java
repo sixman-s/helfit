@@ -39,8 +39,12 @@ public class XssProtectionFilter implements Filter {
             )
             &&
             (
-                request.getContentType().equals("application/json")
-                // request.getContentType().equals("multipart/form-data;")
+                // Post & Patch Body Nullpointexception 예외처리
+                request.getContentType() != null &&
+                    (
+                        request.getContentType().equals("application/json")
+                        // request.getContentType().startsWith("multipart/form-data;")
+                    )
             )
         ) {
             String body = IOUtils.toString(wrappedRequest.getInputStream());
