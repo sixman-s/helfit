@@ -27,11 +27,14 @@ interface UserInfo {
 
 const DetailP = () => {
   const URL = process.env.NEXT_PUBLIC_URL;
-  const userInfo: UserInfo = JSON.parse(localStorage.UserInfo);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [writeCommnet, setWriteCommnet] = useState('');
   const [comments, setComments] = useState([]);
   const [fetchedData, setFetchedData] = useState<BoardData | null>(null);
+  const [viewCount, setViewCount] = useState(0);
+  const [likeCount, setLikeCount] = useState(0);
+  const [isLiked, setIsLiked] = useState(false);
 
   const router = useRouter();
   const { id } = router.query;
@@ -61,9 +64,24 @@ const DetailP = () => {
 
   // 상세페이지 글이랑 댓글 불러오기
   useEffect(() => {
+    // 게시글 불러오기
     axios
       .get(`${URL}/api/v1/board/${pageNumber}/${boardID}`)
       .then((res) => setFetchedData(res.data))
+      //.then((res) => console.log(res.data))
+      // 조회수 불러오기
+      .then(() => {
+        axios
+          .get(`${URL}/api/v1/board/view/${boardID}`)
+          .then((res) => setViewCount(res.data.view));
+      })
+      // 좋아요 불러오기
+      .then(() => {
+        axios
+          .get(`${URL}/api/v1/board/likes/${boardID}`)
+          .then((res) => setLikeCount(res.data));
+      })
+      // 댓글 불러오기
       .then(() => {
         axios
           .get(`${URL}/api/v1/comment/${boardID}`)
@@ -76,6 +94,7 @@ const DetailP = () => {
 
   // 댓글 작성
   const handleSubmit = (e: React.KeyboardEvent) => {
+    const userInfo: UserInfo = JSON.parse(localStorage.UserInfo);
     axios
       .post(`${URL}/api/v1/comment/${userInfo.userId}/${fetchedData.boardId}`, {
         commentBody: writeCommnet
@@ -93,6 +112,7 @@ const DetailP = () => {
 
   // 댓글 삭제 commentId
   const handleDeleteComment = (commentId) => {
+    const userInfo: UserInfo = JSON.parse(localStorage.UserInfo);
     axios
       .delete(
         `${URL}/api/v1/comment/${userInfo.userId}/${boardID}/${commentId}`
@@ -124,6 +144,35 @@ const DetailP = () => {
         alert(err);
       });
   };
+
+  // 좋아요
+  const handleLikeClick = () => {
+    const accessToken = localStorage.accessToken;
+    console.log(accessToken);
+    axios
+      .post(
+        `${URL}/api/v1/board/likes/${boardID}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        }
+      )
+      .then((res) => setLikeCount(res.data))
+      .then(() => setIsLiked(!isLiked))
+      .then(() => router.reload())
+      .catch((err) => {
+        if (err.response.status === 403) {
+          alert('로그인한 유저만 좋아요를 누를 수 있습니다.');
+        } else if (err.response.status === 400) {
+          alert('이미 좋아요를 누른 게시글입니다.');
+        } else {
+          alert(err);
+        }
+      });
+  };
+
   const handlePatch = () => {
     router.push(`/community/patchpost/${currentPage}/${boardID}`);
   };
@@ -168,24 +217,34 @@ const DetailP = () => {
                 />
               ) : (
                 <img
-                  src={'../../assets/Community/UserProfile.svg'}
+                  src={'../../../assets/Community/UserProfile.svg'}
                   className={style.postUserImg}
                 />
               )}
               <div>{fetchedData?.userNickname}</div>
             </div>
             <div>{createdAtString}</div>
-            <div>조회수</div>
+            <div className={style.view}>
+              <div>조회수 : </div>
+              <div className={style.viewCount}>{viewCount}</div>
+            </div>
             <div className={style.PostLike}>
               <img
-                src='../../assets/Community/Like.svg'
+                src={
+                  isLiked
+                    ? '../../assets/Community/Like.svg'
+                    : '../../assets/Community/unLike.svg'
+                }
                 className={style.PostLikeSVG}
+                onClick={handleLikeClick}
               />
-              <div>좋아요</div>
+              <div>좋아요: {likeCount}</div>
             </div>
           </div>
           <div className={style.Buttons}>
-            {fetchedData?.userId === userInfo.userId && (
+            {fetchedData?.userId ===
+              (typeof localStorage !== 'undefined' &&
+                JSON.parse(localStorage.getItem('UserInfo')).userId) && (
               <Btn
                 text='게시글 삭제'
                 type='submit'
@@ -200,7 +259,9 @@ const DetailP = () => {
                 onDelete={handleDeletePost}
               />
             )}
-            {fetchedData?.userId === userInfo.userId && (
+            {fetchedData?.userId ===
+              (typeof localStorage !== 'undefined' &&
+                JSON.parse(localStorage.getItem('UserInfo')).userId) && (
               <Btn
                 text='게시글 수정'
                 type='submit'
@@ -254,12 +315,11 @@ const DetailP = () => {
                 {comment.userProfileUrl ? (
                   <img
                     src={comment.userProfileUrl}
-                    alt='user profile'
                     className={style.commentImage}
                   />
                 ) : (
                   <img
-                    src={'../../assets/Community/UserProfile.svg'}
+                    src={'../../../assets/Community/UserProfile.svg'}
                     className={style.commentImage}
                   />
                 )}
