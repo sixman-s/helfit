@@ -289,7 +289,7 @@ public class UserController {
     }
 
     /*
-     * # 회원 프로필 이미지 등록&수정
+     * # 회원 프로필 이미지 등록 & 수정
      *
      */
     @PostMapping("/profile-image")
@@ -301,7 +301,7 @@ public class UserController {
         String imagePath = fileService.uploadFile(multipartFile);
         userService.updateUserProfileImage(userPrincipal.getUser().getUserId(), imagePath);
 
-        return ResponseEntity.ok().body(ApiResponse.ok());
+        return ResponseEntity.ok().body(ApiResponse.ok("resource", imagePath));
     }
 
     /*
