@@ -21,14 +21,15 @@
     border-radius: 5px;
     font-size: var(--h6);
     height: 30px;
+    cursor: pointer;
     /* vertical-align: middle; */
+}
+
+.topContainer .facilities:hover {
+    border: 2px solid var(--main);
 }
 
 #mylocation{
     margin: 10px;
     cursor: pointer;
-}
-
-#fitness{
- 
 }
