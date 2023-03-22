@@ -19,6 +19,8 @@ public enum ExceptionCode {
     MISS_MATCH_PASSWORD(400, "비밀번호가 일치하지 않습니다."),
     MISS_MATCH_USERID(400,"유저 아이디가 일치하지 않습니다."),
 
+    ALREADY_LIKE_BOARD(400,"이미 좋아요를 누른 게시글 입니다."),
+
     /*
      * # 401 UNAUTHORIZED
      *
