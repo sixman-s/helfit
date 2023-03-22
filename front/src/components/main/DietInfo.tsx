@@ -26,11 +26,10 @@ const DietInfo = ({ token }) => {
         } 식단 나열하고 총 칼로리까지만 알려줘.`
       : '일반적인 다이어트 식단 나열하고 총 칼로리까지만 알려줘';
   const questionView = '오늘의 식단 알려줘.';
-  const url = `${process.env.NEXT_PUBLIC_URL}/api/v1/ai/question`;
   const body = {
     question
   };
-
+  const url = process.env.NEXT_PUBLIC_URL;
   const [dietAnswer] = answer.split('*');
 
   useEffect(() => {
@@ -40,19 +39,18 @@ const DietInfo = ({ token }) => {
           Authorization: `Bearer ${token}`
         }
       };
-      const url = process.env.NEXT_PUBLIC_URL;
       axios
         .get(`${url}/api/v1/calculate/${userData.userId}`, headers)
         .then((res) => {
-          console.log(res.data.body.data);
           setInfo(res.data.body.data);
         })
-        .catch((error) => console.log('유저 신체 데이터 받아오기' + '실패'));
+        .catch((error) => console.log(error));
     }
-    axios.post(url, body).then((res) => {
+    axios.post(`${url}/api/v1/ai/question`, body).then((res) => {
       setAnser(res.data.body.data.choices[0].message.content);
     });
   }, []);
+
   return (
     <>
       <article className={styled.container}>
