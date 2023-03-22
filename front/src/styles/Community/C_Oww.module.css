@@ -1,8 +1,39 @@
 .container {
+  display: grid;
+
+  grid-template-areas:
+    'header  header'
+    'content  content'
+    'footer footer';
+}
+.buttonline {
+  grid-area: header;
+  display: flex;
+  justify-content: end;
+}
+.ul {
+  grid-area: content;
+  display: flex;
+  flex-wrap: wrap;
+}
+.button {
+  background-color: var(--main);
+  color: white;
+  border-radius: 10px;
+  width: 130px;
+  height: 40px;
+  margin-bottom: 20px;
+}
+.button:hover {
+  background-color: blue;
+  transition: 0.7s;
+}
+.SNSbox {
   border: 1px solid black;
-  width: 400px;
-  height: 420px;
+  width: 450px;
+  height: 450px;
   margin: 10px;
+  cursor: pointer;
 }
 .photo {
   border: 1px solid black;
@@ -23,6 +54,7 @@
 .postInfoText {
   margin-top: 5px;
   margin-left: 10px;
+  font-size: 12px;
 }
 .UserPhoto {
   width: 30px;
@@ -36,4 +68,14 @@
 .postUserName {
   margin-left: 20px;
   margin-top: 10px;
+}
+.title {
+  margin-left: 20px;
+  font-size: 14px;
+  font-weight: bold;
+}
+.pagenation {
+  grid-area: footer;
+  display: flex;
+  justify-content: center;
 }
