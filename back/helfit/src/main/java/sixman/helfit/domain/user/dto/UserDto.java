@@ -1,7 +1,9 @@
 package sixman.helfit.domain.user.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.lang.Nullable;
 import sixman.helfit.global.annotations.ValidEnum;
@@ -17,6 +19,7 @@ import static sixman.helfit.domain.user.entity.User.*;
 
 public class UserDto {
     @Getter
+    @NoArgsConstructor
     @AllArgsConstructor
     public static class Signup {
         @NotBlank
@@ -45,6 +48,7 @@ public class UserDto {
     }
 
     @Getter
+    @NoArgsConstructor
     @AllArgsConstructor
     public static class Login {
         @NotBlank
@@ -55,6 +59,7 @@ public class UserDto {
     }
 
     @Getter
+    @NoArgsConstructor
     @AllArgsConstructor
     public static class Update {
         @Nullable
@@ -63,6 +68,7 @@ public class UserDto {
     }
 
     @Getter
+    @NoArgsConstructor
     @AllArgsConstructor
     public static class Password {
         @Pattern(

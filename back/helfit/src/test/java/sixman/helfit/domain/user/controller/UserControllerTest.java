@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,7 +17,6 @@ import sixman.helfit.domain.user.repository.UserRefreshTokenRepository;
 import sixman.helfit.domain.user.service.UserService;
 import sixman.helfit.restdocs.ControllerTest;
 import sixman.helfit.restdocs.annotations.WithMockUserCustom;
-import sixman.helfit.restdocs.support.ConstrainedFields;
 import sixman.helfit.security.mail.entity.EmailConfirmToken;
 import sixman.helfit.security.mail.service.EmailConfirmTokenService;
 import sixman.helfit.security.properties.AppProperties;
@@ -32,6 +30,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static sixman.helfit.restdocs.custom.CustomRequestFieldsSnippet.customRequestFields;
+import static sixman.helfit.restdocs.custom.CustomRequestFieldsSnippet.genCustomRequestFields;
 
 @WebMvcTest(UserController.class)
 class UserControllerTest extends ControllerTest {
@@ -96,22 +95,22 @@ class UserControllerTest extends ControllerTest {
             )
         )
             .andExpect(status().isCreated())
-            .andExpect(header().exists("Location"));
-            // .andDo(restDocs.document(
-            //     customRequestFields(
-            //         "custom-request",
-            //         genCustomRequestFields(
-            //             UserDto.Signup.class,
-            //             new LinkedHashMap<>() {{
-            //                 put("id", "회원 아이디");
-            //                 put("password", "회원 비밀번호");
-            //                 put("nickname", "회원 별명");
-            //                 put("email", "회원 이메일");
-            //                 put("personalInfoAgreement", "회원 개인정보 제공 동의 여부");
-            //             }}
-            //         )
-            //     )
-            // ));
+            .andExpect(header().exists("Location"))
+            .andDo(restDocs.document(
+                customRequestFields(
+                    "custom-request",
+                    genCustomRequestFields(
+                        UserDto.Signup.class,
+                        new LinkedHashMap<>() {{
+                            put("id", "회원 아이디");
+                            put("password", "회원 비밀번호");
+                            put("nickname", "회원 별명");
+                            put("email", "회원 이메일");
+                            put("personalInfoAgreement", "회원 개인정보 제공 동의 여부");
+                        }}
+                    )
+                )
+            ));
     }
 
     @Test
@@ -131,27 +130,6 @@ class UserControllerTest extends ControllerTest {
                 genRelaxedResponseHeaderFields("header"),
                 genRelaxedResponseBodyFields("body.data")
             ));
-    }
-
-    private <T> FieldDescriptor[] genCustomRequestFields(Class<T> clazz, Map<String, String> attributes) {
-        ConstrainedFields constrainedFields = new ConstrainedFields(clazz);
-        List<FieldDescriptor> attrList = new ArrayList<>();
-
-        for (String key : attributes.keySet()) {
-            FieldDescriptor fieldDescriptor = constrainedFields.withPath(key).description(attributes.get(key));
-
-            String type = key.getClass().getTypeName();
-
-            Optional<JsonFieldType> field = Arrays.stream(JsonFieldType.values())
-                                              .filter(v -> v.name().equalsIgnoreCase(type))
-                                              .findAny();
-
-            if (field.isPresent()) fieldDescriptor.type(field);
-
-            attrList.add(fieldDescriptor);
-        }
-
-        return attrList.toArray(FieldDescriptor[]::new);
     }
 
     private ResponseFieldsSnippet genRelaxedResponseHeaderFields(String beneath) {
