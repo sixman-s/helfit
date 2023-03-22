@@ -11,23 +11,24 @@ import java.time.LocalDateTime;
 
 
 public class CommentDto {
-
     @Getter
     @Setter
     public static class PostAndPatch {
         @NotNull
-        @Size(max = 200000)
+        @Size(max = 16383)
         @NoKoreanCurseWords
         private String commentBody;
     }
+
     @Getter
     @AllArgsConstructor
     public static class responseDto {
-//        private String userNickname;
-//        private String userProfileUrl;
+        private long commentId;
+        private long userId;
+        private String userNickname;
+        private String userProfileUrl;
         private String commentBody;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
     }
-
 }

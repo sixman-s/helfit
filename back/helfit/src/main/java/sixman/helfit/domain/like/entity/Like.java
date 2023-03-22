@@ -2,24 +2,27 @@ package sixman.helfit.domain.like.entity;
 
 import lombok.Getter;
 import sixman.helfit.audit.Auditable;
-import sixman.helfit.domain.board.entity.BoardLike;
+import sixman.helfit.domain.board.entity.Board;
+import sixman.helfit.domain.user.entity.User;
+
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+
 
 @Entity
-@Table(name = "LIKES")
 @Getter
+@Table(name = "LIKES")
 public class Like extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long likeId;
 
-    @OneToMany(mappedBy = "like")
-    private List<BoardLike> boardLikes = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "BOARD_ID")
+    private Board board;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID")
+    private User user;
 
 }

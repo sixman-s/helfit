@@ -21,6 +21,11 @@ spring:
   profiles:
     include: common
     active: local
+  batch:
+    job:
+      enabled: false
+    jdbc:
+      initialize-schema: embedded
   servlet:
     multipart:
       max-file-size: 10MB
@@ -46,7 +51,7 @@ spring:
     defer-datasource-initialization : true
   sql:
     init:
-      mode: always
+      mode:
       data-locations: classpath*:db/h2/data.sql
   thymeleaf:
     prefix: classpath:/templates/
@@ -136,7 +141,3 @@ app:
   oauth2:
     authorizedRedirectUris:
       - http://localhost:3000/oauth2/receive
-
-mail:
-  address:
-    admin: ${ADMIN_MAIL}

@@ -1,6 +1,7 @@
 package sixman.helfit.domain.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.nimbusds.openid.connect.sdk.claims.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,22 +43,11 @@ public class User extends Auditable {
     @Column(length = 512)
     private String profileImageUrl;
 
-    @Column(length = 8)
-    private Integer birth;
-
-    private Integer height;
-    private Integer weight;
-
-    private Integer failureCnt = 0;
-
     @Enumerated(value = EnumType.STRING)
     private EmailVerified emailVerifiedYn;
 
     @Enumerated(value = EnumType.STRING)
     private PersonalInfoAgreement personalInfoAgreementYn;
-
-    @Enumerated(value = EnumType.STRING)
-    private Gender gender;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
@@ -74,12 +64,8 @@ public class User extends Auditable {
         String email,
         String nickname,
         String profileImageUrl,
-        Integer birth,
-        Integer height,
-        Integer weight,
         EmailVerified emailVerifiedYn,
         PersonalInfoAgreement personalInfoAgreementYn,
-        Gender gender,
         ProviderType providerType,
         RoleType roleType
     ) {
@@ -88,19 +74,15 @@ public class User extends Auditable {
         this.nickname = nickname != null ? nickname : "";
         this.password = "NO_PASS";
         this.profileImageUrl = profileImageUrl != null ? profileImageUrl : "";
-        this.birth = birth;
-        this.height = height;
-        this.weight = weight;
         this.emailVerifiedYn = emailVerifiedYn;
         this.personalInfoAgreementYn = personalInfoAgreementYn;
-        this.gender = gender;
         this.providerType = providerType;
         this.roleType = roleType;
     }
 
     public enum UserStatus {
         USER_ACTIVE("활동중"),
-        USER_SLEEP("휴면 상태"),
+        USER_INACTIVE("휴면 상태"),
         USER_QUIT("탈퇴 상태");
 
         @Getter
@@ -121,13 +103,4 @@ public class User extends Auditable {
         N
         ;
     }
-
-    public enum Gender {
-        MALE,
-        FEMALE
-        ;
-    }
-
-    @OneToMany(mappedBy = "user")
-    private List<Comment> comments = new ArrayList<>();
 }

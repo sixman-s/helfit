@@ -4,17 +4,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sixman.helfit.domain.withdraw.service.WithdrawService;
 import sixman.helfit.security.entity.ProviderType;
 import sixman.helfit.security.entity.RoleType;
 import sixman.helfit.domain.user.entity.User;
 import sixman.helfit.domain.user.repository.UserRepository;
 import sixman.helfit.exception.BusinessLogicException;
 import sixman.helfit.exception.ExceptionCode;
-import sixman.helfit.security.mail.entity.EmailConfirmToken;
-import sixman.helfit.security.mail.service.EmailConfirmTokenService;
 import sixman.helfit.utils.CustomBeanUtil;
 
-import javax.mail.MessagingException;
 import java.util.Optional;
 
 import static sixman.helfit.domain.user.entity.User.*;
@@ -24,6 +22,8 @@ import static sixman.helfit.domain.user.entity.User.*;
 public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final CustomBeanUtil<User> customBeanUtil;
+
+    private final WithdrawService withdrawService;
 
     private final UserRepository userRepository;
 
@@ -67,6 +67,19 @@ public class UserService {
         userRepository.save(verifiedUser);
     }
 
+    public void withdrawUser(Long userId, User user) {
+        User verifiedUser = findUserByUserId(userId);
+
+        if (!passwordEncoder.matches(user.getPassword(), verifiedUser.getPassword()))
+            throw new BusinessLogicException(ExceptionCode.MISS_MATCH_PASSWORD);
+
+        verifiedUser.setUserStatus(UserStatus.USER_QUIT);
+
+        withdrawService.createWithdraw(verifiedUser);
+
+        userRepository.save(verifiedUser);
+    }
+
     public void updateUserProfileImage(Long userId, String imagePath) {
         User verifiedUser = findUserByUserId(userId);
 
@@ -79,7 +92,7 @@ public class UserService {
     public User findUserByUserId(Long userId) {
         Optional<User> byUserId = userRepository.findByUserId(userId);
 
-        return byUserId.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USERS_NOT_FOUND));
+        return byUserId.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
     }
 
     @Transactional(readOnly = true)

@@ -2,7 +2,7 @@ running: dev
 
 domain:
   front: http://helfit.life
-  back: http://ec2-3-34-96-242.ap-northeast-2.compute.amazonaws.com/
+  back: http://ec2-3-34-96-242.ap-northeast-2.compute.amazonaws.com
 
 chat-gpt:
   secret-key: ${CHAT_GPT_SECRET_KEY}
@@ -25,10 +25,15 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
+  batch:
+    job:
+      enabled: false
+    jdbc:
+      initialize-schema: always
   datasource:
-    url: ${datasource_url}
-    username: ${datasource_username}
-    password: ${datasource_password}
+    url: ${LOCAL_DATASOURCE_URL}
+    username: ${LOCAL_DATASOURCE_USERNAME}
+    password: ${LOCAL_DATASOURCE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database: mysql
@@ -37,6 +42,11 @@ spring:
       ddl-auto: update
     show-sql: true
     defer-datasource-initialization : true
+  sql:
+    init:
+      mode: always
+      data-locations: classpath*:db/mysql/data.sql
+      schema-locations: classpath*:db/mysql/schema.sql
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
@@ -112,7 +122,7 @@ logging:
 cors:
   allowed-origins: "*"
   allowed-headers: "*"
-  allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+  allowed-methods: GET,POST,PATCH,PUT,DELETE,OPTIONS
   max-age: 3600
 
 # Auth & OAuth
@@ -124,7 +134,3 @@ app:
   oauth2:
     authorizedRedirectUris:
       - http://localhost:3000/oauth2/receive
-
-mail:
-  address:
-    admin: ${ADMIN_MAIL}

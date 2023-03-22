@@ -28,10 +28,18 @@ public class CalculatorDto {
     @AllArgsConstructor
     public static class Response{
         private double result;
+        private Long calculatorId;
         private ActivityLevel activityLevel;
         private Goal goal;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
+    }
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    public static class PostResponse{
+        private Long calculatorId;
+        private Long userId;
     }
 }
 

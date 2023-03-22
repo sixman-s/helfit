@@ -12,11 +12,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Entity(name = "CATEGORIES")
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "CATEGORIES")
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,13 +26,5 @@ public class Category {
     @Column(nullable = false, length = 10)
     private String categoryName;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.PERSIST)
-    private List<Board> boards = new ArrayList<>();
-
-    public void addBoard(Board board){
-        if(!this.boards.contains(board)){
-            this.boards.add(board);
-        }
-    }
 
 }
