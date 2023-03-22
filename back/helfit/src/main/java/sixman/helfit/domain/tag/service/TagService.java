@@ -23,4 +23,8 @@ public class TagService {
         }
         else return optionalTag.get();
     }
+
+    public void saveTag(Tag tag) {
+        tagRepository.save(tag);
+    }
 }

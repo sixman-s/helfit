@@ -52,4 +52,8 @@ public class Board extends Auditable {
     private List<Like> likes = new ArrayList<>();
 
     private long view = 0;
+
+    public void removeBoardTag(BoardTag boardTag){
+        this.boardTags.remove(boardTag);
+    }
 }
