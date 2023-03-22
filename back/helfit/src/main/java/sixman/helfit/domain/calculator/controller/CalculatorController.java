@@ -28,6 +28,26 @@ public class CalculatorController {
     private final CalculatorService calculatorService;
     private final CalculatorMapper calculatorMapper;
     private final PhysicalService physicalService;
+//    @PreAuthorize("isAuthenticated()")
+//    @PostMapping("/{user-id}")
+//    public ResponseEntity<?> postResult(@AuthenticationPrincipal UserPrincipal userPrincipal,
+//                                        @RequestBody CalculatorDto.Post requestBody) {
+//        User user = userPrincipal.getUser();
+//
+//        Calculator calculator = calculatorService.createResult(
+//                calculatorMapper.calculatorPostToCalculator(requestBody),
+//                user,
+//                physicalService.findPhysicalByUserId(user.getUserId())
+//        );
+//
+//        URI uri = UriUtil.createUri(DEFAULT_URL, calculator.getCalculatorId());
+//
+//        CalculatorDto.PostResponse postResponse = calculatorMapper.calculatorToPostResponse(calculator);
+//        postResponse.setUserId(userPrincipal.getUser().getUserId());
+//        postResponse.setCalculatorId(calculator.getCalculatorId());
+//
+//        return ResponseEntity.created(uri).body(ApiResponse.ok("data", postResponse));
+//    }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/{user-id}")
@@ -43,11 +63,11 @@ public class CalculatorController {
 
         URI uri = UriUtil.createUri(DEFAULT_URL, calculator.getCalculatorId());
 
-        CalculatorDto.PostResponse postResponse = calculatorMapper.calculatorToPostResponse(calculator);
-        postResponse.setUserId(userPrincipal.getUser().getUserId());
-        postResponse.setCalculatorId(calculator.getCalculatorId());
+        CalculatorDto.Response response = calculatorMapper.calculatorToResponse(calculator);
+        //response.setUserId(userPrincipal.getUser().getUserId());
+        response.setCalculatorId(calculator.getCalculatorId());
 
-        return ResponseEntity.created(uri).body(ApiResponse.ok("data", postResponse));
+        return ResponseEntity.created(uri).body(ApiResponse.ok("data", response));
     }
 
     @PreAuthorize("isAuthenticated()")
