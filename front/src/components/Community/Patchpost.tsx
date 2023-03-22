@@ -52,6 +52,14 @@ const PatchPostBox = () => {
       pageNumber = 4;
       categoryname = '필라테스 갤러리';
       break;
+    case 'oww':
+      pageNumber = 5;
+      categoryname = '오운완 갤러리';
+      break;
+    case 'diet':
+      pageNumber = 6;
+      categoryname = '식단 갤러리';
+      break;
     default:
       pageNumber = null;
   }
