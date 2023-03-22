@@ -1,0 +1,7 @@
+.loaderContainer{
+    margin-left: 240px;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
