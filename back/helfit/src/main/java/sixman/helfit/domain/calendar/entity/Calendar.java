@@ -26,7 +26,6 @@ public class Calendar extends Auditable {
 
     private Integer kcal;
 
-    @Column(unique = true)
     private String recodedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)

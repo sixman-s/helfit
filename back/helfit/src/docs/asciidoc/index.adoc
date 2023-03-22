@@ -10,12 +10,13 @@
 
 [[introduction]]
 == 소개
+Helfit API Documents
 
 [[common]]
 == 공통 사항
-API에 관계없이 아래 사항을 지켜주셔야 합니다.
 
 === Domain
+
 |===
 | 환경 | domain
 
@@ -23,7 +24,7 @@ API에 관계없이 아래 사항을 지켜주셔야 합니다.
 | `localhost:8080`
 
 | 운영서버
-| AWS
+| `http://ec2-3-34-96-242.ap-northeast-2.compute.amazonaws.com/`
 |===
 
 === HTTP State Code
@@ -35,24 +36,27 @@ API에 관계없이 아래 사항을 지켜주셔야 합니다.
 | 요청을 성공적으로 처리함.
 
 | `201 Created`
-| 새 리소스를 성공적으로 생성함.
-응답의 `Location` 헤더에 해당 리소스의 URI가 담겨있다.
+| 새 리소스를 성공적으로 생성.
+응답 헤더 `Location` 해당 리소스의 URI 생성됨.
 
 | `204 No Content`
-| 기존 리소스를 성공적으로 수정함.
+| 기존 리소스를 성공적으로 반영.
 
 | `400 Bad Request`
-| 잘못된 요청을 보낸 경우. 응답 본문에 더 오류에 대한 정보가 담겨있다.
+| 잘못된 요청을 보낸 경우.
 
 | `404 Not Found`
 | 요청한 리소스가 없음.
 
 | `401 Unauthorized`
 | 요청한 리소스를 처리 할 권한이 없음.
+
+|`500 Internal Server Error`
+| 요청한 리소스 처리 실패 서버 오류.
 |===
 
 [[APIs]]
 
-// ==
-// ===
-// operation::answer-controller-test/post-answers-test[snippets='curl-request,http-request,custom-request-fields,http-response,response-body']
+== Users
+=== 회원정보 조회
+operation::user-controller-test/get-user-test[snippets='curl-request,http-request,http-response,response-body,response-fields-header,response-fields-data']
