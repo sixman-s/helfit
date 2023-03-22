@@ -32,7 +32,10 @@ const PatchPostBox = () => {
 
   const router = useRouter();
   const { id } = router.query;
-  const boardID = id ? parseInt(id[id.length - 1]) : null;
+  let boardID: number | null = null;
+  if (typeof id === 'string') {
+    boardID = parseInt(id.split('/').pop() as string);
+  }
   const currentPage = router.asPath.split('/')[3];
   let categoryname: string;
   let pageNumber: Number;
