@@ -4,9 +4,9 @@ import UserInfo from '@/components/main/UserInfo';
 import CalendarInfo from '@/components/main/CalendarInfo';
 import DietInfo from '@/components/main/DietInfo';
 import CommunityInfo from '@/components/main/CommunityInfo';
-import NonMembers from '@/components/main/NonMembers';
-import VisitantInfo from '@/components/main/VisitantInfo';
-import Header from '@/components/main/Header';
+import SignupGuide from '@/components/main/atoms/SignupGuide';
+import VisitantInfo from '@/components/main/NonUserInfo';
+import Header from '@/components/main/atoms/Header';
 import { useEffect, useState } from 'react';
 
 export default function Home() {
@@ -26,7 +26,7 @@ export default function Home() {
           </Header>
         ) : (
           <Header title='Calendar' href='/calendar'>
-            <NonMembers />
+            <SignupGuide />
           </Header>
         )}
         {token ? (
@@ -35,7 +35,7 @@ export default function Home() {
           </Header>
         ) : (
           <Header title={`Today's Diet`} href='/'>
-            <NonMembers />
+            <SignupGuide />
           </Header>
         )}
         <CommunityInfo />

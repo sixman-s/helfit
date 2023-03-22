@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import layout from '../../styles/main/C_header.module.css';
+import layout from '../../../styles/main/C_header.module.css';
 
 interface LayoutProps {
   title: string;

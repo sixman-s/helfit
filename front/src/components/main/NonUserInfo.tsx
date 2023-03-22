@@ -3,7 +3,7 @@ import layout from '../../styles/main/C_header.module.css';
 import styled from '../../styles/main/C_nonMembers.module.css';
 import Link from 'next/link';
 
-const VisitantInfo = () => {
+const NonUserInfo = () => {
   return (
     <article className={userInfo.container}>
       <header className={userInfo.header}>
@@ -32,4 +32,4 @@ const VisitantInfo = () => {
   );
 };
 
-export default VisitantInfo;
+export default NonUserInfo;

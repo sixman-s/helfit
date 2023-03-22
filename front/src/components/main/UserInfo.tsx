@@ -1,10 +1,44 @@
 import styled from '../../styles/main/C_userInfo.module.css';
 import Link from 'next/link';
-import KcalChart from './util/KcalChart';
-import WeightChart from './util/WeightChart';
+import UserKcalChart from './util/UserKcalChart';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import NonData from './atoms/NonData';
 
 const UserInfo = ({ token }) => {
   const userData = JSON.parse(localStorage.getItem('UserInfo'));
+  const [kcal, setKcal] = useState([]);
+  const [weight, setWeight] = useState([]);
+  const [kcalGoal, setkcalGoal] = useState(0);
+
+  useEffect(() => {
+    if (token) {
+      const headers = {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+      const url = process.env.NEXT_PUBLIC_URL;
+      axios
+        .get(`${url}/api/v1/stat/calendar/${userData.userId}`, headers)
+        .then((res) => {
+          setKcal(res.data.body.data);
+        })
+        .catch((error) => console.log(error));
+      axios
+        .get(`${url}/api/v1/stat/physical`, headers)
+        .then((res) => {
+          setWeight(res.data.body.data);
+        })
+        .catch((error) => console.log(error));
+      axios
+        .get(`${url}/api/v1/calculate/${userData.userId}`, headers)
+        .then((res) => {
+          setkcalGoal(res.data.body.data.result);
+        })
+        .catch((error) => console.log(error));
+    }
+  }, [token]);
 
   return (
     <article>
@@ -21,18 +55,30 @@ const UserInfo = ({ token }) => {
       <div className={styled.chartContainer}>
         <figure className={styled.chart}>
           <div className={styled.chartInfo}>
-            <span className={styled.chartTitle}>{'78'}</span>
-            <figcaption className={styled.chartCaption}>weight</figcaption>
+            <span className={styled.chartTitle}>평균 몸무게</span>
+            <figcaption className={styled.chartCaption}>
+              weight chart
+            </figcaption>
           </div>
-          <WeightChart token={token} userId={userData.userId} />
+          <div className={styled.chartView}>
+            {weight.length === 0 ? (
+              <NonData link='/mypage' btn='Mypage' />
+            ) : (
+              <div />
+            )}
+          </div>
         </figure>
         <figure className={styled.chart}>
           <div className={styled.chartInfo}>
-            <span className={styled.chartTitle}>{'2000'}</span>
-            <figcaption className={styled.chartCaption}>kcal</figcaption>
+            <span className={styled.chartTitle}>평균 칼로리</span>
+            <figcaption className={styled.chartCaption}>kcal chart</figcaption>
           </div>
           <div className={styled.chartView}>
-            <KcalChart token={token} userId={userData.userId} />
+            {kcal.length === 0 ? (
+              <NonData link='/calendar' btn='Calendar' />
+            ) : (
+              <UserKcalChart data={kcal} goal={kcalGoal} />
+            )}
           </div>
         </figure>
       </div>
