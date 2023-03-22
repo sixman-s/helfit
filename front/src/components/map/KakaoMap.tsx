@@ -1,5 +1,4 @@
 /* global kakao */
-import { current } from '@reduxjs/toolkit';
 import { FC, useEffect, useRef, useState } from 'react';
 
 import s from '../../styles/map/C_KakaoMap.module.css';
