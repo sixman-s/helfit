@@ -197,6 +197,7 @@ const WritePostBox = () => {
           <Editor
             editorInput={editorInput}
             setEditorInput={handleEditorInput}
+            formValues={editorInput}
           />
         </div>
       </div>

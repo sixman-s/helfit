@@ -27,7 +27,6 @@ interface UserInfo {
 
 const DetailP = () => {
   const URL = process.env.NEXT_PUBLIC_URL;
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [writeCommnet, setWriteCommnet] = useState('');
   const [comments, setComments] = useState([]);
@@ -278,7 +277,9 @@ const DetailP = () => {
                 <span className={style.tagItem}>{tag.tagName}</span>
               ))}
             </div>
-            <div className={style.Content_Text}>{fetchedData?.text}</div>
+            <div className={style.Content_Text}>
+              <div dangerouslySetInnerHTML={{ __html: fetchedData?.text }} />
+            </div>
           </div>
           {fetchedData?.boardImageUrl && (
             <div style={{ width: '250px', height: '250px' }}>
