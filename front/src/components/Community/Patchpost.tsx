@@ -135,14 +135,16 @@ const PatchPostBox = () => {
                 }
               }
             )
-            .then(() => alert('사진 수정 요청이 성공적입니다.'))
+            .then(() => alert('게시글이 성공적으로 수정되었습니다.'))
             .then(() => router.push('/community'))
             .catch((err) => {
-              alert(err);
+              alert('올바른 전송이 아닙니다.');
+              console.log(err);
             });
         })
         .catch((err) => {
-          alert(err);
+          alert('올바른 전송이 아닙니다.');
+          console.log(err);
         });
     }
 
@@ -160,10 +162,11 @@ const PatchPostBox = () => {
           }
         }
       )
-      .then(() => alert('수정 요청이 성공적입니다.'))
+      .then(() => alert('게시글이 성공적으로 수정되었습니다.'))
       .then(() => router.push('/community'))
       .catch((err) => {
-        alert(err);
+        alert('올바른 전송이 아닙니다.');
+        console.log(err);
       });
   };
 
