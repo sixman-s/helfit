@@ -85,9 +85,7 @@ const ModalImage = ({ detail }: { detail: detailProps }) => {
           .then((res) => {
             let userInfo = JSON.parse(localStorage.getItem('UserInfo'));
 
-            userInfo['profileImageUrl'] = JSON.stringify(
-              res.data.body.resource
-            );
+            userInfo['profileImageUrl'] = res.data.body.resource;
 
             localStorage.setItem('UserInfo', JSON.stringify(userInfo));
             console.log(JSON.parse(localStorage.getItem('UserInfo')));

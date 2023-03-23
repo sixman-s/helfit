@@ -14,7 +14,7 @@ export default function Mypage() {
   const [calorie, setCalorie] = useState<number>();
 
   const [token, setToken] = useState<any>('');
-
+  console.log(localStorage.getItem('UserInfo'));
   const url = process.env.NEXT_PUBLIC_URL;
 
   useEffect(() => {
