@@ -1,10 +1,16 @@
 package sixman.helfit.restdocs;
 
 import com.google.gson.Gson;
+import io.jsonwebtoken.security.Keys;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.aop.AopAutoConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
@@ -14,6 +20,11 @@ import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -24,11 +35,19 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import sixman.helfit.domain.user.dto.UserDto;
 import sixman.helfit.domain.user.entity.User;
+import sixman.helfit.domain.user.entity.UserRefreshToken;
 import sixman.helfit.restdocs.config.RestDocsConfig;
 import sixman.helfit.security.entity.ProviderType;
 import sixman.helfit.security.entity.RoleType;
+import sixman.helfit.security.entity.UserPrincipal;
+import sixman.helfit.security.properties.AppProperties;
+import sixman.helfit.security.token.AuthToken;
+import sixman.helfit.security.token.AuthTokenProvider;
 
+import javax.inject.Inject;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,6 +65,12 @@ public abstract class ControllerTest {
     @Autowired
     protected RestDocumentationResultHandler restDocs;
 
+    @Spy
+    protected AppProperties appProperties;
+
+    @Spy
+    protected AuthTokenProvider authTokenProvider;
+
     @BeforeEach
     void setUp(final WebApplicationContext ctx, final RestDocumentationContextProvider provider) {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(ctx)
@@ -56,8 +81,13 @@ public abstract class ControllerTest {
                            .build();
     }
 
-    protected Map<String, Object> userResource() {
-        Map<String, Object> userMap = new HashMap<>();
+    protected Map<String, Object> userResource() throws Exception {
+        // Base64 SecretKey inject, Testing only
+        FieldUtils.writeField(authTokenProvider, "secretKey", "d297f22853e39936052a15a41266866bf058923f", true);
+        FieldUtils.writeField(authTokenProvider, "key", Keys.hmacShaKeyFor("d297f22853e39936052a15a41266866bf058923f".getBytes()), true);
+
+        Date now = new Date();
+        Map<String, Object> resource = new HashMap<>();
 
         User user = new User(
             "tester",
@@ -85,10 +115,38 @@ public abstract class ControllerTest {
                     user.getProviderType().toString()
                 );
 
-        userMap.put("user", user);
-        userMap.put("userDtoResponse", userDtoResponse);
+        UserPrincipal userPrincipal = new UserPrincipal(
+            user,
+            Collections.singletonList(new SimpleGrantedAuthority(RoleType.USER.getCode()))
+        );
 
-        return userMap;
+        UsernamePasswordAuthenticationToken authentication =
+            new UsernamePasswordAuthenticationToken(
+                userPrincipal,
+                "NO_PASS"
+            );
+
+        AuthToken accessToken = authTokenProvider.createAuthToken(
+            user.getId(),
+            user.getRoleType().getCode(),
+            new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
+        );
+
+        AuthToken refreshToken = authTokenProvider.createAuthToken(
+            user.getId(),
+            new Date(now.getTime() + appProperties.getAuth().getRefreshTokenExpiry())
+        );
+
+        UserRefreshToken userRefreshToken = new UserRefreshToken(user.getId(), refreshToken.getToken());
+
+        resource.put("user", user);
+        resource.put("userDtoResponse", userDtoResponse);
+        resource.put("authentication", authentication);
+        resource.put("accessToken", accessToken);
+        resource.put("refreshToken", refreshToken);
+        resource.put("userRefreshToken", userRefreshToken);
+
+        return resource;
     }
 
     protected <T> ResultActions postResource(String url, T body) throws Exception {

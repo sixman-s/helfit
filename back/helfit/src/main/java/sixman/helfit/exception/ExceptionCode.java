@@ -41,6 +41,7 @@ public enum ExceptionCode {
     NOT_FOUND(404,"결과가 존재하지 않습니다."),
     USER_NOT_FOUND(404, "등록되지 않은 사용자입니다."),
     USER_WITHDRAW(404, "탈퇴한 사용자입니다."),
+    USER_INACTIVE(404, "휴면 계정으로 전환된 사용자입니다."),
     CALCULATOR_NOT_FOUND(404,"결과가 존재하지 않습니다."),
     CALCULATOR_NO_USER_INFO(404,"사용자의 신체 정보를 입력하세요"),
     BOARD_NOT_FOUND(404,"게시글이 존재하지 않습니다."),

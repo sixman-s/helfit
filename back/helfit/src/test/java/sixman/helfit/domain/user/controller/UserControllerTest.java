@@ -9,9 +9,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import sixman.helfit.domain.file.service.FileService;
 import sixman.helfit.domain.user.dto.UserDto;
 import sixman.helfit.domain.user.entity.User;
+import sixman.helfit.domain.user.entity.UserRefreshToken;
 import sixman.helfit.domain.user.mapper.UserMapper;
 import sixman.helfit.domain.user.repository.UserRefreshTokenRepository;
 import sixman.helfit.domain.user.service.UserService;
@@ -20,6 +23,7 @@ import sixman.helfit.restdocs.annotations.WithMockUserCustom;
 import sixman.helfit.security.mail.entity.EmailConfirmToken;
 import sixman.helfit.security.mail.service.EmailConfirmTokenService;
 import sixman.helfit.security.properties.AppProperties;
+import sixman.helfit.security.token.AuthToken;
 import sixman.helfit.security.token.AuthTokenProvider;
 
 
@@ -62,12 +66,21 @@ class UserControllerTest extends ControllerTest {
 
     private User user;
     private UserDto.Response userDtoResponse;
+    private Authentication authentication;
+    private AuthToken accessToken;
+    private AuthToken refreshToken;
+    private UserRefreshToken userRefreshToken;
 
     @BeforeEach
-    void setup() {
+    void setup() throws Exception {
         Map<String, Object> userResource = userResource();
+
         user = (User) userResource.get("user");
         userDtoResponse = (UserDto.Response) userResource.get("userDtoResponse");
+        authentication = (Authentication) userResource.get("authentication");
+        accessToken = (AuthToken) userResource.get("accessToken");
+        refreshToken = (AuthToken) userResource.get("refreshToken");
+        userRefreshToken = (UserRefreshToken) userResource.get("userRefreshToken");
     }
 
     @Test
@@ -97,8 +110,7 @@ class UserControllerTest extends ControllerTest {
             .andExpect(status().isCreated())
             .andExpect(header().exists("Location"))
             .andDo(restDocs.document(
-                customRequestFields(
-                    "custom-request",
+                customRequestFields("custom-request",
                     genCustomRequestFields(
                         UserDto.Signup.class,
                         new LinkedHashMap<>() {{
@@ -130,6 +142,48 @@ class UserControllerTest extends ControllerTest {
                 genRelaxedResponseHeaderFields("header"),
                 genRelaxedResponseBodyFields("body.data")
             ));
+    }
+
+    @Test
+    @DisplayName("[테스트] 회원 로그인")
+    @WithMockUserCustom
+    void loginTest() throws Exception {
+        given(authenticationManager.authenticate(Mockito.any(UsernamePasswordAuthenticationToken.class)))
+            .willReturn(authentication);
+
+        given(userService.updateUser(Mockito.anyLong(), Mockito.any(User.class)))
+            .willReturn(user);
+
+        given(authTokenProvider.createAuthToken(Mockito.anyString(), Mockito.anyString(), Mockito.any(Date.class)))
+            .willReturn(accessToken);
+
+        // given(appProperties.getAuth())
+        //     .willReturn(new AppProperties.Auth());
+        //
+        // given(appProperties.getAuth().getTokenExpiry())
+        //     .willReturn(0L);
+        //
+        // given(appProperties.getAuth().getRefreshTokenExpiry())
+        //     .willReturn(0L);
+
+        given(authTokenProvider.createAuthToken(Mockito.anyString(), Mockito.any(Date.class)))
+            .willReturn(refreshToken);
+
+        given(userRefreshTokenRepository.findById(Mockito.anyString()))
+            .willReturn(userRefreshToken);
+
+        given(userRefreshTokenRepository.saveAndFlush(Mockito.any(UserRefreshToken.class)))
+            .willReturn(userRefreshToken);
+
+        // postResource(DEFAULT_URL + "/login",
+        //     new UserDto.Login(
+        //         user.getId(),
+        //         user.getPassword(),
+        //         null
+        //     )
+        // )
+        //     .andExpect(status().isOk())
+        //     .andExpect(jsonPath("$.data").isNotEmpty());
     }
 
     private ResponseFieldsSnippet genRelaxedResponseHeaderFields(String beneath) {
