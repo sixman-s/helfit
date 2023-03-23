@@ -1,6 +1,4 @@
-import Link from 'next/link';
 import { useState } from 'react';
-import layout from '../../styles/main/C_header.module.css';
 import styled from '../../styles/main/C_calendarInfo.module.css';
 import { DateView } from '../calendar/utils/DateView';
 import axios from 'axios';
@@ -46,7 +44,6 @@ const CalendarInfo = () => {
           className={styled.dateInput}
           type='date'
           data-placeholder='year-month-date'
-          required
           onChange={(e) => setDate(e.target.value)}
         />
         <button className={styled.submitBtn} onClick={() => searchHandller()}>
