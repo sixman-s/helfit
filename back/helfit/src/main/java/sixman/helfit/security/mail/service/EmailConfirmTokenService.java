@@ -22,6 +22,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @EnableAsync
 public class EmailConfirmTokenService {
+    // Test
+    @Value("${spring.mail.username}")
+    private String mail;
+
+    @Value("${spring.mail.password}")
+    private String password;
+
     @Value("${domain.back}")
     private String backDomain;
     private final String SEND_MAIL_URI = "/api/v1/users/confirm-email?token-id=";
@@ -61,6 +68,10 @@ public class EmailConfirmTokenService {
 
     @Async
     public void sendEmail(String receiverEmail, String tokenId) throws MessagingException {
+
+        System.out.println("mail = " + mail);
+        System.out.println("password = " + password);
+
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
 

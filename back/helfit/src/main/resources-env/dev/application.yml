@@ -2,7 +2,7 @@ running: dev
 
 domain:
   front: http://helfit.life
-  back: http://ec2-3-34-96-242.ap-northeast-2.compute.amazonaws.com
+  back: https://back.helfit.life
 
 chat-gpt:
   secret-key: ${CHAT_GPT_SECRET_KEY}
@@ -133,4 +133,4 @@ app:
     refreshTokenExpiry: 604800000
   oauth2:
     authorizedRedirectUris:
-      - http://localhost:3000/oauth2/receive
+      - http://helfit.life/oauth2/receive
