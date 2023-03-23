@@ -31,16 +31,21 @@
   transition: 0.7s;
 }
 .SNSbox {
-  border: 1px solid black;
+  border: 1px solid var(--main);
   width: 450px;
   height: 450px;
   margin: 10px;
   cursor: pointer;
 }
 .photo {
-  border: 1px solid black;
+  border: 1px solid var(--main);
+  background-color: var(--bg_2);
   margin: 10px;
-  height: 300px;
+  height: 310px;
+  width: 420px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .postInfo {
   margin: 20px;
@@ -80,4 +85,8 @@
   grid-area: footer;
   display: flex;
   justify-content: center;
+}
+.Content_Img {
+  max-width: 400px;
+  max-height: 300px;
 }

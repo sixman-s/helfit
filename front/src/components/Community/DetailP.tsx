@@ -296,34 +296,30 @@ const DetailP = () => {
           </div>
         </div>
         <div className={style.Content}>
-          <div>
-            <div className={style.tag}>
-              {fetchedData?.tags.map((tag) => (
-                <span className={style.tagItem}>{tag.tagName}</span>
-              ))}
-            </div>
-
-            {/* 게시글 텍스트 */}
-
-            <pre className={style.Content_Text}>
-              <div
-                className='ql-editor'
-                dangerouslySetInnerHTML={{
-                  __html: fetchedData?.text
-                }}
-              />
-            </pre>
-
-            {/* 게시글 텍스트 */}
+          <div className={style.tag}>
+            {fetchedData?.tags.map((tag) => (
+              <span className={style.tagItem}>{tag.tagName}</span>
+            ))}
           </div>
           {fetchedData?.boardImageUrl && (
-            <div style={{ width: '250px', height: '250px' }}>
+            <div className={style.Img_Line}>
               <img
                 src={fetchedData?.boardImageUrl}
                 className={style.Content_Img}
               />
             </div>
           )}
+
+          {/* 게시글 텍스트 */}
+
+          <div className={style.Content_Text}>
+            <div
+              className='ql-editor'
+              dangerouslySetInnerHTML={{
+                __html: fetchedData?.text
+              }}
+            />
+          </div>
         </div>
         <div className={style.CommentWrite}>
           <div className={style.CommnetSVG}>

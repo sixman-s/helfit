@@ -55,7 +55,7 @@ const Oww: React.FC = () => {
     post,
     order
   }) => {
-    const { title, userNickname, view } = post;
+    const { title, userNickname, view, boardImageUrl } = post;
 
     return (
       <div>
@@ -71,7 +71,11 @@ const Oww: React.FC = () => {
               />
               <div className={style.postUserName}>{userNickname}</div>
             </div>
-            <div className={style.photo}></div>
+            <div className={style.photo}>
+              {boardImageUrl && (
+                <img src={boardImageUrl} className={style.Content_Img} />
+              )}
+            </div>
             <div className={style.title}>{title}</div>
             <div className={style.postInfo}>
               <div className={style.postLike}>
