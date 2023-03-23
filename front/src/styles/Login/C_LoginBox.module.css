@@ -1,7 +1,7 @@
 .box {
   width: 400px;
   height: 100%;
-  background-color: #eef8ff;
+  background-color: white;
   margin: 40px;
   display: flex;
   justify-content: center;
@@ -48,7 +48,7 @@
 }
 .OAuthBtn {
   margin: 20px;
-  background-color: #eef8ff;
+  background-color: white;
 }
 .OAuthText {
   display: flex;

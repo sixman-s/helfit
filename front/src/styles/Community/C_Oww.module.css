@@ -31,15 +31,17 @@
   transition: 0.7s;
 }
 .SNSbox {
-  border: 1px solid var(--main);
+  border: 0.5px solid var(--main);
   width: 450px;
   height: 450px;
   margin: 10px;
   cursor: pointer;
+  box-shadow: 0px 4px 6px rgba(15, 73, 166, 0.08);
+  border-radius: 20px;
 }
 .photo {
-  border: 1px solid var(--main);
-  background-color: var(--bg_2);
+  border: 0.5px solid var(--main);
+  background-color: var(--line_2);
   margin: 10px;
   height: 310px;
   width: 420px;
@@ -62,6 +64,7 @@
   margin-top: 5px;
   margin-left: 10px;
   font-size: 12px;
+  color: var(--main);
 }
 .UserPhoto {
   width: 30px;
@@ -75,11 +78,13 @@
 .postUserName {
   margin-left: 20px;
   margin-top: 10px;
+  color: var(--main);
 }
 .title {
   margin-left: 20px;
   font-size: 14px;
   font-weight: bold;
+  color: var(--main);
 }
 .pagenation {
   grid-area: footer;

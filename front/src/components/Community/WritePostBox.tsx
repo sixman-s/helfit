@@ -102,7 +102,7 @@ const WritePostBox = () => {
         }
       )
       .then(() => alert('게시글 등록이 성공적으로 이루어졌습니다.'))
-      .then(() => router.push('/community'))
+      //.then(() => router.push('/community'))
       .catch((err) => {
         alert('올바른 요청이 아닙니다.');
         console.log(err);

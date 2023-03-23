@@ -35,6 +35,7 @@
 .title {
   grid-area: title;
   width: 200px;
+  white-space: nowrap;
   text-overflow: ellipsis;
 }
 .ListHeader_Author,
@@ -43,6 +44,7 @@
   width: 40px;
   font-size: 12px;
   white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .ListHeader_Date,
 .date {

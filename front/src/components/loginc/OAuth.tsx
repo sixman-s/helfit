@@ -17,7 +17,7 @@ const OAuthBox = () => {
 
   return (
     <>
-      <h3 className={style.OAuthText}>Login with</h3>
+      <h4 className={style.OAuthText}> </h4>
       <div className={style.OAuth2}>
         <button className={style.OAuthBtn} onClick={handleGoogleLogin}>
           <img src='assets/LoginP/GoogleOAuth.png' height='45px' />
