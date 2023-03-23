@@ -38,7 +38,7 @@ const ChatPopup = () => {
       <div className={styled.chatField}>
         <div className={styled.chatView}>
           <div className={styled.answerArea}>
-            <img src='assets/mainP/answer_icon.svg' />
+            <img src='../../../assets/mainP/answer_icon.svg' />
             <p className={`${styled.speech} ${styled.answer}`}>
               안녕하세요. 고객님. 제 이름은 헬쳇이에요. 뭐든지 물어봐주세요.
             </p>
@@ -48,12 +48,12 @@ const ChatPopup = () => {
               <p className={`${styled.speech} ${styled.question}`}>
                 {question}
               </p>
-              <img src='assets/mainP/questioner_icon.svg' />
+              <img src='../../../assets/mainP/questioner_icon.svg' />
             </div>
           ) : null}
           {answer ? (
             <div className={styled.answerArea}>
-              <img src='assets/mainP/answer_icon.svg' />
+              <img src='../../../assets/mainP/answer_icon.svg' />
               <p className={`${styled.speech} ${styled.answer}`}>{answer}</p>
             </div>
           ) : null}
@@ -80,7 +80,7 @@ const ChatGPT = () => {
     <div>
       <img
         className={styled.stikyBtn}
-        src='assets/MainP/chatGPT_icon.svg'
+        src='../../../assets/MainP/chatGPT_icon.svg'
         onClick={() => setClick(!click)}
       />
       {click ? <ChatPopup /> : null}

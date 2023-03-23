@@ -43,7 +43,6 @@ const LoginBox = () => {
           .then((res) => {
             const UserInfo = res.data.body.data;
             localStorage.setItem('UserInfo', JSON.stringify(UserInfo));
-            // console.log(JSON.parse(localStorage.UserInfo).email);
           })
           .then(() => router.push('/'))
           .catch((error) => {

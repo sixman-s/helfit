@@ -74,14 +74,16 @@ const WritePostBox = () => {
                 }
               }
             )
-            .then(() => alert('사진 전송 요청이 성공적입니다.'))
+            .then(() => alert('게시글 등록이 성공적으로 이루어졌습니다.'))
             .then(() => router.push('/community'))
             .catch((err) => {
-              alert(err);
+              alert('올바른 요청이 아닙니다.');
+              console.log(err);
             });
         })
         .catch((err) => {
-          alert(err);
+          alert('올바른 요청이 아닙니다.');
+          console.log(err);
         });
     }
 
@@ -99,10 +101,11 @@ const WritePostBox = () => {
           }
         }
       )
-      .then(() => alert('전송요청이 성공적입니다.'))
+      .then(() => alert('게시글 등록이 성공적으로 이루어졌습니다.'))
       .then(() => router.push('/community'))
       .catch((err) => {
-        alert(err);
+        alert('올바른 요청이 아닙니다.');
+        console.log(err);
       });
   };
 
