@@ -90,6 +90,7 @@ const WritePostBox = () => {
   };
   const handleEditorInput = (text: string) => {
     setEditorInput(text);
+    console.log(editorInput);
   };
 
   const handleFileInputChange = (
@@ -197,7 +198,6 @@ const WritePostBox = () => {
           <Editor
             editorInput={editorInput}
             setEditorInput={handleEditorInput}
-            formValues={editorInput}
           />
         </div>
       </div>

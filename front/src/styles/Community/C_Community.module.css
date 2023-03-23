@@ -78,6 +78,7 @@
 .UserPhoto {
   width: 40px;
   margin-right: 8px;
+  border-radius: 50px;
 }
 .UserName {
   margin-right: 20px;
