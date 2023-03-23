@@ -43,11 +43,9 @@ public class CalculatorDto {
     @Getter
     @Setter
     @AllArgsConstructor
-    @NoArgsConstructor
     public static class PostResponse{
         private Long calculatorId;
         private Long userId;
-
     }
 }
 
