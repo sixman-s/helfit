@@ -51,9 +51,8 @@ const LoginBox = () => {
           });
       })
 
-      .catch((error) => {
-        console.log(error);
-        alert('ID or password do not match.');
+      .catch((res) => {
+        alert(res.message);
       });
   };
 

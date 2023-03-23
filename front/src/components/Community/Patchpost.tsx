@@ -25,10 +25,10 @@ const PatchPostBox = () => {
   const [tags, setTags] = useState<any[]>([]);
   const [title, setTitle] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [fileName, setFileName] = useState<string>('No file selected');
   const [editorInput, setEditorInput] = useState('');
   const [titleError, setTitleError] = useState('');
   const [fetchedData, setFetchedData] = useState<BoardData | null>(null);
+  const [fileName, setFileName] = useState<string>('변경 사항이 없습니다.');
 
   const router = useRouter();
   const { id } = router.query;
@@ -108,13 +108,51 @@ const PatchPostBox = () => {
       return;
     }
     const accessToken = localStorage.accessToken;
+    if (selectedFile) {
+      const formData = new FormData();
+      formData.append('multipartFile', selectedFile);
+      return axios
+        .post(`${URL}/api/v1/file/upload`, formData, {
+          headers: {
+            'content-type': 'multipart/form-data',
+            Authorization: `Bearer ${accessToken}`
+          }
+        })
+        .then((res) => {
+          const boardImageUrl = res.data.body.resource;
+          axios
+            .patch(
+              `${URL}/api/v1/board/${pageNumber}/${boardID}`,
+              {
+                title: title,
+                text: editorInput,
+                boardTags: tags,
+                boardImageUrl: boardImageUrl
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${accessToken}`
+                }
+              }
+            )
+            .then(() => alert('사진 수정 요청이 성공적입니다.'))
+            .then(() => router.push('/community'))
+            .catch((err) => {
+              alert(err);
+            });
+        })
+        .catch((err) => {
+          alert(err);
+        });
+    }
+
     axios
       .patch(
         `${URL}/api/v1/board/${pageNumber}/${boardID}`,
         {
           title: title,
           text: editorInput,
-          boardTags: tags.map((tag) => ({ tagName: tag }))
+          boardTags: tags
         },
         {
           headers: {
@@ -122,19 +160,8 @@ const PatchPostBox = () => {
           }
         }
       )
-      // .then(() => {
-      //   const accessToken = localStorage.accessToken;
-      //   const formData = new FormData();
-      //   formData.append('multipartFile', selectedFile);
-      //   axios.post(`${URL}/api/v1/file/upload`, formData, {
-      //     headers: {
-      //       'content-type': 'multipart/form-data',
-      //       Authorization: `Bearer ${accessToken}`
-      //     }
-      //   });
-      // })
-      .then(() => alert(`userid: ${userID}  게시글 수정 성공`))
-      .then(() => router.push(`/community`))
+      .then(() => alert('수정 요청이 성공적입니다.'))
+      .then(() => router.push('/community'))
       .catch((err) => {
         alert(err);
       });
@@ -238,7 +265,10 @@ const PatchPostBox = () => {
                 사진 선택
               </label>
               <div className={style.FileName}>
-                <p className={style.FileNameOver}>{fileName}</p>
+                <p className={style.FileNameOver}>
+                  {fileName}
+                  {/* {fetchedData.boardImageUrl} */}
+                </p>
               </div>
             </div>
 
