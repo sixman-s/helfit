@@ -41,7 +41,7 @@ public class UserDto {
         @NotNull
         @ValidEnum(
             enumClass = PersonalInfoAgreement.class,
-            message = "개인정보 제공 동의 항목은 필수입력값 입니다. : 기대값: ['Y']",
+            message = "개인정보 제공 동의 항목은 '필수' 입력값입니다. : 기대값 = ['Y']",
             ignoreCase = true
         )
         private String personalInfoAgreement;
@@ -56,6 +56,14 @@ public class UserDto {
 
         @NotBlank
         private String password;
+
+        @Nullable
+        @ValidEnum(
+            enumClass = Activate.class,
+            message = "휴면계정에서 '활성화' 계정으로 전환 시 입력 기대값입니다. : 기대값 = ['Y'] ",
+            ignoreCase = true
+        )
+        private String activate;
     }
 
     @Getter

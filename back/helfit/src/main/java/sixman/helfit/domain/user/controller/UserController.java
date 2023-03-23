@@ -42,6 +42,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.net.URI;
+import java.time.ZoneId;
 import java.util.Date;
 
 import static sixman.helfit.domain.user.entity.User.*;
@@ -106,6 +107,16 @@ public class UserController {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         User user = userPrincipal.getUser();
 
+        // ! 휴면 계정 로그인 시도
+        if (user.getUserStatus().equals(UserStatus.USER_INACTIVE)) {
+            if (requestBody.getActivate() != null && requestBody.getActivate().equals(Activate.Y.name())) {
+                user.setUserStatus(UserStatus.USER_ACTIVE);
+                userService.updateUser(user.getUserId(), user);
+            } else {
+                throw new BusinessLogicException(ExceptionCode.USER_INACTIVE);
+            }
+        }
+
         // ! 탈퇴 회원 로그인 시도
         if (user.getUserStatus().equals(UserStatus.USER_QUIT))
             throw new BusinessLogicException(ExceptionCode.USER_WITHDRAW);
@@ -119,10 +130,13 @@ public class UserController {
         String id = user.getId();
         Date now = new Date();
 
+        user.setLastLoggedIn(now.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+        userService.updateUser(user.getUserId(), user);
+
         // # Access Token 생성
         AuthToken accessToken = authTokenProvider.createAuthToken(
             id,
-            ((UserPrincipal) authentication.getPrincipal()).getUser().getRoleType().getCode(),
+            user.getRoleType().getCode(),
             new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
         );
 
@@ -174,11 +188,13 @@ public class UserController {
         AuthToken authRefreshToken = authTokenProvider.convertAuthToken(refreshToken);
 
         // # Refresh Token 검증
-        if (!authRefreshToken.validate()) throw new BusinessLogicException(ExceptionCode.INVALID_REFRESH_TOKEN);
+        if (!authRefreshToken.validate())
+            throw new BusinessLogicException(ExceptionCode.INVALID_REFRESH_TOKEN);
 
         // # DB - Refresh token 확인
         UserRefreshToken userRefreshToken = userRefreshTokenRepository.findByIdAndRefreshToken(userId, refreshToken);
-        if (userRefreshToken == null) throw new BusinessLogicException(ExceptionCode.INVALID_REFRESH_TOKEN);
+        if (userRefreshToken == null)
+            throw new BusinessLogicException(ExceptionCode.INVALID_REFRESH_TOKEN);
 
         Date now = new Date();
 
@@ -303,6 +319,7 @@ public class UserController {
 
         return ResponseEntity.ok().body(ApiResponse.ok("resource", imagePath));
     }
+
 
     /*
      * # 회원 프로필 이미지 삭제

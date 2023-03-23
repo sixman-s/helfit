@@ -58,5 +58,7 @@ Helfit API Documents
 [[APIs]]
 
 == Users
+=== 회원가입
+operation::user-controller-test/signup-test[]
 === 회원정보 조회
 operation::user-controller-test/get-user-test[snippets='curl-request,http-request,http-response,response-body,response-fields-header,response-fields-data']

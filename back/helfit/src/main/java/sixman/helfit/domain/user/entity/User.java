@@ -13,6 +13,7 @@ import sixman.helfit.security.entity.RoleType;
 
 import javax.persistence.*;
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,11 +38,13 @@ public class User extends Auditable {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(length = 30)
+    @Column(nullable = false, length = 30)
     private String nickname;
 
     @Column(length = 512)
     private String profileImageUrl;
+
+    private LocalDateTime lastLoggedIn;
 
     @Enumerated(value = EnumType.STRING)
     private EmailVerified emailVerifiedYn;
@@ -94,6 +97,11 @@ public class User extends Auditable {
     }
 
     public enum PersonalInfoAgreement {
+        Y
+        ;
+    }
+
+    public enum Activate {
         Y
         ;
     }
