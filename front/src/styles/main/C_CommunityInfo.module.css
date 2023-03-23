@@ -6,7 +6,7 @@
 }
 
 .content {
-  width: 100%;
+  width: 33%;
   margin-right: 10px;
 }
 
@@ -16,9 +16,9 @@
 
 .img {
   width: 100%;
-  min-height: 230px;
+  max-height: 230px;
   object-fit: cover;
-  border-radius: 15px;
+  border-radius: 8px;
   margin-bottom: 20px;
 }
 

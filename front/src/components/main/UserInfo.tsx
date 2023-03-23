@@ -25,21 +25,19 @@ const UserInfo = ({ token }) => {
         .then((res) => {
           setKcal(res.data.body.data);
         })
-        .catch((error) => console.log('칼로리 데이터 받아오기' + '실패'));
+        .catch((error) => console.log(error));
       axios
         .get(`${url}/api/v1/stat/physical`, headers)
         .then((res) => {
           setWeight(res.data.body.data);
         })
-        .catch((error) => console.log('몸무게 데이터 받아오기' + '실패'));
+        .catch((error) => console.log(error));
       axios
         .get(`${url}/api/v1/calculate/${userData.userId}`, headers)
         .then((res) => {
           setkcalGoal(res.data.body.data.result);
         })
-        .catch((error) =>
-          console.log('계산기 칼로리 데이터 받아오기' + '실패')
-        );
+        .catch((error) => console.log(error));
     }
   }, [token]);
 

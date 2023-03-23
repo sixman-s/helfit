@@ -21,26 +21,36 @@
 }
 
 .dateInput::before {
-  content: attr(data-placeholder);
   color: var(--text_5);
-  width: 100%;
 }
 .dateInput:valid::before {
   display: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .dateInput::-webkit-clear-button,
 .dateInput::-webkit-inner-spin-button {
   display: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .dateInput::-webkit-calendar-picker-indicator {
   position: absolute;
-  left: 0;
+  right: 0;
   top: 0;
-  width: 100%;
+  width: 50%;
   height: 100%;
   background: transparent;
   color: transparent;
   cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .submitBtn {
