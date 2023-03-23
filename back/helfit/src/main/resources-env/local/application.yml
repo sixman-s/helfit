@@ -70,7 +70,7 @@ spring:
         smtp:
           starttls:
             enable: true
-            required: true
+#            required: true
           auth: true
           connectiontimeout: 5000
           timeout: 5000
