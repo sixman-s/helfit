@@ -67,13 +67,18 @@
   padding-top: 20px;
   border-top: 1px solid var(--line_2);
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
 }
+
 .Content_Text {
   margin-top: 30px;
 }
+.Img_Line {
+  display: flex;
+  margin-top: 30px;
+}
 .Content_Img {
-  width: 250px;
+  max-width: 400px;
 }
 .CommentWrite {
   display: flex;

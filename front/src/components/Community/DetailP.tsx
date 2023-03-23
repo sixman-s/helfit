@@ -35,6 +35,19 @@ const DetailP = () => {
   const [likeCount, setLikeCount] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
 
+  const escapeMap = {
+    '&lt;': '<',
+    '&#12296;': '<',
+    '&gt;': '>',
+    '&#12297;': '>',
+    '&amp;': '&',
+    '&quot;': '"',
+    '&#x27;': "'"
+  };
+  const pattern = /&(lt|gt|amp|quot|#x27|#12296|#12297);/g;
+  const convertToHtml = (text) =>
+    text.replace(pattern, (match, entity) => escapeMap[`&${entity};`] || match);
+
   const router = useRouter();
   const { id } = router.query;
   let boardID: number | null = null;
@@ -74,7 +87,11 @@ const DetailP = () => {
     // 게시글 불러오기
     axios
       .get(`${URL}/api/v1/board/${pageNumber}/${boardID}`)
-      .then((res) => setFetchedData(res.data))
+      .then((res) => {
+        const data = res.data;
+        res.data.text = convertToHtml(res.data.text);
+        setFetchedData(data);
+      })
       //.then((res) => console.log(res.data))
       // 조회수 불러오기
       .then(() => {
@@ -279,24 +296,30 @@ const DetailP = () => {
           </div>
         </div>
         <div className={style.Content}>
-          <div>
-            <div className={style.tag}>
-              {fetchedData?.tags.map((tag) => (
-                <span className={style.tagItem}>{tag.tagName}</span>
-              ))}
-            </div>
-            <div className={style.Content_Text}>
-              <div dangerouslySetInnerHTML={{ __html: fetchedData?.text }} />
-            </div>
+          <div className={style.tag}>
+            {fetchedData?.tags.map((tag) => (
+              <span className={style.tagItem}>{tag.tagName}</span>
+            ))}
           </div>
           {fetchedData?.boardImageUrl && (
-            <div style={{ width: '250px', height: '250px' }}>
+            <div className={style.Img_Line}>
               <img
                 src={fetchedData?.boardImageUrl}
                 className={style.Content_Img}
               />
             </div>
           )}
+
+          {/* 게시글 텍스트 */}
+
+          <div className={style.Content_Text}>
+            <div
+              className='ql-editor'
+              dangerouslySetInnerHTML={{
+                __html: fetchedData?.text
+              }}
+            />
+          </div>
         </div>
         <div className={style.CommentWrite}>
           <div className={style.CommnetSVG}>

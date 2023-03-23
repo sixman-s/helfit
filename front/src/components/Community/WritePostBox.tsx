@@ -46,6 +46,45 @@ const WritePostBox = () => {
     }
 
     const accessToken = localStorage.accessToken;
+
+    if (selectedFile) {
+      const formData = new FormData();
+      formData.append('multipartFile', selectedFile);
+      return axios
+        .post(`${URL}/api/v1/file/upload`, formData, {
+          headers: {
+            'content-type': 'multipart/form-data',
+            Authorization: `Bearer ${accessToken}`
+          }
+        })
+        .then((res) => {
+          const boardImageUrl = res.data.body.resource;
+          axios
+            .post(
+              `${URL}/api/v1/board/${category}/${userID}`,
+              {
+                title: title,
+                text: editorInput,
+                boardTags: tags,
+                boardImageUrl: boardImageUrl
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${accessToken}`
+                }
+              }
+            )
+            .then(() => alert('사진 전송 요청이 성공적입니다.'))
+            .then(() => router.push('/community'))
+            .catch((err) => {
+              alert(err);
+            });
+        })
+        .catch((err) => {
+          alert(err);
+        });
+    }
+
     axios
       .post(
         `${URL}/api/v1/board/${category}/${userID}`,
@@ -60,19 +99,7 @@ const WritePostBox = () => {
           }
         }
       )
-      .then(() => {
-        if (selectedFile) {
-          // check if the user has selected a file
-          const formData = new FormData();
-          formData.append('multipartFile', selectedFile);
-          return axios.post(`${URL}/api/v1/file/upload`, formData, {
-            headers: {
-              'content-type': 'multipart/form-data',
-              Authorization: `Bearer ${accessToken}`
-            }
-          });
-        }
-      })
+      .then(() => alert('전송요청이 성공적입니다.'))
       .then(() => router.push('/community'))
       .catch((err) => {
         alert(err);
@@ -197,7 +224,6 @@ const WritePostBox = () => {
           <Editor
             editorInput={editorInput}
             setEditorInput={handleEditorInput}
-            formValues={editorInput}
           />
         </div>
       </div>

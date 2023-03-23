@@ -64,12 +64,27 @@ const PatchPostBox = () => {
       pageNumber = null;
   }
 
+  const escapeMap = {
+    '&lt;': '<',
+    '&#12296;': '<',
+    '&gt;': '>',
+    '&#12297;': '>',
+    '&amp;': '&',
+    '&quot;': '"',
+    '&#x27;': "'"
+  };
+  const pattern = /&(lt|gt|amp|quot|#x27|#12296|#12297);/g;
+  const convertToHtml = (text) =>
+    text.replace(pattern, (match, entity) => escapeMap[`&${entity};`] || match);
+
   // 상세페이지 글불러오기
   useEffect(() => {
     axios
       .get(`${URL}/api/v1/board/${pageNumber}/${boardID}`)
       .then((res) => {
-        setFetchedData(res.data);
+        const data = res.data;
+        res.data.text = convertToHtml(res.data.text);
+        setFetchedData(data);
         setTitle(res.data.title);
         setEditorInput(res.data.text);
         setSelectedFile(res.data.boardImageUrl);

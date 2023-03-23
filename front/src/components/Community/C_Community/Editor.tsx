@@ -83,7 +83,6 @@ function Editor({
         onBlur={handleBlur}
         className={style.editor}
       />
-      <div dangerouslySetInnerHTML={{ __html: editorInput }}></div>
     </div>
   );
 }

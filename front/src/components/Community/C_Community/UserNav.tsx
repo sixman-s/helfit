@@ -6,29 +6,20 @@ const UserNav = () => {
   const [userProfile, setUserProfile] = useState(
     '../../../assets/Community/UserProfile.svg'
   );
-  const handleUserProfile = (userProfileData: string) => {
-    if (userProfileData) {
-      setUserProfile(userProfileData);
-    }
-  };
+
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
     if (accessToken) {
       const userInfo = JSON.parse(localStorage.getItem('UserInfo'));
       setUserName(userInfo.nickname);
+      setUserProfile(userInfo.profileImageUrl);
     }
   }, []);
 
   return (
     <>
       <div className={style.UserProfile}>
-        <img
-          src={userProfile}
-          className={style.UserPhoto}
-          onError={() =>
-            setUserProfile('../../../assets/Community/UserProfile.svg')
-          }
-        />
+        <img src={userProfile} className={style.UserPhoto} />
         <div className={style.UserName}>{userName}</div>
       </div>
     </>

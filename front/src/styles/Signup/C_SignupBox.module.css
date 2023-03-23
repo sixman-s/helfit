@@ -43,7 +43,12 @@
 }
 
 .logo {
-  width: 155px;
+  width: 125px;
+}
+.logoLine {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
 .button {
   background-color: var(--main);
