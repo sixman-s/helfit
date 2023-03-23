@@ -21,19 +21,19 @@ public class BoardDto {
     public static class Post {
         @NotNull
         @Size(min = 1, max = 2000)
-        @NoKoreanCurseWords
+        //@NoKoreanCurseWords
         private String title;
 
         @NotNull
         @Size(min = 1, max = 16383)
-        @NoKoreanCurseWords
+        //@NoKoreanCurseWords
         private String text;
 
         @Nullable
         private String boardImageUrl;
 
         @Nullable
-        // @NoKoreanCurseWords
+       //@NoKoreanCurseWords
         @Size(max = 2000)
         private List<String> boardTags;
 
@@ -45,6 +45,7 @@ public class BoardDto {
     public static class Response {
         private long boardId;
         private long userId;
+        private long view;
         private String userNickname;
         private String title;
         private String text;
@@ -58,10 +59,10 @@ public class BoardDto {
     @AllArgsConstructor
     public static class Patch {
         @Size(min = 1, max = 2000)
-        @NoKoreanCurseWords
+        //@NoKoreanCurseWords
         private String title;
         @Size(min = 1, max = 20000)
-        @NoKoreanCurseWords
+        //@NoKoreanCurseWords
         private String text;
         private String boardImageUrl;
         private List<String> boardTags;
