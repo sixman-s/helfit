@@ -47,6 +47,9 @@
 .topContainer .idDiv .id{
     font-size: var(--h3);
     color: var(--text_3);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 105px;
 }
 
 .bottomContainer {
@@ -78,7 +81,6 @@
     left: 50%;
     transform: translate(-50%, -50%); */
 }
-
 
 .profile_option{
     width: 24px;

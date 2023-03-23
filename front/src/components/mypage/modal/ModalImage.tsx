@@ -83,10 +83,16 @@ const ModalImage = ({ detail }: { detail: detailProps }) => {
             }
           })
           .then((res) => {
-            if (res.status === 200) {
-              console.log('res : ' + res);
-              router.reload();
-            }
+            let userInfo = JSON.parse(localStorage.getItem('UserInfo'));
+
+            userInfo['profileImageUrl'] = JSON.stringify(
+              res.data.body.resource
+            );
+
+            localStorage.setItem('UserInfo', JSON.stringify(userInfo));
+            console.log(JSON.parse(localStorage.getItem('UserInfo')));
+
+            router.reload();
           })
           .catch((err) => console.log(err));
       } catch (error: any) {
