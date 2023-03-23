@@ -18,7 +18,7 @@ const LodingComponent = () => {
 
 const SpeechBubble = ({ data }) => {
   return data.map(({ type, content }: SpeechData, index: number) => {
-    return type === 'question' ? (
+    return type === 'question' && content !== '' ? (
       <div className={styled.questionArea} key={index}>
         <p className={`${styled.speech} ${styled.question}`}>{content}</p>
         <img src='../../../assets/mainP/questioner_icon.svg' />
@@ -44,6 +44,14 @@ const ChatPopup = () => {
   const url = process.env.NEXT_PUBLIC_URL;
 
   const onSubmit = () => {
+    axios
+      .post(`${url}/api/v1/ai/question`, {
+        question: input
+      })
+      .then((res) => {
+        setAnswer(res.data.body.data.choices[0].message.content);
+      })
+      .catch((error) => alert('내용을 입력해 주세요.'));
     setSpeech([
       ...speech,
       {
@@ -52,14 +60,6 @@ const ChatPopup = () => {
       }
     ]);
     setInput('');
-
-    axios
-      .post(`${url}/api/v1/ai/question`, {
-        question: input
-      })
-      .then((res) => {
-        setAnswer(res.data.body.data.choices[0].message.content);
-      });
   };
 
   useEffect(() => {
@@ -88,7 +88,6 @@ const ChatPopup = () => {
           placeholder='헬쳇과 대화해보세요.'
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => (e.key == 'Enter' ? onSubmit() : null)}
         />
         <button className={styled.submitBtn} onClick={() => onSubmit()}>
           제출
