@@ -3,60 +3,82 @@ import styled from '../../../styles/main/C_chatGPT.module.css';
 import axios from 'axios';
 import { DotPulse } from '@uiball/loaders';
 
+interface SpeechData {
+  type: string;
+  content: string;
+}
+
+const LodingComponent = () => {
+  return (
+    <span className={styled.loading}>
+      <DotPulse size={20} speed={1.3} color='#3361ff' />
+    </span>
+  );
+};
+
+const SpeechBubble = ({ data }) => {
+  return data.map(({ type, content }: SpeechData, index: number) => {
+    return type === 'question' ? (
+      <div className={styled.questionArea} key={index}>
+        <p className={`${styled.speech} ${styled.question}`}>{content}</p>
+        <img src='../../../assets/mainP/questioner_icon.svg' />
+      </div>
+    ) : (
+      <div className={styled.answerArea} key={index}>
+        <img src='../../../assets/mainP/answer_icon.svg' />
+        <p className={`${styled.speech} ${styled.answer}`}>{content}</p>
+      </div>
+    );
+  });
+};
+
 const ChatPopup = () => {
-  const [input, setInput] = useState(null);
+  const [speech, setSpeech] = useState([
+    {
+      type: 'answer',
+      content: '안녕하세요. 고객님. 제 이름은 헬쳇이에요. 뭐든지 물어봐주세요.'
+    }
+  ]);
+  const [input, setInput] = useState('');
   const [answer, setAnswer] = useState(null);
-  const [question, setQuestion] = useState(null);
-  const [pending, setPending] = useState(false);
   const url = process.env.NEXT_PUBLIC_URL;
 
-  const setLodingComponent = () => {
-    return (
-      <span className={styled.loading}>
-        <DotPulse size={20} speed={1.3} color='#3361ff' />
-      </span>
-    );
-  };
-  console.log(input);
   const onSubmit = () => {
-    setQuestion(input);
+    setSpeech([
+      ...speech,
+      {
+        type: 'question',
+        content: input
+      }
+    ]);
+    setInput('');
+
     axios
       .post(`${url}/api/v1/ai/question`, {
         question: input
       })
       .then((res) => {
-        setPending(true);
         setAnswer(res.data.body.data.choices[0].message.content);
-      })
-      .then(() => {
-        setPending(false);
       });
   };
+
+  useEffect(() => {
+    answer === null
+      ? null
+      : setSpeech([
+          ...speech,
+          {
+            type: 'answer',
+            content: answer
+          }
+        ]);
+  }, [answer]);
 
   return (
     <article className={styled.popupContainer}>
       <div className={styled.chatField}>
         <div className={styled.chatView}>
-          <div className={styled.answerArea}>
-            <img src='../../../assets/mainP/answer_icon.svg' />
-            <p className={`${styled.speech} ${styled.answer}`}>
-              안녕하세요. 고객님. 제 이름은 헬쳇이에요. 뭐든지 물어봐주세요.
-            </p>
-          </div>
-          {question ? (
-            <div className={styled.questionArea}>
-              <p className={`${styled.speech} ${styled.question}`}>
-                {question}
-              </p>
-              <img src='../../../assets/mainP/questioner_icon.svg' />
-            </div>
-          ) : null}
-          {answer ? (
-            <div className={styled.answerArea}>
-              <img src='../../../assets/mainP/answer_icon.svg' />
-              <p className={`${styled.speech} ${styled.answer}`}>{answer}</p>
-            </div>
-          ) : null}
+          <SpeechBubble data={speech} />
         </div>
       </div>
       <div className={styled.inputArea}>
@@ -64,7 +86,9 @@ const ChatPopup = () => {
           className={styled.textinput}
           type='text'
           placeholder='헬쳇과 대화해보세요.'
+          value={input}
           onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => (e.key == 'Enter' ? onSubmit() : null)}
         />
         <button className={styled.submitBtn} onClick={() => onSubmit()}>
           제출

@@ -31,7 +31,7 @@ export default function Home() {
         )}
         {token ? (
           <Header title={`Today's Diet`} href='/'>
-            <DietInfo token={token} />
+            <DietInfo />
           </Header>
         ) : (
           <Header title={`Today's Diet`} href='/'>

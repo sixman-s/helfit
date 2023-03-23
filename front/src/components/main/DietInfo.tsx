@@ -4,7 +4,7 @@ import styled from '../../styles/main/C_dietInfo.module.css';
 import { DotPulse } from '@uiball/loaders';
 import Link from 'next/link';
 
-const DietInfo = ({ token }) => {
+const DietInfo = () => {
   if (typeof window !== 'undefined') {
     const userData = JSON.parse(localStorage.getItem('UserInfo'));
     const [answer, setAnser] = useState('');
@@ -37,7 +37,6 @@ const DietInfo = ({ token }) => {
 
     useEffect(() => {
       axios.post(`${url}/api/v1/ai/question`, body).then((res) => {
-        console.log(res.data.body.data.choices[0].message.content);
         setAnser(res.data.body.data.choices[0].message.content);
       });
     }, []);

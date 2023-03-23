@@ -1,16 +1,24 @@
 import Link from 'next/link';
 import layout from '../../styles/main/C_header.module.css';
 import styled from '../../styles/main/C_communityInfo.module.css';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const CommunityInfo = ({ token }) => {
-  const [data, setData] = useState(null);
-  const imgUrl =
-    'https://blog.kakaocdn.net/dn/3yudy/btqFLtiuxnM/kKhK2caNgPuyvJn6faAon1/img.jpg';
-  const title = '은평구 크로스핏으로 오세요^^';
-  const context =
-    '오전 운동이 빡세긴하지만 기분이 상쾌한 장점이 있는듯!☺️ 운동을 더 잘하고싶네요😆😆 수욜도 득근하세용💪🏻💕';
+  const [data, setData] = useState([]);
+  const escapeMap = {
+    '&lt;': '<',
+    '&#12296;': '<',
+    '&gt;': '>',
+    '&#12297;': '>',
+    '&amp;': '&',
+    '&quot;': '"',
+    '&#x27;': "'"
+  };
+  const pattern = /&(lt|gt|amp|quot|#x27|#12296|#12297);/g;
+  const convertToHtml = (text) =>
+    text.replace(pattern, (match, entity) => escapeMap[`&${entity};`] || match);
+
   useEffect(() => {
     if (token) {
       const headers = {
@@ -20,7 +28,7 @@ const CommunityInfo = ({ token }) => {
       };
       const url = process.env.NEXT_PUBLIC_URL;
       axios
-        .get(`${url}/api/v1/stat/board`, headers)
+        .get(`${url}/api/v1/stat/board/5`, headers)
         .then((res) => {
           console.log(res.data.body.data);
           setData(res.data.body.data);
@@ -28,6 +36,7 @@ const CommunityInfo = ({ token }) => {
         .catch((error) => console.log(error));
     }
   }, [token]);
+
   return (
     <article className={layout.container}>
       <header className={layout.header}>
@@ -37,30 +46,20 @@ const CommunityInfo = ({ token }) => {
         </Link>
       </header>
       <ul className={styled.contents}>
-        <li className={styled.content}>
-          <img className={styled.img} src={imgUrl} />
-
-          <label className={styled.label}>
-            <span className={styled.title}>{title}</span>
-            <p className={styled.context}>{context}</p>
-          </label>
-        </li>
-        <li className={styled.content}>
-          <img className={styled.img} src={imgUrl} />
-
-          <label className={styled.label}>
-            <span className={styled.title}>{title}</span>
-            <p className={styled.context}>{context}</p>
-          </label>
-        </li>
-        <li className={styled.content}>
-          <img className={styled.img} src={imgUrl} />
-
-          <label className={styled.label}>
-            <span className={styled.title}>{title}</span>
-            <p className={styled.context}>{context}</p>
-          </label>
-        </li>
+        {data &&
+          data.map(({ boardImageUrl, text, title }, index: number) => (
+            <li className={styled.content} key={index}>
+              <Link href={`/community/oww/${index + 1}`}>
+                <img className={styled.img} src={boardImageUrl} />
+                <div className={styled.label}>
+                  <span className={styled.title}>{title}</span>
+                  <p className={styled.context}>
+                    {convertToHtml(text).replace('<p>', '').replace('</p>', '')}
+                  </p>
+                </div>
+              </Link>
+            </li>
+          ))}
       </ul>
     </article>
   );
