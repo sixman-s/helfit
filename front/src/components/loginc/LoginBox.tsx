@@ -43,17 +43,20 @@ const LoginBox = () => {
           .then((res) => {
             const UserInfo = res.data.body.data;
             localStorage.setItem('UserInfo', JSON.stringify(UserInfo));
-            // console.log(JSON.parse(localStorage.UserInfo).email);
           })
           .then(() => router.push('/'))
           .catch((error) => {
             console.log(error);
           });
       })
-
       .catch((error) => {
-        console.log(error);
-        alert('ID or password do not match.');
+        if (error.response.status === 403) {
+          alert('회원가입시 입력한 이메일에서 인증을 완료해주세요.');
+        } else if (error.response.status === 400) {
+          alert('아이디와 비밀번호가 일치하지 않습니다.');
+        } else {
+          console.log(error);
+        }
       });
   };
 
