@@ -3,6 +3,7 @@ running: local
 domain:
   front: http://localhost:3000
 #  back: http://localhost:8080
+# 프론트 배포 전 임시 저장
   back: http://ec2-3-34-96-242.ap-northeast-2.compute.amazonaws.com:8080
 
 chat-gpt:
@@ -54,12 +55,6 @@ spring:
     init:
       mode:
       data-locations: classpath*:db/h2/data.sql
-  thymeleaf:
-    prefix: classpath:/templates/
-    suffix: .html
-    mode: HTML
-    encoding: UTF-8
-    check-template-location: true
   mail:
     host: smtp.gmail.com
     port: 587
@@ -67,15 +62,15 @@ spring:
     password: ${GMAIL_PASSWORD}     # 앱 비밀번호
     properties:
       mail:
+        debug: true
         smtp:
           starttls:
             enable: true
-#            required: true
+            required: true
           auth: true
-          connectiontimeout: 5000
+          connection-timeout: 5000
           timeout: 5000
-          writetimeout: 5000
-
+          write timeout: 5000
   security:
     oauth2:
       client:
@@ -120,6 +115,12 @@ spring:
             tokenUri: https://kauth.kakao.com/oauth/token
             userInfoUri: https://kapi.kakao.com/v2/user/me
             userNameAttribute: id
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    encoding: UTF-8
+    check-template-location: true
 
 logging:
   level:
