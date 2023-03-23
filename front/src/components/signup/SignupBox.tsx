@@ -5,13 +5,14 @@ import Checkbox from './Checkbox';
 import Btn from '@/components/loginc/Buttons';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
-
+import { useState } from 'react';
 const URL = process.env.NEXT_PUBLIC_URL;
 
 type SignupForm = {
   userID: string;
   email: string;
   password: string;
+  passwordRe: string;
   name: string;
   birth: string;
   nickname: string;
@@ -19,11 +20,13 @@ type SignupForm = {
 };
 
 const SignupBox = () => {
+  const [passwordMatch, setPasswordMatch] = useState(true);
   const router = useRouter();
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
+    getValues
   } = useForm<SignupForm>();
 
   const onSubmit = (data: SignupForm) => {
@@ -42,13 +45,19 @@ const SignupBox = () => {
       })
       .catch((error) => console.log(error));
   };
+  const validatePasswordMatch = (value) => {
+    const { password } = getValues();
+    return value === password || '비밀번호가 일치하지 않습니다.';
+  };
 
   return (
     <>
       <div className={style.container}>
+        <div className={style.logoLine}>
+          <img className={style.logo} src={'assets/LoginP/logo.svg'} />
+        </div>
         <div className={style.leftbox}>
           {/* 아이디 입력칸 */}
-
           <div>
             <h5>아이디</h5>
             <input
@@ -97,10 +106,32 @@ const SignupBox = () => {
             )}
           </div>
 
+          {/* 비밀번호 재확인 입력칸 */}
+
+          <div>
+            <h5>비밀번호 재입력</h5>
+            <input
+              type='password'
+              placeholder='비밀번호 재입력'
+              {...register('passwordRe', {
+                required: true,
+                validate: validatePasswordMatch // Add custom validation rule
+              })}
+              className={style.signup__form}
+            />
+            {errors.passwordRe && (
+              <div className={style.errormessage}>
+                {errors.passwordRe.message}
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className={style.rightbox}>
           {/* 이메일 입력칸 */}
 
           <div>
-            <h5>이메일</h5>
+            <h5> 이메일 </h5>
             <div>
               <input
                 type='text'
@@ -119,12 +150,9 @@ const SignupBox = () => {
               )}
             </div>
           </div>
-        </div>
 
-        {/* 생년월일 입력칸 */}
+          {/* 생년월일 입력칸 */}
 
-        <div className={style.rightbox}>
-          <img className={style.logo} src={'assets/LoginP/logo.svg'} />
           <div>
             <h5>생년월일</h5>
             <input
