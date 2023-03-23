@@ -37,11 +37,13 @@ const ModalPInfo = ({ detail }: { detail: detailProps }) => {
           .then((res) => {
             {
               console.log(res);
-              localStorage.removeItem('UserInfo');
-              localStorage.setItem(
-                'UserInfo',
-                JSON.stringify(res.data.body.data)
-              );
+              let userInfo = JSON.parse(localStorage.getItem('UserInfo'));
+
+              userInfo['nickname'] = res.data.body.data.nickname;
+
+              localStorage.setItem('UserInfo', JSON.stringify(userInfo));
+              console.log(JSON.parse(localStorage.getItem('UserInfo')));
+
               router.reload();
             }
           })

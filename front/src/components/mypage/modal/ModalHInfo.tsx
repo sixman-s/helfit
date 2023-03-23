@@ -52,6 +52,25 @@ const ModalHInfo = ({
       onSubmit={handleSubmit(async (data) => {
         await new Promise((r) => setTimeout(r, 1000));
 
+        const activityMapper = {
+          SEDENTARY: '거의 활동 없음',
+          LIGHTLY_ACTIVE: '가벼운 활동',
+          MODERATELY_ACTIVE: '적당한 활동',
+          VERY_ACTIVE: '강도 높은 활동',
+          EXTRA_ACTIVE: '격력한 활동'
+        };
+
+        const goalMapper = {
+          KEEP: '유지',
+          DIET: '다이어트',
+          BULK: '증량'
+        };
+
+        const genderMapper = {
+          MALE: '남자',
+          FEMALE: '여자'
+        };
+
         const { birth, height, weight, gender, activityLevel, goal } = data;
 
         await axios
@@ -68,7 +87,9 @@ const ModalHInfo = ({
             console.log(`health RES : ${res.data.body.data}`);
             let userInfo = JSON.parse(localStorage.getItem('UserInfo'));
 
-            userInfo['gender'] = JSON.stringify(res.data.body.data.gender);
+            const genderInfo = genderMapper[res.data.body.data.gender];
+
+            userInfo['gender'] = genderInfo;
 
             localStorage.setItem('UserInfo', JSON.stringify(userInfo));
           })
@@ -91,13 +112,16 @@ const ModalHInfo = ({
 
               let userInfo = JSON.parse(localStorage.getItem('UserInfo'));
 
-              userInfo['result'] = JSON.stringify(res.data.body.data.result);
+              const activityInfo =
+                activityMapper[res.data.body.data.activityLevel];
 
-              userInfo['activityLevel'] = JSON.stringify(
-                res.data.body.data.activityLevel
-              );
+              const goalInfo = goalMapper[res.data.body.data.goal];
 
-              userInfo['goal'] = JSON.stringify(res.data.body.data.goal);
+              userInfo['result'] = res.data.body.data.result;
+
+              userInfo['activityLevel'] = activityInfo;
+
+              userInfo['goal'] = goalInfo;
 
               localStorage.setItem('UserInfo', JSON.stringify(userInfo));
 
@@ -120,13 +144,16 @@ const ModalHInfo = ({
 
               let userInfo = JSON.parse(localStorage.getItem('UserInfo'));
 
-              userInfo['result'] = JSON.stringify(res.data.body.data.result);
+              const activityInfo =
+                activityMapper[res.data.body.data.activityLevel];
 
-              userInfo['activityLevel'] = JSON.stringify(
-                res.data.body.data.activityLevel
-              );
+              const goalInfo = goalMapper[res.data.body.data.goal];
 
-              userInfo['goal'] = JSON.stringify(res.data.body.data.goal);
+              userInfo['result'] = res.data.body.data.result;
+
+              userInfo['activityLevel'] = activityInfo;
+
+              userInfo['goal'] = goalInfo;
 
               localStorage.setItem('UserInfo', JSON.stringify(userInfo));
 
