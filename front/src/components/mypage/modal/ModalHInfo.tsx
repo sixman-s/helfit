@@ -65,7 +65,12 @@ const ModalHInfo = ({
             }
           )
           .then((res) => {
-            console.log(`health RES : ${res}`);
+            console.log(`health RES : ${res.data.body.data}`);
+            let userInfo = JSON.parse(localStorage.getItem('UserInfo'));
+
+            userInfo['gender'] = JSON.stringify(res.data.body.data.gender);
+
+            localStorage.setItem('UserInfo', JSON.stringify(userInfo));
           })
           .catch((err) => console.log(err));
         if (cDetail) {
@@ -80,7 +85,22 @@ const ModalHInfo = ({
               }
             )
             .then((res) => {
-              console.log(`calculate RES : ${res}`);
+              console.log(
+                `calculate RES : ${JSON.stringify(res.data.body.data)}`
+              );
+
+              let userInfo = JSON.parse(localStorage.getItem('UserInfo'));
+
+              userInfo['result'] = JSON.stringify(res.data.body.data.result);
+
+              userInfo['activityLevel'] = JSON.stringify(
+                res.data.body.data.activityLevel
+              );
+
+              userInfo['goal'] = JSON.stringify(res.data.body.data.goal);
+
+              localStorage.setItem('UserInfo', JSON.stringify(userInfo));
+
               router.reload();
             })
             .catch((err) => console.log(err));
@@ -96,7 +116,20 @@ const ModalHInfo = ({
               }
             )
             .then((res) => {
-              console.log(`calculate RES : ${res}`);
+              console.log(`calculate RES : ${res.data.body.data}`);
+
+              let userInfo = JSON.parse(localStorage.getItem('UserInfo'));
+
+              userInfo['result'] = JSON.stringify(res.data.body.data.result);
+
+              userInfo['activityLevel'] = JSON.stringify(
+                res.data.body.data.activityLevel
+              );
+
+              userInfo['goal'] = JSON.stringify(res.data.body.data.goal);
+
+              localStorage.setItem('UserInfo', JSON.stringify(userInfo));
+
               router.reload();
             })
             .catch((err) => console.log(err));

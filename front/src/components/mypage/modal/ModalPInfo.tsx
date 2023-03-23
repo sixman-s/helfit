@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import s from '../../../styles/mypage/M_ModalPInfo.module.css';
@@ -24,7 +23,6 @@ const ModalPInfo = ({ detail }: { detail: detailProps }) => {
   const url = process.env.NEXT_PUBLIC_URL;
   const accessToken = localStorage.getItem('accessToken');
 
-  console.log(detail.birth);
   return (
     <form
       onSubmit={handleSubmit(async (data) => {
@@ -36,9 +34,14 @@ const ModalPInfo = ({ detail }: { detail: detailProps }) => {
               Authorization: `Bearer ${accessToken}`
             }
           })
-          .then((data) => {
+          .then((res) => {
             {
-              console.log(data);
+              console.log(res);
+              localStorage.removeItem('UserInfo');
+              localStorage.setItem(
+                'UserInfo',
+                JSON.stringify(res.data.body.data)
+              );
               router.reload();
             }
           })
