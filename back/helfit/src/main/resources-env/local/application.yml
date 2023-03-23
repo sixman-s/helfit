@@ -55,6 +55,12 @@ spring:
     init:
       mode:
       data-locations: classpath*:db/h2/data.sql
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    encoding: UTF-8
+    check-template-location: true
   mail:
     host: smtp.gmail.com
     port: 587
@@ -62,7 +68,6 @@ spring:
     password: ${GMAIL_PASSWORD}     # 앱 비밀번호
     properties:
       mail:
-        debug: true
         smtp:
           starttls:
             enable: true
@@ -115,12 +120,6 @@ spring:
             tokenUri: https://kauth.kakao.com/oauth/token
             userInfoUri: https://kapi.kakao.com/v2/user/me
             userNameAttribute: id
-  thymeleaf:
-    prefix: classpath:/templates/
-    suffix: .html
-    mode: HTML
-    encoding: UTF-8
-    check-template-location: true
 
 logging:
   level:
