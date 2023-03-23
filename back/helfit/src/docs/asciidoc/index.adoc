@@ -21,10 +21,10 @@ Helfit API Documents
 | 환경 | domain
 
 | 개발서버
-| `localhost:8080`
+| `localhost:8080/api/*`
 
 | 운영서버
-| `http://ec2-3-34-96-242.ap-northeast-2.compute.amazonaws.com/`
+| `https://back.helfit.life/api/*`
 |===
 
 === HTTP State Code

@@ -218,6 +218,7 @@ public class SecurityConfig {
         corsConfig.setMaxAge(corsConfig.getMaxAge());
 
         corsConfigSource.registerCorsConfiguration("/**", corsConfig);
+
         return corsConfigSource;
     }
 
