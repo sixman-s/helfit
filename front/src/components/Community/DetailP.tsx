@@ -19,7 +19,7 @@ interface BoardData {
   modifiedAt: string;
   userId: number;
   userNickname: string;
-  userProfileUrl: any;
+  userProfileImage: any;
 }
 interface UserInfo {
   userId: number;
@@ -233,9 +233,9 @@ const DetailP = () => {
         <div className={style.Nav}>
           <div className={style.PostNav}>
             <div className={style.postUser}>
-              {fetchedData?.userProfileUrl ? (
+              {fetchedData?.userProfileImage ? (
                 <img
-                  src={fetchedData?.userProfileUrl}
+                  src={fetchedData?.userProfileImage}
                   alt='user profile'
                   className={style.postUserImg}
                 />

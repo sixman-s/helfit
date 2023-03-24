@@ -48,7 +48,7 @@ const Oww: React.FC = () => {
     axios
       .get(`${URL}/api/v1/board/5?page=${activePage}`)
       //.then((res) => console.log(res.data))
-      .then((res) => setFetchedPosts(res.data))
+      .then((res) => setFetchedPosts(res.data.boardResponses))
       .catch((err) => console.log(err));
   }, [activePage]);
 
@@ -106,11 +106,15 @@ const Oww: React.FC = () => {
           </Link>
         </div>
         <ul className={style.ul}>
-          {fetchedPosts.map((post, index) => (
-            <li key={post.boardId} onClick={handlePostView(post)}>
-              <PostCard post={post} order={index + 1} />
-            </li>
-          ))}
+          {Array.isArray(fetchedPosts) && fetchedPosts.length > 0 ? (
+            fetchedPosts.map((post, index) => (
+              <li key={post.boardId} onClick={handlePostView(post)}>
+                <PostCard post={post} order={index + 1} />
+              </li>
+            ))
+          ) : (
+            <div className={style.noPost}>게시글을 작성해주세요</div>
+          )}
         </ul>
 
         <div className={style.pagenation}>

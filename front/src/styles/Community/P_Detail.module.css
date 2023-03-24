@@ -39,9 +39,10 @@
   display: flex;
 }
 .postUserImg {
-  width: 30px;
+  width: 40px;
   margin-right: 10px;
   margin-top: -8px;
+  border-radius: 50px;
 }
 .ButtonD {
   margin-left: 20px;
