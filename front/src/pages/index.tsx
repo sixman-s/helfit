@@ -30,15 +30,23 @@ export default function Home() {
           </Header>
         )}
         {token ? (
-          <Header title={`Today's Diet`} href='/'>
+          <Header title={`Today's Diet`}>
             <DietInfo />
           </Header>
         ) : (
-          <Header title={`Today's Diet`} href='/'>
+          <Header title={`Today's Diet`}>
             <SignupGuide />
           </Header>
         )}
-        <CommunityInfo token={token} />
+        {token ? (
+          <Header title={`Today's Member`} href='/community/oww'>
+            <CommunityInfo token={token} />
+          </Header>
+        ) : (
+          <Header title={`Today's Member`} href='/community/oww'>
+            <SignupGuide />
+          </Header>
+        )}
       </section>
     </Layout>
   );
