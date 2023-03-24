@@ -6,11 +6,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import sixman.helfit.domain.board.dto.BoardDto;
 import sixman.helfit.domain.board.entity.Board;
 import sixman.helfit.domain.board.mapper.BoardMapper;
 import sixman.helfit.domain.board.service.BoardService;
+import sixman.helfit.domain.file.service.FileService;
 import sixman.helfit.domain.like.entity.Like;
+import sixman.helfit.global.annotations.CurrentUser;
 import sixman.helfit.response.ApiResponse;
 import sixman.helfit.security.entity.UserPrincipal;
 import sixman.helfit.utils.UriUtil;
@@ -26,11 +29,14 @@ public class BoardController {
     private final static String BOARD_DEFAULT_URL = "/api/v1/boards";
     private final BoardMapper mapper;
     private final BoardService boardService;
+    private final FileService fileService;
 
-    public BoardController(BoardMapper mapper, BoardService boardService) {
+    public BoardController(BoardMapper mapper, BoardService boardService, FileService fileService) {
         this.mapper = mapper;
         this.boardService = boardService;
+        this.fileService = fileService;
     }
+
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/{category-id}/{user-id}")
     public ResponseEntity postBoards(@AuthenticationPrincipal UserPrincipal userPrincipal,
@@ -42,6 +48,23 @@ public class BoardController {
 
         return ResponseEntity.created(location).body(ApiResponse.created());
     }
+//    @PostMapping("/image")
+//    @PreAuthorize("isAuthenticated()")
+//    public ResponseEntity<?> updateBoardImage(
+//            @RequestParam MultipartFile[] multipartFiles
+//    ) throws Exception {
+//        List<String> imagePath = fileService.uploadFiles(multipartFiles);
+//
+//        return ResponseEntity.ok().body(ApiResponse.ok("resource", imagePath));
+//    }
+//
+//    @DeleteMapping("/image/{board-id}")
+//    @PreAuthorize("isAuthenticated()")
+//    public ResponseEntity<?> updateUserProfileImage( @Positive @PathVariable ("board-id") Long boardId) {
+//        boardService.updateBoardProfileImage(boardId, null);
+//
+//        return ResponseEntity.ok().body(ApiResponse.noContent());
+//    }
 
     @GetMapping("/{category-id}/{board-id}")
     public ResponseEntity getBoard(@Positive @PathVariable ("category-id") Long categoryId,
@@ -62,7 +85,10 @@ public class BoardController {
                                              @Positive @RequestParam int page) {
         Page<Board> pageBoards = boardService.findBoards(categoryId,page-1);
         List<Board> listBoards = pageBoards.getContent();
-        return new ResponseEntity(mapper.boardsToResponses(listBoards),HttpStatus.OK);
+        Long boardsCount = boardService.findBoardsCount(categoryId);
+
+        BoardDto.BoardListResponse response = new BoardDto.BoardListResponse(mapper.boardsToResponses(listBoards),boardsCount);
+        return new ResponseEntity(response,HttpStatus.OK);
     }
     @PreAuthorize("isAuthenticated()")
     @PatchMapping("{category-id}/{board-id}")
