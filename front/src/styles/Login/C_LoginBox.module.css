@@ -1,10 +1,11 @@
 .box {
-  width: 400px;
   height: 100%;
   background-color: white;
   margin: 40px;
   display: flex;
   justify-content: center;
+  align-items: center;
+  border-radius: 40px;
 }
 .login__form {
   border: 1px solid black;
