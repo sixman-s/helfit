@@ -5,12 +5,9 @@ import io.jsonwebtoken.security.Keys;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.aop.AopAutoConfiguration;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
@@ -20,11 +17,9 @@ import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -50,6 +45,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import static sixman.helfit.security.properties.AppProperties.*;
 
 
 @Import({RestDocsConfig.class, AopAutoConfiguration.class})
@@ -83,8 +80,10 @@ public abstract class ControllerTest {
 
     protected Map<String, Object> userResource() throws Exception {
         // Base64 SecretKey inject, Testing only
-        FieldUtils.writeField(authTokenProvider, "secretKey", "d297f22853e39936052a15a41266866bf058923f", true);
-        FieldUtils.writeField(authTokenProvider, "key", Keys.hmacShaKeyFor("d297f22853e39936052a15a41266866bf058923f".getBytes()), true);
+        final String TEST_SECRET_TOKEN = "d297f22853e39936052a15a41266866bf058923f";
+
+        FieldUtils.writeField(authTokenProvider, "secretKey", TEST_SECRET_TOKEN, true);
+        FieldUtils.writeField(authTokenProvider, "key", Keys.hmacShaKeyFor(TEST_SECRET_TOKEN.getBytes()), true);
 
         Date now = new Date();
         Map<String, Object> resource = new HashMap<>();
@@ -115,33 +114,26 @@ public abstract class ControllerTest {
                     user.getProviderType().toString()
                 );
 
-        UserPrincipal userPrincipal = new UserPrincipal(
-            user,
-            Collections.singletonList(new SimpleGrantedAuthority(RoleType.USER.getCode()))
-        );
-
         UsernamePasswordAuthenticationToken authentication =
             new UsernamePasswordAuthenticationToken(
-                userPrincipal,
+                new UserPrincipal(
+                    user,
+                    Collections.singletonList(new SimpleGrantedAuthority(RoleType.USER.getCode()))
+                ),
                 "NO_PASS"
             );
 
-        AuthToken accessToken = authTokenProvider.createAuthToken(
-            user.getId(),
-            user.getRoleType().getCode(),
-            new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
-        );
+        Auth auth = appProperties.getAuth();
+        auth.setTokenSecret(TEST_SECRET_TOKEN);
 
-        AuthToken refreshToken = authTokenProvider.createAuthToken(
-            user.getId(),
-            new Date(now.getTime() + appProperties.getAuth().getRefreshTokenExpiry())
-        );
-
+        AuthToken accessToken = authTokenProvider.createAuthToken(user.getId(), user.getRoleType().getCode(), new Date(now.getTime()));
+        AuthToken refreshToken = authTokenProvider.createAuthToken(user.getId(), new Date(now.getTime()));
         UserRefreshToken userRefreshToken = new UserRefreshToken(user.getId(), refreshToken.getToken());
 
         resource.put("user", user);
         resource.put("userDtoResponse", userDtoResponse);
         resource.put("authentication", authentication);
+        resource.put("auth", auth);
         resource.put("accessToken", accessToken);
         resource.put("refreshToken", refreshToken);
         resource.put("userRefreshToken", userRefreshToken);
@@ -209,7 +201,7 @@ public abstract class ControllerTest {
         );
     }
 
-    protected <T> ResultActions deleteResource(String url, Object... pathVariables) throws Exception {
+    protected ResultActions deleteResource(String url, Object... pathVariables) throws Exception {
         return mockMvc.perform(
             RestDocumentationRequestBuilders.delete(url, pathVariables)
                 .contentType(MediaType.APPLICATION_JSON)
