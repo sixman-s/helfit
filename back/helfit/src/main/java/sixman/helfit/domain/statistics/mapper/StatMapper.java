@@ -2,13 +2,9 @@ package sixman.helfit.domain.statistics.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import sixman.helfit.domain.calendar.dto.CalendarDto;
-import sixman.helfit.domain.statistics.Dto.StatDto;
+import sixman.helfit.domain.statistics.dto.StatDto;
 import sixman.helfit.domain.statistics.entity.Stat;
 
-import java.util.Calendar;
 import java.util.List;
 
 @Mapper(componentModel = "spring")

@@ -60,14 +60,11 @@ public class CalculatorController {
             user,
             physicalService.findPhysicalByUserId(user.getUserId())
         );
-
-        URI uri = UriUtil.createUri(DEFAULT_URL, calculator.getCalculatorId());
-
+        URI uri = UriUtil.createUri(DEFAULT_URL, user.getUserId());
         CalculatorDto.Response response = calculatorMapper.calculatorToResponse(calculator);
-        //response.setUserId(userPrincipal.getUser().getUserId());
-        response.setCalculatorId(calculator.getCalculatorId());
+        //response.setCalculatorId(calculator.getCalculatorId());
 
-        return ResponseEntity.created(uri).body(ApiResponse.ok("data", response));
+        return ResponseEntity.created(uri).body(ApiResponse.created("data", response));
     }
 
     @PreAuthorize("isAuthenticated()")

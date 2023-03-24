@@ -11,6 +11,7 @@ import sixman.helfit.exception.BusinessLogicException;
 import sixman.helfit.exception.ExceptionCode;
 import sixman.helfit.utils.CustomBeanUtil;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -25,6 +26,12 @@ public class CalculatorService {
         }
         calculator.setResult(CalculatorHelper.calculateResultWithGender(calculator.getActivityLevel(),calculator.getGoal(), physical));
         calculator.setUser(user);
+        calculator.setPhysical(physical);
+        calculator.setCalculatorId(calculator.getCalculatorId());
+        calculator.setGoal(calculator.getGoal());
+        calculator.setActivityLevel(calculator.getActivityLevel());
+        calculator.setCreatedAt(calculator.getCreatedAt());
+        calculator.setModifiedAt(calculator.getCreatedAt());
 
         return calculatorRepository.save(calculator);
     }
@@ -39,10 +46,15 @@ public class CalculatorService {
         }
     }
 
-    public Calculator updateResult(Calculator calculator, sixman.helfit.domain.user.entity.User user, Physical physical) {
+    public Calculator updateResult(Calculator calculator, User user, Physical physical) {
 
         calculator.setResult(CalculatorHelper.calculateResultWithGender(calculator.getActivityLevel(),calculator.getGoal(), physical));
         calculator.setUser(user);
+        calculator.setGoal(calculator.getGoal());
+        calculator.setActivityLevel(calculator.getActivityLevel());
+        calculator.setPhysical(physical);
+        calculator.setCreatedAt(LocalDateTime.now());
+        calculator.setModifiedAt(LocalDateTime.now());
 
         return calculatorRepository.save(calculator);
     }
