@@ -108,7 +108,6 @@ public abstract class ControllerTest {
                 .content(gson.toJson(body))
         );
     }
-
     protected ResultActions getResource(String url) throws Exception {
         return mockMvc.perform(
             RestDocumentationRequestBuilders.get(url)
@@ -148,6 +147,14 @@ public abstract class ControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(body))
+        );
+    }
+    protected <T> ResultActions patchResources(String url, T body, Object... pathVariables) throws Exception {
+        return mockMvc.perform(
+                RestDocumentationRequestBuilders.patch(url, pathVariables)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(gson.toJson(body))
         );
     }
 

@@ -1,10 +1,7 @@
-package sixman.helfit.domain.statistics.Dto;
+package sixman.helfit.domain.statistics.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class StatDto {
 
@@ -18,6 +15,7 @@ public class StatDto {
     @Getter
     @AllArgsConstructor
     public static class boardResponse{
+        private long boardId;
         private String boardImageUrl;
         private String title;
         private String text;

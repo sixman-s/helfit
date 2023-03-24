@@ -1,6 +1,8 @@
 package sixman.helfit.domain.statistics.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 import sixman.helfit.audit.Auditable;
@@ -16,6 +18,8 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Stat extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,4 +48,5 @@ public class Stat extends Auditable {
     private String text;
     private Integer weight;
     private String lastModifiedAt;
+    private long boardId;
 }
