@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import s from '../../styles/mypage/C_HealthInfo.module.css';
+import CalorieInfo from './CalorieInfo';
 import ModalContainer from './modal/ModalContainer';
 import ModalHInfo from './modal/ModalHInfo';
 
@@ -34,13 +35,15 @@ const HealthInfo = ({
   const [showModal, setShowMoadal] = useState(false);
   const [activity, setActivity] = useState(false);
   const [purpose, setPurpose] = useState(false);
+  const [calorie, setCalorie] = useState<number>(0);
 
-  // console.log(cDetail.activityLevel);
+  console.log(cDetail);
 
   useEffect(() => {
     if (detail && hDetail && cDetail) {
       setActivity(true);
       setPurpose(true);
+      setCalorie(cDetail.result);
     }
   }, [detail, hDetail, cDetail]);
 
@@ -81,57 +84,76 @@ const HealthInfo = ({
     setShowMoadal(true);
   };
 
+  console.log(activityInfo);
+
   return (
     <div className={s.hInfoContainer}>
       <div className={s.titleDiv}>
-        <h1 className={s.hInfoTitle}>신체 정보</h1>
+        <span className={s.hInfoTitle}>Physical</span>
         <button className={s.button} onClick={clickModal}>
           칼로리 계산
         </button>
       </div>
       <div className={s.bottomContainer}>
-        <p className={s.list}>
-          <span className={s.question}>성별</span>
-          <span className={s.answer}>
-            {hDetail.gender ? chagneGenderName : '정보를 입력해주세요.'}
-          </span>
-        </p>
-        <p className={s.list}>
-          <span className={s.question}>나이</span>
-          <span className={s.answer}>
-            {hDetail.birth ? years : '정보를 입력해주세요.'}
-          </span>
-        </p>
-        <p className={s.list}>
-          <span className={s.question}>키</span>
-          <span className={s.answer}>
-            {hDetail.height ? hDetail.height : '정보를 입력해주세요.'}
-          </span>
-        </p>
-        <p className={s.list}>
-          <span className={s.question}>몸무게</span>
-          <span className={s.answer}>
-            {hDetail.weight ? hDetail.weight : '정보를 입력해주세요.'}
-          </span>
-        </p>
+        <div className={s.leftContainer}>
+          <img
+            className={cDetail ? s.image : s.images}
+            src='../../../assets/mypage/body.png'
+          ></img>
+        </div>
+        <div className={s.rightContainer}>
+          <div className={s.list}>
+            <span className={s.question}>성별</span>
+            {hDetail.gender ? (
+              <span className={s.answer}>{chagneGenderName}</span>
+            ) : (
+              <span className={s.nonAnswer}>정보를 입력해주세요.</span>
+            )}
+          </div>
+          <div className={s.list}>
+            <span className={s.question}>나이</span>
+            {hDetail.birth ? (
+              <span className={s.answer}>{years}</span>
+            ) : (
+              <span className={s.nonAnswer}>정보를 입력해주세요.</span>
+            )}
+          </div>
+          <div className={s.list}>
+            <span className={s.question}>키</span>
+            {hDetail.height ? (
+              <span className={s.answer}>{hDetail.height}</span>
+            ) : (
+              <span className={s.nonAnswer}>정보를 입력해주세요.</span>
+            )}
+          </div>
+          <div className={s.list}>
+            <span className={s.question}>몸무게</span>
+            {hDetail.weight ? (
+              <span className={s.answer}>{hDetail.weight}</span>
+            ) : (
+              <span className={s.nonAnswer}>정보를 입력해주세요.</span>
+            )}
+          </div>
 
-        {activity ? (
-          <p className={s.list}>
-            <span className={s.question}>활동 정도</span>
-            <span className={s.answer}>{activityInfo}</span>
-          </p>
-        ) : (
-          <></>
-        )}
-        {purpose ? (
-          <p className={s.list}>
-            <span className={s.question}>운동 목적</span>
-            <span className={s.answer}>{goalInfo}</span>
-          </p>
-        ) : (
-          <></>
-        )}
+          {activity ? (
+            <p className={s.list}>
+              <span className={s.question}>활동 정도</span>
+              <span className={s.answer}>{activityInfo}</span>
+            </p>
+          ) : (
+            <></>
+          )}
+          {purpose ? (
+            <p className={s.list}>
+              <span className={s.question}>운동 목적</span>
+              <span className={s.answer}>{goalInfo}</span>
+            </p>
+          ) : (
+            <></>
+          )}
+        </div>
       </div>
+      <CalorieInfo calorie={calorie} />
       <ModalContainer
         showModal={showModal}
         exitModal={() => {

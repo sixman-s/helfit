@@ -9,10 +9,11 @@ const CalorieInfo = ({ calorie }: { calorie: calorieProps }) => {
   console.log(`calorie : ${calorie}`);
 
   return (
-    <div>
-      <h1 className={s.calorieTitle}>칼로리</h1>
+    <div className={s.calroieContainer}>
+      <span className={s.calorieTitle}>Result</span>
+      <span className={s.subTitle}>=</span>
       <div className={s.bottomContainer}>
-        <div>
+        <div className={s.calorieDiv}>
           <span>{calorie ? Math.round(calorie) : 0}</span>
         </div>
         <div className={s.kcal}>Kcal</div>

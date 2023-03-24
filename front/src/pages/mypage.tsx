@@ -4,6 +4,7 @@ import HealthInfo from '@/components/mypage/HealthInfo';
 import MyList from '@/components/mypage/MyList';
 import PersonalInfo from '@/components/mypage/PersonalInfo';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import MyPage from '../styles/mypage/P_mypage.module.css';
 
@@ -11,7 +12,7 @@ export default function Mypage() {
   const [detail, setDetail] = useState<object>({});
   const [hDetail, setHDetail] = useState({});
   const [cDetail, setCDetail] = useState();
-  const [calorie, setCalorie] = useState<number>();
+  const router = useRouter();
 
   const [token, setToken] = useState<any>('');
   const url = process.env.NEXT_PUBLIC_URL;
@@ -87,18 +88,12 @@ export default function Mypage() {
             body: { data: cDetailData }
           }
         } = res;
-        const { result: calorieData } = cDetailData;
         console.log('cDetailData : ' + cDetailData);
-        console.log('calorieData : ' + calorieData);
         setCDetail(cDetailData);
-        setCalorie(calorieData);
       } catch (error) {
         console.log(error);
         const cDetailData = undefined;
-        const calorieData = 0;
-
         setCDetail(cDetailData);
-        setCalorie(calorieData);
       }
     }
   };
@@ -115,9 +110,7 @@ export default function Mypage() {
         <div className={MyPage.healthInfo}>
           <HealthInfo detail={detail} hDetail={hDetail} cDetail={cDetail} />
         </div>
-        <div className={MyPage.calorieInfo}>
-          <CalorieInfo calorie={calorie} />
-        </div>
+        <div className={MyPage.calorieInfo}></div>
       </div>
     </Layout>
   );

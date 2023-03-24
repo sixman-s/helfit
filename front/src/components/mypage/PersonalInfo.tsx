@@ -22,7 +22,7 @@ const PersonalInfo = ({ detail }: { detail: detailProps }) => {
   const [modalContents, setModalContents] = useState<JSX.Element>(<></>);
   const [showModal, setShowMoadal] = useState<boolean>(false);
 
-  // console.log('detail : ' + detail);
+  console.log('detail : ' + JSON.stringify(detail));
 
   const checkImage = detail.profileImageUrl
     ? detail.profileImageUrl
@@ -43,38 +43,39 @@ const PersonalInfo = ({ detail }: { detail: detailProps }) => {
 
   return (
     <div className={s.pInfoContainer}>
-      <h1 className={s.mypageTitle}>개인 정보</h1>
-      <div className={s.topContainer}>
-        <div className={s.profileDiv}>
-          <img src={checkImage} className={s.profile} />
-          <img
-            src='../../../assets/mypage/profile_option.svg'
-            className={s.profile_option}
-            onClick={clickModalImage}
-          />
+      <span className={s.mypageTitle}>User</span>
+      <div className={s.innerContainer}>
+        <div className={s.topContainer}>
+          <div className={s.profileDiv}>
+            <img src={checkImage} className={s.profile} />
+            <img
+              src='../../../assets/mypage/profile_option.svg'
+              className={s.profile_option}
+              onClick={clickModalImage}
+            />
+          </div>
+          <div className={s.idDiv}>
+            <span className={s.id}>{detail.id}</span>
+          </div>
+          <div className={s.divBtn}>
+            <button className={s.buttonDiv} onClick={clickModalP}>
+              닉네임 변경
+            </button>
+            <button className={s.buttonDiv} onClick={clickModalPW}>
+              비밀번호 변경
+            </button>
+          </div>
         </div>
-        <div className={s.idDiv}>
-          <span className={s.welcome}>good day</span>
-          <span className={s.id}>{detail.id}</span>
+        <div className={s.bottomContainer}>
+          <div className={s.sectionContainer}>
+            <img src='../../../assets/mypage/nickName.svg' />
+            <span className={s.contentSpan}>{detail.nickname}</span>
+          </div>
+          <div className={s.sectionContainer}>
+            <img src='../../../assets/mypage/email.svg' />
+            <span className={s.contentSpan}>{detail.email}</span>
+          </div>
         </div>
-        <div className={s.divBtn}>
-          <button id={s.infoBtn} className={s.buttonDiv} onClick={clickModalP}>
-            닉네임 변경
-          </button>
-          <button className={s.buttonDiv} onClick={clickModalPW}>
-            비밀번호 변경
-          </button>
-        </div>
-      </div>
-      <div className={s.bottomContainer}>
-        <p className={s.nnContainer}>
-          <img src='../../../assets/mypage/nickName.svg' />
-          <span>{detail.nickname}</span>
-        </p>
-        <p className={s.emailContainer}>
-          <img src='../../../assets/mypage/email.svg' />
-          <span>{detail.email}</span>
-        </p>
       </div>
       <ModalContainer
         showModal={showModal}
