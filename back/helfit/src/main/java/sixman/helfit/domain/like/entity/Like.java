@@ -31,15 +31,16 @@ public class Like extends Auditable {
     @JoinColumn(name = "USER_ID")
     private User user;
 
-    public void addBoard(Board board) {
-        this.board = board;
-        if(!board.getLikes().contains(this)){
-            board.getLikes().add(this);
-        }
-    }
 
     public Like(Board board, User user) {
         this.board = board;
         this.user = user;
+    }
+
+    public void removeLike() {
+        this.user.getLikes().remove(this);
+        this.board.getLikes().remove(this);
+        this.user =null;
+        this.board =null;
     }
 }
