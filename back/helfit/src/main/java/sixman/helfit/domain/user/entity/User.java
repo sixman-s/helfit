@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import sixman.helfit.audit.Auditable;
 import sixman.helfit.domain.comment.entity.Comment;
+import sixman.helfit.domain.like.entity.Like;
 import sixman.helfit.security.entity.ProviderType;
 import sixman.helfit.security.entity.RoleType;
 
@@ -17,11 +18,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
 @Table(name = "USERS")
 public class User extends Auditable {
     @Id
@@ -62,6 +63,9 @@ public class User extends Auditable {
     @Enumerated(EnumType.STRING)
     private UserStatus userStatus = UserStatus.USER_ACTIVE;
 
+    @OneToMany(mappedBy = "board",cascade = {CascadeType.PERSIST,CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    private List<Like> likes = new ArrayList<>();
+
     public User(
         String id,
         String email,
@@ -83,13 +87,42 @@ public class User extends Auditable {
         this.roleType = roleType;
     }
 
+    public User(
+        Long userId,
+        String id,
+        String password,
+        String email,
+        String nickname,
+        String profileImageUrl,
+        LocalDateTime lastLoggedIn,
+        EmailVerified emailVerifiedYn,
+        PersonalInfoAgreement personalInfoAgreementYn,
+        RoleType roleType,
+        ProviderType providerType,
+        UserStatus userStatus
+    ) {
+        this.userId = userId;
+        this.id = id;
+        this.password = password;
+        this.email = email;
+        this.nickname = nickname;
+        this.profileImageUrl = profileImageUrl;
+        this.lastLoggedIn = lastLoggedIn;
+        this.emailVerifiedYn = emailVerifiedYn;
+        this.personalInfoAgreementYn = personalInfoAgreementYn;
+        this.roleType = roleType;
+        this.providerType = providerType;
+        this.userStatus = userStatus;
+    }
+
     public enum UserStatus {
         USER_ACTIVE("활동중"),
         USER_INACTIVE("휴면 상태"),
-        USER_QUIT("탈퇴 상태");
+        USER_WITHDRAW("탈퇴 상태")
+        ;
 
         @Getter
-        private String status;
+        private final String status;
 
         UserStatus(String status) {
             this.status = status;

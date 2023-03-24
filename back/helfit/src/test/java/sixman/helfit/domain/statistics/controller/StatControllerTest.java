@@ -79,7 +79,7 @@ public class StatControllerTest extends ControllerTest {
     private List<StatDto.physicalResponse> physicalResponseList;
 
     @BeforeEach
-    void setup() throws Exception {
+    void setup() throws Exception{
         Map<String, Object> userResource = userResource();
         user = (User) userResource.get("user");
         calendar = new Calendar(1L, "title", "content", 2500, "2023-03-24", user);

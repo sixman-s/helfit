@@ -1,9 +1,9 @@
 package sixman.helfit.domain.tag.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import sixman.helfit.domain.tag.entity.Tag;
 import sixman.helfit.domain.tag.repository.TagRepository;
-import sixman.helfit.exception.BusinessLogicException;
 
 import java.util.Optional;
 
@@ -18,13 +18,15 @@ public class TagService {
 
     public Tag findTag(Tag tag) {
         Optional<Tag> optionalTag = tagRepository.findByTagName(tag.getTagName());
+
         if(optionalTag.isEmpty()){
-            return tagRepository.save(tag);
+            return saveTag(tag);
         }
         else return optionalTag.get();
     }
-
-    public void saveTag(Tag tag) {
-        tagRepository.save(tag);
+    public Tag saveTag(Tag tag) {
+        return tagRepository.save(tag);
     }
+
+
 }

@@ -2,7 +2,7 @@ package sixman.helfit.domain.statistics.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import sixman.helfit.domain.statistics.dto.StatDto;
+import sixman.helfit.domain.statistics.Dto.StatDto;
 import sixman.helfit.domain.statistics.entity.Stat;
 
 import java.util.List;

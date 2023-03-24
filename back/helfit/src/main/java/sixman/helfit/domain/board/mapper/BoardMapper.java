@@ -7,6 +7,7 @@ import sixman.helfit.domain.board.entity.BoardTag;
 import sixman.helfit.domain.category.entity.Category;
 import sixman.helfit.domain.comment.dto.CommentDto;
 import sixman.helfit.domain.comment.entity.Comment;
+import sixman.helfit.domain.like.entity.Like;
 import sixman.helfit.domain.tag.dto.TagDto;
 import sixman.helfit.domain.tag.entity.Tag;
 
@@ -67,8 +68,11 @@ public interface BoardMapper {
         LocalDateTime createdAt = null;
         LocalDateTime modifiedAt = null;
         Long view = null;
+        String  userProfileImage = null;
+        Integer likesCount =null;
+        List<BoardDto.BoardLikeMember> likeUserInfo = new ArrayList<>();
 
-        title = board.getTitle();
+                title = board.getTitle();
         text = board.getText();
         boardImageUrl = board.getBoardImageUrl();
 
@@ -78,6 +82,8 @@ public interface BoardMapper {
         userId =board.getUser().getUserId();
         userNickname = board.getUser().getNickname();
         view = board.getView();
+        userProfileImage = board.getUser().getProfileImageUrl();
+        likesCount = board.getLikes().size();
 
         List<BoardTag> listBoardTag = board.getBoardTags();
         if (!listBoardTag.isEmpty()) {
@@ -86,7 +92,14 @@ public interface BoardMapper {
                 tagNames.add(responseDto);
             }
         }
-        return new BoardDto.Response(boardId,userId,view,userNickname,title,text,boardImageUrl,tagNames,createdAt,modifiedAt);
+        if(!board.getLikes().isEmpty()){
+            for(Like like : board.getLikes()){
+                BoardDto.BoardLikeMember userInfo = new BoardDto.BoardLikeMember(like.getUser().getUserId(),like.getUser().getProfileImageUrl());
+                likeUserInfo.add(userInfo);
+            }
+        }
+
+        return new BoardDto.Response(boardId,userId,view,likesCount,likeUserInfo,userProfileImage,userNickname,title,text,boardImageUrl,tagNames,createdAt,modifiedAt);
 
     }
     List<BoardDto.Response> boardsToResponses(List<Board> boards);

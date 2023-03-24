@@ -46,6 +46,9 @@ public class BoardDto {
         private long boardId;
         private long userId;
         private long view;
+        private int likesCount;
+        private List<BoardDto.BoardLikeMember> likeUserInfo;
+        private String  userProfileImage;
         private String userNickname;
         private String title;
         private String text;
@@ -72,5 +75,20 @@ public class BoardDto {
     @AllArgsConstructor
     public static class View {
         private long view;
+    }
+
+    @AllArgsConstructor
+    @Getter
+    public static class BoardListResponse {
+        private List<BoardDto.Response> boardResponses;
+        private Long count;
+    }
+
+    @AllArgsConstructor
+    @Getter
+    public static class BoardLikeMember {
+        private Long userId;
+        @Nullable
+        private String userProfileImgUrl;
     }
 }

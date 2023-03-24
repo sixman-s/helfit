@@ -3,7 +3,6 @@ package sixman.helfit.domain.user.controller;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -11,6 +10,7 @@ import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.util.LinkedMultiValueMap;
 import sixman.helfit.domain.file.service.FileService;
 import sixman.helfit.domain.user.dto.UserDto;
 import sixman.helfit.domain.user.entity.User;
@@ -26,15 +26,17 @@ import sixman.helfit.security.properties.AppProperties;
 import sixman.helfit.security.token.AuthToken;
 import sixman.helfit.security.token.AuthTokenProvider;
 
-
 import java.util.*;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static sixman.helfit.restdocs.custom.CustomRequestFieldsSnippet.customRequestFields;
-import static sixman.helfit.restdocs.custom.CustomRequestFieldsSnippet.genCustomRequestFields;
+import static sixman.helfit.security.properties.AppProperties.*;
 
 @WebMvcTest(UserController.class)
 class UserControllerTest extends ControllerTest {
@@ -67,6 +69,7 @@ class UserControllerTest extends ControllerTest {
     private User user;
     private UserDto.Response userDtoResponse;
     private Authentication authentication;
+    private Auth auth;
     private AuthToken accessToken;
     private AuthToken refreshToken;
     private UserRefreshToken userRefreshToken;
@@ -78,6 +81,7 @@ class UserControllerTest extends ControllerTest {
         user = (User) userResource.get("user");
         userDtoResponse = (UserDto.Response) userResource.get("userDtoResponse");
         authentication = (Authentication) userResource.get("authentication");
+        auth = (Auth) userResource.get("auth");
         accessToken = (AuthToken) userResource.get("accessToken");
         refreshToken = (AuthToken) userResource.get("refreshToken");
         userRefreshToken = (UserRefreshToken) userResource.get("userRefreshToken");
@@ -86,16 +90,16 @@ class UserControllerTest extends ControllerTest {
     @Test
     @DisplayName("[테스트] 회원 가입 : LOCAL")
     void signupTest() throws Exception {
-        given(userService.createUser(Mockito.any(User.class)))
+        given(userService.createUser(any(User.class)))
             .willReturn(user);
 
-        given(userMapper.userDtoSignupToUser(Mockito.any(UserDto.Signup.class)))
+        given(userMapper.userDtoSignupToUser(any(UserDto.Signup.class)))
             .willReturn(user);
 
-        given(emailConfirmTokenService.createEmailConfirmToken(Mockito.anyLong()))
+        given(emailConfirmTokenService.createEmailConfirmToken(anyLong()))
             .willReturn(new EmailConfirmToken());
 
-        Mockito.doNothing().when(emailConfirmTokenService).sendEmail(Mockito.anyString(), Mockito.anyString());
+        doNothing().when(emailConfirmTokenService).sendEmail(anyString(), anyString());
 
         postResource(
             DEFAULT_URL + "/signup",
@@ -110,105 +114,194 @@ class UserControllerTest extends ControllerTest {
             .andExpect(status().isCreated())
             .andExpect(header().exists("Location"))
             .andDo(restDocs.document(
-                customRequestFields("custom-request",
-                    genCustomRequestFields(
-                        UserDto.Signup.class,
-                        new LinkedHashMap<>() {{
-                            put("id", "회원 아이디");
-                            put("password", "회원 비밀번호");
-                            put("nickname", "회원 별명");
-                            put("email", "회원 이메일");
-                            put("personalInfoAgreement", "회원 개인정보 제공 동의 여부");
-                        }}
-                    )
+                customRequestFields(UserDto.Signup.class, new LinkedHashMap<>() {{
+                    put("id", "회원 아이디");
+                    put("password", "회원 비밀번호");
+                    put("nickname", "회원 별명");
+                    put("email", "회원 이메일");
+                    put("personalInfoAgreement", "회원 개인정보 제공 동의 여부");
+                }})
+            ));
+    }
+
+    @Test
+    @DisplayName("[테스트] 회원 로그인 : LOCAL")
+    @WithMockUserCustom
+    void loginTest() throws Exception {
+        given(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
+            .willReturn(authentication);
+
+        given(userService.updateUser(anyLong(), any(User.class)))
+            .willReturn(user);
+
+        given(authTokenProvider.createAuthToken(anyString(), anyString(), any(Date.class)))
+            .willReturn(accessToken);
+
+        given(appProperties.getAuth())
+            .willReturn(auth);
+
+        given(authTokenProvider.createAuthToken(anyString(), any(Date.class)))
+            .willReturn(refreshToken);
+
+        given(userRefreshTokenRepository.findById(anyString()))
+            .willReturn(userRefreshToken);
+
+        given(userRefreshTokenRepository.saveAndFlush(any(UserRefreshToken.class)))
+            .willReturn(userRefreshToken);
+
+        postResource(DEFAULT_URL + "/login",
+            new UserDto.Login(
+                user.getId(),
+                user.getPassword(),
+                "Y"
+            )
+        )
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.body.accessToken").isNotEmpty())
+            .andDo(restDocs.document(
+                customRequestFields(UserDto.Login.class, new LinkedHashMap<>() {{
+                    put("id", "회원 아이디");
+                    put("password", "회원 비밀번호");
+                    put("activate", "휴면계정 활성화 여부, Optional");
+                }}),
+                relaxedResponseFields(
+                    beneathPath("body").withSubsectionId("body"),
+                    fieldWithPath("accessToken").type(JsonFieldType.STRING).description("JWT accessToken")
                 )
             ));
+    }
+
+    @Test
+    @DisplayName("[테스트] 회원 refreshToken 재발급 : 만료된 토큰")
+    @WithMockUserCustom
+    void refreshTokenTest() throws Exception {
+        given(authTokenProvider.convertAuthToken(anyString()))
+            .willReturn(accessToken);
+
+        given(userRefreshTokenRepository.findByIdAndRefreshToken(anyString(), anyString()))
+            .willReturn(userRefreshToken);
+
+        given(appProperties.getAuth())
+            .willReturn(auth);
+
+        given(authTokenProvider.createAuthToken(anyString(), anyString(), any(Date.class)))
+            .willReturn(accessToken);
+
+        given(authTokenProvider.createAuthToken(anyString(), any(Date.class)))
+            .willReturn(refreshToken);
+
+        getResource(DEFAULT_URL + "/refresh-token")
+            .andExpect(status().isOk())
+            .andDo(restDocs.document(
+                relaxedResponseFields(
+                    beneathPath("body").withSubsectionId("body"),
+                    fieldWithPath("accessToken").type(JsonFieldType.STRING).description("JWT accessToken")
+                )
+            ));
+    }
+
+    @Test
+    @DisplayName("[테스트] 회원 이메일 인증")
+    void confirmEmailTest() throws Exception {
+        given(emailConfirmTokenService.findVerifiedConfirmTokenByTokenId(anyString()))
+            .willReturn(new EmailConfirmToken("token-id", 1L, false));
+
+        doNothing().when(emailConfirmTokenService).updateEmailConfirmToken(anyString());
+
+        doNothing().when(userService).updateUserEmailVerifiedYn(anyLong());
+
+        getResource(DEFAULT_URL + "/confirm-email",
+            new LinkedMultiValueMap<>() {{
+                add("token-id", "token-id");
+            }}
+        )
+            .andExpect(model().size(1))
+            .andExpect(status().isOk())
+            .andDo(restDocs.document(
+                requestParameters(
+                    parameterWithName("token-id").description("이메일 인증 토큰")
+                )
+            ));
+    }
+
+    @Test
+    @DisplayName("[테스트] 회원 이메일 인증 재발송")
+    @WithMockUserCustom
+    void resendConfirmEmailTest() throws Exception {
+        given(emailConfirmTokenService.findVerifiedConfirmTokenByUserId(anyLong()))
+            .willReturn(new EmailConfirmToken("token-id", 1L, false));
+
+        doNothing().when(emailConfirmTokenService).sendEmail(anyString(), anyString());
+
+        getResource(DEFAULT_URL + "/resend-confirm-email")
+            .andExpect(status().isOk())
+            .andDo(restDocs.document());
     }
 
     @Test
     @DisplayName("[테스트] 회원 정보 조회")
     @WithMockUserCustom
     void getUserTest() throws Exception {
-        given(userService.findUserByUserId(Mockito.anyLong()))
+        given(userService.findUserByUserId(anyLong()))
             .willReturn(user);
 
-        given(userMapper.userToUserDtoResponse(Mockito.any(User.class)))
+        given(userMapper.userToUserDtoResponse(any(User.class)))
             .willReturn(userDtoResponse);
 
         getResource(DEFAULT_URL)
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.body.data").isNotEmpty())
             .andDo(restDocs.document(
-                genRelaxedResponseHeaderFields("header"),
-                genRelaxedResponseBodyFields("body.data")
+                genRelaxedResponseHeaderFields(),
+                genRelaxedResponseBodyFields()
             ));
     }
 
     @Test
-    @DisplayName("[테스트] 회원 로그인")
+    @DisplayName("[테스트] 회원 정보 변경")
     @WithMockUserCustom
-    void loginTest() throws Exception {
-        given(authenticationManager.authenticate(Mockito.any(UsernamePasswordAuthenticationToken.class)))
-            .willReturn(authentication);
+    void updateUserTest() throws Exception {
+        user.setNickname("nickname");
 
-        given(userService.updateUser(Mockito.anyLong(), Mockito.any(User.class)))
+        given(userService.updateUser(anyLong(), any(User.class)))
             .willReturn(user);
 
-        given(authTokenProvider.createAuthToken(Mockito.anyString(), Mockito.anyString(), Mockito.any(Date.class)))
-            .willReturn(accessToken);
+        given(userMapper.userDtoPatchToUser(any(UserDto.Update.class)))
+            .willReturn(user);
 
-        // given(appProperties.getAuth())
-        //     .willReturn(new AppProperties.Auth());
-        //
-        // given(appProperties.getAuth().getTokenExpiry())
-        //     .willReturn(0L);
-        //
-        // given(appProperties.getAuth().getRefreshTokenExpiry())
-        //     .willReturn(0L);
+        given(userMapper.userToUserDtoResponse(any(User.class)))
+            .willReturn(userDtoResponse);
 
-        given(authTokenProvider.createAuthToken(Mockito.anyString(), Mockito.any(Date.class)))
-            .willReturn(refreshToken);
-
-        given(userRefreshTokenRepository.findById(Mockito.anyString()))
-            .willReturn(userRefreshToken);
-
-        given(userRefreshTokenRepository.saveAndFlush(Mockito.any(UserRefreshToken.class)))
-            .willReturn(userRefreshToken);
-
-        // postResource(DEFAULT_URL + "/login",
-        //     new UserDto.Login(
-        //         user.getId(),
-        //         user.getPassword(),
-        //         null
-        //     )
-        // )
-        //     .andExpect(status().isOk())
-        //     .andExpect(jsonPath("$.data").isNotEmpty());
+        patchResource(DEFAULT_URL, new UserDto.Update("nickname"))
+            .andExpect(status().isOk())
+            .andDo(restDocs.document(
+                customRequestFields(UserDto.Update.class, new LinkedHashMap<>() {{
+                    put("nickname", "회원 별명");
+                }}),
+                genRelaxedResponseHeaderFields(),
+                genRelaxedResponseBodyFields()
+            ));
     }
 
-    private ResponseFieldsSnippet genRelaxedResponseHeaderFields(String beneath) {
+    private ResponseFieldsSnippet genRelaxedResponseHeaderFields() {
         return relaxedResponseFields(
-            beneathPath(beneath).withSubsectionId("header"),
+            beneathPath("header").withSubsectionId("header"),
             fieldWithPath("code").type(JsonFieldType.NUMBER).description("응답 코드"),
             fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메세지")
         );
     }
 
-    private ResponseFieldsSnippet genRelaxedResponseBodyFields(String beneath) {
+    private ResponseFieldsSnippet genRelaxedResponseBodyFields() {
         return relaxedResponseFields(
-            beneathPath(beneath).withSubsectionId("data"),
+            beneathPath("body.data").withSubsectionId("data"),
             fieldWithPath("userId").type(JsonFieldType.NUMBER).description("회원 식별자"),
             fieldWithPath("id").type(JsonFieldType.STRING).description("회원 아이디"),
             fieldWithPath("email").type(JsonFieldType.STRING).description("회원 이메일"),
             fieldWithPath("emailVerifiedYn").type(JsonFieldType.STRING).description("이메일 인증 여부"),
             fieldWithPath("nickname").type(JsonFieldType.STRING).description("회원 별명"),
-            fieldWithPath("profileImageUrl").type(JsonFieldType.STRING).description("회원 프로필 이미지"),
-            fieldWithPath("personalInfoAgreementYn").type(JsonFieldType.STRING).description("회원 개인정보 제공 동의 여부"),
-            fieldWithPath("roleType").type(JsonFieldType.STRING).description("회원 권한"),
+            fieldWithPath("profileImageUrl").type(JsonFieldType.STRING).description("회원 프로필 이미지").optional(),
             fieldWithPath("providerType").type(JsonFieldType.STRING).description("가입 경로"),
-            fieldWithPath("userStatus").type(JsonFieldType.STRING).description("회원 상태"),
-            fieldWithPath("createdAt").type(JsonFieldType.STRING).description("생성 일자"),
-            fieldWithPath("modifiedAt").type(JsonFieldType.STRING).description("최종 수정 일자")
+            fieldWithPath("userStatus").type(JsonFieldType.STRING).description("회원 상태")
         );
     }
 }
