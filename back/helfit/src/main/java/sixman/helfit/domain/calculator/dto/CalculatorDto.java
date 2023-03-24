@@ -14,13 +14,10 @@ import java.time.LocalDateTime;
 public class CalculatorDto {
     @Getter
     @Setter
+    @AllArgsConstructor
     public static class Post{
         private Goal goal;
         private ActivityLevel activityLevel;
-
-        public Post(Goal diet, ActivityLevel extraActive) {
-
-        }
     }
     @Getter
     @Setter
