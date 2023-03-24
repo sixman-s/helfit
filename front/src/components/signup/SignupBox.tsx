@@ -14,7 +14,6 @@ type SignupForm = {
   password: string;
   passwordRe: string;
   name: string;
-  birth: string;
   nickname: string;
   checkbox: any;
 };
@@ -36,7 +35,6 @@ const SignupBox = () => {
         password: data.password,
         email: data.email,
         nickname: data.nickname,
-        birth: data.birth,
         personalInfoAgreement: 'Y'
       })
       .then((response) => {
@@ -53,10 +51,7 @@ const SignupBox = () => {
   return (
     <>
       <div className={style.container}>
-        <div className={style.logoLine}>
-          <img className={style.logo} src={'assets/LoginP/logo.svg'} />
-        </div>
-        <div className={style.leftbox}>
+        <div className={style.inputbox}>
           {/* 아이디 입력칸 */}
           <div>
             <h5>아이디</h5>
@@ -125,9 +120,7 @@ const SignupBox = () => {
               </div>
             )}
           </div>
-        </div>
 
-        <div className={style.rightbox}>
           {/* 이메일 입력칸 */}
 
           <div>
@@ -151,29 +144,6 @@ const SignupBox = () => {
             </div>
           </div>
 
-          {/* 생년월일 입력칸 */}
-
-          <div>
-            <h5>생년월일</h5>
-            <input
-              type='text'
-              placeholder='생년월일'
-              {...register('birth', {
-                required: true,
-                pattern: {
-                  value:
-                    /^(19[0-9][0-9]|20\d{2})(0[0-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])$/,
-                  message: '올바른 생년월일 8글자를 입력해주세요'
-                }
-              })}
-              className={style.signup__form}
-            />
-            <h6 className={style.h6}>ex) 20000101</h6>
-            {errors.birth && (
-              <div className={style.errormessage}>{errors.birth.message}</div>
-            )}
-          </div>
-
           {/* 닉네임 입력칸 */}
 
           <div>
@@ -193,21 +163,21 @@ const SignupBox = () => {
               </div>
             )}
           </div>
-        </div>
-        <div className={style.footer}>
-          <div className={style.Checkbox}>
-            <div>
-              <input
-                type='checkbox'
-                {...register('checkbox', { required: true })}
-              />
-              {errors.checkbox && (
-                <div className={style.errormessage}>
-                  가입을 위해 동의가 필요합니다.
-                </div>
-              )}
+          <div>
+            <div className={style.Checkbox}>
+              <div>
+                <input
+                  type='checkbox'
+                  {...register('checkbox', { required: true })}
+                />
+              </div>
+              <Checkbox />
             </div>
-            <Checkbox />
+            {errors.checkbox && (
+              <div className={style.errormessage}>
+                가입을 위해 동의가 필요합니다.
+              </div>
+            )}
           </div>
           <div className={style.OAuthbox}>
             <OAuthBox />
