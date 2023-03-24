@@ -32,6 +32,15 @@ public class CustomRequestFieldsSnippet extends AbstractFieldsSnippet {
     }
 
     public static <T> CustomRequestFieldsSnippet customRequestFields(
+        Class<T> clazz,
+        Map<String, String> attributes
+    ) {
+        FieldDescriptor[] fieldDescriptors = genCustomRequestFields(clazz, attributes);
+
+        return new CustomRequestFieldsSnippet("custom-request", Arrays.asList(fieldDescriptors), new HashMap<>(), true);
+    }
+
+    public static <T> CustomRequestFieldsSnippet customRequestFields(
         String type,
         Class<T> clazz,
         Map<String, String> attributes

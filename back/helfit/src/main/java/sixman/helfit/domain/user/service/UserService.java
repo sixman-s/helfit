@@ -73,7 +73,7 @@ public class UserService {
         if (!passwordEncoder.matches(user.getPassword(), verifiedUser.getPassword()))
             throw new BusinessLogicException(ExceptionCode.MISS_MATCH_PASSWORD);
 
-        verifiedUser.setUserStatus(UserStatus.USER_QUIT);
+        verifiedUser.setUserStatus(UserStatus.USER_WITHDRAW);
 
         withdrawService.createWithdraw(verifiedUser);
 

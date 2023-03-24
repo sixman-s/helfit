@@ -11,6 +11,7 @@ import org.springframework.boot.autoconfigure.aop.AopAutoConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
@@ -40,19 +41,21 @@ import sixman.helfit.security.token.AuthToken;
 import sixman.helfit.security.token.AuthTokenProvider;
 
 import javax.inject.Inject;
+import javax.servlet.http.Cookie;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static sixman.helfit.security.properties.AppProperties.*;
+import static sixman.helfit.utils.HeaderUtil.getAccessToken;
 
 
 @Import({RestDocsConfig.class, AopAutoConfiguration.class})
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
 @MockBean(JpaMetamodelMappingContext.class)
 public abstract class ControllerTest {
+    // Base64 SecretKey inject, Testing only
+    private final String TEST_SECRET_TOKEN = "d297f22853e39936052a15a41266866bf058923f";
+
     @Autowired
     protected MockMvc mockMvc;
 
@@ -79,27 +82,22 @@ public abstract class ControllerTest {
     }
 
     protected Map<String, Object> userResource() throws Exception {
-        // Base64 SecretKey inject, Testing only
-        final String TEST_SECRET_TOKEN = "d297f22853e39936052a15a41266866bf058923f";
-
-        FieldUtils.writeField(authTokenProvider, "secretKey", TEST_SECRET_TOKEN, true);
-        FieldUtils.writeField(authTokenProvider, "key", Keys.hmacShaKeyFor(TEST_SECRET_TOKEN.getBytes()), true);
-
-        Date now = new Date();
         Map<String, Object> resource = new HashMap<>();
 
         User user = new User(
-            "tester",
-            "tester@testet.com",
-            "tester",
+            1L,
+            "TEST",
+            "Test1234!@#$",
+            "TEST@TEST.com",
+            "TEST",
             "",
+            LocalDateTime.now(),
             User.EmailVerified.Y,
             User.PersonalInfoAgreement.Y,
+            RoleType.USER,
             ProviderType.LOCAL,
-            RoleType.USER
+            User.UserStatus.USER_ACTIVE
         );
-        user.setUserId(1L);
-        user.setPassword("Test1234!@#$");
         user.setCreatedAt(LocalDateTime.now());
         user.setModifiedAt(LocalDateTime.now());
 
@@ -111,7 +109,8 @@ public abstract class ControllerTest {
                     user.getEmail(),
                     user.getEmailVerifiedYn().toString(),
                     user.getProfileImageUrl(),
-                    user.getProviderType().toString()
+                    user.getProviderType().toString(),
+                    user.getUserStatus().toString()
                 );
 
         UsernamePasswordAuthenticationToken authentication =
@@ -123,12 +122,11 @@ public abstract class ControllerTest {
                 "NO_PASS"
             );
 
-        Auth auth = appProperties.getAuth();
-        auth.setTokenSecret(TEST_SECRET_TOKEN);
+        Auth auth = new Auth(TEST_SECRET_TOKEN, 1000 * 60, 1000 * 60);
+        AuthToken accessToken = genJwtToken("access");
+        AuthToken refreshToken = genJwtToken("refresh");
 
-        AuthToken accessToken = authTokenProvider.createAuthToken(user.getId(), user.getRoleType().getCode(), new Date(now.getTime()));
-        AuthToken refreshToken = authTokenProvider.createAuthToken(user.getId(), new Date(now.getTime()));
-        UserRefreshToken userRefreshToken = new UserRefreshToken(user.getId(), refreshToken.getToken());
+        UserRefreshToken userRefreshToken = new UserRefreshToken(user.getId(), Objects.requireNonNull(refreshToken).getToken());
 
         resource.put("user", user);
         resource.put("userDtoResponse", userDtoResponse);
@@ -139,6 +137,37 @@ public abstract class ControllerTest {
         resource.put("userRefreshToken", userRefreshToken);
 
         return resource;
+    }
+
+    private AuthToken genJwtToken(String type) throws Exception {
+        long expiry = new Date().getTime();
+
+        FieldUtils.writeField(authTokenProvider, "secretKey", TEST_SECRET_TOKEN, true);
+        FieldUtils.writeField(authTokenProvider, "key", Keys.hmacShaKeyFor(TEST_SECRET_TOKEN.getBytes()), true);
+
+        AuthToken accessToken =
+            authTokenProvider
+                .createAuthToken("TEST", RoleType.USER.getCode(), new Date(expiry));
+        AuthToken refreshToken =
+            authTokenProvider
+                .createAuthToken("TEST", new Date(expiry));
+
+        switch (type) {
+            case "access":
+                return accessToken;
+            case "refresh":
+                return refreshToken;
+            default:
+                return null;
+        }
+    }
+
+    protected <T> ResultActions postResource(String url) throws Exception {
+        return mockMvc.perform(
+            RestDocumentationRequestBuilders.post(url)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+        );
     }
 
     protected <T> ResultActions postResource(String url, T body) throws Exception {
@@ -162,6 +191,8 @@ public abstract class ControllerTest {
     protected ResultActions getResource(String url) throws Exception {
         return mockMvc.perform(
             RestDocumentationRequestBuilders.get(url)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + Objects.requireNonNull(genJwtToken("access")).getToken())
+                .cookie(new Cookie("refresh_token", Objects.requireNonNull(genJwtToken("refresh")).getToken()))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
         );
@@ -175,7 +206,7 @@ public abstract class ControllerTest {
         );
     }
 
-    protected ResultActions getResources(String url, MultiValueMap<String, String> parameters) throws Exception {
+    protected ResultActions getResource(String url, MultiValueMap<String, String> parameters) throws Exception {
         return mockMvc.perform(
             RestDocumentationRequestBuilders.get(url)
                 .params(parameters)

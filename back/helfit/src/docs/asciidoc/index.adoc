@@ -71,5 +71,13 @@ Helfit API Documents
 operation::user-controller-test/signup-test[]
 === 회원 로그인
 operation::user-controller-test/login-test[]
-=== 회원정보 조회
+=== 회원 토큰 재발급
+operation::user-controller-test/refresh-token-test[snippets='curl-request,http-request,http-response,response-fields-body']
+=== 회원 이메일 인증
+operation::user-controller-test/confirm-email-test[snippets='curl-request,http-request,request-parameters']
+=== 회원 이메일 인증 재발송
+operation::user-controller-test/resend-confirm-email-test[snippets='curl-request,http-request,http-response']
+=== 회원 정보 조회
 operation::user-controller-test/get-user-test[snippets='curl-request,http-request,http-response,response-body,response-fields-header,response-fields-data']
+=== 회원 정보 수정
+operation::user-controller-test/update-user-test[snippets='curl-request,http-request,http-response,response-body,response-fields-header,response-fields-data']
