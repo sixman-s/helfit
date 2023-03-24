@@ -18,7 +18,7 @@ const CommunityInfo = ({ token }) => {
   const pattern = /&(lt|gt|amp|quot|#x27|#12296|#12297);/g;
   const convertToHtml = (text) =>
     text.replace(pattern, (match, entity) => escapeMap[`&${entity};`] || match);
-
+  console.log(data);
   useEffect(() => {
     if (token) {
       const headers = {
@@ -30,7 +30,6 @@ const CommunityInfo = ({ token }) => {
       axios
         .get(`${url}/api/v1/stat/board/5`, headers)
         .then((res) => {
-          console.log(res.data.body.data);
           setData(res.data.body.data);
         })
         .catch((error) => console.log(error));
@@ -38,30 +37,22 @@ const CommunityInfo = ({ token }) => {
   }, [token]);
 
   return (
-    <article className={layout.container}>
-      <header className={layout.header}>
-        <h2 className={layout.title}>Today's Member</h2>
-        <Link className={layout.moreBtn} href='/community'>
-          More
-        </Link>
-      </header>
-      <ul className={styled.contents}>
-        {data &&
-          data.map(({ boardImageUrl, text, title }, index: number) => (
-            <li className={styled.content} key={index}>
-              <Link href={`/community/oww/${index + 1}`}>
-                <img className={styled.img} src={boardImageUrl} />
-                <div className={styled.label}>
-                  <span className={styled.title}>{title}</span>
-                  <p className={styled.context}>
-                    {convertToHtml(text).replace('<p>', '').replace('</p>', '')}
-                  </p>
-                </div>
-              </Link>
-            </li>
-          ))}
-      </ul>
-    </article>
+    <ul className={styled.contents}>
+      {data &&
+        data.map(({ boardImageUrl, text, title }, index: number) => (
+          <li className={styled.content} key={index}>
+            <Link href={`/community/oww/${index + 1}`}>
+              <img className={styled.img} src={boardImageUrl} />
+              <div className={styled.label}>
+                <span className={styled.title}>{title}</span>
+                <p className={styled.context}>
+                  {convertToHtml(text).replace('<p>', '').replace('</p>', '')}
+                </p>
+              </div>
+            </Link>
+          </li>
+        ))}
+    </ul>
   );
 };
 

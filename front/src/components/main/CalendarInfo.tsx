@@ -41,6 +41,7 @@ const CalendarInfo = () => {
       <div className={styled.form}>
         <input
           max={DateView(new Date())}
+          id='datepicker'
           className={styled.dateInput}
           type='date'
           data-placeholder='year-month-date'

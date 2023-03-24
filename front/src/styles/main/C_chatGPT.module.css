@@ -69,7 +69,7 @@
 .chatView {
   display: flex;
   overflow-y: auto;
-  flex-direction: column;
+  flex-direction: column-reverse;
   width: 100%;
   height: 426px;
   padding: 20px;
@@ -105,4 +105,10 @@
   flex-direction: row;
   align-items: flex-start;
   margin-top: 20px;
+}
+
+@media (max-width: 400px) {
+  .chatView {
+    flex-direction: column;
+  }
 }

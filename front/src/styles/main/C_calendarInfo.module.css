@@ -23,6 +23,7 @@
 .dateInput::before {
   color: var(--text_5);
 }
+
 .dateInput:valid::before {
   display: none;
   -webkit-user-select: none;
@@ -30,6 +31,7 @@
   -ms-user-select: none;
   user-select: none;
 }
+
 .dateInput::-webkit-clear-button,
 .dateInput::-webkit-inner-spin-button {
   display: none;
@@ -39,11 +41,6 @@
   user-select: none;
 }
 .dateInput::-webkit-calendar-picker-indicator {
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 50%;
-  height: 100%;
   background: transparent;
   color: transparent;
   cursor: pointer;

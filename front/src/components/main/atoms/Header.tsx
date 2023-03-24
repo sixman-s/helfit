@@ -3,7 +3,7 @@ import layout from '../../../styles/main/C_header.module.css';
 
 interface LayoutProps {
   title: string;
-  href: string;
+  href?: string;
   children: React.ReactNode;
 }
 const Header = ({ title, href, children }: LayoutProps) => {
@@ -11,9 +11,11 @@ const Header = ({ title, href, children }: LayoutProps) => {
     <article className={layout.container}>
       <header className={layout.header}>
         <h2 className={layout.title}>{title}</h2>
-        <Link className={layout.moreBtn} href={href}>
-          More
-        </Link>
+        {href ? (
+          <Link className={layout.moreBtn} href={href}>
+            More
+          </Link>
+        ) : null}
       </header>
       {children}
     </article>
