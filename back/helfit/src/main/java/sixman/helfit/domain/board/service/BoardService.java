@@ -141,7 +141,12 @@ public class BoardService {
             throw new BusinessLogicException(ExceptionCode.ALREADY_LIKE_BOARD);
         }
         else{
-            Like like = new Like(findBoardById(boardId),userPrincipal.getUser());
+            Board board = findBoardById(boardId);
+            User user = userPrincipal.getUser();
+            Like like = new Like(board,user);
+            like.addInBoard();
+            like.addInUser();
+
             return likeRepository.save(like);
         }
     }
