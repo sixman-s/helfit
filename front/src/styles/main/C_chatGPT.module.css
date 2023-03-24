@@ -36,8 +36,57 @@
 .chatField {
   flex-grow: 1;
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: auto;
+}
+
+.chatField::-webkit-scrollbar {
+  display: none;
+}
+
+.chatView {
+  flex-grow: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  justify-content: flex-end;
+}
+
+.speech {
+  width: 70%;
+  height: 100%; /* 수정 */
+  background: var(--bg_1);
+  padding: 15px 10px;
+  border-radius: 15px;
+  margin-bottom: 10px;
+  margin-top: auto !important;
+}
+
+.answerArea {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+
+.answer {
+  align-self: flex-end;
+  margin-left: 10px;
+}
+.question {
+  display: flex;
+  margin-right: 10px;
+}
+
+.questionArea {
+  justify-content: flex-end;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-top: 20px;
 }
 
 .inputArea {
@@ -64,51 +113,4 @@
   border-radius: 6px;
   background-color: var(--main);
   color: white;
-}
-
-.chatView {
-  display: flex;
-  overflow-y: auto;
-  flex-direction: column-reverse;
-  width: 100%;
-  height: 426px;
-  padding: 20px;
-}
-.answerArea {
-  justify-content: flex-start;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  margin-top: 20px;
-}
-
-.answerArea:first-child {
-  margin-top: 0px;
-}
-
-.speech {
-  width: 70%;
-  background: var(--bg_1);
-  padding: 15px 10px;
-  border-radius: 15px;
-}
-.answer {
-  margin-left: 10px;
-}
-.question {
-  margin-right: 10px;
-}
-
-.questionArea {
-  justify-content: flex-end;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  margin-top: 20px;
-}
-
-@media (max-width: 400px) {
-  .chatView {
-    flex-direction: column;
-  }
 }
