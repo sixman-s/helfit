@@ -89,3 +89,21 @@ operation::user-controller-test/update-user-profile-image-test[snippets='curl-re
 operation::user-controller-test/delete-user-profile-image-test[snippets='curl-request,http-request,http-response,response-body']
 === 회원 탈퇴
 operation::user-controller-test/withdraw-user-test[snippets='curl-request,http-request,http-response,request-body,response-body']
+
+== Calculator
+=== 계산기 결과 생성
+operation::calculator-controller-test/post-result-test[]
+=== 계산기 결과 조회
+operation::calculator-controller-test/get-result-test[]
+=== 계산기 결과 수정
+operation::calculator-controller-test/patch-result-test[]
+=== 계산기 결과 삭제
+operation::calculator-controller-test/delete-result-test[]
+
+== Statistics
+=== 칼로리, 생성일자 조회
+operation::stat-controller-test/get-board-stat-test[]
+=== 오운완 게시판 최근게시물 3개 조회
+operation::stat-controller-test/get-kcal-stat-test[]
+=== 사용자의 최근 몸무게 수정 조회
+operation::stat-controller-test/get-weight-stat-test[]

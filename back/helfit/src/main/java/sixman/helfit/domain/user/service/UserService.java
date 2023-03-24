@@ -108,4 +108,6 @@ public class UserService {
             throw new BusinessLogicException(ExceptionCode.ALREADY_EXISTS_EMAIL);
         });
     }
+
+    public void saveUser(User user){userRepository.save(user);}
 }

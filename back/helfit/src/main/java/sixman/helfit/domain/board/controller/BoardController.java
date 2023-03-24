@@ -143,7 +143,7 @@ public class BoardController {
     public ResponseEntity deleteLike(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                    @PathVariable ("board-id") @Positive Long boardId) {
 
-
-        return new ResponseEntity(HttpStatus.OK);
+        boardService.deleteLike(userPrincipal,boardId);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }
