@@ -1,5 +1,6 @@
 package sixman.helfit.security.mail.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +12,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "USERS_EMAIL_CONFIRM_TOKEN")
 public class EmailConfirmToken {
     @Id

@@ -97,5 +97,6 @@ public class UserDto {
         private String emailVerifiedYn;
         private String profileImageUrl;
         private String providerType;
+        private String userStatus;
     }
 }

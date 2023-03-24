@@ -18,11 +18,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
 @Table(name = "USERS")
 public class User extends Auditable {
     @Id
@@ -90,10 +90,11 @@ public class User extends Auditable {
     public enum UserStatus {
         USER_ACTIVE("활동중"),
         USER_INACTIVE("휴면 상태"),
-        USER_QUIT("탈퇴 상태");
+        USER_WITHDRAW("탈퇴 상태")
+        ;
 
         @Getter
-        private String status;
+        private final String status;
 
         UserStatus(String status) {
             this.status = status;

@@ -72,7 +72,7 @@ public class UserController {
     private final static String REFRESH_TOKEN = "refresh_token";
 
     /*
-     * # Local 회원 가입
+     * # 회원 가입 : Local
      *
      */
     @PostMapping("/signup")
@@ -88,7 +88,7 @@ public class UserController {
     }
 
     /*
-     * # Local 회원 로그인
+     * # 회원 로그인 : Local
      *
      */
     @PostMapping("/login")
@@ -118,7 +118,7 @@ public class UserController {
         }
 
         // ! 탈퇴 회원 로그인 시도
-        if (user.getUserStatus().equals(UserStatus.USER_QUIT))
+        if (user.getUserStatus().equals(UserStatus.USER_WITHDRAW))
             throw new BusinessLogicException(ExceptionCode.USER_WITHDRAW);
 
         // ! 이메일 인증 프로세스 예외처리 미적용 (RDS 연동시 주석 제거)
@@ -163,7 +163,7 @@ public class UserController {
     }
 
     /*
-     * # 사용자 refresh-token 재발급
+     * # 회원 refreshToken 재발급
      *
      */
     @GetMapping("/refresh-token")
@@ -224,11 +224,11 @@ public class UserController {
             CookieUtil.addCookie(response, REFRESH_TOKEN, authRefreshToken.getToken(), cookieMaxAge);
         }
 
-        return ResponseEntity.ok().body(ApiResponse.ok("access_token", authAccessToken.getToken()));
+        return ResponseEntity.ok().body(ApiResponse.ok("accessToken", authAccessToken.getToken()));
     }
 
     /*
-     * # 사용자 이메일 인증
+     * # 회원 이메일 인증
      *
      */
     @GetMapping("/confirm-email")
@@ -246,7 +246,7 @@ public class UserController {
     }
 
     /*
-     * # 사용자 이메일 인증 재발송
+     * # 회원 이메일 인증 재발송
      *
      */
     @GetMapping("/resend-confirm-email")
@@ -258,7 +258,7 @@ public class UserController {
     }
 
     /*
-     * # 사용자 정보 조회
+     * # 회원 정보 조회
      *
      */
     @GetMapping
@@ -266,11 +266,13 @@ public class UserController {
     public ResponseEntity<?> getUser(@CurrentUser UserPrincipal userPrincipal) {
         User user = userService.findUserByUserId(userPrincipal.getUser().getUserId());
 
-        return ResponseEntity.ok().body(ApiResponse.ok("data", user));
+        UserDto.Response response = userMapper.userToUserDtoResponse(user);
+
+        return ResponseEntity.ok().body(ApiResponse.ok("data", response));
     }
 
     /*
-     * # 사용자 정보 변경
+     * # 회원 정보 변경
      *
      */
     @PatchMapping
@@ -287,7 +289,7 @@ public class UserController {
     }
 
     /*
-     * # 사용자 비밀번호 변경
+     * # 회원 비밀번호 변경
      *
      */
     @PatchMapping("/password")
@@ -319,7 +321,6 @@ public class UserController {
 
         return ResponseEntity.ok().body(ApiResponse.ok("resource", imagePath));
     }
-
 
     /*
      * # 회원 프로필 이미지 삭제
