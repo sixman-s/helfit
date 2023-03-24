@@ -1,6 +1,8 @@
 package sixman.helfit.domain.like.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import sixman.helfit.audit.Auditable;
 import sixman.helfit.domain.board.entity.Board;
@@ -14,6 +16,8 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Table(name = "LIKES")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Like extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,5 +36,10 @@ public class Like extends Auditable {
         if(!board.getLikes().contains(this)){
             board.getLikes().add(this);
         }
+    }
+
+    public Like(Board board, User user) {
+        this.board = board;
+        this.user = user;
     }
 }

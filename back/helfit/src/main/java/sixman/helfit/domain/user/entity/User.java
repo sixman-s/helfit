@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import sixman.helfit.audit.Auditable;
 import sixman.helfit.domain.comment.entity.Comment;
+import sixman.helfit.domain.like.entity.Like;
 import sixman.helfit.security.entity.ProviderType;
 import sixman.helfit.security.entity.RoleType;
 
@@ -61,6 +62,9 @@ public class User extends Auditable {
 
     @Enumerated(EnumType.STRING)
     private UserStatus userStatus = UserStatus.USER_ACTIVE;
+
+    @OneToMany(mappedBy = "board")
+    private List<Like> likes = new ArrayList<>();
 
     public User(
         String id,
