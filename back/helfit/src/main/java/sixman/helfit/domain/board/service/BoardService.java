@@ -1,10 +1,12 @@
 package sixman.helfit.domain.board.service;
 
+import org.hibernate.Session;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import sixman.helfit.domain.board.entity.Board;
 import sixman.helfit.domain.board.entity.BoardTag;
 
@@ -27,6 +29,7 @@ import sixman.helfit.exception.BusinessLogicException;
 import sixman.helfit.exception.ExceptionCode;
 import sixman.helfit.security.entity.UserPrincipal;
 
+import javax.persistence.EntityManager;
 import javax.validation.constraints.Null;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,10 +48,11 @@ public class BoardService {
 
     private final LikeRepository likeRepository;
     private final LikeService likeService;
+    private final EntityManager entityManager;
 
 
-    public BoardService(BoardRepository boardRepository, TagService tagService, CategoryService categoryService, UserService userService, BoardTagRepository boardTagRepository,
-                        CommentRepository commentRepository, LikeRepository likeRepository, LikeService likeService) {
+    public BoardService(BoardRepository boardRepository, TagService tagService, CategoryService categoryService, UserService userService, BoardTagRepository boardTagRepository, CommentRepository commentRepository,
+                        LikeRepository likeRepository, LikeService likeService, EntityManager entityManager) {
         this.boardRepository = boardRepository;
         this.tagService = tagService;
         this.categoryService = categoryService;
@@ -57,6 +61,7 @@ public class BoardService {
         this.commentRepository = commentRepository;
         this.likeRepository = likeRepository;
         this.likeService = likeService;
+        this.entityManager = entityManager;
     }
 
     public Board createBoard(Board board, UserPrincipal userPrincipal){
@@ -64,18 +69,34 @@ public class BoardService {
         for (BoardTag boardTag: board.getBoardTags()) {
             boardTag.addTag(tagService.findTag(boardTag.getTag()));
         }
-        return boardRepository.save(board);
+        Board savedBoard =boardRepository.save(board);
+        boardTagRepository.saveAll(board.getBoardTags());
+        return savedBoard;
     }
 
+//    public void updateBoardProfileImage(Long boardId, String imagePath) {
+//        Board verifiedBoard = findBoardById(boardId);
+//
+//        verifiedBoard.setBoardImageUrl(imagePath);
+//
+//        boardRepository.save(verifiedBoard);
+//    }
+
+    @Transactional(readOnly = true)
     public Page<Board> findBoards(int page) {
         return boardRepository.findAll(PageRequest.of(page,10,
                 Sort.by("boardId").descending()));
     }
-
+    @Transactional(readOnly = true)
     public Page<Board> findBoards(Long categoryId, int page) {
         return boardRepository.findBoardByCategoryId(categoryId,PageRequest.of(page,10,
                 Sort.by("boardId").descending()));
     }
+    @Transactional(readOnly = true)
+    public Long findBoardsCount(Long categoryId){
+        return boardRepository.countByCategoryId(categoryId);
+    }
+
 
     public Board updateBoard(Board board,Long categoryId, Long boardId, UserPrincipal userPrincipal){
         Board findBoard = findBoardByAllId(categoryId,boardId);
@@ -90,19 +111,18 @@ public class BoardService {
         List<BoardTag> updatedBoardTags = board.getBoardTags();
         if (updatedBoardTags != null) {
             for(BoardTag boardTag : findBoard.getBoardTags()){
-                Tag tag = boardTag.getTag();
-                boardTag.removeFromBoard();
                 boardTag.removeFromTag();
-                boardTagRepository.delete(boardTag);
-                tagService.saveTag(tag);
+                boardTag.removeFromBoard();
             }
-
+            boardTagRepository.deleteAll(findBoard.getBoardTags());
             for (BoardTag updatedBoardTag : updatedBoardTags) {
                 updatedBoardTag.addBoard(findBoard);
                 Tag tag = tagService.findTag(updatedBoardTag.getTag());
                 updatedBoardTag.addTag(tag);
-                boardTagRepository.save(updatedBoardTag);
+                tagService.saveTag(tag);
             }
+            boardTagRepository.saveAll(updatedBoardTags);
+            findBoard.setBoardTags(updatedBoardTags);
         }
         return boardRepository.save(findBoard);
     }
@@ -121,10 +141,32 @@ public class BoardService {
             throw new BusinessLogicException(ExceptionCode.ALREADY_LIKE_BOARD);
         }
         else{
-            Like like = new Like();
-            like.setUser(userPrincipal.getUser());
-            like.addBoard(findBoardById(boardId));
+            Board board = findBoardById(boardId);
+            User user = userPrincipal.getUser();
+            Like like = new Like(board,user);
+            like.addInBoard();
+            like.addInUser();
+
             return likeRepository.save(like);
+        }
+    }
+
+    public void deleteLike(UserPrincipal userPrincipal, Long boardId){
+        Optional<Like> optionalLike = likeRepository.findByIds(userPrincipal.getUser().getUserId(),boardId);
+        if(optionalLike.isPresent()){
+            Like like = optionalLike.get();
+            User user = like.getUser();
+            Board board =like.getBoard();
+            if(!Objects.equals(userPrincipal.getUser().getUserId(), like.getUser().getUserId())){
+                throw new BusinessLogicException(ExceptionCode.MISS_MATCH_USERID);
+            }
+            like.removeLike();
+            likeRepository.delete(like);
+            userService.saveUser(user);
+            boardRepository.save(board);
+        }
+        else{
+            throw new BusinessLogicException(ExceptionCode.LIKE_NOT_FOUND);
         }
     }
 
@@ -133,7 +175,7 @@ public class BoardService {
 
         return board.getLikes().size();
     }
-
+    @Transactional(readOnly = true)
     private void verifyBoard(Board board,UserPrincipal userPrincipal) {
         User user = userService.findUserByUserId(board.getUser().getUserId());
         if(!Objects.equals(user.getUserId(), userPrincipal.getUser().getUserId())) {
@@ -141,12 +183,12 @@ public class BoardService {
         }
         categoryService.verifiedCategoryById(board.getCategory().getCategoryId());
     }
-
+    @Transactional(readOnly = true)
     public Board findBoardById(Long boardId){
         Optional<Board> optionalBoard = boardRepository.findById(boardId);
         return optionalBoard.orElseThrow(() -> new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND));
     }
-
+    @Transactional(readOnly = true)
     public Board findBoardByAllId(Long categoryId, Long boardId){
         Optional<Board> optionalBoard = boardRepository.findBoardByIds(categoryId, boardId);
         return optionalBoard.orElseThrow(() -> new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND));

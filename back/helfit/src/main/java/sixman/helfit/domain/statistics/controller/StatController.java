@@ -4,7 +4,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import sixman.helfit.domain.statistics.dto.StatDto;
+
+import sixman.helfit.domain.statistics.Dto.StatDto;
 import sixman.helfit.domain.statistics.entity.Stat;
 import sixman.helfit.domain.statistics.mapper.StatMapper;
 import sixman.helfit.domain.statistics.service.StatService;

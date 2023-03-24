@@ -51,8 +51,17 @@ Helfit API Documents
 | `401 Unauthorized`
 | 요청한 리소스를 처리 할 권한이 없음.
 
+| `403 Access Denied`
+| 권한 또는 토큰 인증 오류로 인한 접근 거부.
+
+| `405 Method Not Allowed`
+| 지원하지않는 메소드로 요청을 보낸 경우.
+
+| `406 Not Acceptable`
+| 잘못된 양식으로 요청을 보낸 경우.
+
 |`500 Internal Server Error`
-| 요청한 리소스 처리 실패 서버 오류.
+| 서버 오류로 인한 요청 처리 실패시.
 |===
 
 [[APIs]]
@@ -60,8 +69,20 @@ Helfit API Documents
 == Users
 === 회원가입
 operation::user-controller-test/signup-test[]
-=== 회원정보 조회
+=== 회원 로그인
+operation::user-controller-test/login-test[]
+=== 회원 토큰 재발급
+operation::user-controller-test/refresh-token-test[snippets='curl-request,http-request,http-response,response-fields-body']
+=== 회원 이메일 인증
+operation::user-controller-test/confirm-email-test[snippets='curl-request,http-request,request-parameters']
+=== 회원 이메일 인증 재발송
+operation::user-controller-test/resend-confirm-email-test[snippets='curl-request,http-request,http-response']
+=== 회원 정보 조회
 operation::user-controller-test/get-user-test[snippets='curl-request,http-request,http-response,response-body,response-fields-header,response-fields-data']
+=== 회원 정보 수정
+operation::user-controller-test/update-user-test[snippets='curl-request,http-request,http-response,response-body,response-fields-header,response-fields-data']
+
+== Calculator
 === 계산기 결과 생성
 operation::calculator-controller-test/post-result-test[]
 === 계산기 결과 조회
@@ -70,9 +91,13 @@ operation::calculator-controller-test/get-result-test[]
 operation::calculator-controller-test/patch-result-test[]
 === 계산기 결과 삭제
 operation::calculator-controller-test/delete-result-test[]
+
+== Statistics
 === 칼로리, 생성일자 조회
 operation::stat-controller-test/get-board-stat-test[]
 === 오운완 게시판 최근게시물 3개 조회
 operation::stat-controller-test/get-kcal-stat-test[]
 === 사용자의 최근 몸무게 수정 조회
 operation::stat-controller-test/get-weight-stat-test[]
+
+

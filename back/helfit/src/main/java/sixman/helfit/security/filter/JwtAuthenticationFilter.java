@@ -60,7 +60,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         User user = userPrincipal.getUser();
 
         // ! 탈퇴 회원 로그인 시도
-        if (user.getUserStatus().equals(User.UserStatus.USER_QUIT))
+        if (user.getUserStatus().equals(User.UserStatus.USER_WITHDRAW))
             throw new BusinessLogicException(ExceptionCode.USER_WITHDRAW);
 
         // ! 이메일 인증 프로세스 예외처리 미적용 (RDS 연동시 주석 제거)

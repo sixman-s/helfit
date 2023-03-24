@@ -4,12 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.restdocs.payload.ResponseFieldsSnippet;
-import org.springframework.test.web.servlet.MockMvc;
 import sixman.helfit.domain.board.entity.Board;
 import sixman.helfit.domain.board.entity.BoardTag;
 import sixman.helfit.domain.calculator.entity.Calculator;
@@ -19,8 +15,7 @@ import sixman.helfit.domain.calendar.entity.Calendar;
 import sixman.helfit.domain.category.entity.Category;
 import sixman.helfit.domain.like.entity.Like;
 import sixman.helfit.domain.physical.entity.Physical;
-import sixman.helfit.domain.physical.repository.PhysicalRepositoryImpl;
-import sixman.helfit.domain.statistics.dto.StatDto;
+import sixman.helfit.domain.statistics.Dto.StatDto;
 import sixman.helfit.domain.statistics.entity.Stat;
 import sixman.helfit.domain.statistics.mapper.StatMapper;
 import sixman.helfit.domain.statistics.service.StatService;
@@ -82,7 +77,7 @@ public class StatControllerTest extends ControllerTest {
     private List<StatDto.physicalResponse> physicalResponseList;
 
     @BeforeEach
-    void setup() throws Exception {
+    void setup() throws Exception{
         Map<String, Object> userResource = userResource();
         user = (User) userResource.get("user");
         calendar = new Calendar(1L, "title", "content", 2500, "2023-03-24", user);
