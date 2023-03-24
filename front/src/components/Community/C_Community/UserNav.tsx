@@ -11,8 +11,11 @@ const UserNav = () => {
     const accessToken = localStorage.getItem('accessToken');
     if (accessToken) {
       const userInfo = JSON.parse(localStorage.getItem('UserInfo'));
-      setUserName(userInfo.nickname);
-      setUserProfile(userInfo.profileImageUrl);
+      if (userInfo) {
+        // add null check here
+        setUserName(userInfo.nickname);
+        setUserProfile(userInfo.profileImageUrl);
+      }
     }
   }, []);
 

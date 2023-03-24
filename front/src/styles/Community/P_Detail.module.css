@@ -201,6 +201,7 @@
 .deleteSVG {
   width: 15px;
   margin-left: 40px;
+  cursor: pointer;
 }
 .view {
   display: flex;

@@ -20,6 +20,10 @@ interface BoardData {
   userId: number;
   userNickname: string;
   userProfileImage: any;
+  likeUserInfo: {
+    userId: number;
+    userProfileImgUrl: string;
+  }[];
 }
 interface UserInfo {
   userId: number;
@@ -34,6 +38,7 @@ const DetailP = () => {
   const [viewCount, setViewCount] = useState(0);
   const [likeCount, setLikeCount] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
+  const [likeUser, setLikeUser] = useState([]);
 
   const escapeMap = {
     '&lt;': '<',
@@ -84,32 +89,36 @@ const DetailP = () => {
 
   // 상세페이지 글이랑 댓글 불러오기
   useEffect(() => {
-    // 게시글 불러오기
+    const localUserId = JSON.parse(localStorage.UserInfo).userId;
     axios
       .get(`${URL}/api/v1/board/${pageNumber}/${boardID}`)
       .then((res) => {
         const data = res.data;
         res.data.text = convertToHtml(res.data.text);
         setFetchedData(data);
+        setLikeUser(
+          data?.likeUserInfo
+            ?.map((userInfo) => userInfo.userId)
+            .filter((id) => typeof id === 'number') || []
+        );
+        const isLikedByUser = data?.likeUserInfo
+          ?.map((userInfo) => userInfo.userId)
+          .includes(Number(localUserId));
+        setIsLiked(isLikedByUser);
       })
-      //.then((res) => console.log(res.data))
-      // 조회수 불러오기
       .then(() => {
         axios
           .get(`${URL}/api/v1/board/view/${boardID}`)
           .then((res) => setViewCount(res.data.view));
       })
-      // 좋아요 불러오기
       .then(() => {
         axios
           .get(`${URL}/api/v1/board/likes/${boardID}`)
           .then((res) => setLikeCount(res.data));
       })
-      // 댓글 불러오기
       .then(() => {
         axios
           .get(`${URL}/api/v1/comment/${boardID}`)
-          //.then((res) => console.log(res.data))
           .then((res) => setComments(res.data))
           .catch((err) => console.log(err));
       })
@@ -172,29 +181,42 @@ const DetailP = () => {
   // 좋아요
   const handleLikeClick = () => {
     const accessToken = localStorage.accessToken;
-    console.log(accessToken);
-    axios
-      .post(
-        `${URL}/api/v1/board/likes/${boardID}`,
-        {},
-        {
+
+    if (isLiked) {
+      axios
+        .delete(`${URL}/api/v1/board/likes/${boardID}`, {
           headers: {
             Authorization: `Bearer ${accessToken}`
           }
-        }
-      )
-      .then((res) => setLikeCount(res.data))
-      .then(() => setIsLiked(!isLiked))
-      .then(() => router.reload())
-      .catch((err) => {
-        if (err.response.status === 403) {
-          alert('로그인한 유저만 좋아요를 누를 수 있습니다.');
-        } else if (err.response.status === 400) {
-          alert('이미 좋아요를 누른 게시글입니다.');
-        } else {
-          alert(err);
-        }
-      });
+        })
+        //.then((res) => console.log(res))
+        .then((res) => setLikeCount(res.data))
+        .then(() => setIsLiked(!isLiked))
+        .catch((err) => alert(err));
+    } else {
+      axios
+        .post(
+          `${URL}/api/v1/board/likes/${boardID}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`
+            }
+          }
+        )
+        .then((res) => setLikeCount(res.data))
+        .then(() => setIsLiked(!isLiked))
+        .then(() => router.reload())
+        .catch((err) => {
+          if (err.response.status === 403) {
+            alert('로그인한 유저만 좋아요를 누를 수 있습니다.');
+          } else if (err.response.status === 400) {
+            alert('이미 좋아요를 누른 게시글입니다.');
+          } else {
+            alert(err);
+          }
+        });
+    }
   };
 
   const handlePatch = () => {
