@@ -328,7 +328,7 @@ public class UserController {
      */
     @DeleteMapping("/profile-image")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> updateUserProfileImage(@CurrentUser UserPrincipal userPrincipal) {
+    public ResponseEntity<?> deleteUserProfileImage(@CurrentUser UserPrincipal userPrincipal) {
         userService.updateUserProfileImage(userPrincipal.getUser().getUserId(), null);
 
         return ResponseEntity.ok().body(ApiResponse.noContent());

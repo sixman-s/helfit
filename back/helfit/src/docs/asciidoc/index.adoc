@@ -81,6 +81,14 @@ operation::user-controller-test/resend-confirm-email-test[snippets='curl-request
 operation::user-controller-test/get-user-test[snippets='curl-request,http-request,http-response,response-body,response-fields-header,response-fields-data']
 === 회원 정보 수정
 operation::user-controller-test/update-user-test[snippets='curl-request,http-request,http-response,response-body,response-fields-header,response-fields-data']
+=== 회원 비밀번호 변경
+operation::user-controller-test/update-user-password-test[snippets='curl-request,custom-request-fields,http-request,request-body,response-body']
+=== 회원 이미지 등록 & 수정
+operation::user-controller-test/update-user-profile-image-test[snippets='curl-request,http-request,request-parts,response-body,response-fields-body']
+=== 회원 이미지 삭제
+operation::user-controller-test/delete-user-profile-image-test[snippets='curl-request,http-request,http-response,response-body']
+=== 회원 탈퇴
+operation::user-controller-test/withdraw-user-test[snippets='curl-request,http-request,http-response,request-body,response-body']
 
 == Calculator
 === 계산기 결과 생성
@@ -99,5 +107,3 @@ operation::stat-controller-test/get-board-stat-test[]
 operation::stat-controller-test/get-kcal-stat-test[]
 === 사용자의 최근 몸무게 수정 조회
 operation::stat-controller-test/get-weight-stat-test[]
-
-

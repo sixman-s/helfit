@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
@@ -29,6 +30,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.multipart.MultipartFile;
 import sixman.helfit.domain.user.dto.UserDto;
 import sixman.helfit.domain.user.entity.User;
 import sixman.helfit.domain.user.entity.UserRefreshToken;
@@ -102,16 +104,16 @@ public abstract class ControllerTest {
         user.setModifiedAt(LocalDateTime.now());
 
         UserDto.Response userDtoResponse =
-                new UserDto.Response(
-                    1L,
-                    user.getId(),
-                    user.getNickname(),
-                    user.getEmail(),
-                    user.getEmailVerifiedYn().toString(),
-                    user.getProfileImageUrl(),
-                    user.getProviderType().toString(),
-                    user.getUserStatus().toString()
-                );
+            new UserDto.Response(
+                1L,
+                user.getId(),
+                user.getNickname(),
+                user.getEmail(),
+                user.getEmailVerifiedYn().toString(),
+                user.getProfileImageUrl(),
+                user.getProviderType().toString(),
+                user.getUserStatus().toString()
+            );
 
         UsernamePasswordAuthenticationToken authentication =
             new UsernamePasswordAuthenticationToken(
@@ -162,6 +164,10 @@ public abstract class ControllerTest {
         }
     }
 
+    /*
+     * # Post Resources
+     *
+     */
     protected <T> ResultActions postResource(String url) throws Exception {
         return mockMvc.perform(
             RestDocumentationRequestBuilders.post(url)
@@ -179,6 +185,15 @@ public abstract class ControllerTest {
         );
     }
 
+    protected ResultActions postResource(String url, MultiValueMap<String, String> parameters) throws Exception {
+        return mockMvc.perform(
+            RestDocumentationRequestBuilders.post(url)
+                .params(parameters)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+        );
+    }
+
     protected <T> ResultActions postResource(String url, T body, Object... pathVariables) throws Exception {
         return mockMvc.perform(
             RestDocumentationRequestBuilders.post(url, pathVariables)
@@ -187,19 +202,16 @@ public abstract class ControllerTest {
                 .content(gson.toJson(body))
         );
     }
+
+    /*
+     * # Get Resources
+     *
+     */
     protected ResultActions getResource(String url) throws Exception {
         return mockMvc.perform(
             RestDocumentationRequestBuilders.get(url)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + Objects.requireNonNull(genJwtToken("access")).getToken())
                 .cookie(new Cookie("refresh_token", Objects.requireNonNull(genJwtToken("refresh")).getToken()))
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-        );
-    }
-
-    protected ResultActions getResource(String url, Object... pathVariables) throws Exception {
-        return mockMvc.perform(
-            RestDocumentationRequestBuilders.get(url, pathVariables)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
         );
@@ -214,14 +226,18 @@ public abstract class ControllerTest {
         );
     }
 
-    protected ResultActions patchResource(String url, Object... pathVariables) throws Exception {
+    protected ResultActions getResource(String url, Object... pathVariables) throws Exception {
         return mockMvc.perform(
-            RestDocumentationRequestBuilders.patch(url, pathVariables)
+            RestDocumentationRequestBuilders.get(url, pathVariables)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
         );
     }
 
+    /*
+     * # Patch Resources
+     *
+     */
     protected <T> ResultActions patchResource(String url, T body) throws Exception {
         return mockMvc.perform(
             RestDocumentationRequestBuilders.patch(url)
@@ -230,12 +246,42 @@ public abstract class ControllerTest {
                 .content(gson.toJson(body))
         );
     }
+
+    protected ResultActions patchResource(String url, Object... pathVariables) throws Exception {
+        return mockMvc.perform(
+            RestDocumentationRequestBuilders.patch(url, pathVariables)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+        );
+    }
+
     protected <T> ResultActions patchResources(String url, T body, Object... pathVariables) throws Exception {
         return mockMvc.perform(
-                RestDocumentationRequestBuilders.patch(url, pathVariables)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .content(gson.toJson(body))
+            RestDocumentationRequestBuilders.patch(url, pathVariables)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(gson.toJson(body))
+        );
+    }
+
+    /*
+     * # Delete Resources
+     *
+     */
+    protected ResultActions deleteResource(String url) throws Exception {
+        return mockMvc.perform(
+            RestDocumentationRequestBuilders.delete(url)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+        );
+    }
+
+    protected <T> ResultActions deleteResource(String url, T body) throws Exception {
+        return mockMvc.perform(
+            RestDocumentationRequestBuilders.delete(url)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(gson.toJson(body))
         );
     }
 
@@ -244,6 +290,17 @@ public abstract class ControllerTest {
             RestDocumentationRequestBuilders.delete(url, pathVariables)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
+        );
+    }
+
+    /*
+     * # File Resources
+     *
+     */
+    protected ResultActions fileResource(String url, MultipartFile multipartFile) throws Exception {
+        return mockMvc.perform(
+            RestDocumentationRequestBuilders.multipart(url)
+                .file((MockMultipartFile) multipartFile)
         );
     }
 }
