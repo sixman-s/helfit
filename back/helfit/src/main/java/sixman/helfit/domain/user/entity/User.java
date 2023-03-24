@@ -87,6 +87,34 @@ public class User extends Auditable {
         this.roleType = roleType;
     }
 
+    public User(
+        Long userId,
+        String id,
+        String password,
+        String email,
+        String nickname,
+        String profileImageUrl,
+        LocalDateTime lastLoggedIn,
+        EmailVerified emailVerifiedYn,
+        PersonalInfoAgreement personalInfoAgreementYn,
+        RoleType roleType,
+        ProviderType providerType,
+        UserStatus userStatus
+    ) {
+        this.userId = userId;
+        this.id = id;
+        this.password = password;
+        this.email = email;
+        this.nickname = nickname;
+        this.profileImageUrl = profileImageUrl;
+        this.lastLoggedIn = lastLoggedIn;
+        this.emailVerifiedYn = emailVerifiedYn;
+        this.personalInfoAgreementYn = personalInfoAgreementYn;
+        this.roleType = roleType;
+        this.providerType = providerType;
+        this.userStatus = userStatus;
+    }
+
     public enum UserStatus {
         USER_ACTIVE("활동중"),
         USER_INACTIVE("휴면 상태"),
