@@ -1,4 +1,4 @@
-package sixman.helfit.domain.statistics.dto;
+package sixman.helfit.domain.statistics.Dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

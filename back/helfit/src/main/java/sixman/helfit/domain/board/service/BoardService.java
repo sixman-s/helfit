@@ -141,8 +141,32 @@ public class BoardService {
             throw new BusinessLogicException(ExceptionCode.ALREADY_LIKE_BOARD);
         }
         else{
-            Like like = new Like(findBoardById(boardId),userPrincipal.getUser());
+            Board board = findBoardById(boardId);
+            User user = userPrincipal.getUser();
+            Like like = new Like(board,user);
+            like.addInBoard();
+            like.addInUser();
+
             return likeRepository.save(like);
+        }
+    }
+
+    public void deleteLike(UserPrincipal userPrincipal, Long boardId){
+        Optional<Like> optionalLike = likeRepository.findByIds(userPrincipal.getUser().getUserId(),boardId);
+        if(optionalLike.isPresent()){
+            Like like = optionalLike.get();
+            User user = like.getUser();
+            Board board =like.getBoard();
+            if(!Objects.equals(userPrincipal.getUser().getUserId(), like.getUser().getUserId())){
+                throw new BusinessLogicException(ExceptionCode.MISS_MATCH_USERID);
+            }
+            like.removeLike();
+            likeRepository.delete(like);
+            userService.saveUser(user);
+            boardRepository.save(board);
+        }
+        else{
+            throw new BusinessLogicException(ExceptionCode.LIKE_NOT_FOUND);
         }
     }
 
