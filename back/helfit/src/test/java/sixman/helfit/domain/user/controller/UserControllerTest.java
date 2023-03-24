@@ -1,16 +1,20 @@
 package sixman.helfit.domain.user.controller;
 
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.web.multipart.MultipartFile;
 import sixman.helfit.domain.file.service.FileService;
 import sixman.helfit.domain.user.dto.UserDto;
 import sixman.helfit.domain.user.entity.User;
@@ -32,8 +36,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static sixman.helfit.restdocs.custom.CustomRequestFieldsSnippet.customRequestFields;
 import static sixman.helfit.security.properties.AppProperties.*;
@@ -258,11 +261,9 @@ class UserControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("[테스트] 회원 정보 변경")
+    @DisplayName("[테스트] 회원 정보 변경 : 별명")
     @WithMockUserCustom
     void updateUserTest() throws Exception {
-        user.setNickname("nickname");
-
         given(userService.updateUser(anyLong(), any(User.class)))
             .willReturn(user);
 
@@ -270,10 +271,22 @@ class UserControllerTest extends ControllerTest {
             .willReturn(user);
 
         given(userMapper.userToUserDtoResponse(any(User.class)))
-            .willReturn(userDtoResponse);
+            .willReturn(
+                new UserDto.Response(
+                    userDtoResponse.getUserId(),
+                    userDtoResponse.getId(),
+                    "nickname",
+                    userDtoResponse.getEmail(),
+                    userDtoResponse.getEmailVerifiedYn(),
+                    userDtoResponse.getProfileImageUrl(),
+                    userDtoResponse.getProviderType(),
+                    userDtoResponse.getUserStatus()
+                )
+            );
 
         patchResource(DEFAULT_URL, new UserDto.Update("nickname"))
             .andExpect(status().isOk())
+            .andExpect(jsonPath("$.body.data.nickname", Matchers.is("nickname")))
             .andDo(restDocs.document(
                 customRequestFields(UserDto.Update.class, new LinkedHashMap<>() {{
                     put("nickname", "회원 별명");
@@ -281,6 +294,75 @@ class UserControllerTest extends ControllerTest {
                 genRelaxedResponseHeaderFields(),
                 genRelaxedResponseBodyFields()
             ));
+    }
+
+    @Test
+    @DisplayName("[테스트] 회원 비밀번호 변경")
+    @WithMockUserCustom
+    void updateUserPasswordTest() throws Exception {
+        doNothing().when(userService).updateUserPassword(anyLong(), any(User.class));
+
+        patchResource(DEFAULT_URL + "/password", new UserDto.Password("Test!@#$1234"))
+            .andExpect(status().isOk())
+            .andDo(restDocs.document(
+                customRequestFields(UserDto.Password.class, new LinkedHashMap<>() {{
+                    put("password", "회원 비밀번호");
+                }})
+            ));
+    }
+
+    @Test
+    @DisplayName("[테스트] 회원 프로필 이미지 등록 & 수정")
+    @WithMockUserCustom
+    void updateUserProfileImageTest() throws Exception {
+        MultipartFile multipartFile = new MockMultipartFile(
+            "multipartFile",
+            "profileImage.jpg",
+            MediaType.IMAGE_JPEG_VALUE,
+            "profileImage".getBytes()
+        );
+
+        given(fileService.uploadFile(any(MultipartFile.class)))
+            .willReturn("://ObjectStorage" + multipartFile.getOriginalFilename());
+
+        doNothing().when(userService).updateUserProfileImage(anyLong(), anyString());
+
+        fileResource(DEFAULT_URL + "/profile-image", multipartFile)
+            .andExpect(status().isOk())
+            .andDo(restDocs.document(
+                requestParts(
+                    partWithName("multipartFile").description("업로드 이미지 파일")
+                ),
+                responseFields(
+                    beneathPath("body").withSubsectionId("body"),
+                    fieldWithPath("resource").type(JsonFieldType.STRING).description("회원 프로필 이미지 업로드 경로")
+                )
+            ));
+
+    }
+
+    @Test
+    @DisplayName("[테스트] 회원 프로필 이미지 삭제")
+    @WithMockUserCustom
+    void deleteUserProfileImageTest() throws Exception {
+        doNothing().when(userService).updateUserProfileImage(anyLong(), anyString());
+
+        deleteResource(DEFAULT_URL + "/profile-image")
+            .andExpect(status().isOk())
+            .andDo(restDocs.document());
+    }
+
+    @Test
+    @DisplayName("[테스트] 회원 탈퇴")
+    @WithMockUserCustom
+    void withdrawUserTest() throws Exception {
+        doNothing().when(userService).withdrawUser(anyLong(), any(User.class));
+        given(userMapper.userDtoPasswordToUser(any(UserDto.Password.class)))
+            .willReturn(user);
+
+        deleteResource(DEFAULT_URL + "/withdraw", new UserDto.Password("Test1234!@#$"))
+            .andExpect(status().isNoContent())
+            .andDo(restDocs.document());
     }
 
     private ResponseFieldsSnippet genRelaxedResponseHeaderFields() {
