@@ -1,36 +1,49 @@
 .layout {
-  display: grid;
-  padding: 120px 120px 20px 350px;
-  grid-auto-flow: column;
-  grid-auto-rows: 150px;
-  grid-template-areas:
-    'contentL  contentR'
-    'contentL  contentR'
-    'contentL  contentR'
-    'contentL  contentR';
+  display: flex;
+  padding: 120px 120px 120px 350px;
+  align-items: center;
+  justify-content: center;
   background-color: var(--bg_2);
 }
 
-.svg_box {
-  grid-area: contentL;
+.svg_logo {
+  border-radius: 40px 0px 0px 40px;
+  min-width: 0;
+  max-width: 500px;
+}
+
+.login_box {
   background: white;
   box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.12);
   display: flex;
-  justify-content: center;
+  border-radius: 40px;
+  max-width: 900px;
+  min-width: 380px;
+  width: 100%;
+  height: 500px;
 }
-.svg_logo {
-  width: 400px;
-  margin-top: 50px;
-}
-.login_box {
-  grid-area: contentR;
-  background: #eef8ff;
-  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.12);
+.img_container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+}
+.leftText {
+  font-weight: bold;
+  color: var(--main);
+}
+.leftText2 {
+  font-weight: bold;
+  color: var(--main);
+  display: flex;
+  justify-content: flex-end;
+}
+.leftTextLine {
+  display: flex;
+  justify-content: flex-end;
 }
 .logo {
   margin-top: 40px;
   width: 155px;
+}
+.loginbox {
+  display: flex;
+  align-items: center;
 }

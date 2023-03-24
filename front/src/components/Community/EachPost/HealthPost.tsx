@@ -44,6 +44,7 @@ const HealthPost: React.FC = () => {
   useEffect(() => {
     axios
       .get(`${URL}/api/v1/board/1?page=${activePage}`)
+      //.then((res) => console.log(res.data))
       .then((res) => setFetchedPosts(res.data))
       .catch((err) => console.log(err));
   }, [activePage]);
@@ -117,6 +118,7 @@ const HealthPost: React.FC = () => {
             pointing
             secondary
             totalPages={5}
+            className={style.PagenationDetail}
           />
         </div>
       </div>
