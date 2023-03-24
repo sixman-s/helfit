@@ -51,7 +51,7 @@ public class CalculatorControllerTest extends ControllerTest {
     private CalculatorDto.Response calculatorDtoResponse;
 
     @BeforeEach
-    void setup() {
+    void setup() throws Exception {
         Map<String, Object> userResource = userResource();
         user = (User) userResource.get("user");
         physical = new Physical(1L, 19961213, 173, 78, Physical.Gender.MALE, user);
