@@ -1,6 +1,8 @@
 import style from '../../styles/Community/C_Community.module.css';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 interface BoardData {
   boardId: number;
@@ -8,6 +10,8 @@ interface BoardData {
   userId: number;
   userNickname: string;
   view: number;
+  boardImageUrl: string | null;
+  likesCount: number;
 }
 
 const URL = process.env.NEXT_PUBLIC_URL;
@@ -18,7 +22,6 @@ const Popular = (): JSX.Element => {
   const [crossfitPosts, setCrossfitPosts] = useState<BoardData[]>([]);
   const [owwPosts, setOwwPosts] = useState<BoardData[]>([]);
   const [dietPosts, setDietPosts] = useState<BoardData[]>([]);
-
   const HealthFourPosts = healthPosts
     .sort((a, b) => b.view - a.view)
     .slice(0, 4);
@@ -28,8 +31,10 @@ const Popular = (): JSX.Element => {
   const CrossfitFourPosts = crossfitPosts
     .sort((a, b) => b.view - a.view)
     .slice(0, 4);
-  const OwwFourPosts = owwPosts.sort((a, b) => b.view - a.view).slice(0, 4);
-  const DietFourPosts = dietPosts.sort((a, b) => b.view - a.view).slice(0, 4);
+  const OwwFourPosts = owwPosts.sort((a, b) => b.view - a.view).slice(0, 3);
+  const DietFourPosts = dietPosts.sort((a, b) => b.view - a.view).slice(0, 2);
+
+  const router = useRouter();
 
   useEffect(() => {
     axios
@@ -49,8 +54,56 @@ const Popular = (): JSX.Element => {
       .then((res) => setDietPosts(res.data.boardResponses));
   }, []);
 
+  const handlePostView = (post: BoardData) => () => {
+    console.log(post.boardId);
+    axios
+      .post(`${URL}/api/v1/board/view/${post.boardId}`)
+      .then(() => router.push(`/community/health/${post.boardId}`))
+      .catch((err) => alert(err));
+  };
+
   return (
     <>
+      <div className={style.box}>
+        <div className={style.Oww_content}>
+          <h4 className={style.P_text_h4}>🔥 인기 오운완 게시글</h4>
+
+          {OwwFourPosts.length === 0 ? (
+            <div className={style.noneMsg}>게시글을 입력해주세요 </div>
+          ) : (
+            <ul className={style.SNSContent}>
+              {OwwFourPosts.map((post, index) => (
+                <li className={style.SNSContent_list} key={post.boardId}>
+                  <div className={style.SNSbody}>
+                    <div className={style.SNS_nickname}>
+                      {post.userNickname}
+                    </div>
+                    <div className={style.SNS_owwPhoto}>
+                      <img
+                        src={post.boardImageUrl}
+                        className={style.oww_photo}
+                      />
+                    </div>
+                    <div className={style.SNS_footer}>
+                      <div className={style.SNS_title}>{post.title}</div>
+                      <div className={style.SNS_love}>
+                        <img
+                          src='../../assets/Community/Like.svg'
+                          className={style.loveSVG}
+                        />
+                        <div className={style.SNS_love_Text}>
+                          좋아요: {post.likesCount}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+
       <div className={style.box}>
         <div className={style.P_content}>
           <h4 className={style.P_text_h4}>🔥 인기 헬스 게시글</h4>
@@ -59,7 +112,11 @@ const Popular = (): JSX.Element => {
           ) : (
             <ul className={style.allContent}>
               {HealthFourPosts.map((post, index) => (
-                <li className={style.P_list} key={post.boardId}>
+                <li
+                  className={style.P_list}
+                  key={post.boardId}
+                  onClick={handlePostView(post)}
+                >
                   <div>{index + 1}.</div>
                   <div className={style.PostContent}>{post.title}</div>
                   <div className={style.nickname}>{post.userNickname}</div>
@@ -106,25 +163,7 @@ const Popular = (): JSX.Element => {
           )}
         </div>
       </div>
-      <div className={style.box}>
-        <div className={style.P_content}>
-          <h4 className={style.P_text_h4}>🔥 인기 오운완 게시글</h4>
 
-          {OwwFourPosts.length === 0 ? (
-            <div className={style.noneMsg}>게시글을 입력해주세요 </div>
-          ) : (
-            <ul className={style.allContent}>
-              {OwwFourPosts.map((post, index) => (
-                <li className={style.P_list} key={post.boardId}>
-                  <div>{index + 1}.</div>
-                  <div className={style.PostContent}>{post.title}</div>
-                  <div className={style.nickname}>{post.userNickname}</div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      </div>
       <div className={style.box}>
         <div className={style.P_content}>
           <h4 className={style.P_text_h4}>🔥 인기 식단 게시글</h4>
@@ -132,12 +171,18 @@ const Popular = (): JSX.Element => {
           {DietFourPosts.length === 0 ? (
             <div className={style.noneMsg}>게시글을 입력해주세요 </div>
           ) : (
-            <ul className={style.allContent}>
+            <ul className={style.SNSContent}>
               {DietFourPosts.map((post, index) => (
-                <li className={style.P_list} key={post.boardId}>
-                  <div>{index + 1}.</div>
-                  <div className={style.PostContent}>{post.title}</div>
-                  <div className={style.nickname}>{post.userNickname}</div>
+                <li className={style.SNSContent_list} key={post.boardId}>
+                  <div className={style.SNSbody}>
+                    <div className={style.SNS_nickname}>
+                      {post.userNickname}
+                    </div>
+                    <div className={style.SNS_photo}>
+                      <img src={post.boardImageUrl} className={style.photo} />
+                    </div>
+                    <div className={style.SNS_title}>{post.title}</div>
+                  </div>
                 </li>
               ))}
             </ul>

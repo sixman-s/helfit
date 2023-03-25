@@ -58,7 +58,7 @@
   border-radius: 30px;
   height: 400px;
   min-width: 400px;
-  max-width: 500px;
+  max-width: 550px;
   display: grid;
   grid-template-rows: 80px 280px;
   overflow: hidden;
@@ -111,4 +111,67 @@
   justify-content: center;
   align-items: center;
   font-weight: bold;
+}
+.SNSContent {
+  display: flex;
+}
+
+.SNS_userInfo {
+  display: flex;
+}
+.photo {
+  width: 220px;
+  border-radius: 20px;
+  margin-top: 20px;
+}
+.SNSbody {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+}
+.SNS_photo {
+  height: 240px;
+}
+.SNS_title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 180px;
+  margin-left: 10px;
+}
+.Oww_content {
+  margin-top: 10px;
+  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.12);
+  border-radius: 30px;
+  height: 600px;
+  max-width: 1000px;
+  min-width: 520px;
+  display: grid;
+  grid-template-rows: 80px 280px;
+  overflow: hidden;
+}
+.SNS_owwPhoto {
+  height: 450px;
+}
+.oww_photo {
+  width: 300px;
+  border-radius: 20px;
+  margin-top: 20px;
+  overflow: hidden;
+  height: 400px;
+}
+.SNS_footer {
+  display: flex;
+  justify-content: space-between;
+}
+.SNS_love {
+  margin-right: 20px;
+  display: flex;
+}
+.SNS_love_Text {
+  font-size: 12px;
+}
+.loveSVG {
+  width: 20px;
+  margin-right: 10px;
 }
