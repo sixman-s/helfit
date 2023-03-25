@@ -60,6 +60,7 @@
   min-width: 400px;
   max-width: 500px;
   display: grid;
+  grid-template-rows: 80px 280px;
   overflow: hidden;
 }
 .P_list {
@@ -67,6 +68,7 @@
   align-items: center;
   margin: -1px 15px 0px 15px;
   justify-content: space-between;
+  cursor: pointer;
 }
 .UserProfile {
   display: flex;
@@ -97,4 +99,16 @@
   text-overflow: ellipsis;
   width: 70px;
   font-size: 12px;
+}
+.allContent {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.noneMsg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
 }
