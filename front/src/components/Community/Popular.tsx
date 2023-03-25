@@ -21,7 +21,12 @@ const categories: Category[] = [
 
 const posts: { [key: string]: Post[] } = {
   health: [
-    { id: 1, content: '헬스 게시글 ', nickname: 'user1' },
+    {
+      id: 1,
+      content:
+        '아일너ㅏ림ㄴ어리ㅏㅇㄴㅁ러아ㅣ러나ㅣㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ ',
+      nickname: '신림동 핑크덤벨'
+    },
     { id: 2, content: '헬스 게시글 ', nickname: 'user2' },
     { id: 3, content: '헬스 게시글 ', nickname: 'user3' },
     { id: 4, content: '헬스 게시글 ', nickname: 'user4' }
@@ -57,15 +62,13 @@ const Popular = (): JSX.Element => {
     <>
       {categories.map((category: Category) => (
         <div className={style.box} key={category.name}>
-          <div className={style.P_text}>
-            <h4 className={style.P_text_h4}>{category.title} 인기 게시글</h4>
-          </div>
           <div className={style.P_content}>
+            <h4 className={style.P_text_h4}>🔥 인기 {category.title} 게시글</h4>
             {posts[category.name].map((post) => (
               <li className={style.P_list} key={post.id}>
                 <div>{post.id}.</div>
-                <div>{post.content}</div>
-                <div>{post.nickname}</div>
+                <div className={style.PostContent}>{post.content}</div>
+                <div className={style.nickname}>{post.nickname}</div>
               </li>
             ))}
           </div>
