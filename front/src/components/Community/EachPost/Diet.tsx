@@ -25,6 +25,7 @@ const URL = process.env.NEXT_PUBLIC_URL;
 const Oww: React.FC = () => {
   const [fetchedPosts, setFetchedPosts] = useState<Post[]>([]);
   const [activePage, setActivePage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [userProfile, setUserProfile] = useState(
     '../../assets/Community/UserProfile.svg'
   );
@@ -47,7 +48,10 @@ const Oww: React.FC = () => {
   useEffect(() => {
     axios
       .get(`${URL}/api/v1/board/6?page=${activePage}`)
-      .then((res) => setFetchedPosts(res.data.boardResponses))
+      .then((res) => {
+        setFetchedPosts(res.data.boardResponses);
+        setTotalPages(Math.ceil(res.data.count / 10));
+      })
       .catch((err) => console.log(err));
   }, [activePage]);
 
@@ -124,7 +128,8 @@ const Oww: React.FC = () => {
             lastItem={null}
             pointing
             secondary
-            totalPages={5}
+            totalPages={totalPages}
+            className={style.PagenationDetail}
           />
         </div>
       </div>

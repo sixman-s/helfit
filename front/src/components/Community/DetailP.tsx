@@ -191,6 +191,7 @@ const DetailP = () => {
         })
         //.then((res) => console.log(res))
         .then((res) => setLikeCount(res.data))
+        .then(() => router.reload())
         .then(() => setIsLiked(!isLiked))
         .catch((err) => alert(err));
     } else {

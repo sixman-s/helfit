@@ -25,6 +25,7 @@ const URL = process.env.NEXT_PUBLIC_URL;
 const HealthPost: React.FC = () => {
   const [fetchedPosts, setFetchedPosts] = useState<Post[]>([]);
   const [activePage, setActivePage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const router = useRouter();
   const handlePageChange = (
     event: React.MouseEvent<HTMLAnchorElement>,
@@ -44,7 +45,10 @@ const HealthPost: React.FC = () => {
   useEffect(() => {
     axios
       .get(`${URL}/api/v1/board/2?page=${activePage}`)
-      .then((res) => setFetchedPosts(res.data.boardResponses))
+      .then((res) => {
+        setFetchedPosts(res.data.boardResponses);
+        setTotalPages(Math.ceil(res.data.count / 10));
+      })
       .catch((err) => console.log(err));
   }, [activePage]);
 
@@ -120,7 +124,8 @@ const HealthPost: React.FC = () => {
             lastItem={null}
             pointing
             secondary
-            totalPages={5}
+            totalPages={totalPages}
+            className={style.PagenationDetail}
           />
         </div>
       </div>

@@ -31,20 +31,17 @@
   transition: 0.7s;
 }
 .SNSbox {
-  border: 0.5px solid var(--main);
-  width: 450px;
+  width: 400px;
   height: 450px;
   margin: 10px;
   cursor: pointer;
-  box-shadow: 14px 14px 16px 14px rgba(15, 73, 166, 0.08);
+  box-shadow: 14px 14px 16px 0px rgba(15, 73, 166, 0.08);
   border-radius: 20px;
 }
 .photo {
-  border: 0.5px solid var(--main);
-  background-color: var(--line_2);
   margin: 10px;
   height: 310px;
-  width: 420px;
+
   display: flex;
   justify-content: center;
   align-items: center;
