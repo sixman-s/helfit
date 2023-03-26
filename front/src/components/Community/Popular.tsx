@@ -1,7 +1,6 @@
 import style from '../../styles/Community/C_Community.module.css';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 interface BoardData {
@@ -12,6 +11,7 @@ interface BoardData {
   view: number;
   boardImageUrl: string | null;
   likesCount: number;
+  userProfileImage: string | null;
 }
 
 const URL = process.env.NEXT_PUBLIC_URL;
@@ -22,6 +22,9 @@ const Popular = (): JSX.Element => {
   const [crossfitPosts, setCrossfitPosts] = useState<BoardData[]>([]);
   const [owwPosts, setOwwPosts] = useState<BoardData[]>([]);
   const [dietPosts, setDietPosts] = useState<BoardData[]>([]);
+  const [userProfile, setUserProfile] = useState(
+    '../../assets/Community/UserProfile.svg'
+  );
   const HealthFourPosts = healthPosts
     .sort((a, b) => b.view - a.view)
     .slice(0, 4);
@@ -40,6 +43,7 @@ const Popular = (): JSX.Element => {
     axios
       .get(`${URL}/api/v1/board/1?page=1`)
       .then((res) => setHealthPosts(res.data.boardResponses));
+    //.then((res) => console.log(res.data.boardResponses));
     axios
       .get(`${URL}/api/v1/board/4?page=1`)
       .then((res) => setPilatesPosts(res.data.boardResponses));
@@ -54,11 +58,39 @@ const Popular = (): JSX.Element => {
       .then((res) => setDietPosts(res.data.boardResponses));
   }, []);
 
-  const handlePostView = (post: BoardData) => () => {
+  const HealthPostView = (post: BoardData) => () => {
     console.log(post.boardId);
     axios
       .post(`${URL}/api/v1/board/view/${post.boardId}`)
       .then(() => router.push(`/community/health/${post.boardId}`))
+      .catch((err) => alert(err));
+  };
+  const PilatesPostView = (post: BoardData) => () => {
+    console.log(post.boardId);
+    axios
+      .post(`${URL}/api/v1/board/view/${post.boardId}`)
+      .then(() => router.push(`/community/pilates/${post.boardId}`))
+      .catch((err) => alert(err));
+  };
+  const CrossfitPostView = (post: BoardData) => () => {
+    console.log(post.boardId);
+    axios
+      .post(`${URL}/api/v1/board/view/${post.boardId}`)
+      .then(() => router.push(`/community/crossfit/${post.boardId}`))
+      .catch((err) => alert(err));
+  };
+  const OwwPostView = (post: BoardData) => () => {
+    console.log(post.boardId);
+    axios
+      .post(`${URL}/api/v1/board/view/${post.boardId}`)
+      .then(() => router.push(`/community/oww/${post.boardId}`))
+      .catch((err) => alert(err));
+  };
+  const DietPostView = (post: BoardData) => () => {
+    console.log(post.boardId);
+    axios
+      .post(`${URL}/api/v1/board/view/${post.boardId}`)
+      .then(() => router.push(`/community/diet/${post.boardId}`))
       .catch((err) => alert(err));
   };
 
@@ -66,17 +98,31 @@ const Popular = (): JSX.Element => {
     <>
       <div className={style.box}>
         <div className={style.Oww_content}>
-          <h4 className={style.P_text_h4}>🔥 인기 오운완 게시글</h4>
-
+          <h4 className={style.Oww_text_h4}>🔥 인기 오운완 게시글</h4>
           {OwwFourPosts.length === 0 ? (
             <div className={style.noneMsg}>게시글을 입력해주세요 </div>
           ) : (
             <ul className={style.SNSContent}>
               {OwwFourPosts.map((post, index) => (
-                <li className={style.SNSContent_list} key={post.boardId}>
+                <li
+                  className={style.SNSContent_list}
+                  key={post.boardId}
+                  onClick={OwwPostView(post)}
+                >
                   <div className={style.SNSbody}>
-                    <div className={style.SNS_nickname}>
-                      {post.userNickname}
+                    <div className={style.SNS_UserNav}>
+                      <img
+                        src={post.userProfileImage}
+                        className={style.UserPhoto}
+                        onError={() =>
+                          setUserProfile(
+                            '../../assets/Community/UserProfile.svg'
+                          )
+                        }
+                      />
+                      <div className={style.SNS_nickname}>
+                        {post.userNickname}
+                      </div>
                     </div>
                     <div className={style.SNS_owwPhoto}>
                       <img
@@ -115,7 +161,7 @@ const Popular = (): JSX.Element => {
                 <li
                   className={style.P_list}
                   key={post.boardId}
-                  onClick={handlePostView(post)}
+                  onClick={HealthPostView(post)}
                 >
                   <div>{index + 1}.</div>
                   <div className={style.PostContent}>{post.title}</div>
@@ -135,7 +181,11 @@ const Popular = (): JSX.Element => {
           ) : (
             <ul className={style.allContent}>
               {PilatesFourPosts.map((post, index) => (
-                <li className={style.P_list} key={post.boardId}>
+                <li
+                  className={style.P_list}
+                  key={post.boardId}
+                  onClick={PilatesPostView(post)}
+                >
                   <div>{index + 1}.</div>
                   <div className={style.PostContent}>{post.title}</div>
                   <div className={style.nickname}>{post.userNickname}</div>
@@ -153,7 +203,11 @@ const Popular = (): JSX.Element => {
           ) : (
             <ul className={style.allContent}>
               {CrossfitFourPosts.map((post, index) => (
-                <li className={style.P_list} key={post.boardId}>
+                <li
+                  className={style.P_list}
+                  key={post.boardId}
+                  onClick={CrossfitPostView(post)}
+                >
                   <div>{index + 1}.</div>
                   <div className={style.PostContent}>{post.title}</div>
                   <div className={style.nickname}>{post.userNickname}</div>
@@ -171,13 +225,15 @@ const Popular = (): JSX.Element => {
           {DietFourPosts.length === 0 ? (
             <div className={style.noneMsg}>게시글을 입력해주세요 </div>
           ) : (
-            <ul className={style.SNSContent}>
+            <ul className={style.SNS_dietContent}>
               {DietFourPosts.map((post, index) => (
-                <li className={style.SNSContent_list} key={post.boardId}>
+                <li
+                  className={style.SNSContent_list}
+                  key={post.boardId}
+                  onClick={DietPostView(post)}
+                >
                   <div className={style.SNSbody}>
-                    <div className={style.SNS_nickname}>
-                      {post.userNickname}
-                    </div>
+                    <div className={style.nickname}>{post.userNickname}</div>
                     <div className={style.SNS_photo}>
                       <img src={post.boardImageUrl} className={style.photo} />
                     </div>

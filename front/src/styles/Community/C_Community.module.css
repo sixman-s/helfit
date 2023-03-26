@@ -58,7 +58,7 @@
   border-radius: 30px;
   height: 400px;
   min-width: 400px;
-  max-width: 550px;
+
   display: grid;
   grid-template-rows: 80px 280px;
   overflow: hidden;
@@ -100,6 +100,10 @@
   width: 70px;
   font-size: 12px;
 }
+.SNS_nickname {
+  margin-top: 20px;
+  margin-bottom: 8px;
+}
 .allContent {
   margin-top: 40px;
   display: flex;
@@ -114,8 +118,14 @@
 }
 .SNSContent {
   display: flex;
+  margin-bottom: 30px;
+  border-top: 0.5px solid var(--text_5);
+  margin: 10px 20px 30px 20px;
+  justify-content: space-between;
 }
-
+.SNSContent_list {
+  cursor: pointer;
+}
 .SNS_userInfo {
   display: flex;
 }
@@ -127,7 +137,6 @@
 .SNSbody {
   display: flex;
   flex-direction: column;
-  margin-left: 20px;
 }
 .SNS_photo {
   height: 240px;
@@ -139,15 +148,21 @@
   width: 180px;
   margin-left: 10px;
 }
+.Oww_text_h4 {
+  padding-top: 20px;
+  padding-left: 10px;
+  display: flex;
+  align-items: center;
+}
 .Oww_content {
   margin-top: 10px;
   box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.12);
   border-radius: 30px;
-  height: 600px;
-  max-width: 1000px;
+  width: 100%;
+  /* max-width: 1000px; */
   min-width: 520px;
-  display: grid;
-  grid-template-rows: 80px 280px;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
 }
 .SNS_owwPhoto {
@@ -174,4 +189,20 @@
 .loveSVG {
   width: 20px;
   margin-right: 10px;
+}
+.SNS_dietContent {
+  display: flex;
+  margin-bottom: 30px;
+  margin: 10px 20px 30px 20px;
+  justify-content: space-between;
+}
+.SNS_UserNav {
+  display: flex;
+  align-items: center;
+}
+.UserPhoto {
+  width: 30px;
+  margin-left: 10px;
+  margin-top: 10px;
+  border-radius: 50px;
 }
