@@ -1,6 +1,6 @@
 import Layout from '@/components/MainLayout';
 import singup from '../styles/Signup/P_Signup.module.css';
-import SignupBox from '../components/Community/signup/SignupBox';
+import SignupBox from '@/components/signup/SignupBox';
 
 const SignupP = () => {
   return (

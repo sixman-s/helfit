@@ -1,12 +1,35 @@
+import { useState } from 'react';
 import s from '../../styles/mypage/C_MyList.module.css';
+import ModalContainer from './modal/ModalContainer';
+import ModalQuit from './modal/ModalQuit';
 import Pagenation from './Pagination';
 
 const MyList = () => {
+  const [showModal, setShowMoadal] = useState(false);
+
+  const handleQuit = () => {
+    const yesOrno = confirm('정말 탈퇴하시겠습니까?');
+    if (yesOrno) {
+      console.log('kkk');
+      clickModal();
+    } else {
+      console.log('ttt');
+    }
+  };
+
+  const clickModal = () => {
+    setShowMoadal(true);
+  };
+
   return (
     <div className={s.myListContainer}>
+      <p id={s.quitContainer}>
+        <span id={s.quit} onClick={handleQuit}>
+          회원탈퇴
+        </span>
+      </p>
       <div className={s.topLine}>
         <h1>내 게시글</h1>
-        <span>더보기</span>
       </div>
       <table className={s.table}>
         <tbody>
@@ -41,8 +64,7 @@ const MyList = () => {
         <Pagenation />
       </div>
       <div className={s.topLine}>
-        <h1>Answer</h1>
-        <span>더보기</span>
+        <h1>내 답변</h1>
       </div>
       <table className={s.table}>
         <tbody>
@@ -79,6 +101,15 @@ const MyList = () => {
       <div className={s.pageDiv}>
         <Pagenation />
       </div>
+
+      <ModalContainer
+        showModal={showModal}
+        exitModal={() => {
+          setShowMoadal(false);
+        }}
+      >
+        <ModalQuit />
+      </ModalContainer>
     </div>
   );
 };

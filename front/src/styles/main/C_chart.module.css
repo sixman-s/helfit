@@ -1,0 +1,36 @@
+.line {
+  color: var(--line_1);
+}
+
+.line > line {
+  display: none;
+}
+
+.popup_container {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+  padding: 14px;
+  background-color: var(--bg_2);
+  border-radius: 4px;
+  box-shadow: 0 0.25em 1em 0 rgba(0, 0, 0, 0.15);
+  animation: fade-in 0.25s ease;
+  font-size: 0.9em;
+}
+
+.date,
+.text {
+  color: var(--main);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translate(-0.5em, -0.5em);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translate(0, 0);
+  }
+}

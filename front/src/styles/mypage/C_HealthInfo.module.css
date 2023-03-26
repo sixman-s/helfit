@@ -1,18 +1,23 @@
 .hInfoContainer {
-    display: flex;
-    flex-direction: column;
+    margin: 20px;
 }
 
 .titleDiv{
     display: flex;
     align-items: center;
-    margin-left: 35px;
-    margin-top: 30px;
+    justify-content: space-between;
+}
+
+.hInfoTitle {
+    font-size: var(--h3);
+    color: var(--text_2);
+    font-weight: 450;
 }
 
 .titleDiv .button {
-    margin-left: 150px;
-    padding: 11.5px 23.5px;
+    width: 85px;
+    height: 30px;
+    padding: 6px 8px;
     color: var(--text_3);
     background-color: var(--vg_2);
     border: 1px solid var(--line_1);
@@ -21,21 +26,43 @@
 }
 
 .bottomContainer {
+    padding-top: 50px;
     display: flex;
-    flex-direction: column;
-    align-items: start;
-    margin: 50px 35px 0;
+    position: relative;
+}
+
+.bottomContainer .leftContainer {
+    width: 50%;
+    height: 140px;
+    text-align: center;
+}
+
+.image {
+    height: 250px;
+}
+
+.images {
+    width: 200px;
+    height: 170px;
 }
 
 .list {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .question {
-    font-size: var(--h6);
+    font-size: var(--h5);
 }
 
 .answer {
+    margin-left: 20px;
+    /* text-decoration: underline; */
+    /* font-weight: */
+
+}
+
+.nonAnswer {
     margin-left: 10px;
+    color: red;
 }
 

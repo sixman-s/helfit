@@ -1,7 +1,7 @@
 .react-datepicker {
   border: none !important;
+  position: inherit !important;
   width: 100%;
-  position: sticky !important;
 }
 .react-datepicker__month-container {
   width: 100%;
@@ -16,7 +16,7 @@
   padding: 0 !important;
   background-color: white !important;
   border: none !important;
-  position: relative;
+  position: inherit !important;
   text-align: center;
   width: 100%;
 }
@@ -130,4 +130,8 @@
 
 .react-datepicker__year-option--selected_year {
   color: var(--main);
+}
+
+.react-datepicker__year-read-view {
+  position: inherit !important;
 }

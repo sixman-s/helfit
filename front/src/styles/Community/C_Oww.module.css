@@ -1,0 +1,94 @@
+.container {
+  display: grid;
+
+  grid-template-areas:
+    'header  header'
+    'content  content'
+    'footer footer';
+}
+.buttonline {
+  grid-area: header;
+  display: flex;
+  justify-content: end;
+}
+.ul {
+  grid-area: content;
+  display: flex;
+  grid-gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.button {
+  background-color: var(--main);
+  color: white;
+  border-radius: 10px;
+  width: 130px;
+  height: 40px;
+  margin-bottom: 20px;
+}
+.button:hover {
+  background-color: blue;
+  transition: 0.7s;
+}
+.SNSbox {
+  width: 400px;
+  height: 450px;
+  margin: 10px;
+  cursor: pointer;
+  box-shadow: 14px 14px 16px 0px rgba(15, 73, 166, 0.08);
+  border-radius: 20px;
+}
+.photo {
+  margin: 10px;
+  height: 310px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.postInfo {
+  margin: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+.postLike {
+  display: flex;
+}
+.postComment {
+  display: flex;
+}
+.postInfoText {
+  margin-top: 5px;
+  margin-left: 10px;
+  font-size: 12px;
+  color: var(--main);
+}
+.UserPhoto {
+  width: 30px;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+.postUser {
+  display: flex;
+  align-items: center;
+}
+.postUserName {
+  margin-left: 20px;
+  margin-top: 10px;
+  color: var(--main);
+}
+.title {
+  margin-left: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--main);
+}
+.pagenation {
+  grid-area: footer;
+  display: flex;
+  justify-content: center;
+}
+.Content_Img {
+  max-width: 400px;
+  max-height: 300px;
+}

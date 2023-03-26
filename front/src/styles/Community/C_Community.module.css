@@ -2,6 +2,9 @@
   width: 100%;
   margin: 20px;
   flex: 1 1 40%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .Search_box {
   width: 100%;
@@ -41,46 +44,134 @@
   border-radius: 10px !important;
 }
 
-.P_text {
-  background-color: #e6ecfc;
-  color: var(--main);
-  border-radius: 10px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-}
 .P_text_h4 {
   margin-left: 20px;
+  margin-right: 20px;
+  display: flex;
+  align-items: center;
+  border-bottom: 0.5px solid var(--text_5);
 }
 
 .P_content {
   margin-top: 10px;
   box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.12);
-  border-radius: 10px;
-  height: 300px;
+  border-radius: 30px;
+  height: 400px;
+  min-width: 400px;
+  max-width: 550px;
   display: grid;
-  grid-template-rows: (4, 1fr);
+  grid-template-rows: 80px 280px;
   overflow: hidden;
 }
 .P_list {
   display: flex;
   align-items: center;
-  border-top: 1px solid var(--line_1);
   margin: -1px 15px 0px 15px;
   justify-content: space-between;
+  cursor: pointer;
 }
 .UserProfile {
   display: flex;
   margin-top: 3px;
   align-items: center;
+  justify-content: flex-end;
 }
 .UserPhoto {
   width: 40px;
   margin-right: 8px;
+  border-radius: 50px;
 }
 .UserName {
   margin-right: 20px;
   color: var(--main);
   font-weight: bold;
   font-size: var(--h6);
+}
+.PostContent {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 300px;
+}
+.nickname {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 70px;
+  font-size: 12px;
+}
+.allContent {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.noneMsg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
+.SNSContent {
+  display: flex;
+}
+
+.SNS_userInfo {
+  display: flex;
+}
+.photo {
+  width: 220px;
+  border-radius: 20px;
+  margin-top: 20px;
+}
+.SNSbody {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+}
+.SNS_photo {
+  height: 240px;
+}
+.SNS_title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 180px;
+  margin-left: 10px;
+}
+.Oww_content {
+  margin-top: 10px;
+  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.12);
+  border-radius: 30px;
+  height: 600px;
+  max-width: 1000px;
+  min-width: 520px;
+  display: grid;
+  grid-template-rows: 80px 280px;
+  overflow: hidden;
+}
+.SNS_owwPhoto {
+  height: 450px;
+}
+.oww_photo {
+  width: 300px;
+  border-radius: 20px;
+  margin-top: 20px;
+  overflow: hidden;
+  height: 400px;
+}
+.SNS_footer {
+  display: flex;
+  justify-content: space-between;
+}
+.SNS_love {
+  margin-right: 20px;
+  display: flex;
+}
+.SNS_love_Text {
+  font-size: 12px;
+}
+.loveSVG {
+  width: 20px;
+  margin-right: 10px;
 }
