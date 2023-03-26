@@ -102,6 +102,9 @@ operation::calendar-controller-test/update-calendar-test[snippets='curl-request,
 === 캘린더 수정
 operation::calendar-controller-test/delete-calendar-test[snippets='curl-request,http-request,http-response,request-body,response-body']
 
+== ChatGPT
+=== 챗봇 질문
+operation::chat-gpt-controller-test/send-question[snippets='curl-request,custom-request-fields,httpie-request,http-request,http-response,request-body,response-body,response-fields-data,response-fields-header']
 
 == Calculator
 === 계산기 결과 생성
