@@ -98,3 +98,8 @@
 .ListBody {
   cursor: pointer;
 }
+.noPost {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+}

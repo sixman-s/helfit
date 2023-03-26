@@ -1,97 +1,106 @@
 .pInfoContainer{
-    display: flex;
-    flex-direction: column;
-}
-
-.mypageTitle{
-    margin: 62px 0 50px 35px;
+    margin: 20px;
 }
 
 .topContainer{
     display: flex;
+    flex-direction: column;
     align-items: center;
-    margin-left: 35px;
 }
 
-.topContainer .idDiv{
-    display: flex;
-    flex-direction: column;
-    padding-left: 17px;
-    padding-right: 5px;
-}
-
-.topContainer .buttonDiv{
-    padding: 5.5px 10.5px;
-    color: var(--text_3);
-    background-color: var(--vg_2);
-    border: 1px solid var(--line_1);
-    border-radius: 10px;
-    /* margin-left: 5px; */
-}
-
-.topContainer #infoBtn {
-   margin-bottom: 10px;
-} 
-
-.topContainer .divBtn {
-    display: flex;
-    flex-direction: column;
-    margin-left: 120px;
-}
-
-.topContainer .idDiv .welcome{
-    font-size: var(--h6);
-    color: var(--text_5);
-}
-
-.topContainer .idDiv .id{
+.mypageTitle {
     font-size: var(--h3);
-    color: var(--text_3);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 105px;
+    color: var(--text_2);
+    font-weight: 450;
 }
 
-.bottomContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    margin: 25px 35px 0;
-}
-
-.bottomContainer p {
-    margin-bottom: 30px;
-}
-
-.bottomContainer span{
-    margin-left: 10px;
-}
-
+/* 프로필 사진 */
 .profileDiv{
+    margin-top: 20px;
     position: relative;
-    width: 60px;
-    height: 60px;
+    width: 100px;
+    height: 100px;
  
 }
 
 .profileDiv img {
     width: 100%;
-    /* position: absolute; */
-    /* top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); */
 }
 
 .profile_option{
-    width: 24px;
-    height: 25px;
+    width: 33px;
+    height: 34px;
     position: absolute;
-    top: 50%;
-    left: 90%;
+    top: 60%;
+    left: 80%;
     transform: translate(-40%, 40%);
 }
 
 .profile_option:hover{
     cursor: pointer;
 }
+
+/* 아이디 박스 */
+.topContainer .idDiv{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+
+}
+
+/* 아이디 */
+.topContainer .idDiv .id{
+    margin: 15px 0;
+    font-size: var(--h3);
+    color: var(--text_3);
+    white-space : nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 200px;
+}
+
+/* 버튼 박스 */
+.pInfoContainer .topContainer .divBtn {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+
+}
+
+/* 버튼 */
+.topContainer .buttonDiv{
+    padding: 5.5px 10.5px;
+    margin: 0 5px;
+    color: var(--text_3);
+    background-color: var(--vg_2);
+    border: 1px solid var(--line_1);
+    border-radius: 10px;
+}
+
+/* 정보 박스 */
+.bottomContainer {
+    width: 300px;
+    margin: 0 auto;
+    padding: 55px 0;
+
+}
+
+.bottomContainer .sectionContainer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+
+}
+
+.bottomContainer .sectionContainer img {
+    width: 24px;
+    height: 24px;
+}
+
+.bottomContainer .contentSpan{
+    margin-left: 10px;
+}
+
+
+
 
