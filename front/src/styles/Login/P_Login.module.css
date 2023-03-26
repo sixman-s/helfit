@@ -4,46 +4,29 @@
   align-items: center;
   justify-content: center;
   background-color: var(--bg_2);
-}
-
-.svg_logo {
-  border-radius: 40px 0px 0px 40px;
-  min-width: 0;
-  max-width: 500px;
+  width: 100%;
+  height: 100vh;
 }
 
 .login_box {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  box-shadow: 0px 4px 6px rgba(15, 73, 166, 0.08);
   background: white;
-  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.12);
-  display: flex;
-  border-radius: 40px;
-  max-width: 900px;
-  min-width: 380px;
-  width: 100%;
-  height: 500px;
+  border-radius: 30px;
+  padding: 40px;
 }
-.img_container {
-  display: flex;
+
+.leftImg {
+  flex: 1;
+  border-radius: 30px 0px 0px 30px;
+  object-fit: cover;
+  margin-right: 40px;
 }
-.leftText {
-  font-weight: bold;
-  color: var(--main);
-}
-.leftText2 {
-  font-weight: bold;
-  color: var(--main);
-  display: flex;
-  justify-content: flex-end;
-}
-.leftTextLine {
-  display: flex;
-  justify-content: flex-end;
-}
-.logo {
-  margin-top: 40px;
-  width: 155px;
-}
-.loginbox {
-  display: flex;
-  align-items: center;
+
+@media screen and (max-width: 1200px) {
+  .leftImg {
+    display: none;
+  }
 }

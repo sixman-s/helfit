@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styled from '../../../styles/main/C_chatGPT.module.css';
 import axios from 'axios';
 import { DotPulse } from '@uiball/loaders';
@@ -33,6 +33,8 @@ const SpeechBubble = ({ data }) => {
 };
 
 const ChatPopup = () => {
+  const scrollRef = useRef(null);
+
   const [speech, setSpeech] = useState([
     {
       type: 'answer',
@@ -43,11 +45,26 @@ const ChatPopup = () => {
   const [answer, setAnswer] = useState(null);
   const url = process.env.NEXT_PUBLIC_URL;
 
+  const onPressEnter = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.nativeEvent.isComposing) {
+      // isComposing 이 true 이면
+      return; // 조합 중이므로 동작을 막는다.
+    }
+    if (e.key === 'Enter' && e.shiftKey) {
+      // [shift] + [Enter] 치면 걍 리턴
+      return;
+    } else if (e.key === 'Enter') {
+      // [Enter] 치면 메시지 보내기
+      onSubmit();
+    }
+  };
+
   const onSubmit = () => {
     axios
       .post(`${url}/api/v1/ai/question`, {
         question: input
       })
+      .then()
       .then((res) => {
         setAnswer(res.data.body.data.choices[0].message.content);
       })
@@ -63,6 +80,10 @@ const ChatPopup = () => {
   };
 
   useEffect(() => {
+    scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+  }, [speech]);
+
+  useEffect(() => {
     answer === null
       ? null
       : setSpeech([
@@ -76,18 +97,18 @@ const ChatPopup = () => {
 
   return (
     <article className={styled.popupContainer}>
-      <div className={styled.chatField}>
+      <div className={styled.chatField} ref={scrollRef}>
         <div className={styled.chatView}>
           <SpeechBubble data={speech} />
         </div>
       </div>
       <div className={styled.inputArea}>
-        <input
+        <textarea
           className={styled.textinput}
-          type='text'
           placeholder='헬쳇과 대화해보세요.'
           value={input}
           onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => onPressEnter(e)}
         />
         <button className={styled.submitBtn} onClick={() => onSubmit()}>
           제출
