@@ -22,7 +22,9 @@ const UserNav = () => {
   return (
     <>
       <div className={style.UserProfile}>
-        <img src={userProfile} className={style.UserPhoto} />
+        <div>
+          <img src={userProfile} className={style.UserPhoto} />
+        </div>
         <div className={style.UserName}>{userName}</div>
       </div>
     </>

@@ -137,8 +137,9 @@ const Popular = (): JSX.Element => {
                           src='../../assets/Community/Like.svg'
                           className={style.loveSVG}
                         />
-                        <div className={style.SNS_love_Text}>
-                          좋아요: {post.likesCount}
+                        <div className={style.SNS_love_Text}>좋아요:</div>
+                        <div className={style.SNS_love_count}>
+                          {post.likesCount}
                         </div>
                       </div>
                     </div>
@@ -195,6 +196,7 @@ const Popular = (): JSX.Element => {
           )}
         </div>
       </div>
+
       <div className={style.box}>
         <div className={style.P_content}>
           <h4 className={style.P_text_h4}>🔥 인기 크로스핏 게시글</h4>
@@ -221,24 +223,19 @@ const Popular = (): JSX.Element => {
       <div className={style.box}>
         <div className={style.P_content}>
           <h4 className={style.P_text_h4}>🔥 인기 식단 게시글</h4>
-
           {DietFourPosts.length === 0 ? (
             <div className={style.noneMsg}>게시글을 입력해주세요 </div>
           ) : (
-            <ul className={style.SNS_dietContent}>
+            <ul className={style.allContent}>
               {DietFourPosts.map((post, index) => (
                 <li
-                  className={style.SNSContent_list}
+                  className={style.P_list}
                   key={post.boardId}
                   onClick={DietPostView(post)}
                 >
-                  <div className={style.SNSbody}>
-                    <div className={style.nickname}>{post.userNickname}</div>
-                    <div className={style.SNS_photo}>
-                      <img src={post.boardImageUrl} className={style.photo} />
-                    </div>
-                    <div className={style.SNS_title}>{post.title}</div>
-                  </div>
+                  <div>{index + 1}.</div>
+                  <div className={style.PostContent}>{post.title}</div>
+                  <div className={style.nickname}>{post.userNickname}</div>
                 </li>
               ))}
             </ul>
