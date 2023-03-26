@@ -1,9 +1,15 @@
+import style from '../../../styles/Community/C_WritePost.module.css';
 import React, { Dispatch, SetStateAction } from 'react';
 import dynamic from 'next/dynamic';
-import style from '../../../styles/Community/C_WritePost.module.css';
-const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 import 'react-quill/dist/quill.snow.css';
 
+const ReactQuill = dynamic(
+  () => import('react-quill').then((mod) => mod.default || mod),
+  {
+    ssr: false,
+    loading: () => <div>Loading...</div> // add a loading component
+  }
+);
 interface EditorProps {
   editorInput?: string;
   setEditorInput: Dispatch<SetStateAction<string>>;
@@ -11,6 +17,8 @@ interface EditorProps {
   handleValidation?: () => void;
   errorMsg?: boolean;
   setNewAnswer?: Dispatch<SetStateAction<string>>;
+  editorError?: string;
+  onBlur?: any;
 }
 
 const modules = {
@@ -22,7 +30,7 @@ const modules = {
       { indent: '-1' },
       { indent: '+1' }
     ],
-    [{ align: [] }, { color: [] }, { background: [] }], // dropdown with defaults from theme
+    [{ align: [] }, { color: [] }, { background: [] }],
     ['clean']
   ]
 };
@@ -48,7 +56,8 @@ function Editor({
   formValues,
   handleValidation,
   errorMsg,
-  setNewAnswer
+  setNewAnswer,
+  editorError
 }: EditorProps) {
   const handleText = (content: string) => {
     if (setNewAnswer) {

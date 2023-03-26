@@ -1,5 +1,5 @@
 import styled from '../../styles/calendar/C_calendarPop.module.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { DateView } from './utils/DateView';
 import axios from 'axios';
 
@@ -11,6 +11,7 @@ interface PostData {
 }
 
 const ReaderPop = ({ date, open, setOpen }) => {
+  const modalRef = useRef<HTMLDivElement>(null);
   const [data, setData] = useState([]);
   const [title, setTitle] = useState('');
   const [kcal, setKcal] = useState(0);
@@ -30,11 +31,16 @@ const ReaderPop = ({ date, open, setOpen }) => {
             Authorization: `Bearer ${token}`
           }
         };
-        axios
-          .post(url, body, headers)
-          .then((res) => console.log(res))
-          .catch((error) => alert('내용을 입력해 주세요'));
-      }
+        if (title.length > 0 && kcal > 0 && content.length > 0) {
+          axios
+            .post(url, body, headers)
+            .then((res) => console.log(res))
+            .then(() => {
+              setKcal(kcal);
+            })
+            .catch((error) => console.log(error));
+        } else alert('제목과 칼로리, 메모는 필수로 입력해 주세요.');
+      } else alert('로그인 후 이용해 주세요.');
     }
   };
 
@@ -49,7 +55,7 @@ const ReaderPop = ({ date, open, setOpen }) => {
         };
         axios
           .patch(`${url}/${calendarId}`, postBody, headers)
-          .catch((error) => console.log(error));
+          .catch((error) => alert('로그인 후 이용해 주세요'));
       }
     }
   };
@@ -65,8 +71,9 @@ const ReaderPop = ({ date, open, setOpen }) => {
         };
         axios
           .delete(`${url}/${calendarId}`, headers)
+          .then((res) => alert('삭제되었습니다'))
           .catch((error) => alert('삭제되지 않았습니다'));
-      }
+      } else alert('로그인 후 이용해 주세요');
     }
   };
   // ! 1안 : 서버에 데이터가 undefined면 get, 있으면 patch
@@ -109,8 +116,17 @@ const ReaderPop = ({ date, open, setOpen }) => {
     }
   }, [date]);
 
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) =>
+      modalRef.current && !modalRef.current.contains(e.target as Node)
+        ? setOpen(false)
+        : setOpen(true);
+    window.addEventListener('mousedown', handleClick);
+    return () => window.removeEventListener('mousedown', handleClick);
+  }, []);
+
   return (
-    <section className={open ? styled.article : styled.disable}>
+    <section ref={modalRef} className={open ? styled.article : styled.disable}>
       <header className={styled.header}>
         <button className={styled.closeBtn} onClick={() => setOpen(false)}>
           {'»'}
@@ -143,8 +159,12 @@ const ReaderPop = ({ date, open, setOpen }) => {
               <input
                 type='number'
                 className={styled.calInput}
-                placeholder={kcal.toString()}
-                onChange={(e) => setKcal(e.target.valueAsNumber)}
+                value={kcal.toString()}
+                onChange={(e) => {
+                  e.target.valueAsNumber > 5000
+                    ? alert('5000kcal까지 입력 가능합니다.')
+                    : setKcal(e.target.valueAsNumber);
+                }}
               />
               kcal
             </p>

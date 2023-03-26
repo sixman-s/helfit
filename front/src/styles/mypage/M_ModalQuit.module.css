@@ -1,0 +1,29 @@
+.inputDiv {
+    display: flex;
+    flex-direction: column;
+    margin: 20px 30px 30px;
+}
+
+.inputDiv > label{
+    margin: 10px 0;
+ }
+
+.inputDiv > input {
+    border: 1px solid #B1B1B1;
+    width: 340px;
+    height: 25px;
+    padding: 2px 5px;
+}
+
+.inputDiv .submitP{
+    margin-top: 20px;
+    text-align: right;
+}
+
+#submitBtn {
+    width: 100px;
+    height: 27px;
+    border-radius: 2px;
+    color: white;
+    background-color: var(--main);
+}

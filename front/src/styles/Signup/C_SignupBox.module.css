@@ -1,34 +1,21 @@
 .container {
-  display: grid;
-  grid-template-areas:
-    'header  header'
-    'contentL  contentR'
-    'contentL  contentR'
-    'footer  footer';
-  height: 550px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   width: 100%;
-  max-width: 1000px;
-  min-width: 800px;
-  background-color: #eef8ff;
+  max-width: 800px;
+  min-width: 500px;
+  background-color: white;
   box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.12);
-  border-radius: 10px;
+  border-radius: 30px;
 }
-.leftbox {
-  grid-area: contentL;
-  display: flex;
-  flex-direction: column;
+.inputbox {
+  display: grid;
   row-gap: 30px;
-  justify-content: center;
-  align-items: center;
+  margin-top: 40px;
 }
-.rightbox {
-  grid-area: contentR;
-  display: flex;
-  flex-direction: column;
-  row-gap: 30px;
-  justify-content: center;
-  align-items: center;
-}
+
 .signup__form {
   border: 1px solid black;
   border-radius: 5px;
@@ -38,13 +25,6 @@
   padding-left: 3px;
 }
 
-.OAuthbox {
-  margin-right: 60px;
-}
-
-.logo {
-  width: 155px;
-}
 .button {
   background-color: var(--main);
   color: white;
@@ -57,26 +37,15 @@
   font-weight: bold;
   transition: 0.7s;
 }
-.signupButton {
-  margin-right: 100px;
-}
-.h6 {
-  color: var(--text_5);
-}
+
 .errormessage {
   color: red;
   font-size: 12px;
-  position: fixed;
 }
 .Checkbox {
-  margin-left: 80px;
   display: flex;
 }
-.footer {
-  grid-area: footer;
-  display: flex;
-  justify-content: space-around;
-}
+
 .modal {
   position: fixed;
   z-index: 1;
@@ -117,4 +86,9 @@
   background-color: blue;
   font-weight: bold;
   transition: 0.7s;
+}
+.signupButton {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
 }

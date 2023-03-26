@@ -6,7 +6,7 @@
 }
 
 .content {
-  width: 100%;
+  width: 33%;
   margin-right: 10px;
 }
 
@@ -16,9 +16,9 @@
 
 .img {
   width: 100%;
-  min-height: 230px;
+  height: 230px;
   object-fit: cover;
-  border-radius: 15px;
+  border-radius: 8px;
   margin-bottom: 20px;
 }
 
@@ -36,7 +36,12 @@
 }
 
 .context {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   width: 100%;
+  height: 100%;
+  overflow: hidden;
   color: var(--text_3);
   margin-bottom: 10px;
 }

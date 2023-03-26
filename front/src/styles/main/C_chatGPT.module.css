@@ -1,0 +1,129 @@
+.stikyBtn {
+  position: fixed;
+  width: 64px;
+  height: 64px;
+  bottom: 0;
+  right: 0;
+  background: none;
+  margin: 20px;
+  cursor: pointer;
+  transition: transform 1s;
+  border-radius: 100px;
+}
+
+.stikyBtn:hover {
+  transform: rotate(360deg);
+}
+
+.stikyBtn:active {
+  box-shadow: rgba(3, 102, 214, 0.3) 0px 0px 0px 3px;
+}
+
+.popupContainer {
+  z-index: 2;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  bottom: 100px;
+  right: 20px;
+  width: 444px;
+  height: 600px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: -6px 0px 20px rgba(15, 73, 166, 0.06);
+}
+
+.chatField {
+  position: relative;
+  flex-grow: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  margin: 20px 20px 0 20px;
+}
+
+.chatField::-webkit-scrollbar {
+  /* display: none; */
+  width: 5px;
+}
+
+.chatView {
+  flex-grow: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  justify-content: flex-end;
+}
+
+.speech {
+  width: 70%;
+  background: var(--bg_1);
+  padding: 15px 10px;
+  border-radius: 15px;
+  margin-bottom: 10px;
+  margin-top: auto !important;
+}
+
+.answerArea {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+
+.answer {
+  align-self: flex-end;
+  margin-left: 10px;
+}
+.question {
+  display: flex;
+  margin-right: 10px;
+}
+
+.questionArea {
+  justify-content: flex-end;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+
+.inputArea {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  background: var(--bg_1);
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 15px;
+  border-radius: 0px 0px 15px 15px;
+}
+
+.textinput {
+  flex-grow: 1;
+  border: 1px solid var(--line_2);
+  height: 100px;
+  padding: 10px 10px;
+  margin-right: 10px;
+  border-radius: 6px;
+  resize: none;
+  color: var(--text_2);
+  line-height: 24px;
+}
+.textinput::-webkit-scrollbar {
+  display: none;
+}
+.textinput:focus {
+  outline: none;
+}
+
+.submitBtn {
+  padding: 8px 20px;
+  border-radius: 6px;
+  background-color: var(--main);
+  color: white;
+}

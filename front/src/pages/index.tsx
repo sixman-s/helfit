@@ -4,9 +4,9 @@ import UserInfo from '@/components/main/UserInfo';
 import CalendarInfo from '@/components/main/CalendarInfo';
 import DietInfo from '@/components/main/DietInfo';
 import CommunityInfo from '@/components/main/CommunityInfo';
-import NonMembers from '@/components/main/NonMembers';
-import VisitantInfo from '@/components/main/VisitantInfo';
-import LoginServiceLayout from '@/components/main/LoginServiceLayout';
+import SignupGuide from '@/components/main/atoms/SignupGuide';
+import VisitantInfo from '@/components/main/NonUserInfo';
+import Header from '@/components/main/atoms/Header';
 import { useEffect, useState } from 'react';
 
 export default function Home() {
@@ -19,32 +19,34 @@ export default function Home() {
   return (
     <Layout>
       <section className={styled.container}>
+        {token ? <UserInfo token={token} /> : <VisitantInfo />}
         {token ? (
-          <UserInfo />
-        ) : (
-          <VisitantInfo>
-            <NonMembers />
-          </VisitantInfo>
-        )}
-        {token ? (
-          <LoginServiceLayout title='Calendar' href='/calendar'>
+          <Header title='Calendar' href='/calendar'>
             <CalendarInfo />
-          </LoginServiceLayout>
+          </Header>
         ) : (
-          <LoginServiceLayout title='Calendar' href='/calendar'>
-            <NonMembers />
-          </LoginServiceLayout>
+          <Header title='Calendar' href='/calendar'>
+            <SignupGuide />
+          </Header>
         )}
         {token ? (
-          <LoginServiceLayout title={`Today's Diet`} href='/'>
+          <Header title={`Today's Diet`}>
             <DietInfo />
-          </LoginServiceLayout>
+          </Header>
         ) : (
-          <LoginServiceLayout title={`Today's Diet`} href='/'>
-            <NonMembers />
-          </LoginServiceLayout>
+          <Header title={`Today's Diet`}>
+            <SignupGuide />
+          </Header>
         )}
-        <CommunityInfo />
+        {token ? (
+          <Header title={`Today's Member`} href='/community/oww'>
+            <CommunityInfo token={token} />
+          </Header>
+        ) : (
+          <Header title={`Today's Member`} href='/community/oww'>
+            <SignupGuide />
+          </Header>
+        )}
       </section>
     </Layout>
   );

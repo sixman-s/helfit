@@ -14,6 +14,7 @@
 
 .ListItem {
   margin-top: 40px;
+  height: 30px;
   color: black;
   display: grid;
   grid-template-areas:
@@ -33,12 +34,17 @@
 .ListHeader_Title,
 .title {
   grid-area: title;
-  width: 250px;
+  width: 200px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .ListHeader_Author,
 .author {
   grid-area: author;
   width: 40px;
+  font-size: 12px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .ListHeader_Date,
 .date {
@@ -48,7 +54,7 @@
 .ListHeader_Tag,
 .tag {
   grid-area: tag;
-  width: 100px;
+  width: 200px;
 }
 .ListHeader_Views,
 .views {
@@ -75,4 +81,25 @@
 .buttonline {
   display: flex;
   justify-content: flex-end;
+}
+.tagItem {
+  background-color: var(--main);
+  margin-left: 3px;
+  border-radius: 5px;
+  color: white;
+  padding: 4px;
+  height: 20px;
+  font-size: 10px;
+}
+.tag {
+  overflow: hidden;
+  white-space: nowrap;
+}
+.ListBody {
+  cursor: pointer;
+}
+.noPost {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
 }

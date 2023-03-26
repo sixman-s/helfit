@@ -7,14 +7,11 @@ const LoginP = () => {
     <>
       <Layout>
         <div className={login.layout}>
-          <div className={login.svg_box}>
-            <img
-              className={login.svg_logo}
-              src={'assets/LoginP/LoginPage.svg'}
-            />
-          </div>
           <div className={login.login_box}>
-            <img className={login.logo} src={'assets/LoginP/logo.svg'} />
+            <img
+              className={login.leftImg}
+              src={'assets/LoginP/로그인페이지1.png'}
+            />
             <LoginBox />
           </div>
         </div>

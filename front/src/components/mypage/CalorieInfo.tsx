@@ -1,12 +1,20 @@
+import axios from 'axios';
 import s from '../../styles/mypage/C_CalorieInfo.module.css';
 
-const CalorieInfo = () => {
+export interface calorieProps {
+  result: number;
+}
+
+const CalorieInfo = ({ calorie }: { calorie: calorieProps }) => {
+  console.log(`calorie : ${calorie}`);
+
   return (
-    <div>
-      <h1 className={s.calorieTitle}>칼로리</h1>
+    <div className={s.calroieContainer}>
+      <span className={s.calorieTitle}>Result</span>
+      <span className={s.subTitle}>=</span>
       <div className={s.bottomContainer}>
-        <div>
-          <span>2000</span>
+        <div className={s.calorieDiv}>
+          <span>{calorie ? Math.round(calorie) : 0}</span>
         </div>
         <div className={s.kcal}>Kcal</div>
       </div>

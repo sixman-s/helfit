@@ -14,6 +14,10 @@ const LNB = () => {
     'Mypage'
   ];
 
+  if (token === null) {
+    category.pop();
+  }
+
   const linkPath = (menu: string) => {
     if (menu === 'Index') {
       return '/';
@@ -48,7 +52,7 @@ const LNB = () => {
   return (
     <nav className={styled.container}>
       <Link href='/'>
-        <img className={styled.logo} src={'../../assets/logo.svg'} />
+        <img className={styled.logo} src={'../../../assets/logo.svg'} />
       </Link>
       <ul className={styled.manuUl}>
         {category.map((menu: string, key: number) => {
@@ -61,7 +65,7 @@ const LNB = () => {
                       ? styled.lnbIcon_active
                       : styled.lnbIcon
                   }
-                  src={`../../assets/lnb_${
+                  src={`../../../assets/lnb_${
                     menu === 'Index' ? 'home' : menu.toLowerCase()
                   }_icn.svg`}
                 />
@@ -85,7 +89,7 @@ const LNB = () => {
             onClick={() => (token ? logout() : null)}
           >
             <img
-              src='../../assets/lnb_lnout_icn.svg'
+              src='../../../assets/lnb_lnout_icn.svg'
               className={styled.lnbIcon}
             />
             <span className={styled.lnbFont}>{token ? 'Logout' : 'login'}</span>

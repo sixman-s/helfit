@@ -1,30 +1,36 @@
 .myPageContainer {
-  margin-left: 240px;
+  padding: 40px 60px 40px 300px;
   height: 100%;
   display: grid;
-  grid-template-columns: 444px auto;
-  grid-template-rows: auto 1fr;
-  grid-template-areas:
-    'leftTop rightTop '
-    'leftBottom rightTop'
-    'leftBottom rightBottom';
-  padding-top: 30px;
-  grid-gap: 30px;
+  grid-template-columns: 0.7fr 1fr;
+  grid-template-rows: 0.8fr 0.1fr 1fr;
+  column-gap: 20px !important;
 }
 
 .personalInfo {
-  grid-area: leftTop;
-  padding-top: 60px;
+  grid-column-start: 1;
+	grid-column-end: 2;
+	grid-row-start: 1;
+	grid-row-end: 2;
+  max-height: 420px;
+
 }
 
 .healthInfo {
-  grid-area: leftBottom;
+  grid-column-start: 1;
+	grid-column-end: 2;
+	grid-row-start: 2;
+	grid-row-end: 4;
 }
 
 .myList {
-  grid-area: rightTop;
-}
-
-.calorieInfo {
-  grid-area: rightBottom;
+  grid-column-start: 2;
+	grid-column-end: 3;
+	grid-row-start: 1;
+	grid-row-end: 4;
+  background-color: white;
+  border: 1px solid var(--line_2);
+  border-radius: 30px;
+  box-shadow: 0 0.25em 1em 0 rgba(0, 0, 0, 0.15);
+  animation: fade-in 0.25s ease;
 }
