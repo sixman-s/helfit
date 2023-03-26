@@ -11,7 +11,12 @@ import org.apache.commons.text.translate.LookupTranslator;
 
 import java.util.HashMap;
 
-
+/*
+ * # 커스텀 필터
+ *  ! ArrayList Jackson 필터링 안되는 문제 추후 개선
+ *    1. ["value"] -> [value] 따옴표 삭제 되는 문제
+ *
+ */
 public class XssProtectionSupport extends CharacterEscapes {
     private final int[] asciiEscapes;
     private final CharSequenceTranslator translator;
@@ -20,11 +25,9 @@ public class XssProtectionSupport extends CharacterEscapes {
         asciiEscapes = CharacterEscapes.standardAsciiEscapesForJSON();
         asciiEscapes['<'] = CharacterEscapes.ESCAPE_CUSTOM;
         asciiEscapes['>'] = CharacterEscapes.ESCAPE_CUSTOM;
-        asciiEscapes['\"'] = CharacterEscapes.ESCAPE_CUSTOM;
         asciiEscapes['('] = CharacterEscapes.ESCAPE_CUSTOM;
         asciiEscapes[')'] = CharacterEscapes.ESCAPE_CUSTOM;
         asciiEscapes['#'] = CharacterEscapes.ESCAPE_CUSTOM;
-        asciiEscapes['\''] = CharacterEscapes.ESCAPE_CUSTOM;
 
         translator = new AggregateTranslator(
             new LookupTranslator(EntityArrays.BASIC_UNESCAPE),
@@ -37,7 +40,6 @@ public class XssProtectionSupport extends CharacterEscapes {
                     put("(",  "&#40;");
                     put(")",  "&#41;");
                     put("#",  "&#35;");
-                    put("'", "&#39;");
                 }}
             )
         );
@@ -59,8 +61,8 @@ public class XssProtectionSupport extends CharacterEscapes {
 
             serializedString = new SerializedString(emoji);
         } else {
-            // serializedString = new SerializedString(translator.translate(Character.toString((char) ch)));
-            serializedString = new SerializedString(StringEscapeUtils.escapeHtml4(Character.toString(charAt)));
+            serializedString = new SerializedString(translator.translate(Character.toString((char) ch)));
+            // serializedString = new SerializedString(StringEscapeUtils.escapeHtml4(Character.toString(charAt)));
         }
 
         return serializedString;

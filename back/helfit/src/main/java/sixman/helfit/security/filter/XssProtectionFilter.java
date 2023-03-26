@@ -16,16 +16,12 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-@Component
-@Order(Ordered.HIGHEST_PRECEDENCE)
+// @Component
+// @Order(Ordered.HIGHEST_PRECEDENCE)
 public class XssProtectionFilter implements Filter {
-
-    // private String excludePatterns;
-
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         Filter.super.init(filterConfig);
-        // this.excludePatterns = filterConfig.getInitParameter("excludePatterns");
     }
 
     @Override
@@ -39,8 +35,12 @@ public class XssProtectionFilter implements Filter {
             )
             &&
             (
-                request.getContentType().equals("application/json")
-                // request.getContentType().equals("multipart/form-data;")
+                // Post & Patch Body Nullpointexception 예외처리
+                request.getContentType() != null &&
+                    (
+                        request.getContentType().equals("application/json")
+                        // request.getContentType().startsWith("multipart/form-data;")
+                    )
             )
         ) {
             String body = IOUtils.toString(wrappedRequest.getInputStream());
@@ -54,7 +54,7 @@ public class XssProtectionFilter implements Filter {
                 );
 
                 wrappedRequest.resetInputStream(
-                    new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(newJsonObject).getBytes()
+                    new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsBytes(newJsonObject)
                 );
             }
         }

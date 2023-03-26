@@ -12,6 +12,7 @@ import java.util.Set;
 
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @Table(name = "BOARD_TAGS")
@@ -20,11 +21,11 @@ public class BoardTag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long boardTagId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "BOARD_ID")
     private Board board;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "TAG_ID")
     private Tag tag;
 
@@ -40,6 +41,15 @@ public class BoardTag {
         if(!this.tag.getBoardTags().contains(this)) {
             this.tag.getBoardTags().add(this);
         }
+    }
+
+    public void removeFromBoard(){
+        this.board.getBoardTags().remove(this);
+        this.board =null;
+    }
+    public void removeFromTag(){
+        this.tag.getBoardTags().remove(this);
+        this.tag = null;
     }
 
 

@@ -8,6 +8,7 @@ import lombok.Setter;
 import sixman.helfit.audit.Auditable;
 import sixman.helfit.domain.category.entity.Category;
 import sixman.helfit.domain.comment.entity.Comment;
+import sixman.helfit.domain.like.entity.Like;
 import sixman.helfit.domain.user.entity.User;
 
 import javax.persistence.*;
@@ -44,8 +45,12 @@ public class Board extends Auditable {
 //    @OneToMany(mappedBy = "board", cascade = CascadeType.PERSIST)
 //    private List<BoardLike> boardLikes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "board", cascade = {CascadeType.REMOVE})
     private List<BoardTag> boardTags = new ArrayList<>();
 
+    @OneToMany(mappedBy = "board",cascade = {CascadeType.PERSIST,CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    private List<Like> likes = new ArrayList<>();
+
     private long view = 0;
+
 }

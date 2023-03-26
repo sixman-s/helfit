@@ -1,5 +1,6 @@
 package sixman.helfit.domain.physical.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,6 +13,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Physical extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

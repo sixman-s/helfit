@@ -20,6 +20,7 @@
 }
 
 .popupContainer {
+  z-index: 2;
   position: fixed;
   display: flex;
   flex-direction: column;
