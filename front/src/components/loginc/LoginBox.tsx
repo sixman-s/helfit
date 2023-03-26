@@ -62,66 +62,62 @@ const LoginBox = () => {
 
   return (
     <>
-      <div className={boxstyle.box}>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className={boxstyle.formID}>
-            <h5>아이디</h5>
-            <input
-              type='text'
-              {...register('userID', {
-                required: true,
-                pattern: {
-                  value: /^[a-z0-9]{6,20}$/,
-                  message: '6~20글자 사이의 소문자 + 숫자의 조합이여야 합니다.'
-                }
-              })}
-              className={boxstyle.login__form}
-            />
-            {errors.userID && (
-              <div className={boxstyle.errorMessage}>
-                {errors.userID.message}
-              </div>
-            )}
-          </div>
-          <div className={boxstyle.formPassword}>
-            <h5>비밀번호</h5>
-            <input
-              type='password'
-              {...register('password', {
-                required: true,
-                minLength: {
-                  value: 8,
-                  message: '8글자 이상이어야 합니다.'
-                },
-                pattern: {
-                  value:
-                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-                  message:
-                    '대/소문자, 숫자, 특수문자가 1개 이상 포함되어야 합니다.'
-                }
-              })}
-              className={boxstyle.login__form}
-            />
+      <form onSubmit={handleSubmit(onSubmit)} className={boxstyle.box}>
+        <div className={boxstyle.formID}>
+          <span className={boxstyle.h5}>아이디</span>
+          <input
+            type='text'
+            {...register('userID', {
+              required: true,
+              pattern: {
+                value: /^[a-z0-9]{6,20}$/,
+                message: '6~20글자 사이의 소문자 + 숫자의 조합이여야 합니다.'
+              }
+            })}
+            className={boxstyle.login__form}
+          />
+          {errors.userID && (
+            <div className={boxstyle.errorMessage}>{errors.userID.message}</div>
+          )}
+        </div>
+        <div className={boxstyle.formPassword}>
+          <span className={boxstyle.h5}>비밀번호</span>
+          <input
+            type='password'
+            {...register('password', {
+              required: true,
+              minLength: {
+                value: 8,
+                message: '8글자 이상이어야 합니다.'
+              },
+              pattern: {
+                value:
+                  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+                message:
+                  '대/소문자, 숫자, 특수문자가 1개 이상 포함되어야 합니다.'
+              }
+            })}
+            className={boxstyle.login__form}
+          />
 
-            {errors.password && (
-              <div className={boxstyle.errorMessage}>
-                {errors.password.message}
-              </div>
-            )}
-          </div>
-          <div className={boxstyle.buttons}>
-            <Btn
-              className={boxstyle.button}
-              text='회원가입'
-              onClick={SignuphandleClick}
-            />
-            <Btn className={boxstyle.button} text='로그인' type='submit' />
-          </div>
-          <div className={boxstyle.OAuth}>
-            <OAuthBox />
-          </div>
-        </form>
-      </div>
+          {errors.password && (
+            <div className={boxstyle.errorMessage}>
+              {errors.password.message}
+            </div>
+          )}
+        </div>
+        <div className={boxstyle.buttons}>
+          <Btn
+            className={boxstyle.button}
+            text='회원가입'
+            onClick={SignuphandleClick}
+          />
+          <Btn className={boxstyle.button} text='로그인' type='submit' />
+        </div>
+        <div className={boxstyle.OAuth}>
+          <OAuthBox />
+        </div>
+      </form>
     </>
   );
 };
