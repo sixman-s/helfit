@@ -3,6 +3,7 @@ package sixman.helfit.domain.board.service;
 import org.hibernate.Session;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
@@ -31,10 +32,7 @@ import sixman.helfit.security.entity.UserPrincipal;
 
 import javax.persistence.EntityManager;
 import javax.validation.constraints.Null;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class BoardService {
@@ -68,8 +66,9 @@ public class BoardService {
             boardTag.addTag(tagService.findTag(boardTag.getTag()));
         }
         Board savedBoard =boardRepository.save(board);
+        savedBoard.calculateBoardPoint();
         boardTagRepository.saveAll(board.getBoardTags());
-        return savedBoard;
+        return boardRepository.save(savedBoard);
     }
 
 //    public void updateBoardProfileImage(Long boardId, String imagePath) {
@@ -143,9 +142,10 @@ public class BoardService {
             User user = userPrincipal.getUser();
             Like like = new Like(board,user);
             like.addInBoard();
-            like.addInUser();
-
-            return likeService.saveLike(like);
+            Like savedLike = likeService.saveLike(like);
+            board.calculateBoardPoint();
+            boardRepository.save(board);
+            return savedLike;
         }
     }
 
@@ -161,13 +161,14 @@ public class BoardService {
             like.removeLike();
             likeRepository.delete(like);
             userService.saveUser(user);
+            board.calculateBoardPoint();
             boardRepository.save(board);
         }
         else{
             throw new BusinessLogicException(ExceptionCode.LIKE_NOT_FOUND);
         }
     }
-
+    @Transactional(readOnly = true)
     public List<Board> findBoardFromLikes(UserPrincipal userPrincipal){
         List<Like> likes = likeRepository.findByUserId(userPrincipal.getUser().getUserId());
         List<Board> boards = new ArrayList<>();
@@ -176,11 +177,15 @@ public class BoardService {
         );
         return boards;
     }
-
+    @Transactional(readOnly = true)
     public long getBoardLikes(Long boardId){
         Board board = findBoardById(boardId);
 
         return board.getLikes().size();
+    }
+    @Transactional(readOnly = true)
+    public List<Board> getHotBoards(Long categoryId){
+        return  boardRepository.findTop5Boards(categoryId,PageRequest.of(0, 5));
     }
     @Transactional(readOnly = true)
     private void verifyBoard(Board board,UserPrincipal userPrincipal) {
@@ -205,6 +210,7 @@ public class BoardService {
         Board findBoard = findBoardById(boardId);
         long view = findBoard.getView();
         findBoard.setView(view+1);
+        findBoard.calculateBoardPoint();
         boardRepository.save(findBoard);
     }
 

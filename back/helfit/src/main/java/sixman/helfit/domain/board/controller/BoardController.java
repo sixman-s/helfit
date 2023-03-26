@@ -137,6 +137,14 @@ public class BoardController {
     public ResponseEntity getBoardLikes(@PathVariable ("board-id") @Positive Long boardId) {
         return new ResponseEntity(boardService.getBoardLikes(boardId),HttpStatus.OK);
     }
+
+    @GetMapping("/hot/{category-id}")
+    public ResponseEntity getHotBoards(@PathVariable ("category-id") @Positive Long categoryId) {
+        List<Board> boards = boardService.getHotBoards(categoryId);
+
+        return new ResponseEntity(mapper.boardsToResponses(boards),HttpStatus.OK);
+    }
+
     @GetMapping("/users/likes")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity getBoardsWithLikes(@AuthenticationPrincipal UserPrincipal userPrincipal){

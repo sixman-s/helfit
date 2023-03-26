@@ -56,6 +56,7 @@ public class BoardDto {
         private List<TagDto.GetResponse> tags;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
+        private long boardPoint;
     }
 
     @Getter
