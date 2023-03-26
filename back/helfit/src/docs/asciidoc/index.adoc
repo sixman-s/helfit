@@ -90,6 +90,19 @@ operation::user-controller-test/delete-user-profile-image-test[snippets='curl-re
 === 회원 탈퇴
 operation::user-controller-test/withdraw-user-test[snippets='curl-request,http-request,http-response,request-body,response-body']
 
+== Calendar
+=== 캘린더 등록
+operation::calendar-controller-test/post-calendar-test[snippets='curl-request,custom-request-fields,http-request,http-response,request-body,response-body']
+=== 캘린더 개별 검색
+operation::calendar-controller-test/get-calendar-test[snippets='curl-request,httpie-request,http-request,http-response,path-parameters,response-body,response-fields-data,response-fields-header']
+=== 캘린더 등록일 기준 검색
+operation::calendar-controller-test/get-calendar-test[snippets='curl-request,httpie-request,http-request,http-response,request-parameters,response-body,response-fields-data,response-fields-header']
+=== 캘린더 수정
+operation::calendar-controller-test/update-calendar-test[snippets='curl-request,custom-request-fields,httpie-request,http-request,http-response,request-body,response-body,response-fields-data,response-fields-header']
+=== 캘린더 수정
+operation::calendar-controller-test/delete-calendar-test[snippets='curl-request,http-request,http-response,request-body,response-body']
+
+
 == Calculator
 === 계산기 결과 생성
 operation::calculator-controller-test/post-result-test[]

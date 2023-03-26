@@ -76,7 +76,7 @@ public class CalculatorControllerTest extends ControllerTest {
         given(calculatorMapper.calculatorToResponse(Mockito.any(Calculator.class)))
                 .willReturn(calculatorDtoResponse);
 
-        postResource(DEFAULT_URL + "/{user-id}", requestBody, user.getUserId())
+        postResources(DEFAULT_URL + "/{user-id}", requestBody, user.getUserId())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.body.data").isNotEmpty())
                 .andDo(restDocs.document(
@@ -101,7 +101,7 @@ public class CalculatorControllerTest extends ControllerTest {
                 .willReturn(calculator);
         given(calculatorMapper.calculatorToResponse(Mockito.any(Calculator.class)))
                 .willReturn(calculatorDtoResponse);
-        getResource(DEFAULT_URL + "/{user-id}", 1L)
+        getResources(DEFAULT_URL + "/{user-id}", 1L)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.body.data").isNotEmpty())
                 .andDo(restDocs.document(
