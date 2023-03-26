@@ -45,7 +45,7 @@ public class Board extends Auditable {
 //    @OneToMany(mappedBy = "board", cascade = CascadeType.PERSIST)
 //    private List<BoardLike> boardLikes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "board", cascade = {CascadeType.REMOVE})
+    @OneToMany(mappedBy = "board", cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
     private List<BoardTag> boardTags = new ArrayList<>();
 
     @OneToMany(mappedBy = "board",cascade = {CascadeType.PERSIST,CascadeType.REMOVE}, fetch = FetchType.EAGER)

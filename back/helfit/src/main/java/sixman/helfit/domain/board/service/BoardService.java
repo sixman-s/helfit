@@ -48,11 +48,10 @@ public class BoardService {
 
     private final LikeRepository likeRepository;
     private final LikeService likeService;
-    private final EntityManager entityManager;
 
 
-    public BoardService(BoardRepository boardRepository, TagService tagService, CategoryService categoryService, UserService userService, BoardTagRepository boardTagRepository, CommentRepository commentRepository,
-                        LikeRepository likeRepository, LikeService likeService, EntityManager entityManager) {
+    public BoardService(BoardRepository boardRepository, TagService tagService, CategoryService categoryService, UserService userService, BoardTagRepository boardTagRepository,
+                        CommentRepository commentRepository, LikeRepository likeRepository, LikeService likeService) {
         this.boardRepository = boardRepository;
         this.tagService = tagService;
         this.categoryService = categoryService;
@@ -61,7 +60,6 @@ public class BoardService {
         this.commentRepository = commentRepository;
         this.likeRepository = likeRepository;
         this.likeService = likeService;
-        this.entityManager = entityManager;
     }
 
     public Board createBoard(Board board, UserPrincipal userPrincipal){
@@ -147,7 +145,7 @@ public class BoardService {
             like.addInBoard();
             like.addInUser();
 
-            return likeRepository.save(like);
+            return likeService.saveLike(like);
         }
     }
 
@@ -168,6 +166,15 @@ public class BoardService {
         else{
             throw new BusinessLogicException(ExceptionCode.LIKE_NOT_FOUND);
         }
+    }
+
+    public List<Board> findBoardFromLikes(UserPrincipal userPrincipal){
+        List<Like> likes = likeRepository.findByUserId(userPrincipal.getUser().getUserId());
+        List<Board> boards = new ArrayList<>();
+        likes.forEach(like->
+                boards.add(like.getBoard())
+        );
+        return boards;
     }
 
     public long getBoardLikes(Long boardId){

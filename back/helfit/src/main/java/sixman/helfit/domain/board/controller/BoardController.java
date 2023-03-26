@@ -137,6 +137,13 @@ public class BoardController {
     public ResponseEntity getBoardLikes(@PathVariable ("board-id") @Positive Long boardId) {
         return new ResponseEntity(boardService.getBoardLikes(boardId),HttpStatus.OK);
     }
+    @GetMapping("/users/likes")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity getBoardsWithLikes(@AuthenticationPrincipal UserPrincipal userPrincipal){
+        List<Board> boards = boardService.findBoardFromLikes(userPrincipal);
+
+        return new ResponseEntity(mapper.boardsToResponses(boards),HttpStatus.OK);
+    }
 
     @DeleteMapping("/likes/{board-id}")
     @PreAuthorize("isAuthenticated()")
