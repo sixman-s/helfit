@@ -191,6 +191,7 @@ const DetailP = () => {
         })
         //.then((res) => console.log(res))
         .then((res) => setLikeCount(res.data))
+        .then(() => router.reload())
         .then(() => setIsLiked(!isLiked))
         .catch((err) => alert(err));
     } else {
@@ -228,6 +229,23 @@ const DetailP = () => {
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
+      e.preventDefault(); // prevent default behavior of Enter key
+      handleSubmit(e);
+    }
+  };
+
+  const pressEnter: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
+    if (e.nativeEvent.isComposing) {
+      // if isComposing is true
+      return; // Prevent operation because it is being combined.
+    }
+
+    if (e.key === 'Enter' && e.shiftKey) {
+      // [shift] + [Enter] just returns
+      return;
+    } else if (e.key === 'Enter') {
+      // Send message when [Enter] is pressed
+      e.preventDefault(); // prevent default behavior of Enter key
       handleSubmit(e);
     }
   };
@@ -235,6 +253,7 @@ const DetailP = () => {
     const keyboardEvent = e as unknown as React.KeyboardEvent;
     handleSubmit(keyboardEvent);
   };
+
   const createdAtString = new Date(fetchedData?.createdAt)
     .toLocaleDateString('en-KR', {
       year: '2-digit',
@@ -354,7 +373,7 @@ const DetailP = () => {
             placeholder='write your comment'
             value={writeCommnet}
             onChange={(e) => setWriteCommnet(e.target.value)}
-            onKeyDown={handleKeyDown}
+            onKeyDown={pressEnter}
           />
           <img
             src='../../assets/Community/Write.svg'
