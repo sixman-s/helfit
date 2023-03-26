@@ -124,7 +124,7 @@ public class StatControllerTest extends ControllerTest {
                 .willReturn(calendarStatList);
         given(statMapper.statListToStatDtoResponseList(Mockito.anyList()))
                 .willReturn(calendarResponseList);
-        getResource(DEFAULT_URL + "/calendar/{user-id}", 1L)
+        getResources(DEFAULT_URL + "/calendar/{user-id}", 1L)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.body.data").isNotEmpty())
                 .andDo(restDocs.document(
@@ -141,7 +141,7 @@ public class StatControllerTest extends ControllerTest {
                 .willReturn(boardStatList);
         given(statMapper.statListToStatDtoBoardResponseList(Mockito.anyList()))
                 .willReturn(boardResponseList);
-        getResource(DEFAULT_URL + "/board/{category-id}", 5)
+        getResources(DEFAULT_URL + "/board/{category-id}", 5)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.body.data").isNotEmpty())
                 .andDo(restDocs.document(
@@ -158,7 +158,7 @@ public class StatControllerTest extends ControllerTest {
                 .willReturn(physicalStatList);
         given(statMapper.statListToStatDtoPhysicalResponseList(Mockito.anyList()))
                 .willReturn(physicalResponseList);
-        getResource(DEFAULT_URL + "/physical")
+        getResources(DEFAULT_URL + "/physical")
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.body.data").isNotEmpty())
                 .andDo(restDocs.document(

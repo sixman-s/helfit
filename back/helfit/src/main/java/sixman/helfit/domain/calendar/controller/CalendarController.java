@@ -53,7 +53,7 @@ public class CalendarController {
      * # 캘린더 개별 조회
      *
      */
-    @GetMapping("{calendar-id}")
+    @GetMapping("/{calendar-id}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> getCalendar(
         @Positive @PathVariable("calendar-id") Long calendarId,
