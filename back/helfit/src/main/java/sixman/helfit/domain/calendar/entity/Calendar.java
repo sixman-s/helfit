@@ -33,4 +33,12 @@ public class Calendar extends Auditable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
     private User user;
+
+    public Calendar(Long calendarId, String title, String content, Integer kcal, String recodedAt) {
+        this.calendarId = calendarId;
+        this.title = title;
+        this.content = content;
+        this.kcal = kcal;
+        this.recodedAt = recodedAt;
+    }
 }

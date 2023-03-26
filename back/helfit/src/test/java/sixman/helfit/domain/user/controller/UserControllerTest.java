@@ -118,11 +118,11 @@ class UserControllerTest extends ControllerTest {
             .andExpect(header().exists("Location"))
             .andDo(restDocs.document(
                 customRequestFields(UserDto.Signup.class, new LinkedHashMap<>() {{
-                    put("id", "회원 아이디");
-                    put("password", "회원 비밀번호");
-                    put("nickname", "회원 별명");
-                    put("email", "회원 이메일");
-                    put("personalInfoAgreement", "회원 개인정보 제공 동의 여부");
+                    put("id", "회원 아이디, String");
+                    put("password", "회원 비밀번호, String");
+                    put("nickname", "회원 별명, String");
+                    put("email", "회원 이메일, String");
+                    put("personalInfoAgreement", "회원 개인정보 제공 동의 여부, String");
                 }})
             ));
     }
@@ -163,9 +163,9 @@ class UserControllerTest extends ControllerTest {
             .andExpect(jsonPath("$.body.accessToken").isNotEmpty())
             .andDo(restDocs.document(
                 customRequestFields(UserDto.Login.class, new LinkedHashMap<>() {{
-                    put("id", "회원 아이디");
-                    put("password", "회원 비밀번호");
-                    put("activate", "휴면계정 활성화 여부, Optional");
+                    put("id", "회원 아이디, String");
+                    put("password", "회원 비밀번호, String");
+                    put("activate", "휴면계정 활성화 여부, String, Optional");
                 }}),
                 relaxedResponseFields(
                     beneathPath("body").withSubsectionId("body"),
@@ -289,7 +289,7 @@ class UserControllerTest extends ControllerTest {
             .andExpect(jsonPath("$.body.data.nickname", Matchers.is("nickname")))
             .andDo(restDocs.document(
                 customRequestFields(UserDto.Update.class, new LinkedHashMap<>() {{
-                    put("nickname", "회원 별명");
+                    put("nickname", "회원 별명, String");
                 }}),
                 genRelaxedResponseHeaderFields(),
                 genRelaxedResponseBodyFields()
@@ -306,7 +306,7 @@ class UserControllerTest extends ControllerTest {
             .andExpect(status().isOk())
             .andDo(restDocs.document(
                 customRequestFields(UserDto.Password.class, new LinkedHashMap<>() {{
-                    put("password", "회원 비밀번호");
+                    put("password", "회원 비밀번호, String");
                 }})
             ));
     }

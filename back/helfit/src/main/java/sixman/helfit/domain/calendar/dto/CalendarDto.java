@@ -1,5 +1,6 @@
 package sixman.helfit.domain.calendar.dto;
 
+import com.sun.istack.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,8 +34,13 @@ public class CalendarDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Patch {
+        @Nullable
         private String title;
+
+        @Nullable
         private String content;
+
+        @Nullable
         private Integer kcal;
     }
 
@@ -46,7 +52,5 @@ public class CalendarDto {
         private String content;
         private Integer kcal;
         private String recodedAt;
-        private LocalDateTime createdAt;
-        private LocalDateTime modifiedAt;
     }
 }

@@ -4,11 +4,13 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.operation.Operation;
 import org.springframework.restdocs.payload.AbstractFieldsSnippet;
 import org.springframework.restdocs.payload.FieldDescriptor;
+import org.springframework.restdocs.payload.FieldTypeResolver;
 import org.springframework.restdocs.payload.JsonFieldType;
 import sixman.helfit.restdocs.support.ConstrainedFields;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CustomRequestFieldsSnippet extends AbstractFieldsSnippet {
@@ -76,25 +78,33 @@ public class CustomRequestFieldsSnippet extends AbstractFieldsSnippet {
 
         for (String key : attributes.keySet()) {
             FieldDescriptor fieldDescriptor = constrainedFields.withPath(key);
-            String type = key.getClass().getSimpleName();
-            String value = attributes.get(key);
+            String values = attributes.get(key);
 
-            if (Pattern.compile(",\\s*Optional$").matcher(attributes.get(key)).find()) {
-                value = value.replaceAll(",\\s*Optional$", "");
+            String[] regexes = {",\\s*Optional$", ",\\s*\\w+$"};
 
-                fieldDescriptor.optional();
+            for (int i = 0; i < regexes.length; i++) {
+                Pattern pattern = Pattern.compile(regexes[i]);
+                Matcher matcher = pattern.matcher(values);
+
+                switch (i) {
+                    case 0:
+                        if (matcher.find()) {
+                            fieldDescriptor.optional();
+                            values = values.replaceAll(regexes[i], "");
+                        }
+                    case 1:
+                        if (matcher.find()) {
+                            fieldDescriptor.type(matcher.group().replaceAll(",\\s*", ""));
+                            values = values.replaceAll(regexes[i], "");
+                        } else {
+                            fieldDescriptor.type(JsonFieldType.OBJECT);
+                        }
+                    default:
+                        break;
+                }
             }
 
-            fieldDescriptor.description(value);
-
-            Optional<JsonFieldType> field =
-                Arrays.stream(JsonFieldType.values())
-                    .filter(v -> v.name().equalsIgnoreCase(type))
-                    .findAny();
-
-            field.ifPresent(fieldDescriptor::type);
-
-            attrList.add(fieldDescriptor);
+            attrList.add(fieldDescriptor.description(values));
         }
 
         return attrList.toArray(FieldDescriptor[]::new);

@@ -37,7 +37,6 @@ import sixman.helfit.restdocs.config.RestDocsConfig;
 import sixman.helfit.security.entity.ProviderType;
 import sixman.helfit.security.entity.RoleType;
 import sixman.helfit.security.entity.UserPrincipal;
-import sixman.helfit.security.properties.AppProperties;
 import sixman.helfit.security.token.AuthToken;
 import sixman.helfit.security.token.AuthTokenProvider;
 
@@ -63,9 +62,6 @@ public abstract class ControllerTest {
 
     @Autowired
     protected RestDocumentationResultHandler restDocs;
-
-    @Spy
-    protected AppProperties appProperties;
 
     @Spy
     protected AuthTokenProvider authTokenProvider;
@@ -191,7 +187,7 @@ public abstract class ControllerTest {
         );
     }
 
-    protected <T> ResultActions postResource(String url, T body, Object... pathVariables) throws Exception {
+    protected <T> ResultActions postResources(String url, T body, Object... pathVariables) throws Exception {
         return mockMvc.perform(
             RestDocumentationRequestBuilders.post(url, pathVariables)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -223,7 +219,7 @@ public abstract class ControllerTest {
         );
     }
 
-    protected ResultActions getResource(String url, Object... pathVariables) throws Exception {
+    protected ResultActions getResources(String url, Object... pathVariables) throws Exception {
         return mockMvc.perform(
             RestDocumentationRequestBuilders.get(url, pathVariables)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -241,14 +237,6 @@ public abstract class ControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(body))
-        );
-    }
-
-    protected ResultActions patchResource(String url, Object... pathVariables) throws Exception {
-        return mockMvc.perform(
-            RestDocumentationRequestBuilders.patch(url, pathVariables)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
         );
     }
 
@@ -282,7 +270,7 @@ public abstract class ControllerTest {
         );
     }
 
-    protected ResultActions deleteResource(String url, Object... pathVariables) throws Exception {
+    protected ResultActions deleteResources(String url, Object... pathVariables) throws Exception {
         return mockMvc.perform(
             RestDocumentationRequestBuilders.delete(url, pathVariables)
                 .contentType(MediaType.APPLICATION_JSON)
