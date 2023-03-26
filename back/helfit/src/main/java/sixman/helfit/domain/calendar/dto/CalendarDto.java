@@ -13,12 +13,15 @@ public class CalendarDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Post {
+        @NotNull(message = "Null 값은 입력할 수 없습니다.")
         @NotBlank
         private String title;
 
+        @NotNull(message = "Null 값은 입력할 수 없습니다.")
         @NotBlank
         private String content;
 
+        @NotNull(message = "Null 값은 입력할 수 없습니다.")
         @Positive
         private Integer kcal;
 

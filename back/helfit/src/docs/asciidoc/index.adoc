@@ -106,6 +106,19 @@ operation::calendar-controller-test/delete-calendar-test[snippets='curl-request,
 === 챗봇 질문
 operation::chat-gpt-controller-test/send-question[snippets='curl-request,custom-request-fields,httpie-request,http-request,http-response,request-body,response-body,response-fields-data,response-fields-header']
 
+== Physical
+=== 회원 개인(신체)정보 생성
+operation::physical-controller-test/post-physical-test[snippets='curl-request,custom-request-fields,httpie-request,http-request,http-response,request-body,response-body,response-fields-data,response-fields-header']
+=== 회원 개인(신체)정보 조회 (당일 기준)
+operation::physical-controller-test/get-physical-within-today-test[snippets='curl-request,httpie-request,http-request,http-response,request-body,response-body']
+=== 회원 개인(신체)정보 조회 (최신 수정일 기준)
+operation::physical-controller-test/get-physical-test[snippets='curl-request,httpie-request,http-request,http-response,request-body,response-body']
+=== 회원 개인(신체)정보 조회 (페이징)
+operation::physical-controller-test/get-all-physical-test[snippets='curl-request,httpie-request,http-request,http-response,request-body,response-body,response-fields-data,response-fields-header']
+=== 회원 개인(신체)정보 수정
+operation::physical-controller-test/patch-physical-test[snippets='curl-request,custom-request-fields,httpie-request,http-request,http-response,request-body,response-body,response-fields-data,response-fields-header']
+
+
 == Calculator
 === 계산기 결과 생성
 operation::calculator-controller-test/post-result-test[]
