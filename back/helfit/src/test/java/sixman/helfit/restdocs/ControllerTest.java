@@ -20,7 +20,6 @@ import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -42,13 +41,11 @@ import sixman.helfit.security.properties.AppProperties;
 import sixman.helfit.security.token.AuthToken;
 import sixman.helfit.security.token.AuthTokenProvider;
 
-import javax.inject.Inject;
 import javax.servlet.http.Cookie;
 import java.time.LocalDateTime;
 import java.util.*;
 
 import static sixman.helfit.security.properties.AppProperties.*;
-import static sixman.helfit.utils.HeaderUtil.getAccessToken;
 
 
 @Import({RestDocsConfig.class, AopAutoConfiguration.class})
