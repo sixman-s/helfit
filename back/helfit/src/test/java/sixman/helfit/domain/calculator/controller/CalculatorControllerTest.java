@@ -56,7 +56,7 @@ public class CalculatorControllerTest extends ControllerTest {
         physical = new Physical(1L, 19961213, 173, 78, Physical.Gender.MALE, user);
         calculator = new Calculator(1L, Goal.DIET, ActivityLevel.VERY_ACTIVE, 3011.0, user, physical);
         calculatorDtoResponse = new CalculatorDto.Response(3011.0, 1L, ActivityLevel.VERY_ACTIVE,
-                Goal.DIET, LocalDateTime.now(), LocalDateTime.now());
+            Goal.DIET, LocalDateTime.now(), LocalDateTime.now());
     }
 
     @WithMockUserCustom
@@ -68,28 +68,24 @@ public class CalculatorControllerTest extends ControllerTest {
 
 
         given(calculatorService.createResult(Mockito.any(Calculator.class), Mockito.any(User.class), Mockito.any(Physical.class)))
-                .willReturn(calculator);
+            .willReturn(calculator);
         given(calculatorMapper.calculatorPostToCalculator(Mockito.any(CalculatorDto.Post.class)))
-                .willReturn(calculator);
+            .willReturn(calculator);
         given(physicalService.findPhysicalByUserId(anyLong()))
-                .willReturn(physical);
+            .willReturn(physical);
         given(calculatorMapper.calculatorToResponse(Mockito.any(Calculator.class)))
-                .willReturn(calculatorDtoResponse);
+            .willReturn(calculatorDtoResponse);
 
         postResources(DEFAULT_URL + "/{user-id}", requestBody, user.getUserId())
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.body.data").isNotEmpty())
-                .andDo(restDocs.document(
-                        customRequestFields("custom-request",
-                                genCustomRequestFields(
-                                        CalculatorDto.Post.class,
-                                        new LinkedHashMap<>(){{
-                                            put("goal","운동 목표");
-                                            put("activityLevel","활동 정도");
-                                        }}
-                                )
-                        )
-                ));
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.body.data").isNotEmpty())
+            .andDo(restDocs.document(
+                customRequestFields(CalculatorDto.Post.class, new LinkedHashMap<>() {{
+                        put("goal", "운동 목표, String");
+                        put("activityLevel", "활동 정도, String");
+                    }}
+                )
+            ));
     }
 
     @WithMockUserCustom
@@ -98,16 +94,16 @@ public class CalculatorControllerTest extends ControllerTest {
     void getResultTest() throws Exception {
 
         given(calculatorService.findUserResult(anyLong()))
-                .willReturn(calculator);
+            .willReturn(calculator);
         given(calculatorMapper.calculatorToResponse(Mockito.any(Calculator.class)))
-                .willReturn(calculatorDtoResponse);
+            .willReturn(calculatorDtoResponse);
         getResources(DEFAULT_URL + "/{user-id}", 1L)
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.body.data").isNotEmpty())
-                .andDo(restDocs.document(
-                        genRelaxedResponseHeaderFields("header"),
-                        genRelaxedResponseBodyFields("body.data")
-                ));
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.body.data").isNotEmpty())
+            .andDo(restDocs.document(
+                genRelaxedResponseHeaderFields("header"),
+                genRelaxedResponseBodyFields("body.data")
+            ));
     }
 
     @WithMockUserCustom
@@ -119,24 +115,24 @@ public class CalculatorControllerTest extends ControllerTest {
         Calculator updatedCalculator = new Calculator(1L, Goal.BULK, ActivityLevel.EXTRA_ACTIVE, 3451.0, user, physical);
 
         given(calculatorService.findVerifiedCalculatorWithUserId(Mockito.anyLong(), Mockito.anyLong()))
-                .willReturn(calculator);
+            .willReturn(calculator);
         given(calculatorMapper.calculatorPatchToCalculator(Mockito.any(CalculatorDto.Patch.class)))
-                .willReturn(calculator);
+            .willReturn(calculator);
         given(calculatorService.updateCalculator(Mockito.any(Calculator.class), Mockito.any(Calculator.class)))
-                .willReturn(calculator);
+            .willReturn(calculator);
         given(calculatorService.updateResult(Mockito.any(Calculator.class), Mockito.any(User.class), Mockito.any(Physical.class)))
-                .willReturn(updatedCalculator);
+            .willReturn(updatedCalculator);
         given(physicalService.findPhysicalByUserId(Mockito.anyLong()))
-                .willReturn(physical);
+            .willReturn(physical);
         given(calculatorMapper.calculatorToResponse(Mockito.any(Calculator.class)))
-                .willReturn(calculatorDtoResponse);
+            .willReturn(calculatorDtoResponse);
         patchResources(DEFAULT_URL + "/{calculator-id}", requestBody, calculator.getCalculatorId())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.body.data").isNotEmpty())
-                .andDo(restDocs.document(
-                        genRelaxedResponseHeaderFields("header"),
-                        genRelaxedResponseBodyFields("body.data")
-                ));
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.body.data").isNotEmpty())
+            .andDo(restDocs.document(
+                genRelaxedResponseHeaderFields("header"),
+                genRelaxedResponseBodyFields("body.data")
+            ));
     }
 
     @WithMockUserCustom
@@ -149,27 +145,29 @@ public class CalculatorControllerTest extends ControllerTest {
         doNothing().when(calculatorService).deleteResult(anyLong());
 
 
-        deleteResource(DEFAULT_URL + "/{user-id}", user.getUserId())
-                .andExpect(status().isNoContent())
-                .andDo(restDocs.document());
+        deleteResources(DEFAULT_URL + "/{user-id}", user.getUserId())
+            .andExpect(status().isNoContent())
+            .andDo(restDocs.document());
 
     }
-    private ResponseFieldsSnippet genRelaxedResponseHeaderFields(String beneath){
+
+    private ResponseFieldsSnippet genRelaxedResponseHeaderFields(String beneath) {
         return relaxedResponseFields(
-                beneathPath(beneath).withSubsectionId("header"),
-                fieldWithPath("code").type(JsonFieldType.NUMBER).description("응답 코드"),
-                fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지")
+            beneathPath(beneath).withSubsectionId("header"),
+            fieldWithPath("code").type(JsonFieldType.NUMBER).description("응답 코드"),
+            fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지")
         );
     }
+
     private ResponseFieldsSnippet genRelaxedResponseBodyFields(String beneath) {
         return relaxedResponseFields(
-                beneathPath(beneath).withSubsectionId("data"),
-                fieldWithPath("result").type(JsonFieldType.NUMBER).description("계산 결과"),
-                fieldWithPath("calculatorId").type(JsonFieldType.NUMBER).description("계산기 아이디"),
-                fieldWithPath("activityLevel").type(JsonFieldType.STRING).description("활동 정도"),
-                fieldWithPath("goal").type(JsonFieldType.STRING).description("운동 목표"),
-                fieldWithPath("createdAt").type(JsonFieldType.STRING).description("생성 일자"),
-                fieldWithPath("modifiedAt").type(JsonFieldType.STRING).description("최종 수정 일자")
+            beneathPath(beneath).withSubsectionId("data"),
+            fieldWithPath("result").type(JsonFieldType.NUMBER).description("계산 결과"),
+            fieldWithPath("calculatorId").type(JsonFieldType.NUMBER).description("계산기 아이디"),
+            fieldWithPath("activityLevel").type(JsonFieldType.STRING).description("활동 정도"),
+            fieldWithPath("goal").type(JsonFieldType.STRING).description("운동 목표"),
+            fieldWithPath("createdAt").type(JsonFieldType.STRING).description("생성 일자"),
+            fieldWithPath("modifiedAt").type(JsonFieldType.STRING).description("최종 수정 일자")
         );
     }
 }
