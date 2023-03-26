@@ -7,11 +7,23 @@
   column-gap: 20px !important;
   padding: 40px 60px 40px 300px;
   grid-area: auto;
+  width: 100%;
 }
 
 @media screen and (max-width: 1440px) {
   .container {
     grid-template-columns: 1fr;
     grid-template-rows: repeat(4, 1fr);
+    place-items: center;
+    width: 100%;
+  }
+}
+@media screen and (max-width: 1024px) {
+  .container {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(4, 1fr);
+    padding: 40px 60px;
+    place-items: center;
+    width: 100%;
   }
 }
