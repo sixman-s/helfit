@@ -6,18 +6,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.restdocs.payload.PayloadDocumentation;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import sixman.helfit.domain.chat_gpt.dto.ChatGptDto;
 import sixman.helfit.domain.chat_gpt.dto.ChatGptDto.ResponseChoice;
 import sixman.helfit.domain.chat_gpt.service.ChatGptService;
 import sixman.helfit.restdocs.ControllerTest;
-import sixman.helfit.restdocs.custom.CustomRequestFieldsSnippet;
 
 import java.time.LocalDate;
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
