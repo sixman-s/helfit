@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import s from '../../../styles/mypage/C_Comment.module.css';
 import Pagenation from '../Pagination';
@@ -14,17 +15,20 @@ interface BoardData {
   userProfileImage: string | null;
   text: string | null;
   commentBody: string;
+  categoryId: number;
 }
-
-const url = process.env.NEXT_PUBLIC_URL;
-const accessToken = localStorage.getItem('accessToken');
 
 const MyComment = () => {
   const [count, setCount] = useState(1);
   const [info, setInfo] = useState<BoardData[]>([]);
   const [totalCount, setTotalCount] = useState(0);
 
+  const router = useRouter();
+
   useEffect(() => {
+    const url = process.env.NEXT_PUBLIC_URL;
+    const accessToken = localStorage.getItem('accessToken');
+
     if (count <= 0) {
       setCount(1);
       console.log(count);
@@ -59,6 +63,27 @@ const MyComment = () => {
 
   const nextPage = () => {
     if (count * 5 < totalCount) setCount(count + 1);
+  };
+
+  const myPostView = (el: BoardData) => (url) => {
+    console.log(el.boardId);
+    console.log(el.categoryId);
+
+    const categoryMapper = {
+      1: 'health',
+      2: 'crossfit',
+      4: 'pilates',
+      5: 'oww',
+      6: 'diet'
+    };
+
+    const category = categoryMapper[el.categoryId];
+    console.log(category);
+
+    axios
+      .get(`${url}/api/v1/board/${el.categoryId}/${el.boardId}`)
+      .then(() => router.push(`/community/${category}/${el.boardId}`))
+      .catch((err) => alert(err));
   };
 
   return (

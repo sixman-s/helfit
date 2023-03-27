@@ -16,9 +16,6 @@ interface BoardData {
   categoryId: number;
 }
 
-const url = process.env.NEXT_PUBLIC_URL;
-const accessToken = localStorage.getItem('accessToken');
-
 const MyBoard = (): JSX.Element => {
   const [count, setCount] = useState(1);
   const [info, setInfo] = useState<BoardData[]>([]);
@@ -40,6 +37,9 @@ const MyBoard = (): JSX.Element => {
     text.replace(pattern, (match, entity) => escapeMap[`&${entity};`] || match);
 
   useEffect(() => {
+    const url = process.env.NEXT_PUBLIC_URL;
+    const accessToken = localStorage.getItem('accessToken');
+
     if (count <= 0) {
       setCount(1);
       console.log(count);
@@ -76,7 +76,7 @@ const MyBoard = (): JSX.Element => {
     if (count * 5 < totalCount) setCount(count + 1);
   };
 
-  const myPostView = (el: BoardData) => () => {
+  const myPostView = (el: BoardData) => (url) => {
     console.log(el.boardId);
     console.log(el.categoryId);
 
