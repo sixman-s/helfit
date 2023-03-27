@@ -63,9 +63,6 @@ public class User extends Auditable {
     @Enumerated(EnumType.STRING)
     private UserStatus userStatus = UserStatus.USER_ACTIVE;
 
-    @OneToMany(mappedBy = "board",cascade = {CascadeType.PERSIST,CascadeType.REMOVE}, fetch = FetchType.EAGER)
-    private List<Like> likes = new ArrayList<>();
-
     public User(
         String id,
         String email,
