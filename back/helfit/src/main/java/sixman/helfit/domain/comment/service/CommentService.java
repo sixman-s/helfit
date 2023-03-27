@@ -1,5 +1,8 @@
 package sixman.helfit.domain.comment.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sixman.helfit.domain.board.entity.Board;
@@ -62,8 +65,13 @@ public class CommentService {
         return findComment;
     }
 
-    public List<Comment> findCommentsByUserId(UserPrincipal userPrincipal){
-        return commentRepository.findCommentsByUserId(userPrincipal.getUser().getUserId());
+    public List<Comment> findCommentsByUserId(UserPrincipal userPrincipal,int page){
+        Page<Comment> pageComment = commentRepository.findCommentsByUserId(userPrincipal.getUser().getUserId(), PageRequest.of(page,10,
+                Sort.by("commentId").descending()));
+        return pageComment.getContent();
+    }
+    public Integer getCommentsCountByUserId(UserPrincipal userPrincipal){
+        return commentRepository.getCommentCountByUserId(userPrincipal.getUser().getUserId());
     }
 
 }

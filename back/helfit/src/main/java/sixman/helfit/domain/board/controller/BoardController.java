@@ -29,12 +29,11 @@ public class BoardController {
     private final static String BOARD_DEFAULT_URL = "/api/v1/boards";
     private final BoardMapper mapper;
     private final BoardService boardService;
-    private final FileService fileService;
 
-    public BoardController(BoardMapper mapper, BoardService boardService, FileService fileService) {
+
+    public BoardController(BoardMapper mapper, BoardService boardService) {
         this.mapper = mapper;
         this.boardService = boardService;
-        this.fileService = fileService;
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -58,13 +57,7 @@ public class BoardController {
 //        return ResponseEntity.ok().body(ApiResponse.ok("resource", imagePath));
 //    }
 //
-//    @DeleteMapping("/image/{board-id}")
-//    @PreAuthorize("isAuthenticated()")
-//    public ResponseEntity<?> updateUserProfileImage( @Positive @PathVariable ("board-id") Long boardId) {
-//        boardService.updateBoardProfileImage(boardId, null);
-//
-//        return ResponseEntity.ok().body(ApiResponse.noContent());
-//    }
+
 
     @GetMapping("/{category-id}/{board-id}")
     public ResponseEntity getBoard(@Positive @PathVariable ("category-id") Long categoryId,
@@ -80,12 +73,26 @@ public class BoardController {
 
         return new ResponseEntity(mapper.boardsToResponses(listBoards),HttpStatus.OK);
     }
+
+    @GetMapping("/users")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity getBoardsByUserId(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                            @Positive @RequestParam int page) {
+        List<Board> listBoard = boardService.findBoardByUserId(userPrincipal,page-1);
+        Integer count = boardService.getCountByUserId(userPrincipal);
+
+        BoardDto.BoardListResponse response = new BoardDto.BoardListResponse(mapper.boardsToResponses(listBoard),count);
+
+        return new ResponseEntity(response, HttpStatus.OK);
+    }
+
+
     @GetMapping("{category-id}")
     public ResponseEntity getBoardByCategory(@Positive @PathVariable ("category-id") Long categoryId,
                                              @Positive @RequestParam int page) {
         Page<Board> pageBoards = boardService.findBoards(categoryId,page-1);
         List<Board> listBoards = pageBoards.getContent();
-        Long boardsCount = boardService.findBoardsCount(categoryId);
+        Integer boardsCount = boardService.findBoardsCount(categoryId);
 
         BoardDto.BoardListResponse response = new BoardDto.BoardListResponse(mapper.boardsToResponses(listBoards),boardsCount);
         return new ResponseEntity(response,HttpStatus.OK);
@@ -151,6 +158,48 @@ public class BoardController {
         List<Board> boards = boardService.findBoardFromLikes(userPrincipal);
 
         return new ResponseEntity(mapper.boardsToResponses(boards),HttpStatus.OK);
+    }
+
+    @GetMapping("/search/nickname")
+    public ResponseEntity getBoardsWithNickname(@RequestParam String userNickname,
+                                                @Positive @RequestParam int page) {
+        List<Board> listBoard = boardService.findBoardByNickname(userNickname,page-1);
+        Integer count = boardService.getBoardCountByNickname(userNickname);
+        BoardDto.BoardListResponse response = new BoardDto.BoardListResponse(mapper.boardsToResponses(listBoard),count);
+
+        return new ResponseEntity(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/search/tag")
+    public ResponseEntity getBoardsWithTagName(@RequestParam String tagName,
+                                               @Positive @RequestParam int page) {
+        List<Board> listBoard = boardService.findBoardByTagName(tagName,page-1);
+        Integer count = boardService.getCountByTagName(tagName);
+        BoardDto.BoardListResponse response = new BoardDto.BoardListResponse(mapper.boardsToResponses(listBoard),count);
+
+        return new ResponseEntity(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/search/title")
+    public ResponseEntity getBoardsWithTitle(@RequestParam String title,
+                                             @Positive @RequestParam int page) {
+        List<Board> listBoard = boardService.findBoardByTitle(title,page-1);
+        Integer count = boardService.getCountByTitle(title);
+
+        BoardDto.BoardListResponse response = new BoardDto.BoardListResponse(mapper.boardsToResponses(listBoard),count);
+
+        return new ResponseEntity(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/search/text")
+    public ResponseEntity getBoardsWithText(@RequestParam String text,
+                                            @Positive @RequestParam int page) {
+        List<Board> listBoard = boardService.findBoardByText(text,page-1);
+        Integer count = boardService.getCountByText(text);
+
+        BoardDto.BoardListResponse response = new BoardDto.BoardListResponse(mapper.boardsToResponses(listBoard),count);
+
+        return new ResponseEntity(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/likes/{board-id}")

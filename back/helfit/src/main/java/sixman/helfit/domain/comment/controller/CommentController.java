@@ -67,10 +67,13 @@ public class CommentController {
 
     @GetMapping("/users")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity getMyComments(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        List<Comment> listComment = commentService.findCommentsByUserId(userPrincipal);
+    public ResponseEntity getMyComments(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                        @Positive @RequestParam int page){
+        List<Comment> listComment = commentService.findCommentsByUserId(userPrincipal,page-1);
+        Integer count = commentService.getCommentsCountByUserId(userPrincipal);
+        CommentDto.CommentListResponse response = new CommentDto.CommentListResponse(mapper.commentsToResponseDtos(listComment),count);
 
-        return new ResponseEntity(mapper.commentsToResponseDtos(listComment), HttpStatus.OK);
+        return new ResponseEntity(response, HttpStatus.OK);
     }
 
 
