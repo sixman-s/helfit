@@ -1,7 +1,9 @@
 package sixman.helfit.domain.user.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.lang.Nullable;
 import sixman.helfit.global.annotations.ValidEnum;
@@ -17,6 +19,8 @@ import static sixman.helfit.domain.user.entity.User.*;
 
 public class UserDto {
     @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Signup {
         @NotBlank
         private String id;
@@ -37,22 +41,34 @@ public class UserDto {
         @NotNull
         @ValidEnum(
             enumClass = PersonalInfoAgreement.class,
-            message = "개인정보 제공 동의 항목은 필수입력값 입니다. : 기대값: ['Y']",
+            message = "개인정보 제공 동의 항목은 '필수' 입력값입니다. : 기대값 = ['Y']",
             ignoreCase = true
         )
         private String personalInfoAgreement;
     }
 
     @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Login {
         @NotBlank
         private String id;
 
         @NotBlank
         private String password;
+
+        @Nullable
+        @ValidEnum(
+            enumClass = Activate.class,
+            message = "휴면계정에서 '활성화' 계정으로 전환 시 입력 기대값입니다. : 기대값 = ['Y'] ",
+            ignoreCase = true
+        )
+        private String activate;
     }
 
     @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Update {
         @Nullable
         @Pattern(regexp = "^\\S+(\\s?\\S+)*$", message = "별명은 공백을 포함할 수 없습니다.")
@@ -60,6 +76,8 @@ public class UserDto {
     }
 
     @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Password {
         @Pattern(
             regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!@#$%^&*()_\\-\"',.+/])[A-Za-z\\d!@#$%^&*()_\\-\"',.+/]{8,}$",
@@ -79,5 +97,6 @@ public class UserDto {
         private String emailVerifiedYn;
         private String profileImageUrl;
         private String providerType;
+        private String userStatus;
     }
 }

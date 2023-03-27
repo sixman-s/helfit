@@ -58,6 +58,7 @@ public class StatService {
         List<Stat> boardStatList = new ArrayList<>();
         for(Board board : boardList){
             Stat boardStat = new Stat();
+            boardStat.setBoardId(board.getBoardId());
             boardStat.setBoardImageUrl(board.getBoardImageUrl());
             boardStat.setTitle(board.getTitle());
             boardStat.setText(board.getText());

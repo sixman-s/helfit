@@ -2,7 +2,7 @@ running: dev
 
 domain:
   front: http://helfit.life
-  back: http://ec2-3-34-96-242.ap-northeast-2.compute.amazonaws.com
+  back: https://back.helfit.life
 
 chat-gpt:
   secret-key: ${CHAT_GPT_SECRET_KEY}
@@ -56,8 +56,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ${GMAIL_ID}
-    password: ${GMAIL_PASSWORD}
+    username: ${GMAIL_ID}           # 앱 비밀번호 발급 google gmail 계정
+    password: ${GMAIL_PASSWORD}     # 앱 비밀번호
     properties:
       mail:
         smtp:
@@ -65,9 +65,9 @@ spring:
             enable: true
             required: true
           auth: true
-          connection-timeout: 5000
+          connectiontimeout: 5000
           timeout: 5000
-          write timeout: 5000
+          writetimeout: 5000
 
   security:
     oauth2:
@@ -133,4 +133,4 @@ app:
     refreshTokenExpiry: 604800000
   oauth2:
     authorizedRedirectUris:
-      - http://localhost:3000/oauth2/receive
+      - http://helfit.life/oauth2/receive

@@ -17,12 +17,12 @@ public class AuthToken {
 
     private static final String AUTHORITIES_KEY = "role";
 
-    AuthToken(String id, Date expiry, Key key) {
+    public AuthToken(String id, Date expiry, Key key) {
         this.key = key;
         this.token = createAuthToken(id, expiry);
     }
 
-    AuthToken(String id, String role, Date expiry, Key key) {
+    public AuthToken(String id, String role, Date expiry, Key key) {
         this.key = key;
         this.token = createAuthToken(id, role, expiry);
     }
@@ -45,7 +45,7 @@ public class AuthToken {
     }
 
     public boolean validate() {
-        return this.getTokenClaims() != null;
+        return getTokenClaims() != null;
     }
 
     public Claims getTokenClaims() {
@@ -59,12 +59,14 @@ public class AuthToken {
             log.info("Invalid JWT signature.");
         } catch (MalformedJwtException e) {
             log.info("Invalid JWT token.");
-        } catch (ExpiredJwtException e) {
-            log.info("Expired JWT token.");
         } catch (UnsupportedJwtException e) {
             log.info("Unsupported JWT token.");
         } catch (IllegalArgumentException e) {
             log.info("JWT token compact of handler are invalid.");
+        } catch (ExpiredJwtException e) {
+            log.info("Expired JWT token.");
+
+            return e.getClaims();
         }
 
         return null;
@@ -79,8 +81,10 @@ public class AuthToken {
                 .getBody();
         } catch (ExpiredJwtException e) {
             log.info("Expired JWT token.");
+
             return e.getClaims();
         }
+
         return null;
     }
 }

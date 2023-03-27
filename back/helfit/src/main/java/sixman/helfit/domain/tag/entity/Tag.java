@@ -30,7 +30,4 @@ public class Tag extends Auditable {
     @OneToMany(mappedBy = "tag")
     private List<BoardTag> boardTags = new ArrayList<>();
 
-    public void removeBoardTags(BoardTag boardTag) {
-        boardTags.remove(boardTag);
-    }
 }

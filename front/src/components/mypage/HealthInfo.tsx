@@ -1,43 +1,27 @@
+import { userInfo1, userInfo2, userInfo3 } from '@/pages/mypage';
 import { useEffect, useState } from 'react';
 import s from '../../styles/mypage/C_HealthInfo.module.css';
 import CalorieInfo from './CalorieInfo';
 import ModalContainer from './modal/ModalContainer';
 import ModalHInfo from './modal/ModalHInfo';
 
-export interface detailProps {
-  result: {
-    detail: {
-      userId: number;
-    };
-    hDetail: {
-      birth: number;
-      gender: string;
-      height: number;
-      weight: number;
-    };
-    cDetail: {
-      calculatorId: number;
-      activityLevel: string;
-      goal: string;
-    };
-  };
-}
+// export interface calorieProps {
+//   result: number;
+// }
 
 const HealthInfo = ({
   detail,
   hDetail,
   cDetail
 }: {
-  detail;
-  hDetail;
-  cDetail: detailProps;
+  detail: userInfo1['detail'];
+  hDetail: userInfo2['hDetail'];
+  cDetail: userInfo3['cDetail'];
 }) => {
   const [showModal, setShowMoadal] = useState(false);
   const [activity, setActivity] = useState(false);
   const [purpose, setPurpose] = useState(false);
   const [calorie, setCalorie] = useState<number>(0);
-
-  console.log(cDetail);
 
   useEffect(() => {
     if (detail && hDetail && cDetail) {
@@ -67,7 +51,7 @@ const HealthInfo = ({
   const goalInfo = cDetail !== undefined ? goalMapper[cDetail.goal] : {};
 
   // 만 나이 계산기
-  const birth = String(hDetail.birth);
+  const birth = hDetail !== undefined ? String(hDetail.birth) : '';
   const setBirth =
     birth.slice(0, 4) + '/' + birth.slice(4, 6) + '/' + birth.slice(6, 8);
 
@@ -78,13 +62,13 @@ const HealthInfo = ({
   birthDay.setFullYear(today.getFullYear());
   if (today < birthDay) years--;
 
-  const chagneGenderName = hDetail.gender === 'MALE' ? '남' : '여';
+  const chagneGenderName = (hDetail?.gender ?? '') === 'MALE' ? '남' : '여';
 
   const clickModal = () => {
     setShowMoadal(true);
   };
 
-  console.log(activityInfo);
+  if (detail == undefined || hDetail == undefined) return <>test</>;
 
   return (
     <div className={s.hInfoContainer}>
@@ -98,13 +82,13 @@ const HealthInfo = ({
         <div className={s.leftContainer}>
           <img
             className={cDetail ? s.image : s.images}
-            src='../../../assets/mypage/body.png'
+            src='../../../assets/mypage/body1.png'
           ></img>
         </div>
         <div className={s.rightContainer}>
           <div className={s.list}>
             <span className={s.question}>성별</span>
-            {hDetail.gender ? (
+            {hDetail.gender !== 'test' ? (
               <span className={s.answer}>{chagneGenderName}</span>
             ) : (
               <span className={s.nonAnswer}>정보를 입력해주세요.</span>
@@ -112,7 +96,7 @@ const HealthInfo = ({
           </div>
           <div className={s.list}>
             <span className={s.question}>나이</span>
-            {hDetail.birth ? (
+            {years !== 0 ? (
               <span className={s.answer}>{years}</span>
             ) : (
               <span className={s.nonAnswer}>정보를 입력해주세요.</span>
@@ -120,7 +104,7 @@ const HealthInfo = ({
           </div>
           <div className={s.list}>
             <span className={s.question}>키</span>
-            {hDetail.height ? (
+            {hDetail.height !== 0 ? (
               <span className={s.answer}>{hDetail.height}</span>
             ) : (
               <span className={s.nonAnswer}>정보를 입력해주세요.</span>
@@ -128,7 +112,7 @@ const HealthInfo = ({
           </div>
           <div className={s.list}>
             <span className={s.question}>몸무게</span>
-            {hDetail.weight ? (
+            {hDetail.weight !== 0 ? (
               <span className={s.answer}>{hDetail.weight}</span>
             ) : (
               <span className={s.nonAnswer}>정보를 입력해주세요.</span>

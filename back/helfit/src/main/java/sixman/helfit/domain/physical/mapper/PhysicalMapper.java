@@ -1,13 +1,14 @@
 package sixman.helfit.domain.physical.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 import sixman.helfit.domain.physical.dto.PhysicalDto;
 import sixman.helfit.domain.physical.entity.Physical;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface PhysicalMapper {
     PhysicalMapper INSTANCE = Mappers.getMapper(PhysicalMapper.class);
 

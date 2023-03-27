@@ -21,19 +21,21 @@ public class BoardDto {
     public static class Post {
         @NotNull
         @Size(min = 1, max = 2000)
-        @NoKoreanCurseWords
+        //@NoKoreanCurseWords
         private String title;
 
         @NotNull
         @Size(min = 1, max = 16383)
-        @NoKoreanCurseWords
+        //@NoKoreanCurseWords
         private String text;
 
         @Nullable
         private String boardImageUrl;
 
         @Nullable
-        private List<BoardTagDto> boardTags;
+       //@NoKoreanCurseWords
+        @Size(max = 2000)
+        private List<String> boardTags;
 
     }
 
@@ -43,6 +45,10 @@ public class BoardDto {
     public static class Response {
         private long boardId;
         private long userId;
+        private long view;
+        private int likesCount;
+        private List<BoardDto.BoardLikeMember> likeUserInfo;
+        private String  userProfileImage;
         private String userNickname;
         private String title;
         private String text;
@@ -56,18 +62,33 @@ public class BoardDto {
     @AllArgsConstructor
     public static class Patch {
         @Size(min = 1, max = 2000)
-        @NoKoreanCurseWords
+        //@NoKoreanCurseWords
         private String title;
         @Size(min = 1, max = 20000)
-        @NoKoreanCurseWords
+        //@NoKoreanCurseWords
         private String text;
         private String boardImageUrl;
-        private List<BoardTagDto> boardTags;
+        private List<String> boardTags;
     }
 
     @Getter
     @AllArgsConstructor
     public static class View {
         private long view;
+    }
+
+    @AllArgsConstructor
+    @Getter
+    public static class BoardListResponse {
+        private List<BoardDto.Response> boardResponses;
+        private Long count;
+    }
+
+    @AllArgsConstructor
+    @Getter
+    public static class BoardLikeMember {
+        private Long userId;
+        @Nullable
+        private String userProfileImgUrl;
     }
 }

@@ -2,6 +2,7 @@ package sixman.helfit.domain.calculator.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import sixman.helfit.domain.calculator.enums.ActivityLevel;
 import sixman.helfit.domain.calculator.enums.Goal;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 public class CalculatorDto {
     @Getter
     @Setter
+    @AllArgsConstructor
     public static class Post{
         private Goal goal;
         private ActivityLevel activityLevel;
@@ -25,6 +27,7 @@ public class CalculatorDto {
         private ActivityLevel activityLevel;
     }
     @Getter
+    @Setter
     @AllArgsConstructor
     public static class Response{
         private double result;

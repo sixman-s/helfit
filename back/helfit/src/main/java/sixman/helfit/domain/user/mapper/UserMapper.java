@@ -11,6 +11,7 @@ public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
     User userDtoSignupToUser(UserDto.Signup requestBody);
+
     User userDtoPatchToUser(UserDto.Update requestBody);
 
     User userDtoPasswordToUser(UserDto.Password requestBody);
