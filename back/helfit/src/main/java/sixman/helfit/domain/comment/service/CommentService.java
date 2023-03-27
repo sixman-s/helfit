@@ -1,6 +1,10 @@
 package sixman.helfit.domain.comment.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import sixman.helfit.domain.board.entity.Board;
 import sixman.helfit.domain.board.service.BoardService;
 import sixman.helfit.domain.comment.entity.Comment;
@@ -9,6 +13,7 @@ import sixman.helfit.domain.user.entity.User;
 import sixman.helfit.domain.user.service.UserService;
 import sixman.helfit.exception.BusinessLogicException;
 import sixman.helfit.exception.ExceptionCode;
+import sixman.helfit.security.entity.UserPrincipal;
 
 import java.util.List;
 import java.util.Optional;
@@ -39,7 +44,7 @@ public class CommentService {
 
         return commentRepository.save(findComment);
     }
-
+    @Transactional(readOnly = true)
     public List<Comment> getComments(long boardId){
         return commentRepository.findComments(boardId);
     }
@@ -49,9 +54,8 @@ public class CommentService {
 
         commentRepository.delete(comment);
 
-
     }
-
+    @Transactional(readOnly = true)
     public Comment findVerifiedComment (long userId,long boardId,long commentId){
         Optional<Comment> optionalComment = commentRepository.findComment(boardId,userId,commentId);
         Comment findComment = optionalComment.orElseThrow(() ->new BusinessLogicException(ExceptionCode.COMMENTS_NOT_FOUND));
@@ -59,6 +63,15 @@ public class CommentService {
             throw new BusinessLogicException(ExceptionCode.MISS_MATCH_USERID);
         }
         return findComment;
+    }
+
+    public List<Comment> findCommentsByUserId(UserPrincipal userPrincipal,int page){
+        Page<Comment> pageComment = commentRepository.findCommentsByUserId(userPrincipal.getUser().getUserId(), PageRequest.of(page,10,
+                Sort.by("commentId").descending()));
+        return pageComment.getContent();
+    }
+    public Integer getCommentsCountByUserId(UserPrincipal userPrincipal){
+        return commentRepository.getCommentCountByUserId(userPrincipal.getUser().getUserId());
     }
 
 }
