@@ -20,11 +20,12 @@ import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.MultiValueMap;
@@ -34,21 +35,21 @@ import org.springframework.web.multipart.MultipartFile;
 import sixman.helfit.domain.user.dto.UserDto;
 import sixman.helfit.domain.user.entity.User;
 import sixman.helfit.domain.user.entity.UserRefreshToken;
+import sixman.helfit.exception.BusinessLogicException;
+import sixman.helfit.exception.ExceptionCode;
 import sixman.helfit.restdocs.config.RestDocsConfig;
+import sixman.helfit.restdocs.support.ResultActionsWithUserFunction;
 import sixman.helfit.security.entity.ProviderType;
 import sixman.helfit.security.entity.RoleType;
 import sixman.helfit.security.entity.UserPrincipal;
-import sixman.helfit.security.properties.AppProperties;
 import sixman.helfit.security.token.AuthToken;
 import sixman.helfit.security.token.AuthTokenProvider;
 
-import javax.inject.Inject;
 import javax.servlet.http.Cookie;
 import java.time.LocalDateTime;
 import java.util.*;
 
 import static sixman.helfit.security.properties.AppProperties.*;
-import static sixman.helfit.utils.HeaderUtil.getAccessToken;
 
 
 @Import({RestDocsConfig.class, AopAutoConfiguration.class})
@@ -66,9 +67,6 @@ public abstract class ControllerTest {
 
     @Autowired
     protected RestDocumentationResultHandler restDocs;
-
-    @Spy
-    protected AppProperties appProperties;
 
     @Spy
     protected AuthTokenProvider authTokenProvider;
@@ -164,133 +162,176 @@ public abstract class ControllerTest {
         }
     }
 
+    private void genHeader(MockHttpServletRequestBuilder requestBuilder) throws Exception {
+        String accessToken = Objects.requireNonNull(genJwtToken("access")).getToken();
+        String refreshToken = Objects.requireNonNull(genJwtToken("refresh")).getToken();
+
+        requestBuilder.header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
+        requestBuilder.cookie(new Cookie("refresh_token", refreshToken));
+    }
+
     /*
      * # Post Resources
      *
      */
-    protected <T> ResultActions postResource(String url) throws Exception {
-        return mockMvc.perform(
-            RestDocumentationRequestBuilders.post(url)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-        );
+    protected <T> ResultActionsWithUserFunction<Boolean, ResultActions> postResource(
+        String url,
+        T body,
+        Object... pathVariables
+    ) {
+        return postResources(url, body, null, pathVariables);
     }
 
-    protected <T> ResultActions postResource(String url, T body) throws Exception {
-        return mockMvc.perform(
-            RestDocumentationRequestBuilders.post(url)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(gson.toJson(body))
-        );
+    protected ResultActionsWithUserFunction<Boolean, ResultActions> postResource(
+        String url,
+        MultiValueMap<String, String> parameters,
+        Object... pathVariables
+    ) {
+        return postResources(url, null, parameters, pathVariables);
     }
 
-    protected ResultActions postResource(String url, MultiValueMap<String, String> parameters) throws Exception {
-        return mockMvc.perform(
-            RestDocumentationRequestBuilders.post(url)
-                .params(parameters)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-        );
-    }
+    protected <T> ResultActionsWithUserFunction<Boolean, ResultActions> postResources(
+        String url,
+        T body,
+        MultiValueMap<String, String> parameters,
+        Object... pathVariables
+    ) {
+        return withUser -> {
+            try {
+                MockHttpServletRequestBuilder requestBuilder =
+                    RestDocumentationRequestBuilders.post(url, pathVariables)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON);
 
-    protected <T> ResultActions postResource(String url, T body, Object... pathVariables) throws Exception {
-        return mockMvc.perform(
-            RestDocumentationRequestBuilders.post(url, pathVariables)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(gson.toJson(body))
-        );
+                if (parameters != null) requestBuilder.params(parameters);
+
+                if (body != null) requestBuilder.content(gson.toJson(body));
+
+                if (withUser) genHeader(requestBuilder);
+
+                return mockMvc.perform(requestBuilder);
+            } catch (Exception e) {
+                throw new BusinessLogicException(ExceptionCode.INTERNAL_SERVER_ERROR);
+            }
+        };
     }
 
     /*
      * # Get Resources
      *
      */
-    protected ResultActions getResource(String url) throws Exception {
-        return mockMvc.perform(
-            RestDocumentationRequestBuilders.get(url)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + Objects.requireNonNull(genJwtToken("access")).getToken())
-                .cookie(new Cookie("refresh_token", Objects.requireNonNull(genJwtToken("refresh")).getToken()))
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-        );
+    protected ResultActionsWithUserFunction<Boolean, ResultActions> getResource(
+        String url,
+        Object... pathVariables
+    ) {
+        return getResources(url, null, pathVariables);
     }
 
-    protected ResultActions getResource(String url, MultiValueMap<String, String> parameters) throws Exception {
-        return mockMvc.perform(
-            RestDocumentationRequestBuilders.get(url)
-                .params(parameters)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-        );
+    protected ResultActionsWithUserFunction<Boolean, ResultActions> getResource(
+        String url,
+        MultiValueMap<String, String> parameters,
+        Object... pathVariables
+    ) {
+        return getResources(url, parameters, pathVariables);
     }
 
-    protected ResultActions getResource(String url, Object... pathVariables) throws Exception {
-        return mockMvc.perform(
-            RestDocumentationRequestBuilders.get(url, pathVariables)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-        );
+    protected ResultActionsWithUserFunction<Boolean, ResultActions> getResources(
+        String url,
+        MultiValueMap<String, String> parameters,
+        Object... pathVariables
+    ) {
+        return withUser -> {
+            try {
+                MockHttpServletRequestBuilder requestBuilder =
+                    RestDocumentationRequestBuilders.get(url, pathVariables)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON);
+
+                if (parameters != null) requestBuilder.params(parameters);
+
+                if (withUser) genHeader(requestBuilder);
+
+                return mockMvc.perform(requestBuilder);
+            } catch (Exception e) {
+                throw new BusinessLogicException(ExceptionCode.INTERNAL_SERVER_ERROR);
+            }
+        };
     }
 
     /*
      * # Patch Resources
      *
      */
-    protected <T> ResultActions patchResource(String url, T body) throws Exception {
-        return mockMvc.perform(
-            RestDocumentationRequestBuilders.patch(url)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(gson.toJson(body))
-        );
+    protected <T> ResultActionsWithUserFunction<Boolean, ResultActions> patchResource(
+        String url,
+        T body,
+        Object... pathVariables
+    ) {
+        if (body != null) return patchResources(url, body, pathVariables);
+
+        return patchResources(url, null, pathVariables);
     }
 
-    protected ResultActions patchResource(String url, Object... pathVariables) throws Exception {
-        return mockMvc.perform(
-            RestDocumentationRequestBuilders.patch(url, pathVariables)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-        );
-    }
+    protected <T> ResultActionsWithUserFunction<Boolean, ResultActions> patchResources(
+        String url,
+        T body,
+        Object... pathVariables
+    ) {
+        return withUser -> {
+            try {
+                MockHttpServletRequestBuilder requestBuilder =
+                    RestDocumentationRequestBuilders.patch(url, pathVariables)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON);
 
-    protected <T> ResultActions patchResources(String url, T body, Object... pathVariables) throws Exception {
-        return mockMvc.perform(
-            RestDocumentationRequestBuilders.patch(url, pathVariables)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(gson.toJson(body))
-        );
+                if (body != null) requestBuilder.content(gson.toJson(body));
+
+                if (withUser) genHeader(requestBuilder);
+
+                return mockMvc.perform(requestBuilder);
+
+            } catch (Exception e) {
+                throw new BusinessLogicException(ExceptionCode.INTERNAL_SERVER_ERROR);
+            }
+        };
     }
 
     /*
      * # Delete Resources
      *
      */
-    protected ResultActions deleteResource(String url) throws Exception {
-        return mockMvc.perform(
-            RestDocumentationRequestBuilders.delete(url)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-        );
+    protected <T> ResultActionsWithUserFunction<Boolean, ResultActions> deleteResource(
+        String url,
+        T body,
+        Object... pathVariables
+    ) {
+        if (body != null) return deleteResources(url, body, pathVariables);
+
+        return deleteResources(url, null, pathVariables);
     }
 
-    protected <T> ResultActions deleteResource(String url, T body) throws Exception {
-        return mockMvc.perform(
-            RestDocumentationRequestBuilders.delete(url)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(gson.toJson(body))
-        );
-    }
+    protected <T> ResultActionsWithUserFunction<Boolean, ResultActions> deleteResources(
+        String url,
+        T body,
+        Object... pathVariables
+    ) {
+        return withUser -> {
+            try {
+                MockHttpServletRequestBuilder requestBuilder =
+                    RestDocumentationRequestBuilders.delete(url, pathVariables)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON);
 
-    protected ResultActions deleteResource(String url, Object... pathVariables) throws Exception {
-        return mockMvc.perform(
-            RestDocumentationRequestBuilders.delete(url, pathVariables)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-        );
+                if (body != null) requestBuilder.content(gson.toJson(body));
+
+                if (withUser) genHeader(requestBuilder);
+
+                return mockMvc.perform(requestBuilder);
+
+            } catch (Exception e) {
+                throw new BusinessLogicException(ExceptionCode.INTERNAL_SERVER_ERROR);
+            }
+        };
     }
 
     /*
@@ -298,9 +339,23 @@ public abstract class ControllerTest {
      *
      */
     protected ResultActions fileResource(String url, MultipartFile multipartFile) throws Exception {
-        return mockMvc.perform(
+        MockMultipartHttpServletRequestBuilder requestBuilder =
             RestDocumentationRequestBuilders.multipart(url)
-                .file((MockMultipartFile) multipartFile)
-        );
+                .file((MockMultipartFile) multipartFile);
+
+        genHeader(requestBuilder);
+
+        return mockMvc.perform(requestBuilder);
+    }
+
+    protected ResultActions fileResources(String url, MultipartFile[] multipartFiles) throws Exception {
+        MockMultipartHttpServletRequestBuilder requestBuilder =
+            RestDocumentationRequestBuilders.multipart(url);
+
+        for (MultipartFile file : multipartFiles) requestBuilder.file((MockMultipartFile) file);
+
+        genHeader(requestBuilder);
+
+        return mockMvc.perform(requestBuilder);
     }
 }

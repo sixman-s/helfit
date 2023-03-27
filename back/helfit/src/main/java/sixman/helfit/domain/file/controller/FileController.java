@@ -19,6 +19,10 @@ import java.util.List;
 public class FileController {
     private final FileService fileService;
 
+    /*
+     * # 파일업로드 (단일)
+     *
+     */
     @PostMapping(value = "/upload")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> upload(@RequestParam MultipartFile multipartFile) throws Exception {
@@ -30,6 +34,10 @@ public class FileController {
         return ResponseEntity.ok().body(ApiResponse.ok("resource", imagePath));
     }
 
+    /*
+     * # 파일업로드 (멀티)
+     *
+     */
     @PostMapping(value = "/multi-upload")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> multiUpload(@RequestParam MultipartFile[] multipartFiles) throws Exception {

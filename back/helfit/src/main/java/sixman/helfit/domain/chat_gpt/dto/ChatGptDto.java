@@ -17,7 +17,7 @@ public class ChatGptDto {
     @NoArgsConstructor
     public static class Post implements Serializable {
         @NotBlank
-        @NotNull
+        @NotNull(message = "Null 값은 입력할 수 없습니다.")
         private String question;
 
         @Builder
