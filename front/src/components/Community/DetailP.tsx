@@ -236,23 +236,20 @@ const DetailP = () => {
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
-      e.preventDefault(); // prevent default behavior of Enter key
+      e.preventDefault();
       handleSubmit(e);
     }
   };
 
   const pressEnter: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
     if (e.nativeEvent.isComposing) {
-      // if isComposing is true
-      return; // Prevent operation because it is being combined.
+      return;
     }
 
     if (e.key === 'Enter' && e.shiftKey) {
-      // [shift] + [Enter] just returns
       return;
     } else if (e.key === 'Enter') {
-      // Send message when [Enter] is pressed
-      e.preventDefault(); // prevent default behavior of Enter key
+      e.preventDefault();
       handleSubmit(e);
     }
   };
