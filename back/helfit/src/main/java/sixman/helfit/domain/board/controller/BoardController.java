@@ -161,20 +161,20 @@ public class BoardController {
     }
 
     @GetMapping("/search/nickname")
-    public ResponseEntity getBoardsWithNickname(@RequestParam String userNickname,
+    public ResponseEntity getBoardsWithNickname(@RequestParam String nickname,
                                                 @Positive @RequestParam int page) {
-        List<Board> listBoard = boardService.findBoardByNickname(userNickname,page-1);
-        Integer count = boardService.getBoardCountByNickname(userNickname);
+        List<Board> listBoard = boardService.findBoardByNickname(nickname,page-1);
+        Integer count = boardService.getBoardCountByNickname(nickname);
         BoardDto.BoardListResponse response = new BoardDto.BoardListResponse(mapper.boardsToResponses(listBoard),count);
 
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
     @GetMapping("/search/tag")
-    public ResponseEntity getBoardsWithTagName(@RequestParam String tagName,
+    public ResponseEntity getBoardsWithTagName(@RequestParam String tag,
                                                @Positive @RequestParam int page) {
-        List<Board> listBoard = boardService.findBoardByTagName(tagName,page-1);
-        Integer count = boardService.getCountByTagName(tagName);
+        List<Board> listBoard = boardService.findBoardByTagName(tag,page-1);
+        Integer count = boardService.getCountByTagName(tag);
         BoardDto.BoardListResponse response = new BoardDto.BoardListResponse(mapper.boardsToResponses(listBoard),count);
 
         return new ResponseEntity(response, HttpStatus.OK);
