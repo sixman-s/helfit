@@ -12,6 +12,8 @@ import sixman.helfit.domain.like.entity.Like;
 import sixman.helfit.domain.user.entity.User;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @Entity
@@ -45,12 +47,36 @@ public class Board extends Auditable {
 //    @OneToMany(mappedBy = "board", cascade = CascadeType.PERSIST)
 //    private List<BoardLike> boardLikes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "board", cascade = {CascadeType.REMOVE})
+    @OneToMany(mappedBy = "board", cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
     private List<BoardTag> boardTags = new ArrayList<>();
 
     @OneToMany(mappedBy = "board",cascade = {CascadeType.PERSIST,CascadeType.REMOVE}, fetch = FetchType.EAGER)
     private List<Like> likes = new ArrayList<>();
 
     private long view = 0;
+
+    private long boardPoint;
+
+    public void calculateBoardPoint() {
+        LocalDateTime createdAt = this.getCreatedAt();
+        LocalDateTime now = LocalDateTime.now();
+
+        long daysSinceCreation = ChronoUnit.DAYS.between(createdAt, now);
+
+        if (daysSinceCreation == 0) {
+            this.setBoardPoint((long) (1000+(view*0.25)+(likes.size()* 10L)));
+        } else if (daysSinceCreation == 1) {
+            this.setBoardPoint((long) (800+(view*0.25)+(likes.size()* 10L)));
+        } else if (daysSinceCreation == 2) {
+            this.setBoardPoint((long) (600+(view*0.25)+(likes.size()* 10L)));
+        } else if(daysSinceCreation ==3) {
+            this.setBoardPoint((long) (400+(view*0.25)+(likes.size()* 10L)));
+        } else if(daysSinceCreation ==4) {
+            this.setBoardPoint((long) (200+(view*0.25)+(likes.size()* 10L)));
+        }
+        else {
+            this.setBoardPoint(0);
+        }
+    }
 
 }

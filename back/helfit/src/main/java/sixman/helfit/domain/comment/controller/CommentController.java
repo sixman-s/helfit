@@ -65,5 +65,13 @@ public class CommentController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
+    @GetMapping("/users")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity getMyComments(@AuthenticationPrincipal UserPrincipal userPrincipal){
+        List<Comment> listComment = commentService.findCommentsByUserId(userPrincipal);
+
+        return new ResponseEntity(mapper.commentsToResponseDtos(listComment), HttpStatus.OK);
+    }
+
 
 }

@@ -28,4 +28,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     @Query(value = "SELECT COUNT(*) FROM Board b WHERE b.category.categoryId = :categoryId")
     Long countByCategoryId(@Param("categoryId") Long categoryId);
+
+    @Query(value = "SELECT b FROM Board b WHERE b.category.categoryId = :categoryId ORDER BY b.boardPoint DESC")
+    List<Board> findTop4Boards(@Param("categoryId") Long categoryId, Pageable pageable);
 }
