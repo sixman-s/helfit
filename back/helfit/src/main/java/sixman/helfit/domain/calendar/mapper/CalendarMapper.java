@@ -1,13 +1,14 @@
 package sixman.helfit.domain.calendar.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 import sixman.helfit.domain.calendar.dto.CalendarDto;
 import sixman.helfit.domain.calendar.entity.Calendar;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CalendarMapper {
     CalendarMapper INSTANCE = Mappers.getMapper(CalendarMapper.class);
 

@@ -74,13 +74,13 @@ operation::user-controller-test/login-test[]
 === 회원 토큰 재발급
 operation::user-controller-test/refresh-token-test[snippets='curl-request,http-request,http-response,response-fields-body']
 === 회원 이메일 인증
-operation::user-controller-test/confirm-email-test[snippets='curl-request,http-request,request-parameters']
+operation::user-controller-test/confirm-email-test[snippets='curl-request,httpie-request,http-request,http-response,request-parameters,response-body']
 === 회원 이메일 인증 재발송
 operation::user-controller-test/resend-confirm-email-test[snippets='curl-request,http-request,http-response']
 === 회원 정보 조회
 operation::user-controller-test/get-user-test[snippets='curl-request,http-request,http-response,response-body,response-fields-header,response-fields-data']
 === 회원 정보 수정
-operation::user-controller-test/update-user-test[snippets='curl-request,http-request,http-response,response-body,response-fields-header,response-fields-data']
+operation::user-controller-test/update-user-test[snippets='curl-request,custom-request-fields,httpie-request,http-request,http-response,request-body,response-body,response-fields-data,response-fields-header']
 === 회원 비밀번호 변경
 operation::user-controller-test/update-user-password-test[snippets='curl-request,custom-request-fields,http-request,request-body,response-body']
 === 회원 이미지 등록 & 수정
@@ -88,7 +88,7 @@ operation::user-controller-test/update-user-profile-image-test[snippets='curl-re
 === 회원 이미지 삭제
 operation::user-controller-test/delete-user-profile-image-test[snippets='curl-request,http-request,http-response,response-body']
 === 회원 탈퇴
-operation::user-controller-test/withdraw-user-test[snippets='curl-request,http-request,http-response,request-body,response-body']
+operation::user-controller-test/withdraw-user-test[snippets='curl-request,http-request,http-response']
 
 == Calendar
 === 캘린더 등록
@@ -96,11 +96,11 @@ operation::calendar-controller-test/post-calendar-test[snippets='curl-request,cu
 === 캘린더 개별 검색
 operation::calendar-controller-test/get-calendar-test[snippets='curl-request,httpie-request,http-request,http-response,path-parameters,response-body,response-fields-data,response-fields-header']
 === 캘린더 등록일 기준 검색
-operation::calendar-controller-test/get-calendar-test[snippets='curl-request,httpie-request,http-request,http-response,request-parameters,response-body,response-fields-data,response-fields-header']
+operation::calendar-controller-test/get-calendar-with-query-test[snippets='curl-request,httpie-request,http-request,http-response,request-parameters,response-body,response-fields-data,response-fields-header']
 === 캘린더 수정
 operation::calendar-controller-test/update-calendar-test[snippets='curl-request,custom-request-fields,httpie-request,http-request,http-response,request-body,response-body,response-fields-data,response-fields-header']
-=== 캘린더 수정
-operation::calendar-controller-test/delete-calendar-test[snippets='curl-request,http-request,http-response,request-body,response-body']
+=== 캘린더 삭제
+operation::calendar-controller-test/delete-calendar-test[snippets='curl-request,http-request,http-response']
 
 == ChatGPT
 === 챗봇 질문

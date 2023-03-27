@@ -1,22 +1,16 @@
 package sixman.helfit.domain.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.nimbusds.openid.connect.sdk.claims.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import sixman.helfit.audit.Auditable;
-import sixman.helfit.domain.comment.entity.Comment;
-import sixman.helfit.domain.like.entity.Like;
 import sixman.helfit.security.entity.ProviderType;
 import sixman.helfit.security.entity.RoleType;
 
 import javax.persistence.*;
-import javax.validation.Valid;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -62,7 +56,6 @@ public class User extends Auditable {
 
     @Enumerated(EnumType.STRING)
     private UserStatus userStatus = UserStatus.USER_ACTIVE;
-
 
     public User(
         String id,
