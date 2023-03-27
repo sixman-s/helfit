@@ -44,6 +44,7 @@ public class BoardDto {
     @AllArgsConstructor
     public static class Response {
         private long boardId;
+        private long categoryId;
         private long userId;
         private long view;
         private int likesCount;
