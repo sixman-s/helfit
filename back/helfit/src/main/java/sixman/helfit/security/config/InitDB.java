@@ -37,7 +37,7 @@ public class InitDB {
                 "tester",
                 "tester@tester.com",
                 "tester",
-                null,
+                "",
                 EmailVerified.Y,
                 PersonalInfoAgreement.Y,
                 ProviderType.LOCAL,

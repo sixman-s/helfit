@@ -2,12 +2,15 @@ package sixman.helfit.domain.calendar.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 
 public class CalendarDto {
     @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Post {
         @NotBlank
         private String title;
@@ -27,6 +30,8 @@ public class CalendarDto {
     }
 
     @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Patch {
         private String title;
         private String content;

@@ -42,6 +42,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.net.URI;
+import java.time.ZoneId;
 import java.util.Date;
 
 import static sixman.helfit.domain.user.entity.User.*;
@@ -71,7 +72,7 @@ public class UserController {
     private final static String REFRESH_TOKEN = "refresh_token";
 
     /*
-     * # Local 회원 가입
+     * # 회원 가입 : Local
      *
      */
     @PostMapping("/signup")
@@ -87,7 +88,7 @@ public class UserController {
     }
 
     /*
-     * # Local 회원 로그인
+     * # 회원 로그인 : Local
      *
      */
     @PostMapping("/login")
@@ -106,8 +107,18 @@ public class UserController {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         User user = userPrincipal.getUser();
 
+        // ! 휴면 계정 로그인 시도
+        if (user.getUserStatus().equals(UserStatus.USER_INACTIVE)) {
+            if (requestBody.getActivate() != null && requestBody.getActivate().equals(Activate.Y.name())) {
+                user.setUserStatus(UserStatus.USER_ACTIVE);
+                userService.updateUser(user.getUserId(), user);
+            } else {
+                throw new BusinessLogicException(ExceptionCode.USER_INACTIVE);
+            }
+        }
+
         // ! 탈퇴 회원 로그인 시도
-        if (user.getUserStatus().equals(UserStatus.USER_QUIT))
+        if (user.getUserStatus().equals(UserStatus.USER_WITHDRAW))
             throw new BusinessLogicException(ExceptionCode.USER_WITHDRAW);
 
         // ! 이메일 인증 프로세스 예외처리 미적용 (RDS 연동시 주석 제거)
@@ -119,10 +130,13 @@ public class UserController {
         String id = user.getId();
         Date now = new Date();
 
+        user.setLastLoggedIn(now.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+        userService.updateUser(user.getUserId(), user);
+
         // # Access Token 생성
         AuthToken accessToken = authTokenProvider.createAuthToken(
             id,
-            ((UserPrincipal) authentication.getPrincipal()).getUser().getRoleType().getCode(),
+            user.getRoleType().getCode(),
             new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
         );
 
@@ -149,7 +163,7 @@ public class UserController {
     }
 
     /*
-     * # 사용자 refresh-token 재발급
+     * # 회원 refreshToken 재발급
      *
      */
     @GetMapping("/refresh-token")
@@ -174,11 +188,13 @@ public class UserController {
         AuthToken authRefreshToken = authTokenProvider.convertAuthToken(refreshToken);
 
         // # Refresh Token 검증
-        if (!authRefreshToken.validate()) throw new BusinessLogicException(ExceptionCode.INVALID_REFRESH_TOKEN);
+        if (!authRefreshToken.validate())
+            throw new BusinessLogicException(ExceptionCode.INVALID_REFRESH_TOKEN);
 
         // # DB - Refresh token 확인
         UserRefreshToken userRefreshToken = userRefreshTokenRepository.findByIdAndRefreshToken(userId, refreshToken);
-        if (userRefreshToken == null) throw new BusinessLogicException(ExceptionCode.INVALID_REFRESH_TOKEN);
+        if (userRefreshToken == null)
+            throw new BusinessLogicException(ExceptionCode.INVALID_REFRESH_TOKEN);
 
         Date now = new Date();
 
@@ -208,11 +224,11 @@ public class UserController {
             CookieUtil.addCookie(response, REFRESH_TOKEN, authRefreshToken.getToken(), cookieMaxAge);
         }
 
-        return ResponseEntity.ok().body(ApiResponse.ok("access_token", authAccessToken.getToken()));
+        return ResponseEntity.ok().body(ApiResponse.ok("accessToken", authAccessToken.getToken()));
     }
 
     /*
-     * # 사용자 이메일 인증
+     * # 회원 이메일 인증
      *
      */
     @GetMapping("/confirm-email")
@@ -230,7 +246,7 @@ public class UserController {
     }
 
     /*
-     * # 사용자 이메일 인증 재발송
+     * # 회원 이메일 인증 재발송
      *
      */
     @GetMapping("/resend-confirm-email")
@@ -242,7 +258,7 @@ public class UserController {
     }
 
     /*
-     * # 사용자 정보 조회
+     * # 회원 정보 조회
      *
      */
     @GetMapping
@@ -250,11 +266,13 @@ public class UserController {
     public ResponseEntity<?> getUser(@CurrentUser UserPrincipal userPrincipal) {
         User user = userService.findUserByUserId(userPrincipal.getUser().getUserId());
 
-        return ResponseEntity.ok().body(ApiResponse.ok("data", user));
+        UserDto.Response response = userMapper.userToUserDtoResponse(user);
+
+        return ResponseEntity.ok().body(ApiResponse.ok("data", response));
     }
 
     /*
-     * # 사용자 정보 변경
+     * # 회원 정보 변경
      *
      */
     @PatchMapping
@@ -271,7 +289,7 @@ public class UserController {
     }
 
     /*
-     * # 사용자 비밀번호 변경
+     * # 회원 비밀번호 변경
      *
      */
     @PatchMapping("/password")
@@ -289,7 +307,7 @@ public class UserController {
     }
 
     /*
-     * # 회원 프로필 이미지 등록&수정
+     * # 회원 프로필 이미지 등록 & 수정
      *
      */
     @PostMapping("/profile-image")
@@ -301,7 +319,7 @@ public class UserController {
         String imagePath = fileService.uploadFile(multipartFile);
         userService.updateUserProfileImage(userPrincipal.getUser().getUserId(), imagePath);
 
-        return ResponseEntity.ok().body(ApiResponse.ok());
+        return ResponseEntity.ok().body(ApiResponse.ok("resource", imagePath));
     }
 
     /*
@@ -310,7 +328,7 @@ public class UserController {
      */
     @DeleteMapping("/profile-image")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> updateUserProfileImage(@CurrentUser UserPrincipal userPrincipal) {
+    public ResponseEntity<?> deleteUserProfileImage(@CurrentUser UserPrincipal userPrincipal) {
         userService.updateUserProfileImage(userPrincipal.getUser().getUserId(), null);
 
         return ResponseEntity.ok().body(ApiResponse.noContent());

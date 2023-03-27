@@ -6,6 +6,7 @@ import axios from 'axios';
 
 const CommunityInfo = ({ token }) => {
   const [data, setData] = useState([]);
+
   const escapeMap = {
     '&lt;': '<',
     '&#12296;': '<',
@@ -15,10 +16,12 @@ const CommunityInfo = ({ token }) => {
     '&quot;': '"',
     '&#x27;': "'"
   };
+
   const pattern = /&(lt|gt|amp|quot|#x27|#12296|#12297);/g;
+
   const convertToHtml = (text) =>
     text.replace(pattern, (match, entity) => escapeMap[`&${entity};`] || match);
-  console.log(data);
+
   useEffect(() => {
     if (token) {
       const headers = {

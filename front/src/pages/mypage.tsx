@@ -8,11 +8,62 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import MyPage from '../styles/mypage/P_mypage.module.css';
 
+// export interface userInfo {
+//   result: {
+//     detail: {
+//       userId: number;
+//       id: string;
+//       email: string;
+//       nickname: string;
+//       profileImageUrl: string;
+//     };
+//     hDetail: {
+//       birth: number;
+//       gender: string;
+//       height: number;
+//       weight: number;
+//     };
+//     cDetail: {
+//       calculatorId: number;
+//       activityLevel: string;
+//       goal: string;
+//       result: number;
+//     };
+//   };
+// }
+
+export interface userInfo1 {
+  detail: {
+    userId: number;
+    id: string;
+    email: string;
+    nickname: string;
+    profileImageUrl: string;
+  };
+}
+export interface userInfo2 {
+  hDetail: {
+    birth: number;
+    gender: string;
+    height: number;
+    weight: number;
+  };
+}
+
+export interface userInfo3 {
+  cDetail: {
+    calculatorId: number;
+    activityLevel: string;
+    goal: string;
+    result: number;
+  };
+}
+
 export default function Mypage() {
-  const [detail, setDetail] = useState<object>({});
-  const [hDetail, setHDetail] = useState({});
-  const [cDetail, setCDetail] = useState();
-  const router = useRouter();
+  const [detail, setDetail] = useState<userInfo1['detail']>();
+  const [hDetail, setHDetail] = useState<userInfo2['hDetail']>();
+  const [cDetail, setCDetail] = useState<userInfo3['cDetail']>();
+  // const router = useRouter();
 
   const [token, setToken] = useState<any>('');
   const url = process.env.NEXT_PUBLIC_URL;
@@ -21,15 +72,19 @@ export default function Mypage() {
     const accessToken = localStorage.getItem('accessToken');
     setToken(accessToken);
     initMyPage(accessToken);
+    // console.log('유주이펙' + detail);
   }, []);
 
   const initMyPage = async (token) => {
     try {
-      const userId = await getUserInfo(token);
-      await getPhysicalInfo(token);
-      await getCalculateInfo({ userId, token });
+      const detail = await getUserInfo(token);
+      // console.log('#####');
+      const hDetail = await getPhysicalInfo({ token, detail });
+      // console.log('@@@@@');
+      const { userId } = detail;
+      await getCalculateInfo({ userId, token, hDetail });
     } catch (e) {
-      console.log(e);
+      // console.log(e);
     }
   };
 
@@ -42,38 +97,55 @@ export default function Mypage() {
           }
         });
         setDetail(res.data.body.data);
-        console.log('info : ' + res.data.body.data);
-        const userId = res.data.body.data.userId;
-        console.log('userId :' + userId);
+        // console.log('detail : ' + detail);
+        // const userId = res.data.body.data.userId;
+        const detail = res.data.body.data;
+        // console.log('userId :' + userId);
 
-        return userId;
+        return detail;
       } catch (err) {
-        console.error(err);
+        // console.error(err);
       }
     }
   };
 
-  const getPhysicalInfo = async (token) => {
+  // 그니까 이 아래함수가 무조건 동작하려면 detail 을 파라미터로 받아야됨
+  const getPhysicalInfo = async ({ token, detail }) => {
     if (detail) {
-      console.log(token);
+      // console.log(token);
+      // console.log('!!!!!!!');
       try {
         const res = await axios.get(`${url}/api/v1/physical/recent`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
         });
-        console.log('info : ' + res.data.body.data);
+        // console.log('info : ' + res.data.body.data);
         setHDetail(res.data.body.data);
-        console.log('hDetail : ' + JSON.stringify(hDetail));
+        return res.data.body.data;
+        // console.log('hDetail : ' + JSON.stringify(hDetail));
       } catch (error) {
+        console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>error');
         console.log(error);
+        const today = new Date();
+        const year = today.getFullYear() * 10000;
+        const month = (today.getMonth() + 1) * 100;
+        const date = today.getDate();
+        console.log(year + month + date);
+        setHDetail({
+          birth: year + month + date,
+          gender: 'test',
+          height: 0,
+          weight: 0
+        });
       }
+    } else {
+      // console.log('detail undefind');
     }
   };
 
-  const getCalculateInfo = async ({ userId, token }) => {
+  const getCalculateInfo = async ({ userId, token, hDetail }) => {
     if (hDetail) {
-      console.log(userId);
       try {
         const res = await axios.get(`${url}/api/v1/calculate/${userId}`, {
           headers: {
@@ -81,19 +153,24 @@ export default function Mypage() {
           }
         });
 
-        console.log(`계산기 요청 결과 : ${res.data.body.data}`);
+        // console.log(`계산기 요청 결과 : ${res.data.body.data}`);
         console.log(res.data.body.data);
         const {
           data: {
             body: { data: cDetailData }
           }
         } = res;
-        console.log('cDetailData : ' + cDetailData);
+        // console.log('cDetailData : ' + cDetailData);
         setCDetail(cDetailData);
       } catch (error) {
-        console.log(error);
-        const cDetailData = undefined;
-        setCDetail(cDetailData);
+        // console.log(error);
+        const cDetailData = {};
+        setCDetail({
+          calculatorId: 0,
+          activityLevel: '',
+          goal: 'string',
+          result: 0
+        });
       }
     }
   };
@@ -102,7 +179,7 @@ export default function Mypage() {
     <Layout>
       <div className={MyPage.myPageContainer}>
         <div className={MyPage.personalInfo}>
-          <PersonalInfo detail={detail} />
+          <PersonalInfo {...detail} />
         </div>
         <div className={MyPage.myList}>
           <MyList />

@@ -1,19 +1,27 @@
 package sixman.helfit.restdocs;
 
 import com.google.gson.Gson;
+import io.jsonwebtoken.security.Keys;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.aop.AopAutoConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -22,21 +30,34 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.multipart.MultipartFile;
 import sixman.helfit.domain.user.dto.UserDto;
 import sixman.helfit.domain.user.entity.User;
+import sixman.helfit.domain.user.entity.UserRefreshToken;
 import sixman.helfit.restdocs.config.RestDocsConfig;
 import sixman.helfit.security.entity.ProviderType;
 import sixman.helfit.security.entity.RoleType;
+import sixman.helfit.security.entity.UserPrincipal;
+import sixman.helfit.security.properties.AppProperties;
+import sixman.helfit.security.token.AuthToken;
+import sixman.helfit.security.token.AuthTokenProvider;
 
+import javax.inject.Inject;
+import javax.servlet.http.Cookie;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+
+import static sixman.helfit.security.properties.AppProperties.*;
+import static sixman.helfit.utils.HeaderUtil.getAccessToken;
 
 
 @Import({RestDocsConfig.class, AopAutoConfiguration.class})
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
 @MockBean(JpaMetamodelMappingContext.class)
 public abstract class ControllerTest {
+    // Base64 SecretKey inject, Testing only
+    private final String TEST_SECRET_TOKEN = "d297f22853e39936052a15a41266866bf058923f";
+
     @Autowired
     protected MockMvc mockMvc;
 
@@ -45,6 +66,12 @@ public abstract class ControllerTest {
 
     @Autowired
     protected RestDocumentationResultHandler restDocs;
+
+    @Spy
+    protected AppProperties appProperties;
+
+    @Spy
+    protected AuthTokenProvider authTokenProvider;
 
     @BeforeEach
     void setUp(final WebApplicationContext ctx, final RestDocumentationContextProvider provider) {
@@ -56,38 +83,97 @@ public abstract class ControllerTest {
                            .build();
     }
 
-    protected Map<String, Object> userResource() {
-        Map<String, Object> userMap = new HashMap<>();
+    protected Map<String, Object> userResource() throws Exception {
+        Map<String, Object> resource = new HashMap<>();
 
         User user = new User(
-            "tester",
-            "tester@testet.com",
-            "tester",
+            1L,
+            "TEST",
+            "Test1234!@#$",
+            "TEST@TEST.com",
+            "TEST",
             "",
+            LocalDateTime.now(),
             User.EmailVerified.Y,
             User.PersonalInfoAgreement.Y,
+            RoleType.USER,
             ProviderType.LOCAL,
-            RoleType.USER
+            User.UserStatus.USER_ACTIVE
         );
-        user.setUserId(1L);
         user.setCreatedAt(LocalDateTime.now());
         user.setModifiedAt(LocalDateTime.now());
 
         UserDto.Response userDtoResponse =
-                new UserDto.Response(
-                    1L,
-                    user.getId(),
-                    user.getNickname(),
-                    user.getEmail(),
-                    user.getEmailVerifiedYn().toString(),
-                    user.getProfileImageUrl(),
-                    user.getProviderType().toString()
-                );
+            new UserDto.Response(
+                1L,
+                user.getId(),
+                user.getNickname(),
+                user.getEmail(),
+                user.getEmailVerifiedYn().toString(),
+                user.getProfileImageUrl(),
+                user.getProviderType().toString(),
+                user.getUserStatus().toString()
+            );
 
-        userMap.put("user", user);
-        userMap.put("userDtoResponse", userDtoResponse);
+        UsernamePasswordAuthenticationToken authentication =
+            new UsernamePasswordAuthenticationToken(
+                new UserPrincipal(
+                    user,
+                    Collections.singletonList(new SimpleGrantedAuthority(RoleType.USER.getCode()))
+                ),
+                "NO_PASS"
+            );
 
-        return userMap;
+        Auth auth = new Auth(TEST_SECRET_TOKEN, 1000 * 60, 1000 * 60);
+        AuthToken accessToken = genJwtToken("access");
+        AuthToken refreshToken = genJwtToken("refresh");
+
+        UserRefreshToken userRefreshToken = new UserRefreshToken(user.getId(), Objects.requireNonNull(refreshToken).getToken());
+
+        resource.put("user", user);
+        resource.put("userDtoResponse", userDtoResponse);
+        resource.put("authentication", authentication);
+        resource.put("auth", auth);
+        resource.put("accessToken", accessToken);
+        resource.put("refreshToken", refreshToken);
+        resource.put("userRefreshToken", userRefreshToken);
+
+        return resource;
+    }
+
+    private AuthToken genJwtToken(String type) throws Exception {
+        long expiry = new Date().getTime();
+
+        FieldUtils.writeField(authTokenProvider, "secretKey", TEST_SECRET_TOKEN, true);
+        FieldUtils.writeField(authTokenProvider, "key", Keys.hmacShaKeyFor(TEST_SECRET_TOKEN.getBytes()), true);
+
+        AuthToken accessToken =
+            authTokenProvider
+                .createAuthToken("TEST", RoleType.USER.getCode(), new Date(expiry));
+        AuthToken refreshToken =
+            authTokenProvider
+                .createAuthToken("TEST", new Date(expiry));
+
+        switch (type) {
+            case "access":
+                return accessToken;
+            case "refresh":
+                return refreshToken;
+            default:
+                return null;
+        }
+    }
+
+    /*
+     * # Post Resources
+     *
+     */
+    protected <T> ResultActions postResource(String url) throws Exception {
+        return mockMvc.perform(
+            RestDocumentationRequestBuilders.post(url)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+        );
     }
 
     protected <T> ResultActions postResource(String url, T body) throws Exception {
@@ -96,6 +182,15 @@ public abstract class ControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(body))
+        );
+    }
+
+    protected ResultActions postResource(String url, MultiValueMap<String, String> parameters) throws Exception {
+        return mockMvc.perform(
+            RestDocumentationRequestBuilders.post(url)
+                .params(parameters)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
         );
     }
 
@@ -108,9 +203,24 @@ public abstract class ControllerTest {
         );
     }
 
+    /*
+     * # Get Resources
+     *
+     */
     protected ResultActions getResource(String url) throws Exception {
         return mockMvc.perform(
             RestDocumentationRequestBuilders.get(url)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + Objects.requireNonNull(genJwtToken("access")).getToken())
+                .cookie(new Cookie("refresh_token", Objects.requireNonNull(genJwtToken("refresh")).getToken()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+        );
+    }
+
+    protected ResultActions getResource(String url, MultiValueMap<String, String> parameters) throws Exception {
+        return mockMvc.perform(
+            RestDocumentationRequestBuilders.get(url)
+                .params(parameters)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
         );
@@ -124,12 +234,16 @@ public abstract class ControllerTest {
         );
     }
 
-    protected ResultActions getResources(String url, MultiValueMap<String, String> parameters) throws Exception {
+    /*
+     * # Patch Resources
+     *
+     */
+    protected <T> ResultActions patchResource(String url, T body) throws Exception {
         return mockMvc.perform(
-            RestDocumentationRequestBuilders.get(url)
-                .params(parameters)
+            RestDocumentationRequestBuilders.patch(url)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
+                .content(gson.toJson(body))
         );
     }
 
@@ -141,20 +255,52 @@ public abstract class ControllerTest {
         );
     }
 
-    protected <T> ResultActions patchResource(String url, T body) throws Exception {
+    protected <T> ResultActions patchResources(String url, T body, Object... pathVariables) throws Exception {
         return mockMvc.perform(
-            RestDocumentationRequestBuilders.patch(url)
+            RestDocumentationRequestBuilders.patch(url, pathVariables)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(gson.toJson(body))
         );
     }
 
-    protected <T> ResultActions deleteResource(String url, Object... pathVariables) throws Exception {
+    /*
+     * # Delete Resources
+     *
+     */
+    protected ResultActions deleteResource(String url) throws Exception {
+        return mockMvc.perform(
+            RestDocumentationRequestBuilders.delete(url)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+        );
+    }
+
+    protected <T> ResultActions deleteResource(String url, T body) throws Exception {
+        return mockMvc.perform(
+            RestDocumentationRequestBuilders.delete(url)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(gson.toJson(body))
+        );
+    }
+
+    protected ResultActions deleteResource(String url, Object... pathVariables) throws Exception {
         return mockMvc.perform(
             RestDocumentationRequestBuilders.delete(url, pathVariables)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
+        );
+    }
+
+    /*
+     * # File Resources
+     *
+     */
+    protected ResultActions fileResource(String url, MultipartFile multipartFile) throws Exception {
+        return mockMvc.perform(
+            RestDocumentationRequestBuilders.multipart(url)
+                .file((MockMultipartFile) multipartFile)
         );
     }
 }
