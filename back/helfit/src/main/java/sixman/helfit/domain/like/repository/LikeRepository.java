@@ -5,9 +5,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import sixman.helfit.domain.like.entity.Like;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface LikeRepository extends JpaRepository<Like, Long> {
     @Query(value = "SELECT l FROM Like l WHERE l.user.userId = :userId AND l.board.boardId = :boardId")
     Optional<Like> findByIds(@Param("userId") Long userId,@Param("boardId") Long boardId);
+
+    @Query(value = "SELECT l FROM Like l WHERE l.user.userId = :userId")
+    List<Like> findByUserId(@Param("userId") Long userId);
 }
