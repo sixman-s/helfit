@@ -47,6 +47,11 @@ const WritePostBox = () => {
 
     const accessToken = localStorage.accessToken;
 
+    if ((category === '5' || category === '6') && !selectedFile) {
+      alert('오운완 갤러리와 식단 갤러리는 사진 업로드가 필수 입니다.');
+      return;
+    }
+
     if (selectedFile) {
       const formData = new FormData();
       formData.append('multipartFile', selectedFile);
@@ -192,7 +197,14 @@ const WritePostBox = () => {
         {/* 사진첨부 */}
 
         <div>
-          <div className={style.Text}>사진</div>
+          <div className={style.title}>
+            <div className={style.titleMessage}>
+              <div className={style.Text}>사진</div>
+              <div className={style.Subtext}>
+                오운완 갤러리와 식단 갤러리는 사진 선택이 필수입니다.
+              </div>
+            </div>
+          </div>
           <div className={style.line}>
             <div className={style.picture}>
               <input

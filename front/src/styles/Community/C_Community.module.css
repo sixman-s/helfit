@@ -16,7 +16,8 @@
   justify-content: space-between;
 }
 .Search_bar {
-  width: 500px;
+  max-width: 600px;
+  min-width: 300px;
   height: 30px;
   border-radius: 10px;
   margin-left: 20px;
@@ -33,6 +34,12 @@
 }
 .menuItem {
   color: var(--text_5) !important;
+  display: inline-block !important;
+}
+@media (max-width: 1080px) {
+  .menuItem {
+    font-size: 12px;
+  }
 }
 
 .activeItem {
@@ -42,6 +49,7 @@
 .Menubar {
   border: 1px solid var(--main) !important;
   border-radius: 10px !important;
+  min-width: 550px;
 }
 
 .P_text_h4 {
@@ -51,6 +59,12 @@
   align-items: center;
   border-bottom: 0.5px solid var(--text_5);
 }
+.allContent {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 
 .P_content {
   margin-top: 10px;
@@ -58,11 +72,85 @@
   border-radius: 30px;
   height: 400px;
   min-width: 400px;
-  max-width: 550px;
   display: grid;
   grid-template-rows: 80px 280px;
   overflow: hidden;
 }
+.PostContent {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 300px;
+}
+.SNSContent {
+  display: flex;
+  margin-bottom: 30px;
+  border-top: 0.5px solid var(--text_5);
+  margin: 10px 20px 30px 20px;
+  justify-content: space-between;
+}
+.SNSbody {
+  display: flex;
+  flex-direction: column;
+}
+.Oww_content {
+  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.12);
+  border-radius: 30px;
+  width: 100%;
+  min-width: 500px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.SNS_owwPhoto {
+  height: 320px;
+  width: 250px;
+  overflow: auto;
+  margin: 10px;
+}
+.oww_photo {
+  width: 100%;
+  height: 300px;
+  border-radius: 20px;
+}
+@media (max-width: 1280px) {
+  .SNS_owwPhoto {
+    height: 270px;
+    width: 200px;
+  }
+  .oww_photo {
+    height: 250px;
+  }
+  .SNS_title {
+    font-size: 12px;
+    width: 150px;
+  }
+}
+
+@media (max-width: 947px) {
+  .SNS_owwPhoto {
+    height: 170px;
+    width: 140px;
+  }
+  .oww_photo {
+    height: 160px;
+  }
+  .SNS_love_Text {
+    display: none;
+  }
+  .SNS_nickname {
+    font-size: 12px;
+  }
+  .SNS_title {
+    font-size: 12px;
+    width: 100px;
+  }
+  .UserName1 {
+    display: none;
+  }
+}
+
 .P_list {
   display: flex;
   align-items: center;
@@ -72,7 +160,6 @@
 }
 .UserProfile {
   display: flex;
-  margin-top: 3px;
   align-items: center;
   justify-content: flex-end;
 }
@@ -81,18 +168,17 @@
   margin-right: 8px;
   border-radius: 50px;
 }
-.UserName {
+.UserName1 {
+  margin-top: 5px;
   margin-right: 20px;
   color: var(--main);
   font-weight: bold;
   font-size: var(--h6);
-}
-.PostContent {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  width: 300px;
 }
+
 .nickname {
   white-space: nowrap;
   overflow: hidden;
@@ -100,22 +186,21 @@
   width: 70px;
   font-size: 12px;
 }
-.allContent {
-  margin-top: 40px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+.SNS_nickname {
+  margin-top: 20px;
+  margin-bottom: 8px;
 }
+
 .noneMsg {
   display: flex;
   justify-content: center;
   align-items: center;
   font-weight: bold;
 }
-.SNSContent {
-  display: flex;
-}
 
+.SNSContent_list {
+  cursor: pointer;
+}
 .SNS_userInfo {
   display: flex;
 }
@@ -124,11 +209,7 @@
   border-radius: 20px;
   margin-top: 20px;
 }
-.SNSbody {
-  display: flex;
-  flex-direction: column;
-  margin-left: 20px;
-}
+
 .SNS_photo {
   height: 240px;
 }
@@ -136,30 +217,16 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  width: 180px;
+  max-width: 180px;
   margin-left: 10px;
 }
-.Oww_content {
-  margin-top: 10px;
-  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.12);
-  border-radius: 30px;
-  height: 600px;
-  max-width: 1000px;
-  min-width: 520px;
-  display: grid;
-  grid-template-rows: 80px 280px;
-  overflow: hidden;
+.Oww_text_h4 {
+  padding-top: 20px;
+  padding-left: 10px;
+  display: flex;
+  align-items: center;
 }
-.SNS_owwPhoto {
-  height: 450px;
-}
-.oww_photo {
-  width: 300px;
-  border-radius: 20px;
-  margin-top: 20px;
-  overflow: hidden;
-  height: 400px;
-}
+
 .SNS_footer {
   display: flex;
   justify-content: space-between;
@@ -167,11 +234,31 @@
 .SNS_love {
   margin-right: 20px;
   display: flex;
+  white-space: nowrap;
 }
 .SNS_love_Text {
   font-size: 12px;
 }
+.SNS_love_count {
+  font-size: 12px;
+}
 .loveSVG {
   width: 20px;
-  margin-right: 10px;
+  margin-right: 3px;
+}
+.SNS_dietContent {
+  display: flex;
+  margin-bottom: 30px;
+  margin: 10px 20px 30px 20px;
+  justify-content: space-between;
+}
+.SNS_UserNav {
+  display: flex;
+  align-items: center;
+}
+.UserPhoto {
+  width: 30px;
+  margin-left: 10px;
+  margin-top: 10px;
+  border-radius: 50px;
 }

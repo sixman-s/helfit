@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
 import style from '../../../styles/Community/C_Post.module.css';
 import Btn from '../../loginc/Buttons';
 import { Pagination, PaginationProps } from 'semantic-ui-react';
@@ -40,6 +39,14 @@ const HealthPost: React.FC = () => {
       .post(`${URL}/api/v1/board/view/${post.boardId}`)
       .then(() => router.push(`/community/health/${post.boardId}`))
       .catch((err) => alert(err));
+  };
+
+  const handlePostBtn = () => {
+    if (typeof localStorage.accessToken !== 'undefined') {
+      router.push('/community/writepost');
+    } else {
+      alert('로그인 한 유저만 게시글을 작성할 수 있습니다.');
+    }
   };
 
   useEffect(() => {
@@ -92,14 +99,16 @@ const HealthPost: React.FC = () => {
     <>
       <div className={style.List}>
         <div className={style.buttonline}>
-          <Link href={'/community/writepost'}>
-            <Btn className={style.button} text='게시글 작성' />
-          </Link>
+          <Btn
+            className={style.button}
+            text='게시글 작성'
+            onClick={handlePostBtn}
+          />
         </div>
         <div className={style.ListHeader}>
           <div className={style.ListHeader_No}>No.</div>
           <div className={style.ListHeader_Title}>제목</div>
-          <div className={style.ListHeader_nickName}>작성자</div>
+          <div className={style.ListHeader_Author}>작성자</div>
           <div className={style.ListHeader_Date}>작성일</div>
           <div className={style.ListHeader_Tag}>태그</div>
           <div className={style.ListHeader_Views}>조회수</div>

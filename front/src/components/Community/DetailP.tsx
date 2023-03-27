@@ -89,7 +89,7 @@ const DetailP = () => {
 
   // 상세페이지 글이랑 댓글 불러오기
   useEffect(() => {
-    const localUserId = JSON.parse(localStorage.UserInfo).userId;
+    const localUserId = JSON.parse(localStorage.UserInfo?.userId ?? 'null');
     axios
       .get(`${URL}/api/v1/board/${pageNumber}/${boardID}`)
       .then((res) => {
@@ -127,20 +127,27 @@ const DetailP = () => {
 
   // 댓글 작성
   const handleSubmit = (e: React.KeyboardEvent) => {
-    const userInfo: UserInfo = JSON.parse(localStorage.UserInfo);
-    axios
-      .post(`${URL}/api/v1/comment/${userInfo.userId}/${fetchedData.boardId}`, {
-        commentBody: writeCommnet
-      })
-      .then(() => {
-        axios
-          .get(`${URL}/api/v1/comment/${boardID}`)
-          .then((res) => setComments(res.data))
-          .catch((err) => console.log(err));
-      })
-      .then((res) => console.log(res));
+    if (typeof localStorage.accessToken !== 'undefined') {
+      const userInfo: UserInfo = JSON.parse(localStorage.UserInfo);
+      axios
+        .post(
+          `${URL}/api/v1/comment/${userInfo.userId}/${fetchedData.boardId}`,
+          {
+            commentBody: writeCommnet
+          }
+        )
+        .then(() => {
+          axios
+            .get(`${URL}/api/v1/comment/${boardID}`)
+            .then((res) => setComments(res.data))
+            .catch((err) => console.log(err));
+        })
+        .then((res) => console.log(res));
 
-    setWriteCommnet('');
+      setWriteCommnet('');
+    } else {
+      alert('로그인 한 유저만 댓글을 작성할 수 있습니다.');
+    }
   };
 
   // 댓글 삭제 commentId
@@ -309,7 +316,8 @@ const DetailP = () => {
           <div className={style.Buttons}>
             {fetchedData?.userId ===
               (typeof localStorage !== 'undefined' &&
-                JSON.parse(localStorage.getItem('UserInfo')).userId) && (
+                JSON.parse(localStorage.getItem('UserInfo') ?? '{}')
+                  ?.userId) && (
               <Btn
                 text='게시글 삭제'
                 type='submit'
@@ -326,7 +334,8 @@ const DetailP = () => {
             )}
             {fetchedData?.userId ===
               (typeof localStorage !== 'undefined' &&
-                JSON.parse(localStorage.getItem('UserInfo')).userId) && (
+                JSON.parse(localStorage.getItem('UserInfo') ?? '{}')
+                  ?.userId) && (
               <Btn
                 text='게시글 수정'
                 type='submit'
@@ -401,7 +410,9 @@ const DetailP = () => {
               <div className={style.commentBody}>
                 <div>{comment.commentBody}</div>
                 {comment.userId ===
-                  JSON.parse(localStorage.UserInfo).userId && (
+                  (typeof localStorage !== 'undefined' &&
+                    JSON.parse(localStorage.getItem('UserInfo') ?? '{}')
+                      ?.userId) && (
                   <img
                     src={'../../assets/Community/Delete.svg'}
                     className={style.deleteSVG}

@@ -30,11 +30,13 @@
   grid-area: No;
   width: 30px;
   margin-left: 20px;
+  font-size: 12px;
 }
 .ListHeader_Title,
 .title {
   grid-area: title;
   width: 200px;
+
   white-space: nowrap;
   text-overflow: ellipsis;
 }
@@ -49,24 +51,27 @@
 .ListHeader_Date,
 .date {
   grid-area: date;
-  width: 40px;
+  width: 70px;
+  font-size: 12px;
 }
 .ListHeader_Tag,
 .tag {
   grid-area: tag;
   width: 200px;
+  font-size: 12px;
 }
 .ListHeader_Views,
 .views {
   grid-area: views;
   width: 40px;
+  font-size: 12px;
 }
 .button {
   background-color: var(--main);
   color: white;
   border-radius: 10px;
-  width: 130px;
-  height: 40px;
+  width: 100px;
+  height: 30px;
   margin-bottom: 20px;
 }
 .button:hover {
