@@ -114,6 +114,7 @@ class UserControllerTest extends ControllerTest {
                 "Y"
             )
         )
+            .apply(false)
             .andExpect(status().isCreated())
             .andExpect(header().exists("Location"))
             .andDo(restDocs.document(
@@ -129,7 +130,6 @@ class UserControllerTest extends ControllerTest {
 
     @Test
     @DisplayName("[테스트] 회원 로그인 : LOCAL")
-    @WithMockUserCustom
     void loginTest() throws Exception {
         given(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
             .willReturn(authentication);
@@ -159,6 +159,7 @@ class UserControllerTest extends ControllerTest {
                 "Y"
             )
         )
+            .apply(false)
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.body.accessToken").isNotEmpty())
             .andDo(restDocs.document(
@@ -193,7 +194,9 @@ class UserControllerTest extends ControllerTest {
         given(authTokenProvider.createAuthToken(anyString(), any(Date.class)))
             .willReturn(refreshToken);
 
+
         getResource(DEFAULT_URL + "/refresh-token")
+            .apply(true)
             .andExpect(status().isOk())
             .andDo(restDocs.document(
                 relaxedResponseFields(
@@ -218,6 +221,7 @@ class UserControllerTest extends ControllerTest {
                 add("token-id", "token-id");
             }}
         )
+            .apply(false)
             .andExpect(model().size(1))
             .andExpect(status().isOk())
             .andDo(restDocs.document(
@@ -237,6 +241,7 @@ class UserControllerTest extends ControllerTest {
         doNothing().when(emailConfirmTokenService).sendEmail(anyString(), anyString());
 
         getResource(DEFAULT_URL + "/resend-confirm-email")
+            .apply(true)
             .andExpect(status().isOk())
             .andDo(restDocs.document());
     }
@@ -252,6 +257,7 @@ class UserControllerTest extends ControllerTest {
             .willReturn(userDtoResponse);
 
         getResource(DEFAULT_URL)
+            .apply(true)
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.body.data").isNotEmpty())
             .andDo(restDocs.document(
@@ -285,6 +291,7 @@ class UserControllerTest extends ControllerTest {
             );
 
         patchResource(DEFAULT_URL, new UserDto.Update("nickname"))
+            .apply(true)
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.body.data.nickname", Matchers.is("nickname")))
             .andDo(restDocs.document(
@@ -303,6 +310,7 @@ class UserControllerTest extends ControllerTest {
         doNothing().when(userService).updateUserPassword(anyLong(), any(User.class));
 
         patchResource(DEFAULT_URL + "/password", new UserDto.Password("Test!@#$1234"))
+            .apply(true)
             .andExpect(status().isOk())
             .andDo(restDocs.document(
                 customRequestFields(UserDto.Password.class, new LinkedHashMap<>() {{
@@ -323,7 +331,7 @@ class UserControllerTest extends ControllerTest {
         );
 
         given(fileService.uploadFile(any(MultipartFile.class)))
-            .willReturn("://ObjectStorage" + multipartFile.getOriginalFilename());
+            .willReturn("://ObjectStorage-" + multipartFile.getOriginalFilename());
 
         doNothing().when(userService).updateUserProfileImage(anyLong(), anyString());
 
@@ -347,7 +355,8 @@ class UserControllerTest extends ControllerTest {
     void deleteUserProfileImageTest() throws Exception {
         doNothing().when(userService).updateUserProfileImage(anyLong(), anyString());
 
-        deleteResource(DEFAULT_URL + "/profile-image")
+        deleteResource(DEFAULT_URL + "/profile-image", null)
+            .apply(true)
             .andExpect(status().isOk())
             .andDo(restDocs.document());
     }
@@ -361,6 +370,7 @@ class UserControllerTest extends ControllerTest {
             .willReturn(user);
 
         deleteResource(DEFAULT_URL + "/withdraw", new UserDto.Password("Test1234!@#$"))
+            .apply(true)
             .andExpect(status().isNoContent())
             .andDo(restDocs.document());
     }

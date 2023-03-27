@@ -90,6 +90,7 @@ class PhysicalControllerTest extends ControllerTest {
             physical.getWeight(),
             physical.getGender().name())
         )
+            .apply(true)
             .andExpect(status().isCreated())
             .andDo(restDocs.document(
                 customRequestFields(PhysicalDto.Post.class, new HashMap<>() {{
@@ -114,6 +115,7 @@ class PhysicalControllerTest extends ControllerTest {
             .willReturn(physicalDtoResponse);
 
         getResource(DEFAULT_URI + "/today")
+            .apply(true)
             .andExpect(status().isOk())
             .andDo(restDocs.document(
                 genRelaxedResponseHeaderFields(),
@@ -132,6 +134,7 @@ class PhysicalControllerTest extends ControllerTest {
             .willReturn(physicalDtoResponse);
 
         getResource(DEFAULT_URI + "/recent")
+            .apply(true)
             .andExpect(status().isOk())
             .andDo(restDocs.document(
                 genRelaxedResponseHeaderFields(),
@@ -153,6 +156,7 @@ class PhysicalControllerTest extends ControllerTest {
             add("page", "1");
             add("size", "10");
         }})
+            .apply(true)
             .andExpect(status().isOk())
             .andDo(restDocs.document(
                 genRelaxedResponseHeaderFields(),
@@ -190,6 +194,7 @@ class PhysicalControllerTest extends ControllerTest {
             physical.getWeight(),
             physical.getGender().name()
         ))
+            .apply(true)
             .andExpect(status().isOk())
             .andDo(restDocs.document(
                 customRequestFields(PhysicalDto.Patch.class, new LinkedHashMap<>() {{
