@@ -207,7 +207,7 @@ public class BoardService {
     }
     @Transactional(readOnly = true)
     public List<Board> findBoardByUserId(UserPrincipal userPrincipal,int page){
-        Page<Board> pageBoard = boardRepository.findBoardsByUserId(userPrincipal.getUser().getUserId(),PageRequest.of(page,5,
+        Page<Board> pageBoard = boardRepository.findBoardsByUserId(userPrincipal.getUser().getUserId(),PageRequest.of(page,10,
                 Sort.by("createdAt").descending()));
         return pageBoard.getContent();
     }

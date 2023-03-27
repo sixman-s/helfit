@@ -66,7 +66,7 @@ public class CommentService {
     }
 
     public List<Comment> findCommentsByUserId(UserPrincipal userPrincipal,int page){
-        Page<Comment> pageComment = commentRepository.findCommentsByUserId(userPrincipal.getUser().getUserId(), PageRequest.of(page,5,
+        Page<Comment> pageComment = commentRepository.findCommentsByUserId(userPrincipal.getUser().getUserId(), PageRequest.of(page,10,
                 Sort.by("commentId").descending()));
         return pageComment.getContent();
     }
