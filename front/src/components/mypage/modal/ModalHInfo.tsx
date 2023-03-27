@@ -3,31 +3,34 @@ import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 
 import s from '../../../styles/mypage/M_ModalHInfo.module.css';
+import { userInfo1, userInfo2, userInfo3 } from '@/pages/mypage';
 
-export interface detailProps {
-  result: {
-    detail: {
-      userId: number;
-    };
-    hDetail: {
-      birth: number;
-      gender: string;
-      height: number;
-      weight: number;
-    };
-    cDetail: {
-      calculatorId: number;
-      activityLevel: string;
-      goal: string;
-    };
-  };
-}
+// export interface detailProps {
+//   result: {
+//     detail: {
+//       userId: number;
+//     };
+//     hDetail: {
+//       birth: number;
+//       gender: string;
+//       height: number;
+//       weight: number;
+//     };
+//     cDetail: {
+//       calculatorId: number;
+//       activityLevel: string;
+//       goal: string;
+//     };
+//   };
+// }
 
 interface HeathForm {
   height: number;
   weight: number;
   birth: number;
   gender: string;
+  activityLevel: string;
+  goal: string;
 }
 
 const ModalHInfo = ({
@@ -35,9 +38,9 @@ const ModalHInfo = ({
   hDetail,
   cDetail
 }: {
-  detail;
-  hDetail;
-  cDetail: detailProps;
+  detail: userInfo1['detail'];
+  hDetail: userInfo2['hDetail'];
+  cDetail: userInfo3['cDetail'];
 }) => {
   const { register, handleSubmit, formState } = useForm<HeathForm>({
     mode: 'all'
@@ -47,6 +50,7 @@ const ModalHInfo = ({
   const url = process.env.NEXT_PUBLIC_URL;
   const accessToken = localStorage.getItem('accessToken');
 
+  console.log(hDetail);
   return (
     <form
       onSubmit={handleSubmit(async (data) => {
@@ -171,7 +175,7 @@ const ModalHInfo = ({
               type='number'
               id='height'
               className={s.hInfo}
-              defaultValue={hDetail.height}
+              defaultValue={(hDetail === undefined ? {} : hDetail).height}
               {...register('height', {
                 required: true,
                 maxLength: {
@@ -187,7 +191,7 @@ const ModalHInfo = ({
               type='number'
               id='weight'
               className={s.hInfo}
-              defaultValue={hDetail.weight}
+              defaultValue={(hDetail === undefined ? {} : hDetail).weight}
               {...register('weight', {
                 required: true,
                 maxLength: {
@@ -203,7 +207,7 @@ const ModalHInfo = ({
               type='number'
               id='birthDay'
               className={s.info}
-              defaultValue={hDetail.birth}
+              defaultValue={(hDetail === undefined ? {} : hDetail).birth}
               {...register('birth', {
                 required: true,
                 maxLength: {
@@ -222,7 +226,9 @@ const ModalHInfo = ({
                   type='radio'
                   id='man'
                   value='MALE'
-                  defaultChecked={hDetail.gender === 'MALE'}
+                  defaultChecked={
+                    (hDetail === undefined ? {} : hDetail).gender === 'MALE'
+                  }
                   {...register('gender')}
                 />
                 <label htmlFor='man'>남</label>
@@ -232,7 +238,9 @@ const ModalHInfo = ({
                   type='radio'
                   id='woman'
                   value='FEMALE'
-                  defaultChecked={hDetail.gender === 'FEMALE'}
+                  defaultChecked={
+                    (hDetail === undefined ? {} : hDetail).gender === 'FEMALE'
+                  }
                   {...register('gender')}
                 />
                 <label htmlFor='woman'>여</label>

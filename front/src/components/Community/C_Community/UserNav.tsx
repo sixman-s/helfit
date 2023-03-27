@@ -22,8 +22,10 @@ const UserNav = () => {
   return (
     <>
       <div className={style.UserProfile}>
-        <img src={userProfile} className={style.UserPhoto} />
-        <div className={style.UserName}>{userName}</div>
+        <div>
+          <img src={userProfile} className={style.UserPhoto} />
+        </div>
+        <div className={style.UserName1}>{userName}</div>
       </div>
     </>
   );

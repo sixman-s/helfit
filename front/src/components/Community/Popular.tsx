@@ -1,7 +1,6 @@
 import style from '../../styles/Community/C_Community.module.css';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 interface BoardData {
@@ -12,6 +11,7 @@ interface BoardData {
   view: number;
   boardImageUrl: string | null;
   likesCount: number;
+  userProfileImage: string | null;
 }
 
 const URL = process.env.NEXT_PUBLIC_URL;
@@ -22,43 +22,61 @@ const Popular = (): JSX.Element => {
   const [crossfitPosts, setCrossfitPosts] = useState<BoardData[]>([]);
   const [owwPosts, setOwwPosts] = useState<BoardData[]>([]);
   const [dietPosts, setDietPosts] = useState<BoardData[]>([]);
-  const HealthFourPosts = healthPosts
-    .sort((a, b) => b.view - a.view)
-    .slice(0, 4);
-  const PilatesFourPosts = pilatesPosts
-    .sort((a, b) => b.view - a.view)
-    .slice(0, 4);
-  const CrossfitFourPosts = crossfitPosts
-    .sort((a, b) => b.view - a.view)
-    .slice(0, 4);
-  const OwwFourPosts = owwPosts.sort((a, b) => b.view - a.view).slice(0, 3);
-  const DietFourPosts = dietPosts.sort((a, b) => b.view - a.view).slice(0, 2);
 
   const router = useRouter();
 
   useEffect(() => {
     axios
-      .get(`${URL}/api/v1/board/1?page=1`)
-      .then((res) => setHealthPosts(res.data.boardResponses));
+      .get(`${URL}/api/v1/board/hot/1`)
+      .then((res) => setHealthPosts(res.data));
+    //.then((res) => console.log(res.data));
     axios
-      .get(`${URL}/api/v1/board/4?page=1`)
-      .then((res) => setPilatesPosts(res.data.boardResponses));
+      .get(`${URL}/api/v1/board/hot/4`)
+      .then((res) => setPilatesPosts(res.data));
     axios
-      .get(`${URL}/api/v1/board/2?page=1`)
-      .then((res) => setCrossfitPosts(res.data.boardResponses));
+      .get(`${URL}/api/v1/board/hot/2`)
+      .then((res) => setCrossfitPosts(res.data));
+    axios.get(`${URL}/api/v1/board/hot/5`).then((res) => {
+      setOwwPosts(res.data.slice(0, 3));
+    });
     axios
-      .get(`${URL}/api/v1/board/5?page=1`)
-      .then((res) => setOwwPosts(res.data.boardResponses));
-    axios
-      .get(`${URL}/api/v1/board/6?page=1`)
-      .then((res) => setDietPosts(res.data.boardResponses));
+      .get(`${URL}/api/v1/board/hot/6`)
+      .then((res) => setDietPosts(res.data));
   }, []);
 
-  const handlePostView = (post: BoardData) => () => {
+  const HealthPostView = (post: BoardData) => () => {
     console.log(post.boardId);
     axios
       .post(`${URL}/api/v1/board/view/${post.boardId}`)
       .then(() => router.push(`/community/health/${post.boardId}`))
+      .catch((err) => alert(err));
+  };
+  const PilatesPostView = (post: BoardData) => () => {
+    console.log(post.boardId);
+    axios
+      .post(`${URL}/api/v1/board/view/${post.boardId}`)
+      .then(() => router.push(`/community/pilates/${post.boardId}`))
+      .catch((err) => alert(err));
+  };
+  const CrossfitPostView = (post: BoardData) => () => {
+    console.log(post.boardId);
+    axios
+      .post(`${URL}/api/v1/board/view/${post.boardId}`)
+      .then(() => router.push(`/community/crossfit/${post.boardId}`))
+      .catch((err) => alert(err));
+  };
+  const OwwPostView = (post: BoardData) => () => {
+    console.log(post.boardId);
+    axios
+      .post(`${URL}/api/v1/board/view/${post.boardId}`)
+      .then(() => router.push(`/community/oww/${post.boardId}`))
+      .catch((err) => alert(err));
+  };
+  const DietPostView = (post: BoardData) => () => {
+    console.log(post.boardId);
+    axios
+      .post(`${URL}/api/v1/board/view/${post.boardId}`)
+      .then(() => router.push(`/community/diet/${post.boardId}`))
       .catch((err) => alert(err));
   };
 
@@ -66,17 +84,29 @@ const Popular = (): JSX.Element => {
     <>
       <div className={style.box}>
         <div className={style.Oww_content}>
-          <h4 className={style.P_text_h4}>🔥 인기 오운완 게시글</h4>
-
-          {OwwFourPosts.length === 0 ? (
+          <h4 className={style.Oww_text_h4}>🔥 인기 오운완 게시글</h4>
+          {owwPosts.length === 0 ? (
             <div className={style.noneMsg}>게시글을 입력해주세요 </div>
           ) : (
             <ul className={style.SNSContent}>
-              {OwwFourPosts.map((post, index) => (
-                <li className={style.SNSContent_list} key={post.boardId}>
+              {owwPosts.map((post, index) => (
+                <li
+                  className={style.SNSContent_list}
+                  key={post.boardId}
+                  onClick={OwwPostView(post)}
+                >
                   <div className={style.SNSbody}>
-                    <div className={style.SNS_nickname}>
-                      {post.userNickname}
+                    <div className={style.SNS_UserNav}>
+                      <img
+                        src={
+                          post.userProfileImage ||
+                          '../../assets/Community/UserProfile.svg'
+                        }
+                        className={style.UserPhoto}
+                      />
+                      <div className={style.SNS_nickname}>
+                        {post.userNickname}
+                      </div>
                     </div>
                     <div className={style.SNS_owwPhoto}>
                       <img
@@ -91,8 +121,9 @@ const Popular = (): JSX.Element => {
                           src='../../assets/Community/Like.svg'
                           className={style.loveSVG}
                         />
-                        <div className={style.SNS_love_Text}>
-                          좋아요: {post.likesCount}
+                        <div className={style.SNS_love_Text}>좋아요:</div>
+                        <div className={style.SNS_love_count}>
+                          {post.likesCount}
                         </div>
                       </div>
                     </div>
@@ -107,15 +138,15 @@ const Popular = (): JSX.Element => {
       <div className={style.box}>
         <div className={style.P_content}>
           <h4 className={style.P_text_h4}>🔥 인기 헬스 게시글</h4>
-          {HealthFourPosts.length === 0 ? (
+          {healthPosts.length === 0 ? (
             <div className={style.noneMsg}>게시글을 입력해주세요 </div>
           ) : (
             <ul className={style.allContent}>
-              {HealthFourPosts.map((post, index) => (
+              {healthPosts.map((post, index) => (
                 <li
                   className={style.P_list}
                   key={post.boardId}
-                  onClick={handlePostView(post)}
+                  onClick={HealthPostView(post)}
                 >
                   <div>{index + 1}.</div>
                   <div className={style.PostContent}>{post.title}</div>
@@ -130,12 +161,16 @@ const Popular = (): JSX.Element => {
       <div className={style.box}>
         <div className={style.P_content}>
           <h4 className={style.P_text_h4}>🔥 인기 필라테스 게시글</h4>
-          {PilatesFourPosts.length === 0 ? (
+          {pilatesPosts.length === 0 ? (
             <div className={style.noneMsg}>게시글을 입력해주세요 </div>
           ) : (
             <ul className={style.allContent}>
-              {PilatesFourPosts.map((post, index) => (
-                <li className={style.P_list} key={post.boardId}>
+              {pilatesPosts.map((post, index) => (
+                <li
+                  className={style.P_list}
+                  key={post.boardId}
+                  onClick={PilatesPostView(post)}
+                >
                   <div>{index + 1}.</div>
                   <div className={style.PostContent}>{post.title}</div>
                   <div className={style.nickname}>{post.userNickname}</div>
@@ -145,15 +180,20 @@ const Popular = (): JSX.Element => {
           )}
         </div>
       </div>
+
       <div className={style.box}>
         <div className={style.P_content}>
           <h4 className={style.P_text_h4}>🔥 인기 크로스핏 게시글</h4>
-          {CrossfitFourPosts.length === 0 ? (
+          {crossfitPosts.length === 0 ? (
             <div className={style.noneMsg}>게시글을 입력해주세요 </div>
           ) : (
             <ul className={style.allContent}>
-              {CrossfitFourPosts.map((post, index) => (
-                <li className={style.P_list} key={post.boardId}>
+              {crossfitPosts.map((post, index) => (
+                <li
+                  className={style.P_list}
+                  key={post.boardId}
+                  onClick={CrossfitPostView(post)}
+                >
                   <div>{index + 1}.</div>
                   <div className={style.PostContent}>{post.title}</div>
                   <div className={style.nickname}>{post.userNickname}</div>
@@ -167,22 +207,19 @@ const Popular = (): JSX.Element => {
       <div className={style.box}>
         <div className={style.P_content}>
           <h4 className={style.P_text_h4}>🔥 인기 식단 게시글</h4>
-
-          {DietFourPosts.length === 0 ? (
+          {dietPosts.length === 0 ? (
             <div className={style.noneMsg}>게시글을 입력해주세요 </div>
           ) : (
-            <ul className={style.SNSContent}>
-              {DietFourPosts.map((post, index) => (
-                <li className={style.SNSContent_list} key={post.boardId}>
-                  <div className={style.SNSbody}>
-                    <div className={style.SNS_nickname}>
-                      {post.userNickname}
-                    </div>
-                    <div className={style.SNS_photo}>
-                      <img src={post.boardImageUrl} className={style.photo} />
-                    </div>
-                    <div className={style.SNS_title}>{post.title}</div>
-                  </div>
+            <ul className={style.allContent}>
+              {dietPosts.map((post, index) => (
+                <li
+                  className={style.P_list}
+                  key={post.boardId}
+                  onClick={DietPostView(post)}
+                >
+                  <div>{index + 1}.</div>
+                  <div className={style.PostContent}>{post.title}</div>
+                  <div className={style.nickname}>{post.userNickname}</div>
                 </li>
               ))}
             </ul>

@@ -1,22 +1,23 @@
+import { userInfo1 } from '@/pages/mypage';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 
 import s from '../../../styles/mypage/M_ModalPInfo.module.css';
 
-interface detailProps {
-  userId: number;
-  id: string;
-  email: string;
-  nickname: string;
-  profileImageUrl: string;
-  birth: number;
-  gender: string;
-  height: number;
-  weight: number;
-}
+// interface detailProps {
+//   userId: number;
+//   id: string;
+//   email: string;
+//   nickname: string;
+//   profileImageUrl: string;
+//   birth: number;
+//   gender: string;
+//   height: number;
+//   weight: number;
+// }
 
-const ModalPInfo = ({ detail }: { detail: detailProps }) => {
+const ModalPInfo = (detail: userInfo1['detail']) => {
   const { register, handleSubmit } = useForm();
   const router = useRouter();
 

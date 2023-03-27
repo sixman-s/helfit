@@ -6,11 +6,19 @@ import { Loader } from '@/components/map/Loader';
 import useGeoLocation from '../components/map/Geolocation';
 import map from '../styles/map/P_Map.module.css';
 
+export interface IntrinsicAttributes {
+  result: {
+    info: { lat: number; lng: number };
+    search: string;
+  };
+}
+
 const Map = () => {
   const [findLocation, setFindLocation] = useState(false);
   // const [loading, setLoading] = useState(false);
-  const [search, setSearch] = useState('');
-  const [info, setInfo] = useState<object>();
+  const [search, setSearch] =
+    useState<IntrinsicAttributes['result']['search']>('');
+  const [info, setInfo] = useState<IntrinsicAttributes['result']['info']>();
 
   const location = useGeoLocation();
   useEffect(() => {}, [findLocation]);
@@ -98,7 +106,7 @@ const Map = () => {
               크로스핏
             </span>
           </div>
-          <KakaoMap info={info} search={search ? search : undefined} />
+          <KakaoMap info={info} search={search} />
         </div>
       ) : (
         <Loader />
