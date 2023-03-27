@@ -9,7 +9,6 @@ const OAuth2 = () => {
   const router = useRouter();
 
   if (typeof window !== 'undefined') {
-    // Get the URL from the address bar
     const url: string = window.location.href;
 
     // URLParams에서 잘라오기
