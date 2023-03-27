@@ -6,23 +6,21 @@ import ModalPassword from './modal/ModalPassword';
 import ModalContainer from './modal/ModalContainer';
 import ModalImage from './modal/ModalImage';
 import { useEffect } from 'react';
+import { userInfo1 } from '@/pages/mypage';
 
-export interface detailProps {
-  info: {
-    userId: number;
-    birth: number;
-    id: string;
-    email: string;
-    nickname: string;
-    profileImageUrl: string;
-  };
-}
+// export interface detailProps {
+//   info: {
+//     userId: number;
+//     id: string;
+//     email: string;
+//     nickname: string;
+//     profileImageUrl: string;
+//   };
+// }
 
-const PersonalInfo = ({ detail }: { detail: detailProps }) => {
+const PersonalInfo = (detail: userInfo1['detail']) => {
   const [modalContents, setModalContents] = useState<JSX.Element>(<></>);
   const [showModal, setShowMoadal] = useState<boolean>(false);
-
-  console.log('detail : ' + JSON.stringify(detail));
 
   const checkImage = detail.profileImageUrl
     ? detail.profileImageUrl
@@ -30,7 +28,7 @@ const PersonalInfo = ({ detail }: { detail: detailProps }) => {
 
   const clickModalP = () => {
     setShowMoadal(true);
-    setModalContents(<ModalPInfo detail={detail} />);
+    setModalContents(<ModalPInfo {...detail} />);
   };
   const clickModalPW = () => {
     setShowMoadal(true);
@@ -38,7 +36,7 @@ const PersonalInfo = ({ detail }: { detail: detailProps }) => {
   };
   const clickModalImage = () => {
     setShowMoadal(true);
-    setModalContents(<ModalImage detail={detail} />);
+    setModalContents(<ModalImage {...detail} />);
   };
 
   return (
