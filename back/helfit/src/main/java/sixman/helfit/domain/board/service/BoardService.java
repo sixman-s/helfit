@@ -86,11 +86,11 @@ public class BoardService {
     }
     @Transactional(readOnly = true)
     public Page<Board> findBoards(Long categoryId, int page) {
-        return boardRepository.findBoardByCategoryId(categoryId,PageRequest.of(page,10,
+        return boardRepository.findBoardsByCategoryId(categoryId,PageRequest.of(page,10,
                 Sort.by("boardId").descending()));
     }
     @Transactional(readOnly = true)
-    public Long findBoardsCount(Long categoryId){
+    public Integer findBoardsCount(Long categoryId){
         return boardRepository.countByCategoryId(categoryId);
     }
 
@@ -205,6 +205,17 @@ public class BoardService {
         Optional<Board> optionalBoard = boardRepository.findBoardByIds(categoryId, boardId);
         return optionalBoard.orElseThrow(() -> new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND));
     }
+    @Transactional(readOnly = true)
+    public List<Board> findBoardByUserId(UserPrincipal userPrincipal,int page){
+        Page<Board> pageBoard = boardRepository.findBoardsByUserId(userPrincipal.getUser().getUserId(),PageRequest.of(page,10,
+                Sort.by("createdAt").descending()));
+        return pageBoard.getContent();
+    }
+
+    @Transactional(readOnly = true)
+    public Integer getCountByUserId(UserPrincipal userPrincipal) {
+        return boardRepository.getCountByUserId(userPrincipal.getUser().getUserId());
+    }
 
     public void addView(Long boardId){
         Board findBoard = findBoardById(boardId);
@@ -212,6 +223,58 @@ public class BoardService {
         findBoard.setView(view+1);
         findBoard.calculateBoardPoint();
         boardRepository.save(findBoard);
+    }
+    @Transactional(readOnly = true)
+    public List<Board> findBoardByNickname(String userNickname, int page) {
+        Page<Board> pageBoard =  boardRepository.findByUserNickname(userNickname,PageRequest.of(page,10,
+                Sort.by("createdAt").descending()));
+        return pageBoard.getContent();
+    }
+    @Transactional(readOnly = true)
+    public Integer getBoardCountByNickname(String userNickname){
+        return boardRepository.getCountByNickname(userNickname);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Board> findBoardByTagName(String tagName,int page){
+        Page<BoardTag> boardTags = boardTagRepository.findByTag(tagName,PageRequest.of(page,10,
+                Sort.by("boardTagId").descending()));
+        List<BoardTag> listBoardTag = boardTags.getContent();
+        List<Board> boards = new ArrayList<>();
+        listBoardTag.forEach(boardTag ->
+            boards.add(boardTag.getBoard())
+                );
+        return boards;
+    }
+
+    @Transactional(readOnly = true)
+    public Integer getCountByTagName(String tagName){
+        return boardTagRepository.getCountByTag(tagName);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Board> findBoardByTitle(String title, int page) {
+        Page<Board> pageBoard =  boardRepository.findByTitle(title,PageRequest.of(page,10,
+                Sort.by("createdAt").descending()));
+
+        return pageBoard.getContent();
+    }
+
+    @Transactional(readOnly = true)
+    public Integer getCountByTitle(String title){
+        return boardRepository.getCountByTitle(title);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Board> findBoardByText(String text, int page) {
+        Page<Board> pageBoard =  boardRepository.findByText(text,PageRequest.of(page,10,
+                Sort.by("createdAt").descending()));
+        return pageBoard.getContent();
+    }
+
+    @Transactional(readOnly = true)
+    public Integer getCountByText(String text){
+        return boardRepository.getCountByText(text);
     }
 
 }
