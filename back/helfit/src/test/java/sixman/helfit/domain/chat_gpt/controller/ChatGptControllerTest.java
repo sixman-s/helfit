@@ -59,6 +59,7 @@ class ChatGptControllerTest extends ControllerTest {
             .willReturn(chatGptDtoResponse);
 
         postResource(DEFAULT_URL + "/question", new ChatGptDto.Post("안녕?"))
+            .apply(false)
             .andExpect(status().isOk())
             .andDo(restDocs.document(
                 customRequestFields(ChatGptDto.Post.class, new LinkedHashMap<>() {{

@@ -63,9 +63,7 @@ public class CalculatorControllerTest extends ControllerTest {
     @Test
     @DisplayName("[테스트] 계산기 결과 생성")
     void postResultTest() throws Exception {
-
         CalculatorDto.Post requestBody = new CalculatorDto.Post(Goal.DIET, ActivityLevel.EXTRA_ACTIVE);
-
 
         given(calculatorService.createResult(Mockito.any(Calculator.class), Mockito.any(User.class), Mockito.any(Physical.class)))
             .willReturn(calculator);
@@ -76,7 +74,8 @@ public class CalculatorControllerTest extends ControllerTest {
         given(calculatorMapper.calculatorToResponse(Mockito.any(Calculator.class)))
             .willReturn(calculatorDtoResponse);
 
-        postResources(DEFAULT_URL + "/{user-id}", requestBody, user.getUserId())
+        postResource(DEFAULT_URL + "/{user-id}", requestBody, user.getUserId())
+            .apply(true)
             .andExpect(status().isCreated())
             .andExpect(jsonPath("$.body.data").isNotEmpty())
             .andDo(restDocs.document(
@@ -97,7 +96,8 @@ public class CalculatorControllerTest extends ControllerTest {
             .willReturn(calculator);
         given(calculatorMapper.calculatorToResponse(Mockito.any(Calculator.class)))
             .willReturn(calculatorDtoResponse);
-        getResources(DEFAULT_URL + "/{user-id}", 1L)
+        getResource(DEFAULT_URL + "/{user-id}", 1L)
+            .apply(true)
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.body.data").isNotEmpty())
             .andDo(restDocs.document(
@@ -126,7 +126,9 @@ public class CalculatorControllerTest extends ControllerTest {
             .willReturn(physical);
         given(calculatorMapper.calculatorToResponse(Mockito.any(Calculator.class)))
             .willReturn(calculatorDtoResponse);
-        patchResources(DEFAULT_URL + "/{calculator-id}", requestBody, calculator.getCalculatorId())
+
+        patchResource(DEFAULT_URL + "/{calculator-id}", requestBody, calculator.getCalculatorId())
+            .apply(true)
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.body.data").isNotEmpty())
             .andDo(restDocs.document(
@@ -145,7 +147,8 @@ public class CalculatorControllerTest extends ControllerTest {
         doNothing().when(calculatorService).deleteResult(anyLong());
 
 
-        deleteResources(DEFAULT_URL + "/{user-id}", user.getUserId())
+        deleteResource(DEFAULT_URL + "/{user-id}", null, user.getUserId())
+            .apply(true)
             .andExpect(status().isNoContent())
             .andDo(restDocs.document());
 

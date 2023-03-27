@@ -85,6 +85,7 @@ class CalendarControllerTest extends ControllerTest {
             calendar.getKcal(),
             calendar.getRecodedAt()
         ))
+            .apply(true)
             .andExpect(status().isCreated())
             .andExpect(header().exists("Location"))
             .andDo(restDocs.document(
@@ -107,7 +108,8 @@ class CalendarControllerTest extends ControllerTest {
         given(calendarMapper.calendarToCalendarDtoResponse(any(Calendar.class)))
             .willReturn(calendarDtoResponse);
 
-        getResources(DEFAULT_URL + "/{calendar-id}", 1L)
+        getResource(DEFAULT_URL + "/{calendar-id}", 1L)
+            .apply(true)
             .andExpect(status().isOk())
             .andDo(restDocs.document(
                 pathParameters(
@@ -133,6 +135,7 @@ class CalendarControllerTest extends ControllerTest {
         getResource(DEFAULT_URL, new LinkedMultiValueMap<>() {{
             add("recodedAt", "2023-01-01");
         }})
+            .apply(true)
             .andExpect(status().isOk())
             .andDo(restDocs.document(
                 requestParameters(
@@ -154,6 +157,7 @@ class CalendarControllerTest extends ControllerTest {
             .willReturn(calendarDtoResponseList);
 
         getResource(DEFAULT_URL)
+            .apply(true)
             .andExpect(status().isOk())
             .andDo(restDocs.document(
                 genRelaxedResponseHeaderFields(),
@@ -177,11 +181,12 @@ class CalendarControllerTest extends ControllerTest {
         given(calendarMapper.calendarToCalendarDtoResponse(any(Calendar.class)))
             .willReturn(calendarDtoResponse);
 
-        patchResources(DEFAULT_URL + "/{calender-id}", new CalendarDto.Patch(
+        patchResource(DEFAULT_URL + "/{calender-id}", new CalendarDto.Patch(
             "캘린더 수정 제목",
             "캘린더 수정 내용",
             3400
         ), calendar.getCalendarId())
+            .apply(true)
             .andExpect(status().isOk())
             .andDo(restDocs.document(
                 customRequestFields(CalendarDto.Patch.class, new LinkedHashMap<>() {{
@@ -203,7 +208,8 @@ class CalendarControllerTest extends ControllerTest {
 
         doNothing().when(calendarService).deleteCalendar(any(Calendar.class));
 
-        deleteResources(DEFAULT_URL + "/{calendar-id}", calendar.getCalendarId())
+        deleteResource(DEFAULT_URL + "/{calendar-id}", null, calendar.getCalendarId())
+            .apply(true)
             .andExpect(status().isNoContent())
             .andDo(restDocs.document());
     }

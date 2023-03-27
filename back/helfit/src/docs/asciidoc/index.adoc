@@ -118,6 +118,11 @@ operation::physical-controller-test/get-all-physical-test[snippets='curl-request
 === 회원 개인(신체)정보 수정
 operation::physical-controller-test/patch-physical-test[snippets='curl-request,custom-request-fields,httpie-request,http-request,http-response,request-body,response-body,response-fields-data,response-fields-header']
 
+== File
+=== 파일 업로드(단일)
+operation::file-controller-test/upload-test[snippets='curl-request,httpie-request,http-request,http-response,request-body,request-parts,response-body,response-fields-body']
+=== 파일 업로드(멀티)
+operation::file-controller-test/multi-upload-test[snippets='curl-request,httpie-request,http-request,http-response,request-body,request-parts,response-body,response-fields-body']
 
 == Calculator
 === 계산기 결과 생성
