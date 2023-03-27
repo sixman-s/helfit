@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import React, { useState, useEffect } from 'react';
 import Btn from '@/components/loginc/Buttons';
-import Link from 'next/link';
 import { Pagination, PaginationProps } from 'semantic-ui-react';
 
 interface Post {
@@ -43,6 +42,14 @@ const Oww: React.FC = () => {
       .post(`${URL}/api/v1/board/view/${post.boardId}`)
       .then(() => router.push(`/community/diet/${post.boardId}`))
       .catch((err) => alert(err));
+  };
+
+  const handlePostBtn = () => {
+    if (typeof localStorage.accessToken !== 'undefined') {
+      router.push('/community/writepost');
+    } else {
+      alert('로그인 한 유저만 게시글을 작성할 수 있습니다.');
+    }
   };
 
   useEffect(() => {
@@ -104,9 +111,11 @@ const Oww: React.FC = () => {
     <>
       <div className={style.container}>
         <div className={style.buttonline}>
-          <Link href={'/community/writepost'}>
-            <Btn className={style.button} text='게시글 작성' />
-          </Link>
+          <Btn
+            className={style.button}
+            text='게시글 작성'
+            onClick={handlePostBtn}
+          />
         </div>
         <ul className={style.ul}>
           {Array.isArray(fetchedPosts) && fetchedPosts.length > 0 ? (

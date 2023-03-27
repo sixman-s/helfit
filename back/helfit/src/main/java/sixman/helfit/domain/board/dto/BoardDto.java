@@ -44,6 +44,7 @@ public class BoardDto {
     @AllArgsConstructor
     public static class Response {
         private long boardId;
+        private long categoryId;
         private long userId;
         private long view;
         private int likesCount;
@@ -56,7 +57,6 @@ public class BoardDto {
         private List<TagDto.GetResponse> tags;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
-        private long boardPoint;
     }
 
     @Getter
@@ -82,7 +82,7 @@ public class BoardDto {
     @Getter
     public static class BoardListResponse {
         private List<BoardDto.Response> boardResponses;
-        private Long count;
+        private int count;
     }
 
     @AllArgsConstructor

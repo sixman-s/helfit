@@ -71,7 +71,7 @@ public interface BoardMapper {
         String  userProfileImage = null;
         Integer likesCount =null;
         List<BoardDto.BoardLikeMember> likeUserInfo = new ArrayList<>();
-        Long boardPoint = null;
+        Long categoryId =null;
 
         title = board.getTitle();
         text = board.getText();
@@ -85,7 +85,8 @@ public interface BoardMapper {
         view = board.getView();
         userProfileImage = board.getUser().getProfileImageUrl();
         likesCount = board.getLikes().size();
-        boardPoint = board.getBoardPoint();
+        categoryId = board.getCategory().getCategoryId();
+
 
         List<BoardTag> listBoardTag = board.getBoardTags();
         if (!listBoardTag.isEmpty()) {
@@ -101,8 +102,8 @@ public interface BoardMapper {
             }
         }
 
-        return new BoardDto.Response(boardId,userId,view,likesCount,likeUserInfo,userProfileImage,
-                userNickname,title,text,boardImageUrl,tagNames,createdAt,modifiedAt,boardPoint);
+        return new BoardDto.Response(boardId,categoryId,userId,view,likesCount,likeUserInfo,userProfileImage,
+                userNickname,title,text,boardImageUrl,tagNames,createdAt,modifiedAt);
 
     }
     List<BoardDto.Response> boardsToResponses(List<Board> boards);
