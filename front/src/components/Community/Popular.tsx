@@ -35,7 +35,7 @@ const Popular = (): JSX.Element => {
     .sort((a, b) => b.view - a.view)
     .slice(0, 4);
   const OwwFourPosts = owwPosts.sort((a, b) => b.view - a.view).slice(0, 3);
-  const DietFourPosts = dietPosts.sort((a, b) => b.view - a.view).slice(0, 2);
+  const DietFourPosts = dietPosts.sort((a, b) => b.view - a.view).slice(0, 4);
 
   const router = useRouter();
 

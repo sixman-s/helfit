@@ -39,6 +39,9 @@
   .menuItem {
     font-size: 12px;
   }
+  .UserName1 {
+    font-size: 12px;
+  }
 }
 
 .activeItem {
@@ -158,7 +161,7 @@
   margin-right: 8px;
   border-radius: 50px;
 }
-.UserName {
+.UserName1 {
   margin-top: 5px;
   margin-right: 20px;
   color: var(--main);

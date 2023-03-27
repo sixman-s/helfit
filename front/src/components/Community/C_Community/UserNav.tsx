@@ -25,7 +25,7 @@ const UserNav = () => {
         <div>
           <img src={userProfile} className={style.UserPhoto} />
         </div>
-        <div className={style.UserName}>{userName}</div>
+        <div className={style.UserName1}>{userName}</div>
       </div>
     </>
   );
