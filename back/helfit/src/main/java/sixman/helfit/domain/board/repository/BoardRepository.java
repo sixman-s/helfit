@@ -30,5 +30,5 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     Long countByCategoryId(@Param("categoryId") Long categoryId);
 
     @Query(value = "SELECT b FROM Board b WHERE b.category.categoryId = :categoryId ORDER BY b.boardPoint DESC")
-    List<Board> findTop5Boards(@Param("categoryId") Long categoryId, Pageable pageable);
+    List<Board> findTop4Boards(@Param("categoryId") Long categoryId, Pageable pageable);
 }

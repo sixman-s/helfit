@@ -57,7 +57,6 @@ public class Board extends Auditable {
 
     private long boardPoint;
 
-    @PostLoad
     public void calculateBoardPoint() {
         LocalDateTime createdAt = this.getCreatedAt();
         LocalDateTime now = LocalDateTime.now();

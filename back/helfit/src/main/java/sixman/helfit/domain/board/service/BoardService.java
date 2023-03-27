@@ -185,7 +185,7 @@ public class BoardService {
     }
     @Transactional(readOnly = true)
     public List<Board> getHotBoards(Long categoryId){
-        return  boardRepository.findTop5Boards(categoryId,PageRequest.of(0, 5));
+        return  boardRepository.findTop4Boards(categoryId,PageRequest.of(0, 4));
     }
     @Transactional(readOnly = true)
     private void verifyBoard(Board board,UserPrincipal userPrincipal) {
