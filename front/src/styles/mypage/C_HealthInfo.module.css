@@ -1,5 +1,6 @@
 .hInfoContainer {
     margin: 20px;
+    padding-top: 30px;
 }
 
 .titleDiv{
@@ -22,13 +23,15 @@
     background-color: var(--vg_2);
     border: 1px solid var(--line_1);
     border-radius: 10px;
+    margin-right: 20px;
     
 }
 
 .bottomContainer {
     padding-top: 50px;
     display: flex;
-    position: relative;
+    /* position: relative; */
+    
 }
 
 .bottomContainer .leftContainer {

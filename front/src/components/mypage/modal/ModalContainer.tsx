@@ -1,4 +1,3 @@
-import ModalPInfo from './ModalPInfo';
 import { PropsWithChildren } from 'react';
 import s from '../../../styles/mypage/M_ModalContainer.module.css';
 import { useEffect } from 'react';
