@@ -17,16 +17,16 @@
   }
 
   function openPopup(event) {
-
     const target = event.target;
-    if (target.className !== "popup") {
-      return;
-    }
+
+    if (target.className !== "popup") return;
 
     event.preventDefault();
+
     const screenX = event.screenX;
     const screenY = event.screenY;
-    window.open(target.href, target.text, `left=${screenX}, top=${screenY}, width=500, height=600, status=no, menubar=no, toolbar=no, resizable=no`);
+
+    window.open(target.href, target.text, `left=${screenX}, top=${screenY}, width=600, height=600, status=no, menubar=no, toolbar=no, resizable=no`);
   }
 
   ready(function () {

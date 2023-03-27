@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import sixman.helfit.audit.Auditable;
+import sixman.helfit.global.enums.EnumType;
 import sixman.helfit.security.entity.ProviderType;
 import sixman.helfit.security.entity.RoleType;
 
@@ -41,20 +42,20 @@ public class User extends Auditable {
 
     private LocalDateTime lastLoggedIn;
 
-    @Enumerated(value = EnumType.STRING)
+    @Enumerated(value = javax.persistence.EnumType.STRING)
     private EmailVerified emailVerifiedYn;
 
-    @Enumerated(value = EnumType.STRING)
+    @Enumerated(value = javax.persistence.EnumType.STRING)
     private PersonalInfoAgreement personalInfoAgreementYn;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(javax.persistence.EnumType.STRING)
     @Column(length = 20)
     private RoleType roleType;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(javax.persistence.EnumType.STRING)
     private ProviderType providerType;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(javax.persistence.EnumType.STRING)
     private UserStatus userStatus = UserStatus.USER_ACTIVE;
 
     public User(
@@ -78,17 +79,23 @@ public class User extends Auditable {
         this.roleType = roleType;
     }
 
-    public enum UserStatus {
+    @AllArgsConstructor
+    public enum UserStatus implements EnumType {
         USER_ACTIVE("활동중"),
         USER_INACTIVE("휴면 상태"),
         USER_WITHDRAW("탈퇴 상태")
         ;
 
-        @Getter
-        private final String status;
+        private final String description;
 
-        UserStatus(String status) {
-            this.status = status;
+        @Override
+        public String getName() {
+            return this.name();
+        }
+
+        @Override
+        public String getDescription() {
+            return this.description;
         }
     }
 
