@@ -126,18 +126,18 @@ operation::file-controller-test/multi-upload-test[snippets='curl-request,httpie-
 
 == Calculator
 === 계산기 결과 생성
-operation::calculator-controller-test/post-result-test[]
+operation::calculator-controller-test/post-result-test[snippets='curl-request,custom-request-fields,httpie-request,http-request,http-response,request-body,response-body']
 === 계산기 결과 조회
-operation::calculator-controller-test/get-result-test[]
+operation::calculator-controller-test/get-result-test[snippets='curl-request,httpie-request,http-request,http-response,request-body,response-body,response-fields-data,response-fields-header']
 === 계산기 결과 수정
-operation::calculator-controller-test/patch-result-test[]
+operation::calculator-controller-test/patch-result-test[snippets='curl-request,httpie-request,http-request,http-response,request-body,response-body,response-fields-data,response-fields-header']
 === 계산기 결과 삭제
-operation::calculator-controller-test/delete-result-test[]
+operation::calculator-controller-test/delete-result-test[snippets='curl-request,httpie-request,http-request,http-response']
 
 == Statistics
 === 칼로리, 생성일자 조회
-operation::stat-controller-test/get-board-stat-test[]
+operation::stat-controller-test/get-board-stat-test[snippets='curl-request,httpie-request,http-request,http-response,response-body,response-fields-data,response-fields-header']
 === 오운완 게시판 최근게시물 3개 조회
-operation::stat-controller-test/get-kcal-stat-test[]
+operation::stat-controller-test/get-kcal-stat-test[snippets='curl-request,httpie-request,http-request,http-response,response-body,response-fields-data,response-fields-header']
 === 사용자의 최근 몸무게 수정 조회
-operation::stat-controller-test/get-weight-stat-test[]
+operation::stat-controller-test/get-weight-stat-test[snippets='curl-request,httpie-request,http-request,http-response,response-body,response-fields-data,response-fields-header']
