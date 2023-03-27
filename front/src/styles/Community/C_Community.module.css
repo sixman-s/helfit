@@ -16,7 +16,7 @@
   justify-content: space-between;
 }
 .Search_bar {
-  max-width: 500px;
+  max-width: 600px;
   min-width: 300px;
   height: 30px;
   border-radius: 10px;
@@ -34,12 +34,10 @@
 }
 .menuItem {
   color: var(--text_5) !important;
+  display: inline-block !important;
 }
 @media (max-width: 1080px) {
   .menuItem {
-    font-size: 12px;
-  }
-  .UserName1 {
     font-size: 12px;
   }
 }
@@ -51,6 +49,7 @@
 .Menubar {
   border: 1px solid var(--main) !important;
   border-radius: 10px !important;
+  min-width: 550px;
 }
 
 .P_text_h4 {
@@ -123,6 +122,10 @@
   .oww_photo {
     height: 250px;
   }
+  .SNS_title {
+    font-size: 12px;
+    width: 150px;
+  }
 }
 
 @media (max-width: 947px) {
@@ -141,6 +144,10 @@
   }
   .SNS_title {
     font-size: 12px;
+    width: 100px;
+  }
+  .UserName1 {
+    display: none;
   }
 }
 
@@ -167,6 +174,9 @@
   color: var(--main);
   font-weight: bold;
   font-size: var(--h6);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .nickname {

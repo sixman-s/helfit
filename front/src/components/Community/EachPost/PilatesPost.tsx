@@ -98,7 +98,7 @@ const HealthPost: React.FC = () => {
         <div className={style.ListHeader}>
           <div className={style.ListHeader_No}>No.</div>
           <div className={style.ListHeader_Title}>제목</div>
-          <div className={style.ListHeader_nickName}>작성자</div>
+          <div className={style.ListHeader_Author}>작성자</div>
           <div className={style.ListHeader_Date}>작성일</div>
           <div className={style.ListHeader_Tag}>태그</div>
           <div className={style.ListHeader_Views}>조회수</div>
