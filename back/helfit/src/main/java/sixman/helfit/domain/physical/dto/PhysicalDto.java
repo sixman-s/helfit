@@ -35,7 +35,7 @@ public class PhysicalDto {
         @NotNull(message = "Null 값은 입력할 수 없습니다.")
         @ValidEnum(
             enumClass = Gender.class,
-            message = "잘못된 입력값입니다. : 기대값: ['MALE', FEMALE]",
+            message = "잘못된 입력값입니다. : 기대값 = ['MALE', 'FEMALE']",
             ignoreCase = true
         )
         private String gender;
@@ -63,7 +63,7 @@ public class PhysicalDto {
         @NotNull
         @ValidEnum(
             enumClass = Gender.class,
-            message = "잘못된 입력값입니다. : 기대값: ['MALE', FEMALE]",
+            message = "잘못된 입력값입니다. : 기대값 = ['MALE', FEMALE]",
             ignoreCase = true
         )
         private String gender;

@@ -22,6 +22,7 @@ public class UserDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Signup {
+        @NotNull(message = "Null 값은 입력할 수 없습니다.")
         @NotBlank
         private String id;
 
@@ -31,14 +32,16 @@ public class UserDto {
         )
         private String password;
 
+        @NotNull(message = "Null 값은 입력할 수 없습니다.")
         @Pattern(regexp = "^\\S+(\\s?\\S+)*$", message = "별명은 공백을 포함할 수 없습니다.")
         private String nickname;
 
+        @NotNull(message = "Null 값은 입력할 수 없습니다.")
         @NotBlank
         @Email
         private String email;
 
-        @NotNull
+        @NotNull(message = "Null 값은 입력할 수 없습니다.")
         @ValidEnum(
             enumClass = PersonalInfoAgreement.class,
             message = "개인정보 제공 동의 항목은 '필수' 입력값입니다. : 기대값 = ['Y']",

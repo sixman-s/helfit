@@ -53,28 +53,6 @@ public class PhysicalController {
         return ResponseEntity.created(uri).body(ApiResponse.created("data", response));
     }
 
-
-    /*
-     * # 회원 개인(신체)정보 수정
-     *
-     */
-    @PatchMapping
-    @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> patchPhysical(
-        @Valid @RequestBody PhysicalDto.Patch requestBody,
-        @AuthenticationPrincipal UserPrincipal userPrincipal
-    ) {
-        Physical physical = physicalService.updatePhysical(
-            physicalMapper.physicalDtoPatchToPhysical(requestBody),
-            userPrincipal.getUser().getUserId()
-        );
-
-        PhysicalDto.Response response = physicalMapper.physicalToPhysicalDtoResponse(physical);
-
-        return ResponseEntity.ok().body(ApiResponse.ok("data", response));
-    }
-
-
     /*
      * # 회원 개인(신체)정보 조회 (당일 기준)
      *
@@ -104,21 +82,45 @@ public class PhysicalController {
     }
 
 
+    /*
+     * # 회원 개인(신체)정보 조회 (페이징)
+     *
+     */
     @GetMapping
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> getAllPhysicalWithinToday(
+    public ResponseEntity<?> getAllPhysical(
         @Positive @RequestParam Integer page,
         @Positive @RequestParam Integer size,
         @AuthenticationPrincipal UserPrincipal userPrincipal
     ) {
         Page<Physical> physicalPage = physicalService.findAllPhysicalByUserId(userPrincipal.getUser().getUserId(), page, size);
-        List<PhysicalDto.Response> physicalList = physicalMapper.physicalToPhysicalDtoResponseList(physicalPage.getContent());
+        List<PhysicalDto.Response> physicalDtoReponseList = physicalMapper.physicalToPhysicalDtoResponseList(physicalPage.getContent());
 
         HashMap<String, Object> responses = new HashMap<>() {{
-            put("physical", physicalList);
+            put("physical", physicalDtoReponseList);
             put("pageInfo", PageUtil.getPageInfo(physicalPage));
         }};
 
         return ResponseEntity.ok().body(ApiResponse.ok("data", responses));
+    }
+
+    /*
+     * # 회원 개인(신체)정보 수정
+     *
+     */
+    @PatchMapping
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> patchPhysical(
+        @Valid @RequestBody PhysicalDto.Patch requestBody,
+        @AuthenticationPrincipal UserPrincipal userPrincipal
+    ) {
+        Physical physical = physicalService.updatePhysical(
+            physicalMapper.physicalDtoPatchToPhysical(requestBody),
+            userPrincipal.getUser().getUserId()
+        );
+
+        PhysicalDto.Response response = physicalMapper.physicalToPhysicalDtoResponse(physical);
+
+        return ResponseEntity.ok().body(ApiResponse.ok("data", response));
     }
 }

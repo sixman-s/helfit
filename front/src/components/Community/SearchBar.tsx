@@ -16,6 +16,20 @@ const SearchBar = () => {
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
+      e.preventDefault();
+      handleSubmit(e);
+    }
+  };
+
+  const pressEnter: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
+    if (e.nativeEvent.isComposing) {
+      return;
+    }
+
+    if (e.key === 'Enter' && e.shiftKey) {
+      return;
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
       handleSubmit(e);
     }
   };
@@ -30,7 +44,7 @@ const SearchBar = () => {
             placeholder='검색 유형을 선택해주세요 '
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            onKeyDown={handleKeyDown}
+            onKeyDown={pressEnter}
           />
         </form>
         <select
@@ -38,10 +52,10 @@ const SearchBar = () => {
           className={style.searchType}
           onChange={(e) => setSearchType(e.target.value)}
         >
-          <option value='title'>Title</option>
-          <option value='text'>Text</option>
-          <option value='tag'>Tag</option>
-          <option value='nickname'>Nickname</option>
+          <option value='title'>제목</option>
+          <option value='text'>내용</option>
+          <option value='tag'>태그</option>
+          <option value='nickname'>닉네임</option>
         </select>
         <button type='submit' className={style.SeachBtn} onClick={handleSubmit}>
           <img src='../../assets/Community/Search.svg' />

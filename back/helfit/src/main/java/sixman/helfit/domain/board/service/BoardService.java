@@ -3,6 +3,7 @@ package sixman.helfit.domain.board.service;
 import org.hibernate.Session;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
@@ -31,10 +32,7 @@ import sixman.helfit.security.entity.UserPrincipal;
 
 import javax.persistence.EntityManager;
 import javax.validation.constraints.Null;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class BoardService {
@@ -48,11 +46,10 @@ public class BoardService {
 
     private final LikeRepository likeRepository;
     private final LikeService likeService;
-    private final EntityManager entityManager;
 
 
-    public BoardService(BoardRepository boardRepository, TagService tagService, CategoryService categoryService, UserService userService, BoardTagRepository boardTagRepository, CommentRepository commentRepository,
-                        LikeRepository likeRepository, LikeService likeService, EntityManager entityManager) {
+    public BoardService(BoardRepository boardRepository, TagService tagService, CategoryService categoryService, UserService userService, BoardTagRepository boardTagRepository,
+                        CommentRepository commentRepository, LikeRepository likeRepository, LikeService likeService) {
         this.boardRepository = boardRepository;
         this.tagService = tagService;
         this.categoryService = categoryService;
@@ -61,7 +58,6 @@ public class BoardService {
         this.commentRepository = commentRepository;
         this.likeRepository = likeRepository;
         this.likeService = likeService;
-        this.entityManager = entityManager;
     }
 
     public Board createBoard(Board board, UserPrincipal userPrincipal){
@@ -70,8 +66,9 @@ public class BoardService {
             boardTag.addTag(tagService.findTag(boardTag.getTag()));
         }
         Board savedBoard =boardRepository.save(board);
+        savedBoard.calculateBoardPoint();
         boardTagRepository.saveAll(board.getBoardTags());
-        return savedBoard;
+        return boardRepository.save(savedBoard);
     }
 
 //    public void updateBoardProfileImage(Long boardId, String imagePath) {
@@ -89,11 +86,11 @@ public class BoardService {
     }
     @Transactional(readOnly = true)
     public Page<Board> findBoards(Long categoryId, int page) {
-        return boardRepository.findBoardByCategoryId(categoryId,PageRequest.of(page,10,
+        return boardRepository.findBoardsByCategoryId(categoryId,PageRequest.of(page,10,
                 Sort.by("boardId").descending()));
     }
     @Transactional(readOnly = true)
-    public Long findBoardsCount(Long categoryId){
+    public Integer findBoardsCount(Long categoryId){
         return boardRepository.countByCategoryId(categoryId);
     }
 
@@ -145,9 +142,10 @@ public class BoardService {
             User user = userPrincipal.getUser();
             Like like = new Like(board,user);
             like.addInBoard();
-            like.addInUser();
-
-            return likeRepository.save(like);
+            Like savedLike = likeService.saveLike(like);
+            board.calculateBoardPoint();
+            boardRepository.save(board);
+            return savedLike;
         }
     }
 
@@ -163,17 +161,31 @@ public class BoardService {
             like.removeLike();
             likeRepository.delete(like);
             userService.saveUser(user);
+            board.calculateBoardPoint();
             boardRepository.save(board);
         }
         else{
             throw new BusinessLogicException(ExceptionCode.LIKE_NOT_FOUND);
         }
     }
-
+    @Transactional(readOnly = true)
+    public List<Board> findBoardFromLikes(UserPrincipal userPrincipal){
+        List<Like> likes = likeRepository.findByUserId(userPrincipal.getUser().getUserId());
+        List<Board> boards = new ArrayList<>();
+        likes.forEach(like->
+                boards.add(like.getBoard())
+        );
+        return boards;
+    }
+    @Transactional(readOnly = true)
     public long getBoardLikes(Long boardId){
         Board board = findBoardById(boardId);
 
         return board.getLikes().size();
+    }
+    @Transactional(readOnly = true)
+    public List<Board> getHotBoards(Long categoryId){
+        return  boardRepository.findTop4Boards(categoryId,PageRequest.of(0, 4));
     }
     @Transactional(readOnly = true)
     private void verifyBoard(Board board,UserPrincipal userPrincipal) {
@@ -193,12 +205,76 @@ public class BoardService {
         Optional<Board> optionalBoard = boardRepository.findBoardByIds(categoryId, boardId);
         return optionalBoard.orElseThrow(() -> new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND));
     }
+    @Transactional(readOnly = true)
+    public List<Board> findBoardByUserId(UserPrincipal userPrincipal,int page){
+        Page<Board> pageBoard = boardRepository.findBoardsByUserId(userPrincipal.getUser().getUserId(),PageRequest.of(page,10,
+                Sort.by("createdAt").descending()));
+        return pageBoard.getContent();
+    }
+
+    @Transactional(readOnly = true)
+    public Integer getCountByUserId(UserPrincipal userPrincipal) {
+        return boardRepository.getCountByUserId(userPrincipal.getUser().getUserId());
+    }
 
     public void addView(Long boardId){
         Board findBoard = findBoardById(boardId);
         long view = findBoard.getView();
         findBoard.setView(view+1);
+        findBoard.calculateBoardPoint();
         boardRepository.save(findBoard);
+    }
+    @Transactional(readOnly = true)
+    public List<Board> findBoardByNickname(String userNickname, int page) {
+        Page<Board> pageBoard =  boardRepository.findByUserNickname(userNickname,PageRequest.of(page,10,
+                Sort.by("createdAt").descending()));
+        return pageBoard.getContent();
+    }
+    @Transactional(readOnly = true)
+    public Integer getBoardCountByNickname(String userNickname){
+        return boardRepository.getCountByNickname(userNickname);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Board> findBoardByTagName(String tagName,int page){
+        Page<BoardTag> boardTags = boardTagRepository.findByTag(tagName,PageRequest.of(page,10,
+                Sort.by("boardTagId").descending()));
+        List<BoardTag> listBoardTag = boardTags.getContent();
+        List<Board> boards = new ArrayList<>();
+        listBoardTag.forEach(boardTag ->
+            boards.add(boardTag.getBoard())
+                );
+        return boards;
+    }
+
+    @Transactional(readOnly = true)
+    public Integer getCountByTagName(String tagName){
+        return boardTagRepository.getCountByTag(tagName);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Board> findBoardByTitle(String title, int page) {
+        Page<Board> pageBoard =  boardRepository.findByTitle(title,PageRequest.of(page,10,
+                Sort.by("createdAt").descending()));
+
+        return pageBoard.getContent();
+    }
+
+    @Transactional(readOnly = true)
+    public Integer getCountByTitle(String title){
+        return boardRepository.getCountByTitle(title);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Board> findBoardByText(String text, int page) {
+        Page<Board> pageBoard =  boardRepository.findByText(text,PageRequest.of(page,10,
+                Sort.by("createdAt").descending()));
+        return pageBoard.getContent();
+    }
+
+    @Transactional(readOnly = true)
+    public Integer getCountByText(String text){
+        return boardRepository.getCountByText(text);
     }
 
 }

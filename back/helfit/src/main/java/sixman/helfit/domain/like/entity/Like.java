@@ -42,14 +42,8 @@ public class Like extends Auditable {
             this.board.getLikes().add(this);
         }
     }
-    public void addInUser(){
-        if(!this.user.getLikes().contains(this)){
-            this.user.getLikes().add(this);
-        }
-    }
 
     public void removeLike() {
-        this.user.getLikes().remove(this);
         this.board.getLikes().remove(this);
         this.user =null;
         this.board =null;

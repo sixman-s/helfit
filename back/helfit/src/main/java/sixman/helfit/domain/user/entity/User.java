@@ -1,22 +1,17 @@
 package sixman.helfit.domain.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.nimbusds.openid.connect.sdk.claims.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import sixman.helfit.audit.Auditable;
-import sixman.helfit.domain.comment.entity.Comment;
-import sixman.helfit.domain.like.entity.Like;
+import sixman.helfit.global.enums.EnumType;
 import sixman.helfit.security.entity.ProviderType;
 import sixman.helfit.security.entity.RoleType;
 
 import javax.persistence.*;
-import javax.validation.Valid;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -47,24 +42,21 @@ public class User extends Auditable {
 
     private LocalDateTime lastLoggedIn;
 
-    @Enumerated(value = EnumType.STRING)
+    @Enumerated(value = javax.persistence.EnumType.STRING)
     private EmailVerified emailVerifiedYn;
 
-    @Enumerated(value = EnumType.STRING)
+    @Enumerated(value = javax.persistence.EnumType.STRING)
     private PersonalInfoAgreement personalInfoAgreementYn;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(javax.persistence.EnumType.STRING)
     @Column(length = 20)
     private RoleType roleType;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(javax.persistence.EnumType.STRING)
     private ProviderType providerType;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(javax.persistence.EnumType.STRING)
     private UserStatus userStatus = UserStatus.USER_ACTIVE;
-
-    @OneToMany(mappedBy = "board",cascade = {CascadeType.PERSIST,CascadeType.REMOVE}, fetch = FetchType.EAGER)
-    private List<Like> likes = new ArrayList<>();
 
     public User(
         String id,
@@ -87,45 +79,23 @@ public class User extends Auditable {
         this.roleType = roleType;
     }
 
-    public User(
-        Long userId,
-        String id,
-        String password,
-        String email,
-        String nickname,
-        String profileImageUrl,
-        LocalDateTime lastLoggedIn,
-        EmailVerified emailVerifiedYn,
-        PersonalInfoAgreement personalInfoAgreementYn,
-        RoleType roleType,
-        ProviderType providerType,
-        UserStatus userStatus
-    ) {
-        this.userId = userId;
-        this.id = id;
-        this.password = password;
-        this.email = email;
-        this.nickname = nickname;
-        this.profileImageUrl = profileImageUrl;
-        this.lastLoggedIn = lastLoggedIn;
-        this.emailVerifiedYn = emailVerifiedYn;
-        this.personalInfoAgreementYn = personalInfoAgreementYn;
-        this.roleType = roleType;
-        this.providerType = providerType;
-        this.userStatus = userStatus;
-    }
-
-    public enum UserStatus {
+    @AllArgsConstructor
+    public enum UserStatus implements EnumType {
         USER_ACTIVE("활동중"),
         USER_INACTIVE("휴면 상태"),
         USER_WITHDRAW("탈퇴 상태")
         ;
 
-        @Getter
-        private final String status;
+        private final String description;
 
-        UserStatus(String status) {
-            this.status = status;
+        @Override
+        public String getName() {
+            return this.name();
+        }
+
+        @Override
+        public String getDescription() {
+            return this.description;
         }
     }
 

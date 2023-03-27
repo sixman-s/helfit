@@ -86,7 +86,7 @@ public class StatControllerTest extends ControllerTest {
         physical = new Physical(1L, 19961213, 173, 78, Physical.Gender.MALE, user);
         calculator = new Calculator(1L, Goal.DIET, ActivityLevel.VERY_ACTIVE, 3011.0, user, physical);
         category = new Category(5L, "오운완");
-        board = new Board(1L, "title", "text", "", category, user, boardTags, likes, 10);
+        board = new Board(1L, "title", "text", "", category, user, boardTags, likes, 10,1000);
         calendarStat1 = new Stat(user, calendar, 2500, "2023-03-22");
         calendarStat2 = new Stat(user, calendar, 2600, "2023-03-23");
         calendarStat3 = new Stat(user, calendar, 2700, "2023-03-24");
@@ -124,13 +124,15 @@ public class StatControllerTest extends ControllerTest {
                 .willReturn(calendarStatList);
         given(statMapper.statListToStatDtoResponseList(Mockito.anyList()))
                 .willReturn(calendarResponseList);
+
         getResource(DEFAULT_URL + "/calendar/{user-id}", 1L)
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.body.data").isNotEmpty())
-                .andDo(restDocs.document(
-                        genRelaxedResponseHeaderFields("header"),
-                        genRelaxedCalendarResponseBodyFields("body.data")
-                ));
+            .apply(true)
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.body.data").isNotEmpty())
+            .andDo(restDocs.document(
+                    genRelaxedResponseHeaderFields("header"),
+                    genRelaxedCalendarResponseBodyFields("body.data")
+            ));
     }
 
     @Test
@@ -141,13 +143,15 @@ public class StatControllerTest extends ControllerTest {
                 .willReturn(boardStatList);
         given(statMapper.statListToStatDtoBoardResponseList(Mockito.anyList()))
                 .willReturn(boardResponseList);
+
         getResource(DEFAULT_URL + "/board/{category-id}", 5)
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.body.data").isNotEmpty())
-                .andDo(restDocs.document(
-                        genRelaxedResponseHeaderFields("header"),
-                        genRelaxedBoardResponseBodyFields("body.data")
-                ));
+            .apply(true)
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.body.data").isNotEmpty())
+            .andDo(restDocs.document(
+                    genRelaxedResponseHeaderFields("header"),
+                    genRelaxedBoardResponseBodyFields("body.data")
+            ));
     }
 
     @Test
@@ -158,7 +162,9 @@ public class StatControllerTest extends ControllerTest {
                 .willReturn(physicalStatList);
         given(statMapper.statListToStatDtoPhysicalResponseList(Mockito.anyList()))
                 .willReturn(physicalResponseList);
+
         getResource(DEFAULT_URL + "/physical")
+            .apply(true)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.body.data").isNotEmpty())
                 .andDo(restDocs.document(
