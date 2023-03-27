@@ -36,8 +36,8 @@
 .title {
   grid-area: title;
   width: 200px;
-
   white-space: nowrap;
+  overflow: hidden;
   text-overflow: ellipsis;
 }
 .ListHeader_Author,
@@ -46,6 +46,7 @@
   width: 40px;
   font-size: 12px;
   white-space: nowrap;
+  overflow: hidden;
   text-overflow: ellipsis;
 }
 .ListHeader_Date,
@@ -59,6 +60,9 @@
   grid-area: tag;
   width: 200px;
   font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .ListHeader_Views,
 .views {
