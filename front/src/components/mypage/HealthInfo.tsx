@@ -98,7 +98,7 @@ const HealthInfo = ({
         <div className={s.leftContainer}>
           <img
             className={cDetail ? s.image : s.images}
-            src='../../../assets/mypage/body.png'
+            src='../../../assets/mypage/body1.png'
           ></img>
         </div>
         <div className={s.rightContainer}>
