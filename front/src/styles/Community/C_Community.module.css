@@ -15,22 +15,28 @@
   display: flex;
   justify-content: space-between;
 }
+
+.Search_bar_line {
+  display: flex;
+  align-items: center;
+}
 .Search_bar {
-  max-width: 600px;
-  min-width: 300px;
+  width: 350px;
   height: 30px;
-  border-radius: 10px;
+  border-radius: 20px 0px 0px 20px;
   margin-left: 20px;
-  margin-top: 10px;
+  padding-left: 20px;
+}
+.searchType {
+  border-radius: 0px 20px 20px 0px;
+  height: 30px;
 }
 .SeachBtn {
   border-radius: 5px;
   width: 40px;
   height: 30px;
-  margin-left: 10px;
-  position: relative;
-  top: 6px;
   background-color: var(--main);
+  margin-left: 10px;
 }
 .menuItem {
   color: var(--text_5) !important;
