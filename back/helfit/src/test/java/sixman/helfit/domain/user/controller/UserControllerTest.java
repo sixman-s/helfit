@@ -24,6 +24,7 @@ import sixman.helfit.domain.user.repository.UserRefreshTokenRepository;
 import sixman.helfit.domain.user.service.UserService;
 import sixman.helfit.restdocs.ControllerTest;
 import sixman.helfit.restdocs.annotations.WithMockUserCustom;
+import sixman.helfit.restdocs.support.DocumentLinkGenerator;
 import sixman.helfit.security.mail.entity.EmailConfirmToken;
 import sixman.helfit.security.mail.service.EmailConfirmTokenService;
 import sixman.helfit.security.properties.AppProperties;
@@ -393,7 +394,7 @@ class UserControllerTest extends ControllerTest {
             fieldWithPath("nickname").type(JsonFieldType.STRING).description("회원 별명"),
             fieldWithPath("profileImageUrl").type(JsonFieldType.STRING).description("회원 프로필 이미지").optional(),
             fieldWithPath("providerType").type(JsonFieldType.STRING).description("가입 경로"),
-            fieldWithPath("userStatus").type(JsonFieldType.STRING).description("회원 상태")
+            fieldWithPath("userStatus").type(JsonFieldType.STRING).description(DocumentLinkGenerator.generateLinkCode(DocumentLinkGenerator.DocUrl.USER_STATUS))
         );
     }
 }
