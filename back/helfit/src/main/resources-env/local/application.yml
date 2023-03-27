@@ -9,6 +9,9 @@ domain:
 chat-gpt:
   secret-key: ${CHAT_GPT_SECRET_KEY}
 
+crypto:
+  encrypt-key: ${CRYPTO_ENCRYPTION_KEY}
+
 cloud:
   aws:
     s3bucket: helfit.life/files
