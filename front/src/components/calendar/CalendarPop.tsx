@@ -142,7 +142,10 @@ const ReaderPop = ({ date, open, setOpen }) => {
         <ul className={styled.infoUl}>
           <li className={styled.infoLi}>
             <picture className={styled.cate}>
-              <img className={styled.icon} src='/assets/lnb_calendar_icn.svg' />
+              <img
+                className={styled.icon}
+                src='../../assets/lnb_calendar_icn.svg'
+              />
               <label className={styled.label}>날짜</label>
             </picture>
             <p className={styled.innerText}>{DateView(date)}</p>
@@ -151,7 +154,7 @@ const ReaderPop = ({ date, open, setOpen }) => {
             <picture className={styled.cate}>
               <img
                 className={styled.icon}
-                src='/assets/calendarP/cal_icn.svg'
+                src='../../../assets/calendarP/cal_icn.svg'
               />
               <label className={styled.label}>칼로리</label>
             </picture>

@@ -5,7 +5,7 @@ import styled from '../../../styles/main/C_nonMembers.module.css';
 const SignupGuide = () => {
   return (
     <form className={styled.container}>
-      <img className={styled.errIcon} src='/assets/mainP/error_icon.svg' />
+      <img className={styled.errIcon} src='../../assets/main/error_icon.svg' />
       <p className={styled.title}>로그인이 필요한 서비스입니다.</p>
       <Link href='/login'>
         <button className={styled.loginBtn}>Login</button>

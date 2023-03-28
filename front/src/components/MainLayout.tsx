@@ -1,11 +1,11 @@
 import LNB from './LNB';
 import ChatGPT from './main/util/ChatGPT';
 
-type MainProps = {
+type mainrops = {
   children: React.ReactNode;
 };
 
-const Layout = ({ children }: MainProps) => {
+const Layout = ({ children }: mainrops) => {
   return (
     <main>
       <LNB />

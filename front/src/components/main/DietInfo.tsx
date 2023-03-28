@@ -45,13 +45,13 @@ const DietInfo = () => {
       <>
         <article className={styled.container}>
           <figure className={styled.figure}>
-            <img src='assets/mainP/questioner_icon.svg' alt='anwer icon' />
+            <img src='assets/main/questioner_icon.svg' alt='anwer icon' />
             <p className={`${styled.question} ${styled.title}`}>
               {questionView}
             </p>
           </figure>
           <figure className={styled.figure}>
-            <img src='assets/mainP/anser_icon.svg' alt='anwer icon' />
+            <img src='assets/main/anser_icon.svg' alt='anwer icon' />
             {answer === '' ? (
               setLodingComponent()
             ) : (
