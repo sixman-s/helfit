@@ -4,6 +4,13 @@ on:
   push:
     branches: ["dev"]
 
+env:
+  APPLICATION_NAME: helfit
+  APPLICATION_GROUP_NAME: helfit-group
+  S3_BUCKET_NAME: helfit.life
+  S3_BUCKET_DIRECTORY: backend
+  ZIP_FILE: front-helfit.zip
+
 jobs:
   build:
     name: CD
@@ -28,7 +35,11 @@ jobs:
         run: npm ci
 
       - name: Run npm run build
-        run: npm run build-dev --if-present
+        run: npm run build --if-present
+
+      - name: Make zip file
+        run: zip -r ./$ZIP_FILE .
+        shell: bash
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -38,7 +49,11 @@ jobs:
           aws-region: ap-northeast-2
 
       - name: Upload to S3
-        run: aws deploy push --application-name airbnb-11-fe --description "This is a revision for the application" --s3-location s3://accommodation-s3/server/FE-Build.zip --source .
+        run: aws deploy push --application-name $APPLICATION_NAME
+             --s3-location s3://$S3_BUCKET_NAME/$ZIP_FILE --source .
 
       - name: Code Deploy
-        run: aws deploy create-deployment --application-name airbnb-11-fe --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name fe-master --s3-location bucket=accommodation-s3,bundleType=zip,key=server/FE-Build.zip
+        run: aws deploy create-deployment --application-name $APPLICATION_NAME 
+             --deployment-config-name CodeDeployDefault.OneAtATime 
+             --deployment-group-name $APPLICATION_GROUP_NAME 
+             --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$ZIP_FILE
