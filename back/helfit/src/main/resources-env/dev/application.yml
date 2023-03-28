@@ -49,15 +49,18 @@ spring:
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
+    defer-datasource-initialization: true
     hibernate:
       ddl-auto: update
-    show-sql: true
-    defer-datasource-initialization : true
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true
   sql:
     init:
       mode: always
       data-locations: classpath*:db/mysql/data.sql
-      schema-locations: classpath*:db/mysql/schema.sql
+#      schema-locations: classpath*:db/mysql/schema.sql
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
@@ -79,7 +82,6 @@ spring:
           connectiontimeout: 5000
           timeout: 5000
           writetimeout: 5000
-
   security:
     oauth2:
       client:
