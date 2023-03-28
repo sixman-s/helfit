@@ -15,7 +15,10 @@ const NonUserInfo = () => {
         </h3>
       </header>
       <form className={`${styled.container} ${styled.userContainer}`}>
-        <img className={styled.errIcon} src='/assets/mainP/error_icon.svg' />
+        <img
+          className={styled.errIcon}
+          src='../../assets/main/error_icon.svg'
+        />
         <p className={styled.title}>로그인이 필요한 서비스입니다.</p>
         <Link href='/login'>
           <button className={styled.loginBtn}>Login</button>
