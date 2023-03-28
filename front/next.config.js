@@ -1,7 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-
   reactStrictMode: true,
+  exportPathMap: async function () {
+    return {
+      '/': { page: '/' },
+      '/community': { page: '/community' },
+      '/login': { page: '/login' },
+      '/signup': { page: '/signup' },
+      '/map': { page: '/map' },
+      '/calendar': { page: '/calendar' },
+      '/oauth2': { page: '/oauth2' }
+    };
+  },
+
   webpack: (config) => {
     config.module.rules.push({
       test: /\.svg$/i,
