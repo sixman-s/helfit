@@ -8,7 +8,6 @@ env:
   APPLICATION_NAME: helfit
   APPLICATION_GROUP_NAME: helfit-group
   S3_BUCKET_NAME: helfit.life
-  ZIP_FILE: front-helfit.zip
 
 jobs:
   build:
@@ -45,4 +44,4 @@ jobs:
           aws-region: ap-northeast-2
 
       - name: Upload to S3
-        run: aws s3 sync s3://$S3_BUCKET_NAME . --acl public-read --delete
+        run: aws s3 cp --recursive out s3://$S3_BUCKET_NAME
