@@ -39,7 +39,6 @@ public class InitDB {
                 "tester",
                 "",
                 EmailVerified.Y,
-                PersonalInfoAgreement.Y,
                 ProviderType.LOCAL,
                 RoleType.USER
             );

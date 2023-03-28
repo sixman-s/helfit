@@ -64,7 +64,6 @@ public class User extends Auditable {
         String nickname,
         String profileImageUrl,
         EmailVerified emailVerifiedYn,
-        PersonalInfoAgreement personalInfoAgreementYn,
         ProviderType providerType,
         RoleType roleType
     ) {
@@ -74,7 +73,7 @@ public class User extends Auditable {
         this.password = "NO_PASS";
         this.profileImageUrl = profileImageUrl != null ? profileImageUrl : "";
         this.emailVerifiedYn = emailVerifiedYn;
-        this.personalInfoAgreementYn = personalInfoAgreementYn;
+        this.personalInfoAgreementYn = PersonalInfoAgreement.Y;
         this.providerType = providerType;
         this.roleType = roleType;
     }

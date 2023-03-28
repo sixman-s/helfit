@@ -26,7 +26,6 @@ public class WithMockUserCustomSecurityContextFactory implements WithSecurityCon
                 "tester",
                 "",
                 EmailVerified.Y,
-                PersonalInfoAgreement.Y,
                 ProviderType.LOCAL,
                 RoleType.USER
             );
