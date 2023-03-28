@@ -188,43 +188,38 @@ const DetailP = () => {
   // 좋아요
   const handleLikeClick = () => {
     const accessToken = localStorage.accessToken;
-
-    if (isLiked) {
-      axios
-        .delete(`${URL}/api/v1/board/likes/${boardID}`, {
+    axios
+      .post(
+        `${URL}/api/v1/board/likes/${boardID}`,
+        {},
+        {
           headers: {
             Authorization: `Bearer ${accessToken}`
           }
-        })
-        //.then((res) => console.log(res))
-        .then((res) => setLikeCount(res.data))
-        .then(() => router.reload())
-        .then(() => setIsLiked(!isLiked))
-        .catch((err) => alert(err));
-    } else {
-      axios
-        .post(
-          `${URL}/api/v1/board/likes/${boardID}`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`
-            }
-          }
-        )
-        .then((res) => setLikeCount(res.data))
-        .then(() => setIsLiked(!isLiked))
-        .then(() => router.reload())
-        .catch((err) => {
-          if (err.response.status === 403) {
-            alert('로그인한 유저만 좋아요를 누를 수 있습니다.');
-          } else if (err.response.status === 400) {
-            alert('이미 좋아요를 누른 게시글입니다.');
-          } else {
-            alert(err);
-          }
-        });
-    }
+        }
+      )
+      .then((res) => setLikeCount(res.data))
+      .then(() => setIsLiked(!isLiked))
+      .then(() => router.reload())
+      .catch((err) => {
+        if (err.response.status === 403) {
+          alert('로그인한 유저만 좋아요를 누를 수 있습니다.');
+        } else if (err.response.status === 400) {
+          axios
+            .delete(`${URL}/api/v1/board/likes/${boardID}`, {
+              headers: {
+                Authorization: `Bearer ${accessToken}`
+              }
+            })
+            //.then((res) => console.log(res))
+            .then((res) => setLikeCount(res.data))
+            .then(() => router.reload())
+            .then(() => setIsLiked(!isLiked))
+            .catch((err) => alert(err));
+        } else {
+          alert(err);
+        }
+      });
   };
 
   const handlePatch = () => {
