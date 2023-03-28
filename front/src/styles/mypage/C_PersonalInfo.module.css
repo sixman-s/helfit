@@ -1,5 +1,19 @@
 .pInfoContainer{
     margin: 20px;
+
+
+}
+
+.quitContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#quit {
+    margin-right: 20px;
+    color: var(--text_5);
+    cursor: pointer;
 }
 
 .topContainer{
