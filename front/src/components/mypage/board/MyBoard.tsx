@@ -2,6 +2,7 @@ import axios from 'axios';
 import { Router, useRouter } from 'next/router';
 import { ReactNode, useEffect, useState } from 'react';
 import s from '../../../styles/mypage/C_Board.module.css';
+import Checkbox from './Checkbox';
 
 interface BoardData {
   boardId: number;
@@ -109,23 +110,25 @@ const MyBoard = (): JSX.Element => {
           ></img>
         </div>
       </div>
-      {info.length === 0
-        ? '게시물을 등록해주세요!'
-        : info.map((el, idx) => {
-            return (
-              <div className={s.board} key={idx}>
-                <div className={s.boardTitle} onClick={myPostView(el)}>
-                  {el.title}
-                </div>
-                <div
-                  className={s.boardContent}
-                  dangerouslySetInnerHTML={{
-                    __html: convertToHtml(el.text)
-                  }}
-                />
+      {info.length === 0 ? (
+        <Checkbox />
+      ) : (
+        info.map((el, idx) => {
+          return (
+            <div className={s.board} key={idx}>
+              <div className={s.boardTitle} onClick={myPostView(el)}>
+                {el.title}
               </div>
-            );
-          })}
+              <div
+                className={s.boardContent}
+                dangerouslySetInnerHTML={{
+                  __html: convertToHtml(el.text)
+                }}
+              />
+            </div>
+          );
+        })
+      )}
     </div>
   );
 };

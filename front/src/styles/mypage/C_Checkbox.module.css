@@ -1,0 +1,12 @@
+.boxContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90%;
+    position: relative;
+}
+
+.innerContainer {
+    font-size: var(--h5);
+    color: var(--text_5);
+}

@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import s from '../../../styles/mypage/C_Comment.module.css';
-import Pagenation from '../Pagination';
+import Checkbox from './Checkbox';
 
 interface BoardData {
   boardId: number;
@@ -102,18 +102,20 @@ const MyComment = () => {
           ></img>
         </div>
       </div>
-      {info.length === 0
-        ? '게시물을 등록해주세요!'
-        : info.map((el, idx) => {
-            return (
-              <div className={s.comment} key={idx}>
-                <div className={s.commentTitle} onClick={myPostView(el)}>
-                  {el.title}
-                </div>
-                <div className={s.commentContent}>{el.commentBody}</div>
+      {info.length === 0 ? (
+        <Checkbox />
+      ) : (
+        info.map((el, idx) => {
+          return (
+            <div className={s.comment} key={idx}>
+              <div className={s.commentTitle} onClick={myPostView(el)}>
+                {el.title}
               </div>
-            );
-          })}
+              <div className={s.commentContent}>{el.commentBody}</div>
+            </div>
+          );
+        })
+      )}
     </div>
   );
 };
