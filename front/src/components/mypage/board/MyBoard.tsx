@@ -42,9 +42,7 @@ const MyBoard = (): JSX.Element => {
 
     if (count <= 0) {
       setCount(1);
-      console.log(count);
     }
-    console.log(count);
 
     axios
       .get(
@@ -63,7 +61,6 @@ const MyBoard = (): JSX.Element => {
         setTotalCount(count);
 
         setInfo(res.data.boardResponses);
-        console.log(res.data.boardResponses);
         return info;
       });
   }, [count]);
@@ -76,9 +73,8 @@ const MyBoard = (): JSX.Element => {
     if (count * 5 < totalCount) setCount(count + 1);
   };
 
-  const myPostView = (el: BoardData) => (url) => {
-    console.log(el.boardId);
-    console.log(el.categoryId);
+  const myPostView = (el: BoardData) => () => {
+    const url = process.env.NEXT_PUBLIC_URL;
 
     const categoryMapper = {
       1: 'health',
@@ -89,15 +85,12 @@ const MyBoard = (): JSX.Element => {
     };
 
     const category = categoryMapper[el.categoryId];
-    console.log(category);
 
     axios
       .get(`${url}/api/v1/board/${el.categoryId}/${el.boardId}`)
       .then(() => router.push(`/community/${category}/${el.boardId}`))
       .catch((err) => alert(err));
   };
-
-  // router.push(`/community/pilates/${el.boardId}`)
 
   return (
     <div className={s.BoardContainer}>

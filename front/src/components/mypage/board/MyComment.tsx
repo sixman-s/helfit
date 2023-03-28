@@ -65,9 +65,8 @@ const MyComment = () => {
     if (count * 5 < totalCount) setCount(count + 1);
   };
 
-  const myPostView = (el: BoardData) => (url) => {
-    console.log(el.boardId);
-    console.log(el.categoryId);
+  const myPostView = (el: BoardData) => () => {
+    const url = process.env.NEXT_PUBLIC_URL;
 
     const categoryMapper = {
       1: 'health',
@@ -108,7 +107,9 @@ const MyComment = () => {
         : info.map((el, idx) => {
             return (
               <div className={s.comment} key={idx}>
-                {/* <div className={s.commentTitle}>{el.title}</div> */}
+                <div className={s.commentTitle} onClick={myPostView(el)}>
+                  {el.title}
+                </div>
                 <div className={s.commentContent}>{el.commentBody}</div>
               </div>
             );
