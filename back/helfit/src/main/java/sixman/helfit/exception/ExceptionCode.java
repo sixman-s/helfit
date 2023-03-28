@@ -12,7 +12,7 @@ public enum ExceptionCode {
     INVALID_CREDENTIAL_VALUE(400, "잘못된 인증 정보입니다."),
     INVALID_ACCESS_TOKEN(400, "잘못된 토큰입니다."),
     INVALID_REFRESH_TOKEN(400, "잘못된 리프레쉬 토큰입니다."),
-
+    EXPIRED_RANDOM_KEY(400, "만료된 인증번호입니다."),
     EXPIRED_TOKEN(400, "만료된 토큰입니다."),
     NOT_EXPIRED_TOKEN_YET(400, "만료되지 않은 토큰입니다."),
     NOT_CHANGED_PASSWORD(400, "최근 사용한 비밀번호입니다. 다른 비밀번호를 선택해 주세요."),
@@ -45,11 +45,8 @@ public enum ExceptionCode {
     CALCULATOR_NOT_FOUND(404,"결과가 존재하지 않습니다."),
     CALCULATOR_NO_USER_INFO(404,"사용자의 신체 정보를 입력하세요"),
     BOARD_NOT_FOUND(404,"게시글이 존재하지 않습니다."),
-
     COMMENTS_NOT_FOUND(404,"댓글이 존재하지 않습니다."),
-
     CATEGORY_NOT_FOUND(404,"카테고리가 존재하지 않습니다."),
-
     LIKE_NOT_FOUND(404, "좋아요가 존재하지 않습니다."),
 
     /*

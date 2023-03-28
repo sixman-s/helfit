@@ -10,6 +10,7 @@ import { useRouter } from 'next/router';
 interface Post {
   boardId: number;
   categoryId: number;
+
   boardImageUrl: string | null;
   createdAt: string;
   modifiedAt: string;
@@ -94,6 +95,7 @@ const Community = () => {
     axios
       .post(`${URL}/api/v1/board/view/${post.boardId}`)
       .then(() => router.push(`/community/${categoryname}/${post.boardId}`))
+
       .catch((err) => alert(err));
   };
   const handlePageChange = (

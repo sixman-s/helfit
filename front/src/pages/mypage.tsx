@@ -85,6 +85,7 @@ export default function Mypage() {
     }
   };
 
+
   const getPhysicalInfo = async ({ token, detail }) => {
     if (detail) {
       // console.log(token);

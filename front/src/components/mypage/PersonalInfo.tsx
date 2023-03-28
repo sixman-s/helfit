@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 import { userInfo1 } from '@/pages/mypage';
 import ModalQuit from './modal/ModalQuit';
 
+
 // export interface detailProps {
 //   info: {
 //     userId: number;
@@ -38,6 +39,7 @@ const PersonalInfo = (detail: userInfo1['detail']) => {
   const clickModalImage = () => {
     setShowMoadal(true);
     setModalContents(<ModalImage {...detail} />);
+
   };
 
   const clickModalQ = () => {
@@ -50,6 +52,7 @@ const PersonalInfo = (detail: userInfo1['detail']) => {
     if (yesOrno) {
       clickModalQ();
     }
+
   };
 
   return (
