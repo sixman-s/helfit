@@ -27,6 +27,9 @@ public class CommentDto {
     public static class ResponseDto {
         private long commentId;
         private long userId;
+        private long categoryId;
+        private long boardId;
+        private String title;
         private String userNickname;
         private String userProfileUrl;
         private String commentBody;
