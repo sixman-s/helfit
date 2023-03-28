@@ -13,7 +13,7 @@ env:
 
 jobs:
   build:
-    name: CD
+    name: Frontend CI/CD
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -21,7 +21,7 @@ jobs:
         working-directory: front
     strategy:
       matrix:
-        node-version: [ 16.x ]
+        node-version: [16.x]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -30,6 +30,9 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+
+      - name: Run npm install packages
+        run: npm i
 
       - name: Run npm run build
         run: npm run build --if-present
