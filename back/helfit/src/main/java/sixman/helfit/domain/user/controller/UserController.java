@@ -402,6 +402,7 @@ public class UserController {
      *q
      */
     @DeleteMapping("/withdraw")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> withdrawUser(
         @Valid @RequestBody UserDto.Password requestBody,
         @CurrentUser UserPrincipal userPrincipal
