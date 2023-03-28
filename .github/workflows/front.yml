@@ -31,9 +31,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Run npm ci
-        run: npm ci
-
       - name: Run npm run build
         run: npm run build --if-present
 
