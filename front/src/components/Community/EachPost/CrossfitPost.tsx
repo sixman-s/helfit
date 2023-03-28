@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import style from '../../../css/Community/C_Post.module.css';
+import style from '../../../styles/Community/C_Post.module.css';
 import Btn from '../../loginc/Buttons';
 import { Pagination, PaginationProps } from 'semantic-ui-react';
 import axios from 'axios';

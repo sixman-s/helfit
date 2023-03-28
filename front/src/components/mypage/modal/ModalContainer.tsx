@@ -1,5 +1,5 @@
 import { PropsWithChildren } from 'react';
-import s from '../../../css/mypage/M_ModalContainer.module.css';
+import s from '../../../styles/mypage/M_ModalContainer.module.css';
 import { useEffect } from 'react';
 
 interface ModalDefaultType {

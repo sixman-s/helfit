@@ -1,6 +1,6 @@
 import { userInfo1, userInfo2, userInfo3 } from '@/pages/mypage';
 import { useEffect, useState } from 'react';
-import s from '../../css/mypage/C_HealthInfo.module.css';
+import s from '../../styles/mypage/C_HealthInfo.module.css';
 import CalorieInfo from './CalorieInfo';
 import ModalContainer from './modal/ModalContainer';
 import ModalHInfo from './modal/ModalHInfo';

@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import layout from '../../../css/main/C_header.module.css';
-import styled from '../../../css/main/C_nonMembers.module.css';
+import layout from '../../../styles/main/C_header.module.css';
+import styled from '../../../styles/main/C_nonMembers.module.css';
 
 const SignupGuide = () => {
   return (

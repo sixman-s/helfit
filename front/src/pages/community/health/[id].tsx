@@ -1,5 +1,5 @@
 import Layout from '@/components/MainLayout';
-import style from '../../../css/Community/P_Detail.module.css';
+import style from '../../../styles/Community/P_Detail.module.css';
 import DetailP from '@/components/Community/DetailP';
 
 const DetailPage = () => {

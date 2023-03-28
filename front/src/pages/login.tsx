@@ -1,4 +1,4 @@
-import login from '../css/Login/P_Login.module.css';
+import login from '../styles/Login/P_Login.module.css';
 import Layout from '@/components/MainLayout';
 import LoginBox from '../components/loginc/LoginBox';
 

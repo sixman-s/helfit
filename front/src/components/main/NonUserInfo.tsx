@@ -1,6 +1,6 @@
-import userInfo from '../../css/main/C_userInfo.module.css';
-import layout from '../../css/main/C_header.module.css';
-import styled from '../../css/main/C_nonMembers.module.css';
+import userInfo from '../../styles/main/C_userInfo.module.css';
+import layout from '../../styles/main/C_header.module.css';
+import styled from '../../styles/main/C_nonMembers.module.css';
 import Link from 'next/link';
 
 const NonUserInfo = () => {

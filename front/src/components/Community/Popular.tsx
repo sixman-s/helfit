@@ -1,4 +1,4 @@
-import style from '../../css/Community/C_Community.module.css';
+import style from '../../styles/Community/C_Community.module.css';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';

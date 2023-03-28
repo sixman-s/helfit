@@ -51,9 +51,3 @@ jobs:
       - name: Upload to S3
         run: aws deploy push --application-name $APPLICATION_NAME
              --s3-location s3://$S3_BUCKET_NAME/$ZIP_FILE --source .
-
-      - name: Code Deploy
-        run: aws deploy create-deployment --application-name $APPLICATION_NAME 
-             --deployment-config-name CodeDeployDefault.OneAtATime 
-             --deployment-group-name $APPLICATION_GROUP_NAME 
-             --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$ZIP_FILE

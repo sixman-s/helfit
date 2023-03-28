@@ -1,4 +1,4 @@
-import style from '../../../css/Community/P_Detail.module.css';
+import style from '../../../styles/Community/P_Detail.module.css';
 
 interface ModalProps {
   isOpen: boolean;

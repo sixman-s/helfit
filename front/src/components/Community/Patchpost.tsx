@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import style from '../../css/Community/C_WritePost.module.css';
+import style from '../../styles/Community/C_WritePost.module.css';
 import Editor from './C_Community/Editor';
 import Tag from './C_Community/Tag';
 import Btn from '../loginc/Buttons';

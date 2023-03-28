@@ -1,5 +1,5 @@
 import Layout from '@/components/MainLayout';
-import singup from '../css/Signup/P_Signup.module.css';
+import singup from '../styles/Signup/P_Signup.module.css';
 import SignupBox from '@/components/signup/SignupBox';
 
 const SignupP = () => {

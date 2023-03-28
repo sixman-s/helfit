@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import s from '../../css/mypage/C_PersonalInfo.module.css';
+import s from '../../styles/mypage/C_PersonalInfo.module.css';
 import ModalPInfo from './modal/ModalPInfo';
 import ModalPassword from './modal/ModalPassword';
 import ModalContainer from './modal/ModalContainer';

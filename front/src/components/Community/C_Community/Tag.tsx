@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import style from '../../../css/Community/C_Tag.module.css';
+import style from '../../../styles/Community/C_Tag.module.css';
 
 export interface TagProps {
   onTagAdd: (newTags: string[]) => void;

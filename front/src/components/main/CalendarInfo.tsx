@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import styled from '../../css/main/C_calendarInfo.module.css';
+import styled from '../../styles/main/C_calendarInfo.module.css';
 import { DateView } from '../calendar/utils/DateView';
 import axios from 'axios';
 

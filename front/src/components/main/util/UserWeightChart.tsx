@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import styled from '../../../css/main/C_chart.module.css';
+import styled from '../../../styles/main/C_chart.module.css';
 import { axisBottom, axisLeft, scaleBand, scaleLinear, select } from 'd3';
 
 const AxisBottom = ({ scale, transform }) => {

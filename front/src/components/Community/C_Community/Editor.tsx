@@ -1,4 +1,4 @@
-import style from '../../../css/Community/C_WritePost.module.css';
+import style from '../../../styles/Community/C_WritePost.module.css';
 import React, { Dispatch, SetStateAction } from 'react';
 import dynamic from 'next/dynamic';
 import 'react-quill/dist/quill.snow.css';

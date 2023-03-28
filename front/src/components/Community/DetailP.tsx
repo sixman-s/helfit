@@ -1,4 +1,4 @@
-import style from '../../css/Community/P_Detail.module.css';
+import style from '../../styles/Community/P_Detail.module.css';
 import React, { useState, useEffect } from 'react';
 import UserNav from './C_Community/UserNav';
 import axios from 'axios';

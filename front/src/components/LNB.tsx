@@ -1,4 +1,4 @@
-import styled from '../css/lnb.module.css';
+import styled from '../styles/lnb.module.css';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';

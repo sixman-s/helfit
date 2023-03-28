@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import s from '../../css/mypage/C_MyList.module.css';
+import s from '../../styles/mypage/C_MyList.module.css';
 import MyBoard from './board/MyBoard';
 import MyComment from './board/MyComment';
 

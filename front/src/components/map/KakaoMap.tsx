@@ -2,7 +2,7 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import { IntrinsicAttributes } from '@/pages/map';
 
-import s from '../../css/map/C_KakaoMap.module.css';
+import s from '../../styles/map/C_KakaoMap.module.css';
 
 declare global {
   interface Window {

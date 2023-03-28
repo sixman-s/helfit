@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import style from '../../css/Community/C_Community.module.css';
+import style from '../../styles/Community/C_Community.module.css';
 import UserNav from './C_Community/UserNav';
 import { useRouter } from 'next/router';
 

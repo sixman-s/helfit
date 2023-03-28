@@ -1,5 +1,5 @@
 import Layout from '@/components/MainLayout';
-import style from '../../css/Community/C_WritePost.module.css';
+import style from '../../styles/Community/C_WritePost.module.css';
 import WritePostBox from '@/components/Community/WritePostBox';
 const WritePost = () => {
   return (
