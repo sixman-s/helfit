@@ -2,7 +2,7 @@ name: Frontend CI/CD
 
 on:
   push:
-    branches: ["fe/dev"]
+    branches: ["dev"]
 
 jobs:
   build:
