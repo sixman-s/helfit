@@ -45,4 +45,4 @@ jobs:
           aws-region: ap-northeast-2
 
       - name: Upload to S3
-        run: aws s3 sync s3://$S3_BUCKET_NAME . --acl public-read
+        run: aws s3 sync s3://$S3_BUCKET_NAME . --acl public-read --overwrite
