@@ -8,7 +8,7 @@ const NonUserInfo = () => {
     <article className={userInfo.container}>
       <header className={userInfo.header}>
         <h3 className={userInfo.h3}>
-          헬핏이 처음이신가요?
+          헬핏이 처음이신가요??
           <br />
           <span className={userInfo.username}>로그인 후 </span>
           다양한 서비스를 만나보세요.

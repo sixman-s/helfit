@@ -20,7 +20,6 @@ export default function Home() {
   return (
     <Layout>
       <section className={styled.container}>
-        <div>....</div>
         {token ? <UserInfo token={token} /> : <VisitantInfo />}
         {token ? (
           <Header title='Calendar' href='/calendar'>
