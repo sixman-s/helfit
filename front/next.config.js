@@ -8,20 +8,6 @@ const nextConfig = {
       use: ['@svgr/webpack']
     });
     return config;
-  },
-  async redirects() {
-    return [
-      {
-        source: '/community/:path*',
-        destination: '/community/:path*',
-        permanent: false
-      },
-      {
-        source: '/signup',
-        destination: '/signup',
-        permanent: false
-      }
-    ];
   }
 };
 
