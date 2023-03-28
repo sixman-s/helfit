@@ -4,7 +4,8 @@
   display: grid;
   grid-template-columns: 0.7fr 1fr;
   grid-template-rows: 0.8fr 0.1fr 1fr;
-  column-gap: 20px !important;
+  column-gap: 30px !important;
+  row-gap: 10px;
 }
 
 .personalInfo {

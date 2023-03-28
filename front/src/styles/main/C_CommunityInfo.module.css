@@ -28,6 +28,10 @@
 }
 
 .title {
+  display: inline-block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
   width: 100%;
   font-size: var(--h6);
   font-weight: 700;
@@ -42,6 +46,6 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
-  color: var(--text_3);
   margin-bottom: 10px;
+  color: var(--text_4);
 }

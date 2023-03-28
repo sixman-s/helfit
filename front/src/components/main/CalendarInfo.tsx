@@ -60,7 +60,7 @@ const CalendarInfo = () => {
             <picture className={styled.cate}>
               <img
                 className={styled.icon}
-                src='/assets/mainP/calendar_icn.svg'
+                src='../../assets/main/calendar_icn.svg'
               />
               <label className={styled.label}>날짜</label>
             </picture>
@@ -70,7 +70,7 @@ const CalendarInfo = () => {
             <picture className={styled.cate}>
               <img
                 className={styled.icon}
-                src='/assets/calendarP/cal_icn.svg'
+                src='../../../assets/calendarP/cal_icn.svg'
               />
               <label className={styled.label}>칼로리</label>
             </picture>
@@ -83,7 +83,7 @@ const CalendarInfo = () => {
             <picture className={styled.cate}>
               <img
                 className={styled.icon}
-                src='/assets/calendarP/cal_icn.svg'
+                src='../../../assets/calendarP/cal_icn.svg'
               />
               <label className={styled.label}>메모</label>
             </picture>
