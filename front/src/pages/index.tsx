@@ -16,10 +16,10 @@ export default function Home() {
       setToken(localStorage.getItem('accessToken'));
     }
   }, []);
-  //test
   return (
     <Layout>
       <section className={styled.container}>
+        <VisitantInfo />
         {token ? <UserInfo token={token} /> : <VisitantInfo />}
         {token ? (
           <Header title='Calendar' href='/calendar'>
