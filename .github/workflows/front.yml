@@ -1,0 +1,15 @@
+name: Frontend CI/CD
+
+on:
+  push:
+    branches: ["fe/dev"]
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@master
+
+      - name: Build # React Build
+        run: npm run deploy
