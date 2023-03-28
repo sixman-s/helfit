@@ -9,6 +9,8 @@ import { useRouter } from 'next/router';
 
 interface Post {
   boardId: number;
+  categoryId: number;
+
   boardImageUrl: string | null;
   createdAt: string;
   modifiedAt: string;
@@ -69,10 +71,31 @@ const Community = () => {
   }, [searchType, searchTerm, activePage]);
 
   const HealthPostView = (post: Post) => () => {
-    console.log(post.boardId);
+    let categoryname: string;
+    switch (post.categoryId) {
+      case 1:
+        categoryname = 'health';
+        break;
+      case 2:
+        categoryname = 'crossfit';
+        break;
+      case 4:
+        categoryname = 'pilates';
+        break;
+      case 5:
+        categoryname = 'oww';
+        break;
+      case 6:
+        categoryname = 'diet';
+        break;
+      default:
+        categoryname = null;
+    }
+
     axios
       .post(`${URL}/api/v1/board/view/${post.boardId}`)
-      .then(() => router.push(`/community/health/${post.boardId}`))
+      .then(() => router.push(`/community/${categoryname}/${post.boardId}`))
+
       .catch((err) => alert(err));
   };
   const handlePageChange = (

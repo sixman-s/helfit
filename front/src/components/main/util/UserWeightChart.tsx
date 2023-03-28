@@ -109,7 +109,6 @@ const UserWeightChart = ({ data }) => {
         <g transform={`translate(${margin.left}, ${margin.top})`}>
           <AxisBottom scale={scaleX} transform={`translate(0, ${height})`} />
           <AxisLeft scale={scaleY} />
-
           <ChartBars
             data={weightData}
             height={height}

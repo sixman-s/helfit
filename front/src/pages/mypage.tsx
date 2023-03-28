@@ -8,30 +8,6 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import MyPage from '../styles/mypage/P_mypage.module.css';
 
-// export interface userInfo {
-//   result: {
-//     detail: {
-//       userId: number;
-//       id: string;
-//       email: string;
-//       nickname: string;
-//       profileImageUrl: string;
-//     };
-//     hDetail: {
-//       birth: number;
-//       gender: string;
-//       height: number;
-//       weight: number;
-//     };
-//     cDetail: {
-//       calculatorId: number;
-//       activityLevel: string;
-//       goal: string;
-//       result: number;
-//     };
-//   };
-// }
-
 export interface userInfo1 {
   detail: {
     userId: number;
@@ -109,7 +85,7 @@ export default function Mypage() {
     }
   };
 
-  // 그니까 이 아래함수가 무조건 동작하려면 detail 을 파라미터로 받아야됨
+
   const getPhysicalInfo = async ({ token, detail }) => {
     if (detail) {
       // console.log(token);
