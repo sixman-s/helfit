@@ -16,7 +16,7 @@
   border-radius: 4px;
   padding: 10px 20px;
   color: var(--text_3);
-  background: url(../../../public/assets/main/calendar_icn.svg) no-repeat right
+  background: url(../../../public/assets/Main/calendar_icn.svg) no-repeat right
     21px center / 16px auto;
 }
 
