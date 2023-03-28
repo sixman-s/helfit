@@ -3,8 +3,6 @@ running: local
 domain:
   front: http://localhost:3000
   back: http://localhost:8080
-# 프론트 배포 전 임시 저장
-#  back: http://ec2-3-34-96-242.ap-northeast-2.compute.amazonaws.com:8080
 
 chat-gpt:
   secret-key: ${CHAT_GPT_SECRET_KEY}
