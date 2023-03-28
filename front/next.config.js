@@ -8,8 +8,7 @@ const nextConfig = {
       '/login': { page: '/login' },
       '/signup': { page: '/signup' },
       '/map': { page: '/map' },
-      '/calendar': { page: '/calendar' },
-      '/oauth2': { page: '/oauth2' }
+      '/calendar': { page: '/calendar' }
     };
   },
 
