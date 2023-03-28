@@ -2,9 +2,9 @@ running: local
 
 domain:
   front: http://localhost:3000
-#  back: http://localhost:8080
+  back: http://localhost:8080
 # 프론트 배포 전 임시 저장
-  back: http://ec2-3-34-96-242.ap-northeast-2.compute.amazonaws.com:8080
+#  back: http://ec2-3-34-96-242.ap-northeast-2.compute.amazonaws.com:8080
 
 chat-gpt:
   secret-key: ${CHAT_GPT_SECRET_KEY}
@@ -35,6 +35,14 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
+  redis:
+    lettuce:
+      pool:
+        min-idle: 0
+        max-idle: 8
+        max-active: 8
+    port: 6379
+    host: 127.0.01
   h2:
     console:
       enabled: true
@@ -126,6 +134,7 @@ spring:
 
 logging:
   level:
+    org.springframework.data.redis: trace
     org.hibernate.SQL: trace
     org.hibernate.type.descriptor.sql.BasicBinder: trace
 

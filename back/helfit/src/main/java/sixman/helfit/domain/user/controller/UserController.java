@@ -25,8 +25,9 @@ import sixman.helfit.exception.BusinessLogicException;
 import sixman.helfit.exception.ExceptionCode;
 import sixman.helfit.global.annotations.CurrentUser;
 import sixman.helfit.response.ApiResponse;
+import sixman.helfit.security.mail.entity.EmailConfirmRandomKey;
 import sixman.helfit.security.mail.entity.EmailConfirmToken;
-import sixman.helfit.security.mail.service.EmailConfirmTokenService;
+import sixman.helfit.security.mail.service.EmailService;
 import sixman.helfit.security.properties.AppProperties;
 import sixman.helfit.security.entity.RoleType;
 import sixman.helfit.security.entity.UserPrincipal;
@@ -34,6 +35,7 @@ import sixman.helfit.security.token.AuthToken;
 import sixman.helfit.security.token.AuthTokenProvider;
 import sixman.helfit.utils.CookieUtil;
 import sixman.helfit.utils.HeaderUtil;
+import sixman.helfit.utils.TempUtil;
 import sixman.helfit.utils.UriUtil;
 
 import javax.mail.MessagingException;
@@ -64,7 +66,7 @@ public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
     private final FileService fileService;
-    private final EmailConfirmTokenService emailConfirmTokenService;
+    private final EmailService emailService;
 
     private final UserRefreshTokenRepository userRefreshTokenRepository;
 
@@ -79,8 +81,8 @@ public class UserController {
     public ResponseEntity<?> signup(@Valid @RequestBody UserDto.Signup requestBody) throws MessagingException {
         User user = userService.createUser(userMapper.userDtoSignupToUser(requestBody));
 
-        EmailConfirmToken emailConfirmToken = emailConfirmTokenService.createEmailConfirmToken(user.getUserId());
-        emailConfirmTokenService.sendEmail(user.getEmail(), emailConfirmToken.getTokenId());
+        EmailConfirmToken emailConfirmToken = emailService.createEmailConfirmToken(user.getUserId());
+        emailService.sendEmailWithToken(user.getEmail(), emailConfirmToken.getTokenId());
 
         URI uri = UriUtil.createUri(DEFAULT_URI, user.getUserId());
 
@@ -163,6 +165,67 @@ public class UserController {
     }
 
     /*
+     * # 회원 아이디 찾기
+     *
+     */
+    @PostMapping("/me/id")
+    public ResponseEntity<?> meId(@Valid @RequestBody UserDto.MeEmail requestBody) throws MessagingException {
+        userService.findUserByEmail(requestBody.getEmail());
+
+        EmailConfirmRandomKey emailRandomKey = emailService.createEmailConfirmRandomKey(requestBody.getEmail());
+        emailService.sendEmailWithRandomKey(requestBody.getEmail(), emailRandomKey.getRandomKey(), "아이디");
+
+        return ResponseEntity.ok(ApiResponse.ok());
+    }
+
+    /*
+     * # 회원 아이디 찾기 (이메일 인증)
+     *
+     */
+    @PostMapping("/me/confirm-id")
+    public ResponseEntity<?> meConfirmId(@Valid @RequestBody UserDto.MeEmailConfirm requestBody) {
+        emailService.updateEmailConfirmRandomKey(requestBody.getRandomKey());
+
+        User user = userService.findUserByEmail(requestBody.getEmail());
+        UserDto.ResponseId response = userMapper.userToUserDtoResponseId(user);
+
+        return ResponseEntity.ok(ApiResponse.ok("data", response));
+    }
+
+    /*
+     * # 회원 비밀번호 찾기
+     *
+     */
+    @PostMapping("/me/password")
+    public ResponseEntity<?> mePassword(@Valid @RequestBody UserDto.MePassword requestBody) throws MessagingException {
+        userService.findUserById(requestBody.getId());
+        userService.findUserByEmail(requestBody.getEmail());
+
+        EmailConfirmRandomKey emailRandomKey =
+            emailService.createEmailConfirmRandomKey(requestBody.getEmail());
+        emailService.sendEmailWithRandomKey(requestBody.getEmail(), emailRandomKey.getRandomKey(), "비밀번호");
+
+        return ResponseEntity.ok(ApiResponse.ok());
+    }
+
+    /*
+     * # 회원 비밀번호 찾기(임시 비밀번호 발급)
+     *
+     */
+    @PostMapping("/me/confirm-password")
+    public ResponseEntity<?> meConfirmPassword(@Valid @RequestBody UserDto.MePasswordConfirm requestBody) throws MessagingException {
+        emailService.updateEmailConfirmRandomKey(requestBody.getRandomKey());
+
+        String email = requestBody.getEmail();
+        String tempPassword = TempUtil.issueTempPassword(email);
+
+        userService.updateUserTempPassword(email, tempPassword);
+        emailService.sendEmailWithTempPassword(email, tempPassword);
+
+        return ResponseEntity.ok(ApiResponse.ok());
+    }
+
+    /*
      * # 회원 refreshToken 재발급
      *
      */
@@ -234,12 +297,12 @@ public class UserController {
     @GetMapping("/confirm-email")
     public ModelAndView confirmEmail(@RequestParam("token-id") String tokenId) {
         EmailConfirmToken verifiedConfirmToken =
-            emailConfirmTokenService.findVerifiedConfirmTokenByTokenId(tokenId);
-        emailConfirmTokenService.updateEmailConfirmToken(verifiedConfirmToken.getTokenId());
+            emailService.findVerifiedConfirmTokenByTokenId(tokenId);
+        emailService.updateEmailConfirmToken(verifiedConfirmToken.getTokenId());
         userService.updateUserEmailVerifiedYn(verifiedConfirmToken.getUserId());
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("email_confirm");
+        modelAndView.setViewName("email_confirm_token");
         modelAndView.addObject("link", frontDomain);
 
         return modelAndView;
@@ -252,9 +315,9 @@ public class UserController {
     @GetMapping("/resend-confirm-email")
     public void resendConfirmEmail(@CurrentUser UserPrincipal userPrincipal) throws MessagingException {
         EmailConfirmToken verifiedConfirmToken =
-            emailConfirmTokenService.findVerifiedConfirmTokenByUserId(userPrincipal.getUser().getUserId());
+            emailService.findVerifiedConfirmTokenByUserId(userPrincipal.getUser().getUserId());
 
-        emailConfirmTokenService.sendEmail(userPrincipal.getUser().getEmail(), verifiedConfirmToken.getTokenId());
+        emailService.sendEmailWithToken(userPrincipal.getUser().getEmail(), verifiedConfirmToken.getTokenId());
     }
 
     /*

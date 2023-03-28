@@ -1,4 +1,4 @@
-package sixman.helfit.domain.user.converter;
+package sixman.helfit.global.converter;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -29,7 +29,6 @@ public class CryptoConverter implements AttributeConverter<String, String> {
 
     @Override
     public String convertToEntityAttribute(String sensitive) {
-        System.out.println("ENCRYPTION_KEY = " + ENCRYPTION_KEY);
         if (sensitive == null) return null;
 
         return encryptDecryptString(sensitive, DECRYPT);
