@@ -1,17 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  exportPathMap: async function () {
-    return {
-      '/': { page: '/' },
-      '/community': { page: '/community' },
-      '/login': { page: '/login' },
-      '/signup': { page: '/signup' },
-      '/map': { page: '/map' },
-      '/calendar': { page: '/calendar' }
-    };
-  },
-
   webpack: (config) => {
     config.module.rules.push({
       test: /\.svg$/i,
@@ -19,6 +8,20 @@ const nextConfig = {
       use: ['@svgr/webpack']
     });
     return config;
+  },
+  async redirects() {
+    return [
+      {
+        source: '/community/:path*',
+        destination: '/community/:path*',
+        permanent: false
+      },
+      {
+        source: '/signup',
+        destination: '/signup',
+        permanent: false
+      }
+    ];
   }
 };
 
