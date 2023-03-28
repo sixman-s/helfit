@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 
-import style from '../../styles/Signup/C_SignupBox.module.css';
+import style from '../../css/Signup/C_SignupBox.module.css';
 
 const Checkbox = () => {
   const [showModal, setShowModal] = useState(false);

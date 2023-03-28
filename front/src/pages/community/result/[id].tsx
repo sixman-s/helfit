@@ -1,4 +1,4 @@
-import style from '../../../styles/Community/P_Result.module.css';
+import style from '../../../css/Community/P_Result.module.css';
 import Layout from '@/components/MainLayout';
 import Searchbar from '@/components/Community/SearchBar';
 

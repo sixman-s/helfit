@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import style from '../../../styles/Community/C_Community.module.css';
+import style from '../../../css/Community/C_Community.module.css';
 
 const UserNav = () => {
   const [userName, setUserName] = useState('User');

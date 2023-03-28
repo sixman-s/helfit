@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Loader } from '@/components/map/Loader';
 
 import useGeoLocation from '../components/map/Geolocation';
-import map from '../styles/map/P_Map.module.css';
+import map from '../css/map/P_Map.module.css';
 
 export interface IntrinsicAttributes {
   result: {

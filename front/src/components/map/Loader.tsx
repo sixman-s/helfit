@@ -1,4 +1,4 @@
-import s from '../../styles/map/C_LoaderTest.module.css';
+import s from '../../css/map/C_LoaderTest.module.css';
 
 import { Ring } from '@uiball/loaders';
 

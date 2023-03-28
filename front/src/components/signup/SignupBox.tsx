@@ -1,5 +1,5 @@
 import axios from 'axios';
-import style from '../../styles/Signup/C_SignupBox.module.css';
+import style from '../../css/Signup/C_SignupBox.module.css';
 import OAuthBox from '@/components/loginc/OAuth';
 import Checkbox from './Checkbox';
 import Btn from '@/components/loginc/Buttons';

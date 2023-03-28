@@ -1,4 +1,4 @@
-import styled from '../../styles/calendar/C_calendarPop.module.css';
+import styled from '../../css/calendar/C_calendarPop.module.css';
 import { useEffect, useState, useRef } from 'react';
 import { DateView } from './utils/DateView';
 import axios from 'axios';

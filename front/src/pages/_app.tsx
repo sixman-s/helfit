@@ -1,9 +1,9 @@
 import type { AppProps } from 'next/app';
-import '../styles/global-style.css';
+import '../css/global-style.css';
 import 'semantic-ui-css/semantic.min.css';
-import '../styles/variables.css';
-import '../styles/calendar/C_calendarApi.css';
-import '../styles/Editor.css';
+import '../css/variables.css';
+import '../css/calendar/C_calendarApi.css';
+import '../css/Editor.css';
 import Script from 'next/script';
 
 const App = ({ Component, pageProps }: AppProps) => {

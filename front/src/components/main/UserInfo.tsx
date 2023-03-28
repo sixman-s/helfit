@@ -1,4 +1,4 @@
-import styled from '../../styles/main/C_userInfo.module.css';
+import styled from '../../css/main/C_userInfo.module.css';
 import Link from 'next/link';
 import UserKcalChart from './util/UserKcalChart';
 import UserWeightChart from './util/UserWeightChart';

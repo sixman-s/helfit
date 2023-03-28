@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import layout from '../../styles/main/C_header.module.css';
-import styled from '../../styles/main/C_communityInfo.module.css';
+import layout from '../../css/main/C_header.module.css';
+import styled from '../../css/main/C_communityInfo.module.css';
 import { useEffect, useRef, useState, useLayoutEffect } from 'react';
 import axios from 'axios';
 import { ConvertToHtml } from './util/ConvertToHtml';

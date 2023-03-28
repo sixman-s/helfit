@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import styled from '../../../styles/main/C_noneData.module.css';
+import styled from '../../../css/main/C_noneData.module.css';
 const NonData = ({ link, btn }) => {
   return (
     <div className={styled.container}>

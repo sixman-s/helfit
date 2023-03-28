@@ -6,7 +6,7 @@ import PersonalInfo from '@/components/mypage/PersonalInfo';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import MyPage from '../styles/mypage/P_mypage.module.css';
+import MyPage from '../css/mypage/P_mypage.module.css';
 
 export interface userInfo1 {
   detail: {

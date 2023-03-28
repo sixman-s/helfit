@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Menu, MenuItemProps } from 'semantic-ui-react';
-import styles from '../../styles/Community/C_Community.module.css';
+import styles from '../../css/Community/C_Community.module.css';
 import { useRouter } from 'next/router';
 
 const menuItems = [

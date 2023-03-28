@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import styled from '../../../styles/main/C_chatGPT.module.css';
+import styled from '../../../css/main/C_chatGPT.module.css';
 import axios from 'axios';
 import { DotPulse } from '@uiball/loaders';
 

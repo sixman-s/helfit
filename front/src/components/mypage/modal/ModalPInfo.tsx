@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 
-import s from '../../../styles/mypage/M_ModalPInfo.module.css';
+import s from '../../../css/mypage/M_ModalPInfo.module.css';
 
 // interface detailProps {
 //   userId: number;

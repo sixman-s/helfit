@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 
-import s from '../../../styles/mypage/M_ModalPassword.module.css';
+import s from '../../../css/mypage/M_ModalPassword.module.css';
 
 interface PasswordForm {
   password: string;

@@ -1,4 +1,4 @@
-import style from '../../../styles/Community/P_Community.module.css';
+import style from '../../../css/Community/P_Community.module.css';
 import Layout from '@/components/MainLayout';
 import Categoty from '@/components/Community/Category';
 import Searchbar from '@/components/Community/SearchBar';

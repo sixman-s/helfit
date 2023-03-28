@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import s from '../../../styles/mypage/C_Comment.module.css';
+import s from '../../../css/mypage/C_Comment.module.css';
 import Checkbox from './Checkbox';
 
 interface BoardData {

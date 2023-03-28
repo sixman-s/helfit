@@ -1,5 +1,5 @@
 import Layout from '@/components/MainLayout';
-import styled from '../styles/main/P_main.module.css';
+import styled from '../css/main/P_main.module.css';
 import UserInfo from '@/components/main/UserInfo';
 import CalendarInfo from '@/components/main/CalendarInfo';
 import DietInfo from '@/components/main/DietInfo';

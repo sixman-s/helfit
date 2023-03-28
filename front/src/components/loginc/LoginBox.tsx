@@ -1,4 +1,4 @@
-import boxstyle from '../../styles/Login/C_LoginBox.module.css';
+import boxstyle from '../../css/Login/C_LoginBox.module.css';
 import OAuthBox from './OAuth';
 import Btn from './Buttons';
 import axios from 'axios';

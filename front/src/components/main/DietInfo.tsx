@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import styled from '../../styles/main/C_dietInfo.module.css';
+import styled from '../../css/main/C_dietInfo.module.css';
 import { DotPulse } from '@uiball/loaders';
 import Link from 'next/link';
 

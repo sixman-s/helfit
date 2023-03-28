@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 
-import s from '../../../styles/mypage/M_ModalQuit.module.css';
+import s from '../../../css/mypage/M_ModalQuit.module.css';
 
 const ModalQuit = () => {
   const { register, handleSubmit } = useForm();

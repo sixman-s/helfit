@@ -3,7 +3,7 @@ import { useRef } from 'react';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 
-import s from '../../../styles/mypage/M_ModalImage.module.css';
+import s from '../../../css/mypage/M_ModalImage.module.css';
 import { userInfo1 } from '@/pages/mypage';
 
 // interface detailProps {

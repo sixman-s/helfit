@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 
-import s from '../../../styles/mypage/M_ModalHInfo.module.css';
+import s from '../../../css/mypage/M_ModalHInfo.module.css';
 import { userInfo1, userInfo2, userInfo3 } from '@/pages/mypage';
 
 // export interface detailProps {

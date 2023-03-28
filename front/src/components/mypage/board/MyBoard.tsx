@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Router, useRouter } from 'next/router';
 import { ReactNode, useEffect, useState } from 'react';
-import s from '../../../styles/mypage/C_Board.module.css';
+import s from '../../../css/mypage/C_Board.module.css';
 import Checkbox from './Checkbox';
 
 interface BoardData {

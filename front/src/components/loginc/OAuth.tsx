@@ -1,4 +1,4 @@
-import style from '../../styles/Login/C_LoginBox.module.css';
+import style from '../../css/Login/C_LoginBox.module.css';
 
 const URL = process.env.NEXT_PUBLIC_URL;
 

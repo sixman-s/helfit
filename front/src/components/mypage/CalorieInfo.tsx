@@ -1,5 +1,5 @@
 import axios from 'axios';
-import s from '../../styles/mypage/C_CalorieInfo.module.css';
+import s from '../../css/mypage/C_CalorieInfo.module.css';
 // import { calorieProps } from './HealthInfo';
 
 // export interface calorieProps {
