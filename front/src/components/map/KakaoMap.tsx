@@ -1,5 +1,6 @@
 /* global kakao */
 import { FC, useEffect, useRef, useState } from 'react';
+import { IntrinsicAttributes } from '@/pages/map';
 
 import s from '../../styles/map/C_KakaoMap.module.css';
 
@@ -24,27 +25,28 @@ type Place = {
   y: string;
 };
 
-const KakaoMap: FC<{ info: string; search: string }> = ({ info, search }) => {
+const KakaoMap = (result: IntrinsicAttributes['result']) => {
   const [selectedPlace, setSelectedPlace] = useState<Place>();
   const [exit, setExit] = useState(false);
   const mapRef = useRef<HTMLDivElement>(null);
+  const kakao = (window as any).kakao;
 
   useEffect(() => {
     window.kakao.maps.load(() => {
       const container = mapRef.current;
       const options = {
         center: new kakao.maps.LatLng(
-          info ? info.lat : 33.450701,
-          info ? info.lng : 126.570667
+          result.info ? result.info.lat : 33.450701,
+          result.info ? result.info.lng : 126.570667
         ),
-        level: 5
+        level: 4
       };
       // 지도 객체 생성
       const map = new kakao.maps.Map(container, options);
       // 장소 검색 객체 생성
       const places = new kakao.maps.services.Places(map);
 
-      if (search) {
+      if (result.search) {
         // 키워드 검색이 끝나고 호출될 콜백 함수
         const placesSearchCB = (data, status, pagination) => {
           if (status === kakao.maps.services.Status.OK) {
@@ -54,7 +56,7 @@ const KakaoMap: FC<{ info: string; search: string }> = ({ info, search }) => {
           }
         };
         // 키워드로 장소 검색
-        places.keywordSearch(search, placesSearchCB, {
+        places.keywordSearch(result.search, placesSearchCB, {
           useMapBounds: true
         });
 
@@ -69,7 +71,7 @@ const KakaoMap: FC<{ info: string; search: string }> = ({ info, search }) => {
             setSelectedPlace(place);
           });
         };
-      } else if (info) {
+      } else if (result.info) {
         new window.kakao.maps.Marker({
           map: map,
           position: options.center

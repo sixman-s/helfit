@@ -26,7 +26,7 @@ import sixman.helfit.restdocs.ControllerTest;
 import sixman.helfit.restdocs.annotations.WithMockUserCustom;
 import sixman.helfit.restdocs.support.DocumentLinkGenerator;
 import sixman.helfit.security.mail.entity.EmailConfirmToken;
-import sixman.helfit.security.mail.service.EmailConfirmTokenService;
+import sixman.helfit.security.mail.service.EmailService;
 import sixman.helfit.security.properties.AppProperties;
 import sixman.helfit.security.token.AuthToken;
 import sixman.helfit.security.token.AuthTokenProvider;
@@ -65,7 +65,7 @@ class UserControllerTest extends ControllerTest {
     FileService fileService;
 
     @MockBean
-    EmailConfirmTokenService emailConfirmTokenService;
+    EmailService emailService;
 
     @MockBean
     UserRefreshTokenRepository userRefreshTokenRepository;
@@ -100,10 +100,10 @@ class UserControllerTest extends ControllerTest {
         given(userMapper.userDtoSignupToUser(any(UserDto.Signup.class)))
             .willReturn(user);
 
-        given(emailConfirmTokenService.createEmailConfirmToken(anyLong()))
+        given(emailService.createEmailConfirmToken(anyLong()))
             .willReturn(new EmailConfirmToken());
 
-        doNothing().when(emailConfirmTokenService).sendEmail(anyString(), anyString());
+        doNothing().when(emailService).sendEmailWithToken(anyString(), anyString());
 
         postResource(
             DEFAULT_URL + "/signup",
@@ -210,10 +210,10 @@ class UserControllerTest extends ControllerTest {
     @Test
     @DisplayName("[테스트] 회원 이메일 인증")
     void confirmEmailTest() throws Exception {
-        given(emailConfirmTokenService.findVerifiedConfirmTokenByTokenId(anyString()))
+        given(emailService.findVerifiedConfirmTokenByTokenId(anyString()))
             .willReturn(new EmailConfirmToken("token-id", 1L, false));
 
-        doNothing().when(emailConfirmTokenService).updateEmailConfirmToken(anyString());
+        doNothing().when(emailService).updateEmailConfirmToken(anyString());
 
         doNothing().when(userService).updateUserEmailVerifiedYn(anyLong());
 
@@ -236,10 +236,10 @@ class UserControllerTest extends ControllerTest {
     @DisplayName("[테스트] 회원 이메일 인증 재발송")
     @WithMockUserCustom
     void resendConfirmEmailTest() throws Exception {
-        given(emailConfirmTokenService.findVerifiedConfirmTokenByUserId(anyLong()))
+        given(emailService.findVerifiedConfirmTokenByUserId(anyLong()))
             .willReturn(new EmailConfirmToken("token-id", 1L, false));
 
-        doNothing().when(emailConfirmTokenService).sendEmail(anyString(), anyString());
+        doNothing().when(emailService).sendEmailWithToken(anyString(), anyString());
 
         getResource(DEFAULT_URL + "/resend-confirm-email")
             .apply(true)

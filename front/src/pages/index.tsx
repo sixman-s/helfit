@@ -16,6 +16,7 @@ export default function Home() {
       setToken(localStorage.getItem('accessToken'));
     }
   }, []);
+
   return (
     <Layout>
       <section className={styled.container}>

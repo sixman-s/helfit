@@ -22,8 +22,8 @@
   background-color: var(--main);
   color: white;
   border-radius: 10px;
-  width: 130px;
-  height: 40px;
+  width: 100px;
+  height: 30px;
   margin-bottom: 20px;
 }
 .button:hover {
@@ -41,7 +41,6 @@
 .photo {
   margin: 10px;
   height: 310px;
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -67,6 +66,7 @@
   width: 30px;
   margin-left: 10px;
   margin-top: 10px;
+  border-radius: 50px;
 }
 .postUser {
   display: flex;
@@ -82,6 +82,9 @@
   font-size: 14px;
   font-weight: bold;
   color: var(--main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .pagenation {
   grid-area: footer;

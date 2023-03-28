@@ -35,11 +35,10 @@ public class InitDB {
         public void dbInit() {
             User user = new User(
                 "tester",
-                "tester@tester.com",
+                "gr8monkeyj@gmail.com",
                 "tester",
                 "",
                 EmailVerified.Y,
-                PersonalInfoAgreement.Y,
                 ProviderType.LOCAL,
                 RoleType.USER
             );

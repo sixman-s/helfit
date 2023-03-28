@@ -41,7 +41,7 @@ jobs:
           gradle-version: 7.6.1
 
       - name: Execute Gradle build
-        run: ./gradlew clean build
+        run: ./gradlew clean build -Pprofile=dev
 
       - name: Make zip file
         run: zip -r ./$ZIP_FILE .

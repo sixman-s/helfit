@@ -51,18 +51,3 @@
     text-align: end;
     padding-right: 10px;
 }
-
-.pageDiv{
-    text-align: center;
-}
-
-#quitContainer {
-    display: flex;
-    justify-content: end;
-}
-
-#quit {
-  
-    color: var(--text_5);
-    cursor: pointer;
-}

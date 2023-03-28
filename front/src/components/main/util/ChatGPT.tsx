@@ -21,11 +21,11 @@ const SpeechBubble = ({ data }) => {
     return type === 'question' && content !== '' ? (
       <div className={styled.questionArea} key={index}>
         <p className={`${styled.speech} ${styled.question}`}>{content}</p>
-        <img src='../../../assets/mainP/questioner_icon.svg' />
+        <img src='../../../assets/main/questioner_icon.svg' />
       </div>
     ) : (
       <div className={styled.answerArea} key={index}>
-        <img src='../../../assets/mainP/answer_icon.svg' />
+        <img src='../../../assets/main/answer_icon.svg' />
         <p className={`${styled.speech} ${styled.answer}`}>{content}</p>
       </div>
     );
@@ -124,7 +124,7 @@ const ChatGPT = () => {
     <div>
       <img
         className={styled.stikyBtn}
-        src='../../../assets/MainP/chatGPT_icon.svg'
+        src='../../../assets/main/chatGPT_icon.svg'
         onClick={() => setClick(!click)}
       />
       {click ? <ChatPopup /> : null}

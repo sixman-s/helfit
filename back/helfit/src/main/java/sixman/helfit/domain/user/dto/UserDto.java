@@ -1,10 +1,8 @@
 package sixman.helfit.domain.user.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.lang.Nullable;
 import sixman.helfit.global.annotations.ValidEnum;
 
@@ -13,7 +11,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-import java.time.LocalDateTime;
 
 import static sixman.helfit.domain.user.entity.User.*;
 
@@ -26,6 +23,7 @@ public class UserDto {
         @NotBlank
         private String id;
 
+        @NotNull(message = "Null 값은 입력할 수 없습니다.")
         @Pattern(
             regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!@#$%^&*()_\\-\"',.+/])[A-Za-z\\d!@#$%^&*()_\\-\"',.+/]{8,}$",
             message = "비밀번호는 영어(대/소문자), 숫자, 특수문자 포함 8자 이상으로 구성되어야 합니다."
@@ -54,9 +52,11 @@ public class UserDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Login {
+        @NotNull(message = "Null 값은 입력할 수 없습니다.")
         @NotBlank
         private String id;
 
+        @NotNull(message = "Null 값은 입력할 수 없습니다.")
         @NotBlank
         private String password;
 
@@ -89,6 +89,61 @@ public class UserDto {
         private String password;
     }
 
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MeEmail {
+        @NotNull(message = "Null 값은 입력할 수 없습니다.")
+        @NotBlank
+        @Email
+        private String email;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MeEmailConfirm {
+        @NotNull(message = "Null 값은 입력할 수 없습니다.")
+        @NotBlank
+        @Email
+        private String email;
+
+        @NotNull(message = "Null 값은 입력할 수 없습니다.")
+        @NotBlank
+        private String randomKey;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MePassword {
+        @NotNull(message = "Null 값은 입력할 수 없습니다.")
+        @NotBlank
+        private String id;
+
+        @NotNull(message = "Null 값은 입력할 수 없습니다.")
+        @NotBlank
+        @Email
+        private String email;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MePasswordConfirm {
+        @NotNull(message = "Null 값은 입력할 수 없습니다.")
+        @NotBlank
+        private String id;
+
+        @NotNull(message = "Null 값은 입력할 수 없습니다.")
+        @NotBlank
+        @Email
+        private String email;
+
+        @NotNull(message = "Null 값은 입력할 수 없습니다.")
+        @NotBlank
+        private String randomKey;
+    }
 
     @Getter
     @AllArgsConstructor
@@ -101,5 +156,11 @@ public class UserDto {
         private String profileImageUrl;
         private String providerType;
         private String userStatus;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class ResponseId {
+        private String id;
     }
 }

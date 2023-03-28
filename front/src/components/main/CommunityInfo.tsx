@@ -1,60 +1,49 @@
 import Link from 'next/link';
 import layout from '../../styles/main/C_header.module.css';
-import styled from '../../styles/main/C_communityInfo.module.css';
-import { useEffect, useState } from 'react';
+import styled from '../../styles/main/C_CommunityInfo.module.css';
+import { useEffect, useRef, useState, useLayoutEffect } from 'react';
 import axios from 'axios';
+import { ConvertToHtml } from './util/ConvertToHtml';
 
 const CommunityInfo = ({ token }) => {
   const [data, setData] = useState([]);
-
-  const escapeMap = {
-    '&lt;': '<',
-    '&#12296;': '<',
-    '&gt;': '>',
-    '&#12297;': '>',
-    '&amp;': '&',
-    '&quot;': '"',
-    '&#x27;': "'"
-  };
-
-  const pattern = /&(lt|gt|amp|quot|#x27|#12296|#12297);/g;
-
-  const convertToHtml = (text) =>
-    text.replace(pattern, (match, entity) => escapeMap[`&${entity};`] || match);
+  const elRef = useRef(null);
 
   useEffect(() => {
     if (token) {
-      const headers = {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      };
       const url = process.env.NEXT_PUBLIC_URL;
       axios
-        .get(`${url}/api/v1/stat/board/5`, headers)
+        .get(`${url}/api/v1/board/hot/5`)
         .then((res) => {
-          setData(res.data.body.data);
+          setData(res.data);
         })
         .catch((error) => console.log(error));
     }
   }, [token]);
 
+  useLayoutEffect(() => {
+    if (elRef.current) {
+      elRef.current.style.color = '#7e90b3';
+      // set other style attributes
+    }
+  });
+
   return (
     <ul className={styled.contents}>
       {data &&
-        data.map(({ boardImageUrl, text, title }, index: number) => (
-          <li className={styled.content} key={index}>
-            <Link href={`/community/oww/${index + 1}`}>
-              <img className={styled.img} src={boardImageUrl} />
-              <div className={styled.label}>
-                <span className={styled.title}>{title}</span>
-                <p className={styled.context}>
-                  {convertToHtml(text).replace('<p>', '').replace('</p>', '')}
-                </p>
-              </div>
-            </Link>
-          </li>
-        ))}
+        data
+          .slice(0, 3)
+          .map(({ boardImageUrl, text, title, boardId }, index: number) => (
+            <li className={styled.content} key={index}>
+              <Link href={`/community/oww/${boardId}`}>
+                <img className={styled.img} src={boardImageUrl} />
+                <div className={styled.label}>
+                  <span className={styled.title}>{title}</span>
+                  <p className={styled.context}>{ConvertToHtml(text)}</p>
+                </div>
+              </Link>
+            </li>
+          ))}
     </ul>
   );
 };

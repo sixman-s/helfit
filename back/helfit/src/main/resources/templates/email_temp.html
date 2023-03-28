@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="x-apple-disable-message-reformatting">
+    <title>Helfit</title>
+    <style>
+        table, td, div, h1, p {font-family: Arial, sans-serif;}
+        table, td {border: 0 solid transparent !important;}
+    </style>
+</head>
+<body style="margin:0;padding:50px;">
+<table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;background:#ffffff;">
+    <tr>
+        <td align="center" style="padding:0;">
+            <table role="presentation" style="width:602px;border-collapse:collapse;border:1px solid #cccccc;border-spacing:0;text-align:left;">
+                <tr>
+                    <td style="padding:0;">
+                        <table role="presentation" style="width:602px;border-collapse:collapse;border:1px solid #cccccc;border-spacing:0;text-align:left;">
+                            <tr>
+                                <td style="padding:50px 0 0; text-align: center; font-size:40px;">
+                                    <img src="https://s3.ap-northeast-2.amazonaws.com/helfit.life/files/logo.png" alt="Helfit" width="200" height="200">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:20px 0 20px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:0; text-align: center; font-size: 24px;">
+                                    회원 임시 비밀번호 발급
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 50px 0 0; text-align: center;">
+                                    임시 발급된 비밀번호 입니다.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 20px 0; text-align: center;">
+                                    비밀번호: <span th:text="${temp}" style="font-weight: bold; font-size: 24px"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:0 0 100px; text-align: center;">
+                                    서비스 이동 후 임시 발급된 비밀번호로 로그인해주세요.
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

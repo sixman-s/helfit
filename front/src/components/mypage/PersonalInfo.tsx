@@ -6,23 +6,23 @@ import ModalPassword from './modal/ModalPassword';
 import ModalContainer from './modal/ModalContainer';
 import ModalImage from './modal/ModalImage';
 import { useEffect } from 'react';
+import { userInfo1 } from '@/pages/mypage';
+import ModalQuit from './modal/ModalQuit';
 
-export interface detailProps {
-  info: {
-    userId: number;
-    birth: number;
-    id: string;
-    email: string;
-    nickname: string;
-    profileImageUrl: string;
-  };
-}
 
-const PersonalInfo = ({ detail }: { detail: detailProps }) => {
+// export interface detailProps {
+//   info: {
+//     userId: number;
+//     id: string;
+//     email: string;
+//     nickname: string;
+//     profileImageUrl: string;
+//   };
+// }
+
+const PersonalInfo = (detail: userInfo1['detail']) => {
   const [modalContents, setModalContents] = useState<JSX.Element>(<></>);
   const [showModal, setShowMoadal] = useState<boolean>(false);
-
-  console.log('detail : ' + JSON.stringify(detail));
 
   const checkImage = detail.profileImageUrl
     ? detail.profileImageUrl
@@ -30,7 +30,7 @@ const PersonalInfo = ({ detail }: { detail: detailProps }) => {
 
   const clickModalP = () => {
     setShowMoadal(true);
-    setModalContents(<ModalPInfo detail={detail} />);
+    setModalContents(<ModalPInfo {...detail} />);
   };
   const clickModalPW = () => {
     setShowMoadal(true);
@@ -38,12 +38,33 @@ const PersonalInfo = ({ detail }: { detail: detailProps }) => {
   };
   const clickModalImage = () => {
     setShowMoadal(true);
-    setModalContents(<ModalImage detail={detail} />);
+    setModalContents(<ModalImage {...detail} />);
+
+  };
+
+  const clickModalQ = () => {
+    setShowMoadal(true);
+    setModalContents(<ModalQuit />);
+  };
+
+  const handleQuit = () => {
+    const yesOrno = confirm('정말 탈퇴하시겠습니까?');
+    if (yesOrno) {
+      clickModalQ();
+    }
+
   };
 
   return (
     <div className={s.pInfoContainer}>
-      <span className={s.mypageTitle}>User</span>
+      <div className={s.quitContainer}>
+        <span className={s.mypageTitle}>User</span>
+        <p id={s.quitContainer}>
+          <span id={s.quit} onClick={handleQuit}>
+            회원탈퇴
+          </span>
+        </p>
+      </div>
       <div className={s.innerContainer}>
         <div className={s.topContainer}>
           <div className={s.profileDiv}>
