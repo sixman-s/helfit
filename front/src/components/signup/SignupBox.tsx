@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-const URL = 'https://back.helfit.life';
+const URL = process.env.NEXT_PUBLIC_URL;
 
 type SignupForm = {
   userID: string;
