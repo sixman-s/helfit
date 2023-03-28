@@ -96,12 +96,8 @@ public class SecurityConfig {
                     "/**/*.css",
                     "/**/*.js"
                 ).permitAll()
-                .antMatchers(
-                    "/api/**/users/signup",
-                    "/api/**/users/login",
-                    "/api/**/users/confirm-email"
-                ).permitAll()
-                .antMatchers("/api/**/users/**").hasAnyAuthority(RoleType.USER.getCode())
+                // # Ex: RoleType.USER 인가 설정
+                // .antMatchers("/api/**/users/**").hasAnyAuthority(RoleType.USER.getCode())
                 .antMatchers("/api/**/admin/**").hasAnyAuthority(RoleType.ADMIN.getCode())
                 .antMatchers("/api/**").permitAll()
                 .anyRequest().authenticated()

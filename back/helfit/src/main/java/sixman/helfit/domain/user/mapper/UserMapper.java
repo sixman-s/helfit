@@ -17,4 +17,5 @@ public interface UserMapper {
     User userDtoPasswordToUser(UserDto.Password requestBody);
 
     UserDto.Response userToUserDtoResponse(User user);
+    UserDto.ResponseId userToUserDtoResponseId(User user);
 }

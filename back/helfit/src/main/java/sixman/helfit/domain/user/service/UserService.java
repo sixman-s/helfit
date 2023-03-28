@@ -14,6 +14,7 @@ import sixman.helfit.exception.ExceptionCode;
 import sixman.helfit.utils.CustomBeanUtil;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import static sixman.helfit.domain.user.entity.User.*;
 
@@ -67,6 +68,13 @@ public class UserService {
         userRepository.save(verifiedUser);
     }
 
+    public void updateUserTempPassword(String email, String tempPassword) {
+        User verifiedUser = findUserByEmail(email);
+
+        verifiedUser.setPassword(passwordEncoder.encode(tempPassword));
+        userRepository.save(verifiedUser);
+    }
+
     public void withdrawUser(Long userId, User user) {
         User verifiedUser = findUserByUserId(userId);
 
@@ -89,8 +97,22 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
+    public User findUserById(String id) {
+        Optional<User> byUserId = userRepository.findById(id);
+
+        return byUserId.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+    }
+
+    @Transactional(readOnly = true)
     public User findUserByUserId(Long userId) {
         Optional<User> byUserId = userRepository.findByUserId(userId);
+
+        return byUserId.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+    }
+
+    @Transactional(readOnly = true)
+    public User findUserByEmail(String email) {
+        Optional<User> byUserId = userRepository.findByEmail(email);
 
         return byUserId.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
     }
@@ -109,5 +131,7 @@ public class UserService {
         });
     }
 
-    public void saveUser(User user){userRepository.save(user);}
+    public void saveUser(User user){
+        userRepository.save(user);
+    }
 }
