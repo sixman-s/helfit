@@ -20,23 +20,11 @@ const nextConfig = {
       '/community': { page: '/community' },
       '/calendar': { page: '/calendar' },
       '/login': { page: '/login' },
-      '/signup': { page: '/signup' }
+      '/signup': { page: '/signup' },
+      '/mypage': { page: '/mypage' },
+      '/oauth2': { page: '/oauth2' }
     };
   }
-  // async redirects() {
-  //   return [
-  //     {
-  //       source: '/login',
-  //       destination: '/login',
-  //       permanent: false
-  //     },
-  //     {
-  //       source: '/map',
-  //       destination: '/community',
-  //       permanent: false
-  //     }
-  //   ];
-  // }
 };
 
 module.exports = nextConfig;
