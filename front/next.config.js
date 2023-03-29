@@ -8,6 +8,15 @@ const nextConfig = {
       use: ['@svgr/webpack']
     });
     return config;
+  },
+  async redirects() {
+    return [
+      {
+        source: '/login',
+        destination: '/login',
+        permanent: false
+      }
+    ];
   }
 };
 
