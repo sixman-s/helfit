@@ -16,7 +16,11 @@ const nextConfig = {
   ) {
     return {
       '/': { page: '/' },
-      '/map': { page: '/map' }
+      '/map': { page: '/map' },
+      '/community': { page: '/community' },
+      '/calendar': { page: '/calendar' },
+      '/login': { page: '/login' },
+      '/signup': { page: '/signup' }
     };
   }
   // async redirects() {
