@@ -91,7 +91,7 @@ const HealthInfo = ({
             {hDetail.gender !== 'test' ? (
               <span className={s.answer}>{chagneGenderName}</span>
             ) : (
-              <span className={s.nonAnswer}>정보를 입력해주세요.</span>
+              <span className={s.nonAnswer}>정보를 입력해주세요..</span>
             )}
           </div>
           <div className={s.list}>

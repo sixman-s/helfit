@@ -37,8 +37,8 @@ const DetailP = () => {
   const [fetchedData, setFetchedData] = useState<BoardData | null>(null);
   const [viewCount, setViewCount] = useState(0);
   const [likeCount, setLikeCount] = useState(0);
-  const [likeUser, setLikeUser] = useState([]);
   const [isLiked, setIsLiked] = useState(false);
+  const [likeUser, setLikeUser] = useState([]);
 
   const escapeMap = {
     '&lt;': '<',
@@ -199,8 +199,8 @@ const DetailP = () => {
         }
       )
       .then((res) => setLikeCount(res.data))
-      .then(() => router.reload())
       .then(() => setIsLiked(!isLiked))
+      .then(() => router.reload())
       .catch((err) => {
         if (err.response.status === 403) {
           alert('로그인한 유저만 좋아요를 누를 수 있습니다.');
@@ -296,8 +296,8 @@ const DetailP = () => {
               <img
                 src={
                   isLiked
-                    ? '../../assets/Community/Like.svg'
-                    : '../../assets/Community/unLike.svg'
+                    ? '../../../assets/Community/Like.svg'
+                    : '../../../assets/Community/unLike.svg'
                 }
                 className={style.PostLikeSVG}
                 onClick={handleLikeClick}
@@ -365,7 +365,7 @@ const DetailP = () => {
         </div>
         <div className={style.CommentWrite}>
           <div className={style.CommnetSVG}>
-            <img src='../../assets/Community/Comment.svg' />
+            <img src='../../../assets/Community/Comment.svg' />
             <div className={style.CommnetText}> 댓글 </div>
           </div>
           <input
@@ -377,7 +377,7 @@ const DetailP = () => {
             onKeyDown={pressEnter}
           />
           <img
-            src='../../assets/Community/Write.svg'
+            src='../../../assets/Community/Write.svg'
             onClick={handleClick}
             style={{ cursor: 'pointer' }}
           />
@@ -406,7 +406,7 @@ const DetailP = () => {
                     JSON.parse(localStorage.getItem('UserInfo') ?? '{}')
                       ?.userId) && (
                   <img
-                    src={'../../assets/Community/Delete.svg'}
+                    src={'../../../assets/Community/Delete.svg'}
                     className={style.deleteSVG}
                     onClick={() => handleDeleteComment(comment.commentId)}
                   />

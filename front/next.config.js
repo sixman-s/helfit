@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-
   reactStrictMode: true,
   webpack: (config) => {
     config.module.rules.push({
@@ -9,6 +8,30 @@ const nextConfig = {
       use: ['@svgr/webpack']
     });
     return config;
+  },
+  trailingSlash: true,
+  exportPathMap: async function (
+    defaultPathMap,
+    { dev, dir, outDir, distDir, buildId }
+  ) {
+    return {
+      '/': { page: '/' },
+      '/map': { page: '/map' },
+      '/community': { page: '/community' },
+      '/calendar': { page: '/calendar' },
+      '/login': { page: '/login' },
+      '/signup': { page: '/signup' },
+      '/mypage': { page: '/mypage' }
+    };
+  },
+  async redirects() {
+    return [
+      {
+        source: '/oauth2/:path*',
+        destination: '/oauth2/:path*',
+        permanent: false
+      }
+    ];
   }
 };
 

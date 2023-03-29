@@ -6,6 +6,7 @@ import Btn from '@/components/loginc/Buttons';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+
 const URL = process.env.NEXT_PUBLIC_URL;
 
 type SignupForm = {
@@ -41,8 +42,15 @@ const SignupBox = () => {
         router.push('/login');
         console.log(response);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        if (error.response.status === 409) {
+          alert('가입 이력이 이미 있는 이메일입니다.');
+        } else {
+          alert('잘못된 요청입니다.');
+        }
+      });
   };
+
   const validatePasswordMatch = (value) => {
     const { password } = getValues();
     return value === password || '비밀번호가 일치하지 않습니다.';
