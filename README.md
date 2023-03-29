@@ -84,7 +84,7 @@
 |                  **메인 페이지(대시보드)**                   |                   로그인 / 회원가입 페이지                   |
 | :----------------------------------------------------------: | :----------------------------------------------------------: |
 | <img width="100%" src="https://user-images.githubusercontent.com/104547038/228576867-71229015-5e74-4c65-ba79-f821b6803919.png"/> | <img width="100%" src="https://user-images.githubusercontent.com/104547038/228464390-1b5ad490-08b5-4a2a-8de4-d27ea75f80f4.png"/> |
-|                   **인기 게시판 페이지 **                    |                    **각 카테고리 페이지**                    |
+|                   **인기 게시판 페이지**                    |                    **각 카테고리 페이지**                    |
 | <img width="100%" src="https://user-images.githubusercontent.com/104547038/228464414-898f14e7-423b-49d3-9435-4b1c824f90da.png"/> | <img width="100%" src="https://user-images.githubusercontent.com/104547038/228576331-711438ec-0f06-4f4f-ab32-d15149d65b89.png"/> |
 |                **게시글 작성 & 수정 페이지**                 |                       **상세 페이지**                        |
 | <img width="100%" src="https://user-images.githubusercontent.com/104547038/228465348-83e8cf55-df79-4ff7-96f3-ed3893fc510f.png"/> | <img width="100%" src="https://user-images.githubusercontent.com/104547038/228467569-2967a476-bbd8-4f6b-bd32-9983e1e89dc7.png"/> |
