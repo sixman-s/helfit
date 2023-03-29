@@ -10,7 +10,7 @@ const LoginP = () => {
           <div className={login.login_box}>
             <img
               className={login.leftImg}
-              src={'assets/LoginP/로그인페이지1.png'}
+              src={'../../assets/LoginP/로그인페이지1.png'}
             />
             <LoginBox />
           </div>
