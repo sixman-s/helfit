@@ -18,7 +18,7 @@ const nextConfig = {
       },
       {
         source: '/map',
-        destination: '/map',
+        destination: '/community',
         permanent: false
       }
     ];
