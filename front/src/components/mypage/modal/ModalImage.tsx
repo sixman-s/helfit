@@ -6,18 +6,6 @@ import { useRouter } from 'next/router';
 import s from '../../../styles/mypage/M_ModalImage.module.css';
 import { userInfo1 } from '@/pages/mypage';
 
-// interface detailProps {
-//   userId: number;
-//   id: string;
-//   email: string;
-//   nickname: string;
-//   profileImageUrl: string;
-//   birth: number;
-//   gender: string;
-//   height: number;
-//   weight: number;
-// }
-
 const ModalImage = (detail: userInfo1['detail']) => {
   const router = useRouter();
   const firstImageUrl = '../../../../assets/mypage/profile.svg';
@@ -34,9 +22,7 @@ const ModalImage = (detail: userInfo1['detail']) => {
       setFile(event.target.files);
 
       const newFileURL = URL.createObjectURL(event.target.files[0]);
-      console.log(newFileURL);
       setFileURL(newFileURL);
-      console.log(fileURL);
     }
   };
 
@@ -54,7 +40,6 @@ const ModalImage = (detail: userInfo1['detail']) => {
             }
           })
           .then((res) => {
-            console.log(res.status);
             if (res.status === 200) {
               router.reload();
             }

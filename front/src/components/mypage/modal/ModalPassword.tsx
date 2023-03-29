@@ -29,7 +29,6 @@ const ModalPassword = () => {
     <form
       onSubmit={handleSubmit(async (data) => {
         await new Promise((r) => setTimeout(r, 1000));
-        console.log(data);
         try {
           axios
             .patch(`${url}/api/v1/users/password`, data, {

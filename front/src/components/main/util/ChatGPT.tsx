@@ -124,7 +124,7 @@ const ChatGPT = () => {
     <div>
       <img
         className={styled.stikyBtn}
-        src='../../../assets/main/chatGPT_icon.svg'
+        src='../../../../assets/main/chatGPT_icon.svg'
         onClick={() => setClick(!click)}
       />
       {click ? <ChatPopup /> : null}

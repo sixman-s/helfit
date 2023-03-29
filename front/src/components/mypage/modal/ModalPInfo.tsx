@@ -28,7 +28,6 @@ const ModalPInfo = (detail: userInfo1['detail']) => {
     <form
       onSubmit={handleSubmit(async (data) => {
         await new Promise((r) => setTimeout(r, 1000));
-        console.log(data);
         axios
           .patch(`${url}/api/v1/users`, data, {
             headers: {
@@ -37,13 +36,11 @@ const ModalPInfo = (detail: userInfo1['detail']) => {
           })
           .then((res) => {
             {
-              console.log(res);
               let userInfo = JSON.parse(localStorage.getItem('UserInfo'));
 
               userInfo['nickname'] = res.data.body.data.nickname;
 
               localStorage.setItem('UserInfo', JSON.stringify(userInfo));
-              console.log(JSON.parse(localStorage.getItem('UserInfo')));
 
               router.reload();
             }

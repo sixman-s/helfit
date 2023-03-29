@@ -119,7 +119,7 @@ const Community = () => {
             <div>검색 결과: {resultCount}개 </div>
             <div className={style.backToHome} onClick={handleGoHome}>
               <img
-                src={'../../assets/Community/Community.svg'}
+                src={'../../../assets/Community/Community.svg'}
                 className={style.backHome}
               />
               Home으로 돌아가기
@@ -152,7 +152,7 @@ const Community = () => {
               )}
             </div>
             <img
-              src={'../../assets/Community/SearchPage.png'}
+              src={'../../../assets/Community/SearchPage.png'}
               className={style.SearchPicture}
             />
           </div>
