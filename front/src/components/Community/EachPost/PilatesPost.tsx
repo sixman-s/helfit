@@ -142,3 +142,5 @@ const HealthPost: React.FC = () => {
 };
 
 export default HealthPost;
+
+// 주석 처리
