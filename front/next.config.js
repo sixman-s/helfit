@@ -1,4 +1,3 @@
-// Process
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -22,8 +21,8 @@ const nextConfig = {
       '/calendar': { page: '/calendar' },
       '/login': { page: '/login' },
       '/signup': { page: '/signup' },
-      '/mypage': { page: '/mypage' },
-      '/oauth2': { page: '/oauth2/receive' }
+      '/mypage': { page: '/mypage' }
+      // '/oauth2': { page: '/oauth2/receive' }
     };
   }
   // async redirects() {

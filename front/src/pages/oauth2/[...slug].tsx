@@ -40,5 +40,7 @@ const OAuth2 = () => {
         });
     }
   }
+
+  return <></>;
 };
 export default OAuth2;
