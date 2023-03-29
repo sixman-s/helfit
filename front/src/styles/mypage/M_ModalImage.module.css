@@ -34,8 +34,6 @@
     border-radius: 2px;
     color: white;
     background-color: var(--main);
-    /* margin-right: 50px;
-    margin-left: 20px; */
 }
 
 #submitBtn {
@@ -52,8 +50,7 @@
     border-radius: 2px;
     background-color: #B1B1B1;
     color: white;
-    /* margin-left: 50px;
-    margin-right: 20px; */
+
 }
 
 

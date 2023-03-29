@@ -88,7 +88,7 @@ const HealthInfo = ({
         <div className={s.rightContainer}>
           <div className={s.list}>
             <span className={s.question}>성별</span>
-            {hDetail.gender !== '' ? (
+            {hDetail.gender !== 'test' ? (
               <span className={s.answer}>{chagneGenderName}</span>
             ) : (
               <span className={s.nonAnswer}>정보를 입력해주세요..</span>

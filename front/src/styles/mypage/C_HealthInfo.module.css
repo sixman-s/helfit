@@ -36,12 +36,16 @@
 
 .bottomContainer .leftContainer {
     width: 50%;
-    /* height: 140px; */
+    height: 140px;
+    text-align: center;
+}
+
+.bottomContainer .rightContainer{
     text-align: center;
 }
 
 .image {
-    /* height: 200px; */
+    height: 200px;
 }
 
 .images {
@@ -59,6 +63,7 @@
 
 .answer {
     margin-left: 20px;
+    color: var(--text_2);
     /* text-decoration: underline; */
     /* font-weight: */
 
