@@ -14,7 +14,7 @@ crypto:
 
 cloud:
   aws:
-    s3bucket: helfit.life/files
+    s3bucket: back.helfit.life/files
     access-key: ${AWS_ACCESS_KEY}
     secret-key: ${AWS_SECRET_KEY}
     stack:
