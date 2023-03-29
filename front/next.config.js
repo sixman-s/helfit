@@ -29,7 +29,7 @@ const nextConfig = {
       {
         source: '/oauth2/:path*',
         destination: '/oauth2/:path*',
-        permanent: false
+        permanent: true
       }
     ];
   }
