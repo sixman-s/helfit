@@ -39,7 +39,6 @@ export default function Mypage() {
   const [detail, setDetail] = useState<userInfo1['detail']>();
   const [hDetail, setHDetail] = useState<userInfo2['hDetail']>();
   const [cDetail, setCDetail] = useState<userInfo3['cDetail']>();
-  // const router = useRouter();
 
   const [token, setToken] = useState<any>('');
   const url = process.env.NEXT_PUBLIC_URL;
@@ -48,17 +47,17 @@ export default function Mypage() {
     const accessToken = localStorage.getItem('accessToken');
     setToken(accessToken);
     initMyPage(accessToken);
-    // console.log('유주이펙' + detail);
   }, []);
 
   const initMyPage = async (token) => {
     try {
       const detail = await getUserInfo(token);
-      // console.log('#####');
-      const hDetail = await getPhysicalInfo({ token, detail });
-      // console.log('@@@@@');
-      const { userId } = detail;
-      await getCalculateInfo({ userId, token, hDetail });
+      const checking = JSON.parse(localStorage.getItem('UserInfo')).gender;
+      if (checking) {
+        const hDetail = await getPhysicalInfo({ token, detail });
+        const { userId } = detail;
+        await getCalculateInfo({ userId, token, hDetail });
+      }
     } catch (e) {
       // console.log(e);
     }
@@ -73,36 +72,28 @@ export default function Mypage() {
           }
         });
         setDetail(res.data.body.data);
-        // console.log('detail : ' + detail);
-        // const userId = res.data.body.data.userId;
+
         const detail = res.data.body.data;
-        // console.log('userId :' + userId);
 
         return detail;
       } catch (err) {
-        // console.error(err);
+        console.error(err);
       }
     }
   };
 
-
   const getPhysicalInfo = async ({ token, detail }) => {
     if (detail) {
-      // console.log(token);
-      // console.log('!!!!!!!');
       try {
         const res = await axios.get(`${url}/api/v1/physical/recent`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
         });
-        // console.log('info : ' + res.data.body.data);
+
         setHDetail(res.data.body.data);
         return res.data.body.data;
-        // console.log('hDetail : ' + JSON.stringify(hDetail));
       } catch (error) {
-        console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>error');
-        console.log(error);
         const today = new Date();
         const year = today.getFullYear() * 10000;
         const month = (today.getMonth() + 1) * 100;
@@ -115,8 +106,6 @@ export default function Mypage() {
           weight: 0
         });
       }
-    } else {
-      // console.log('detail undefind');
     }
   };
 
@@ -129,17 +118,14 @@ export default function Mypage() {
           }
         });
 
-        // console.log(`계산기 요청 결과 : ${res.data.body.data}`);
-        console.log(res.data.body.data);
         const {
           data: {
             body: { data: cDetailData }
           }
         } = res;
-        // console.log('cDetailData : ' + cDetailData);
+
         setCDetail(cDetailData);
       } catch (error) {
-        // console.log(error);
         const cDetailData = {};
         setCDetail({
           calculatorId: 0,
