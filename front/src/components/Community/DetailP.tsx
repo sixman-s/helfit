@@ -296,8 +296,8 @@ const DetailP = () => {
               <img
                 src={
                   isLiked
-                    ? '../../assets/Community/Like.svg'
-                    : '../../assets/Community/unLike.svg'
+                    ? '../../../assets/Community/Like.svg'
+                    : '../../../assets/Community/unLike.svg'
                 }
                 className={style.PostLikeSVG}
                 onClick={handleLikeClick}
@@ -365,7 +365,7 @@ const DetailP = () => {
         </div>
         <div className={style.CommentWrite}>
           <div className={style.CommnetSVG}>
-            <img src='../../assets/Community/Comment.svg' />
+            <img src='../../../assets/Community/Comment.svg' />
             <div className={style.CommnetText}> 댓글 </div>
           </div>
           <input
@@ -377,7 +377,7 @@ const DetailP = () => {
             onKeyDown={pressEnter}
           />
           <img
-            src='../../assets/Community/Write.svg'
+            src='../../../assets/Community/Write.svg'
             onClick={handleClick}
             style={{ cursor: 'pointer' }}
           />
@@ -406,7 +406,7 @@ const DetailP = () => {
                     JSON.parse(localStorage.getItem('UserInfo') ?? '{}')
                       ?.userId) && (
                   <img
-                    src={'../../assets/Community/Delete.svg'}
+                    src={'../../../assets/Community/Delete.svg'}
                     className={style.deleteSVG}
                     onClick={() => handleDeleteComment(comment.commentId)}
                   />

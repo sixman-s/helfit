@@ -10,7 +10,7 @@ permissions:
 env:
   APPLICATION_NAME: helfit
   APPLICATION_GROUP_NAME: helfit-group
-  S3_BUCKET_NAME: helfit.life
+  S3_BUCKET_NAME: back.helfit.life
   S3_BUCKET_DIRECTORY: backend
   ZIP_FILE: helfit.zip
 

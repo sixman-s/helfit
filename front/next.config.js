@@ -27,10 +27,15 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      // {
+      //   source: '/oauth2/:path*',
+      //   destination: '/oauth2/:path*',
+      //   permanent: true
+      // },
       {
-        source: '/oauth2/:path*',
-        destination: '/oauth2/:path*',
-        permanent: false
+        source: '/oauth2/receive/:path*',
+        destination: '/oauth2/receive/:path*',
+        permanent: true
       }
     ];
   }
