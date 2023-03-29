@@ -1,7 +1,7 @@
 running: dev
 
 domain:
-  front: http://helfit.life
+  front: https://www.helfit.life
   back: https://back.helfit.life
 
 chat-gpt:
@@ -146,4 +146,4 @@ app:
     refreshTokenExpiry: 604800000
   oauth2:
     authorizedRedirectUris:
-      - http://helfit.life/oauth2/receive
+      - https://www.helfit.life/oauth2/receive
