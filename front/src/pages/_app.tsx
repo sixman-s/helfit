@@ -1,5 +1,5 @@
 import type { AppProps } from 'next/app';
-import { useRouter } from 'next/router';
+// import { useRouter } from 'next/router';
 import '../styles/global-style.css';
 import 'semantic-ui-css/semantic.min.css';
 import '../styles/variables.css';
@@ -8,11 +8,11 @@ import '../styles/Editor.css';
 import Script from 'next/script';
 
 const App = ({ Component, pageProps }: AppProps) => {
-  const router = useRouter();
-  const path = (/#!(\/.*)$/.exec(router.asPath) || [])[1];
-  if (path) {
-    router.replace(path);
-  }
+  // const router = useRouter();
+  // const path = (/#!(\/.*)$/.exec(router.asPath) || [])[1];
+  // if (path) {
+  //   router.replace(path);
+  // }
 
   return (
     <>
