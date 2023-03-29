@@ -36,8 +36,8 @@ const KakaoMap = (result: IntrinsicAttributes['result']) => {
       const container = mapRef.current;
       const options = {
         center: new kakao.maps.LatLng(
-          result.info ? result.info.lat : 33.450701,
-          result.info ? result.info.lng : 126.570667
+          result.info ? result.info.lat : 37.555078,
+          result.info ? result.info.lng : 126.970702
         ),
         level: 4
       };
