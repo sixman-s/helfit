@@ -1,14 +1,7 @@
 import axios from 'axios';
 import s from '../../styles/mypage/C_CalorieInfo.module.css';
-// import { calorieProps } from './HealthInfo';
-
-// export interface calorieProps {
-//   result: number;
-// }
 
 const CalorieInfo = (result) => {
-  console.log(`calorie : ${result.calorie}`);
-  // const k1 = JSON.stringify(result.caloir);
   return (
     <div className={s.calroieContainer}>
       <span className={s.calorieTitle}>Result</span>

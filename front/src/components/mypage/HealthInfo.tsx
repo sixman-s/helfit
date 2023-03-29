@@ -68,7 +68,55 @@ const HealthInfo = ({
     setShowMoadal(true);
   };
 
-  if (detail == undefined || hDetail == undefined) return <>test</>;
+  if (detail == undefined || hDetail == undefined)
+    return (
+      <>
+        <div className={s.hInfoContainer}>
+          <div className={s.titleDiv}>
+            <span className={s.hInfoTitle}>Physical</span>
+            <button className={s.button} onClick={clickModal}>
+              칼로리 계산
+            </button>
+          </div>
+          <div className={s.bottomContainer}>
+            <div className={s.leftContainer}>
+              <img
+                className={cDetail ? s.image : s.images}
+                src='../../../assets/mypage/body1.png'
+              ></img>
+            </div>
+            <div className={s.rightContainer}>
+              <div className={s.list}>
+                <span className={s.question}>성별</span>
+                <span className={s.nonAnswer}>정보를 입력해주세요..</span>
+              </div>
+              <div className={s.list}>
+                <span className={s.question}>나이</span>
+                <span className={s.nonAnswer}>정보를 입력해주세요.</span>
+              </div>
+              <div className={s.list}>
+                <span className={s.question}>키</span>
+
+                <span className={s.nonAnswer}>정보를 입력해주세요.</span>
+              </div>
+              <div className={s.list}>
+                <span className={s.question}>몸무게</span>
+                <span className={s.nonAnswer}>정보를 입력해주세요.</span>
+              </div>
+            </div>
+          </div>
+          <CalorieInfo calorie={calorie} />
+          <ModalContainer
+            showModal={showModal}
+            exitModal={() => {
+              setShowMoadal(false);
+            }}
+          >
+            <ModalHInfo detail={detail} hDetail={hDetail} cDetail={cDetail} />
+          </ModalContainer>
+        </div>
+      </>
+    );
 
   return (
     <div className={s.hInfoContainer}>
