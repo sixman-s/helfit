@@ -93,8 +93,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             new Date(now.getTime() + appProperties.getAuth().getRefreshTokenExpiry())
         );
 
-        HeaderUtil.setAccessToken(response, accessToken.getToken());
-
         // # DB Access
         UserRefreshToken userRefreshToken = userRefreshTokenRepository.findById(userInfo.getId());
 
@@ -146,20 +144,16 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private URI createURI(AuthToken accessToken, AuthToken refreshToken) {
         List<String> authorizedRedirectUris = appProperties.getOauth2().getAuthorizedRedirectUris();
+        String callback = authorizedRedirectUris.stream().filter(d -> d.contains(frontDomain)).findAny()
+                       .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ACCESS_DENIED));
 
-        String callback = authorizedRedirectUris.stream()
-                              .filter(d -> d.contains(frontDomain))
-                              .findAny()
-                              .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ACCESS_DENIED));
-
-        // MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-        // ! Response Header 전달로 대체
-        // queryParams.add("access_token", accessToken.getToken());
+        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+        queryParams.add("access_token", accessToken.getToken());
         // ! Cookie 전달로 대체
         // queryParams.add("refresh_token", refreshToken.getToken());
 
         return UriComponentsBuilder.fromUriString(callback)
-                   // .queryParams(queryParams)
-                   .build().toUri();
+                      .queryParams(queryParams)
+                      .build().toUri();
     }
 }
