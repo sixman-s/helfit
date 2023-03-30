@@ -35,7 +35,7 @@ public class InitDB {
         public void dbInit() {
             User user = new User(
                 "tester",
-                "gr8monkeyj@gmail.com",
+                "tester@tester.com",
                 "tester",
                 "",
                 EmailVerified.Y,
