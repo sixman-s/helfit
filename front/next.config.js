@@ -22,7 +22,7 @@ const nextConfig = {
       '/login': { page: '/login' },
       '/signup': { page: '/signup' },
       '/mypage': { page: '/mypage' },
-      '/oauth2': { page: '/oauth2/receive' }
+      '/oauth2/receive': { page: '/oauth2/receive' }
     };
   }
   // async redirects() {
