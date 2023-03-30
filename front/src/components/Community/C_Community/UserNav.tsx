@@ -27,7 +27,7 @@ const UserNav = () => {
       <div className={style.UserProfile}>
         <div>
           <img
-            src={userProfile || '../../../assets/Community/UserProfile.svg'}
+            src={userProfile || '../../../../assets/Community/UserProfile.svg'}
             className={style.UserPhoto}
           />
         </div>

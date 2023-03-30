@@ -127,7 +127,7 @@ const PatchPostBox = () => {
                 title: title,
                 text: editorInput,
                 boardTags: tags,
-                boardImageUrl: boardImageUrl || null
+                boardImageUrl: boardImageUrl
               },
               {
                 headers: {
@@ -153,7 +153,8 @@ const PatchPostBox = () => {
           {
             title: title,
             text: editorInput,
-            boardTags: tags
+            boardTags: tags,
+            boardImageUrl: selectedFile
           },
           {
             headers: {
