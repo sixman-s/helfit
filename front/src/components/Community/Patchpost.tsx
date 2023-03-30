@@ -127,7 +127,7 @@ const PatchPostBox = () => {
                 title: title,
                 text: editorInput,
                 boardTags: tags,
-                boardImageUrl: boardImageUrl
+                boardImageUrl: boardImageUrl || null
               },
               {
                 headers: {

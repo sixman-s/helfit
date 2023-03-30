@@ -200,7 +200,7 @@ const DetailP = () => {
       )
       .then((res) => setLikeCount(res.data))
       .then(() => setIsLiked(!isLiked))
-      .then(() => router.reload())
+      .then(() => router.push(`/community/${currentPage}/${boardID}`))
       .catch((err) => {
         if (err.response.status === 403) {
           alert('로그인한 유저만 좋아요를 누를 수 있습니다.');
@@ -213,7 +213,7 @@ const DetailP = () => {
             })
             //.then((res) => console.log(res))
             .then((res) => setLikeCount(res.data))
-            .then(() => router.reload())
+            .then(() => router.push(`/community/${currentPage}/${boardID}`))
             .then(() => setIsLiked(!isLiked))
             .catch((err) => alert(err));
         } else {
