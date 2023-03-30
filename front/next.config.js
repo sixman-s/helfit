@@ -22,24 +22,10 @@ const nextConfig = {
       '/login': { page: '/login' },
       '/signup': { page: '/signup' },
       '/mypage': { page: '/mypage' },
-      '/oauth2': { page: '/oauth2' },
+      // '/oauth2': { page: '/oauth2' },
       '/oauth2/receive': { page: '/oauth2/receive' }
     };
   }
-  // async redirects() {
-  //   return [
-  //     // {
-  //     //   source: '/oauth2/:path*',
-  //     //   destination: '/oauth2/:path*',
-  //     //   permanent: true
-  //     // },
-  //     {
-  //       source: '/oauth2/receive:path*',
-  //       destination: '/oauth2/receive:path*',
-  //       permanent: true
-  //     }
-  //   ];
-  // }
 };
 
 module.exports = nextConfig;
