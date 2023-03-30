@@ -8,32 +8,32 @@ const nextConfig = {
       use: ['@svgr/webpack']
     });
     return config;
-  },
-  trailingSlash: true,
-  exportPathMap: async function (
-    defaultPathMap,
-    { dev, dir, outDir, distDir, buildId }
-  ) {
-    return {
-      '/': { page: '/' },
-      '/map': { page: '/map' },
-      '/community': { page: '/community' },
-      '/calendar': { page: '/calendar' },
-      '/login': { page: '/login' },
-      '/signup': { page: '/signup' },
-      '/mypage': { page: '/mypage' },
-      '/oauth2': { page: '/oauth2' }
-    };
-  },
-  async redirects() {
-    return [
-      {
-        source: '/oauth2/receive:path*',
-        destination: '/oauth2/receive:path*',
-        permanent: true
-      }
-    ];
   }
+  // trailingSlash: true,
+  // exportPathMap: async function (
+  //   defaultPathMap,
+  //   { dev, dir, outDir, distDir, buildId }
+  // ) {
+  //   return {
+  //     '/': { page: '/' },
+  //     '/map': { page: '/map' },
+  //     '/community': { page: '/community' },
+  //     '/calendar': { page: '/calendar' },
+  //     '/login': { page: '/login' },
+  //     '/signup': { page: '/signup' },
+  //     '/mypage': { page: '/mypage' },
+  //     '/oauth2': { page: '/oauth2' }
+  //   };
+  // },
+  // async redirects() {
+  //   return [
+  //     {
+  //       source: '/oauth2/receive:path*',
+  //       destination: '/oauth2/receive:path*',
+  //       permanent: true
+  //     }
+  //   ];
+  // }
 };
 
 module.exports = nextConfig;

@@ -8,12 +8,12 @@ import '../styles/Editor.css';
 import Script from 'next/script';
 
 const App = ({ Component, pageProps }: AppProps) => {
-  const router = useRouter();
-  const path = (/#!(\/.*)$/.exec(router.asPath) || [])[1];
+  // const router = useRouter();
+  // const path = (/#!(\/.*)$/.exec(router.asPath) || [])[1];
 
-  if (path) {
-    router.replace(path);
-  }
+  // if (path) {
+  //   router.replace(path);
+  // }
 
   return (
     <>
