@@ -151,4 +151,4 @@ app:
     refreshTokenExpiry: 864000000
   oauth2:
     authorizedRedirectUris:
-      - http://localhost:3000/oauth2/receive
+      - http://localhost:3000/oauth2.html
