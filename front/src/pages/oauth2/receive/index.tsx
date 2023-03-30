@@ -33,7 +33,7 @@ const OAuth2 = () => {
           const UserInfo = res.data.body.data;
           localStorage.setItem('UserInfo', JSON.stringify(UserInfo));
           // console.log(JSON.parse(localStorage.UserInfo).email);
-          window.location.href = 'https://www.helfit.life';
+          router.push('/');
         })
         .catch((error) => {
           console.log(error);
