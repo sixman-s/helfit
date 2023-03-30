@@ -1,6 +1,7 @@
 package sixman.helfit.utils;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class HeaderUtil {
     private final static String HEADER_AUTHORIZATION = "Authorization";
@@ -18,5 +19,11 @@ public class HeaderUtil {
         }
 
         return null;
+    }
+
+    public static void setAccessToken(HttpServletResponse response, String accessToken) {
+        String headerValue = TOKEN_PREFIX + accessToken;
+
+        response.setHeader(HEADER_AUTHORIZATION, headerValue);
     }
 }

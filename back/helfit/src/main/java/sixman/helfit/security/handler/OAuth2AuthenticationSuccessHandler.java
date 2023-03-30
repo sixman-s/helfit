@@ -23,6 +23,7 @@ import sixman.helfit.security.token.AuthTokenProvider;
 import sixman.helfit.domain.user.entity.UserRefreshToken;
 import sixman.helfit.domain.user.repository.UserRefreshTokenRepository;
 import sixman.helfit.utils.CookieUtil;
+import sixman.helfit.utils.HeaderUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -148,7 +149,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
         queryParams.add("access_token", accessToken.getToken());
-        // ! Cookie 정보 전달로 대체함
+        // ! Cookie 전달로 대체
         // queryParams.add("refresh_token", refreshToken.getToken());
 
         return UriComponentsBuilder.fromUriString(callback)
