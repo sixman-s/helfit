@@ -195,7 +195,10 @@ public class SecurityConfig {
      */
     @Bean
     public OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler() {
-        return new OAuth2AuthenticationFailureHandler(oAuth2AuthorizationRequestBasedOnCookieRepository());
+        return new OAuth2AuthenticationFailureHandler(
+            appProperties,
+            oAuth2AuthorizationRequestBasedOnCookieRepository()
+        );
     }
 
     /*

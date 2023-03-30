@@ -131,7 +131,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private boolean isAuthorizedRedirectUri(String uri) {
         URI clientRedirectUri = URI.create(uri);
 
-        return appProperties.getOauth2().getAuthorizedRedirectUris()
+        return appProperties.getOauth2().getAuthorizedSuccessRedirectUris()
                    .stream()
                    .anyMatch(authorizedRedirectUri -> {
                        // Only validate host and port. Let the clients use different paths if they want to
@@ -143,9 +143,11 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     }
 
     private URI createURI(AuthToken accessToken, AuthToken refreshToken) {
-        List<String> authorizedRedirectUris = appProperties.getOauth2().getAuthorizedRedirectUris();
-        String callback = authorizedRedirectUris.stream().filter(d -> d.contains(frontDomain)).findAny()
-                       .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ACCESS_DENIED));
+        List<String> authorizedRedirectUris = appProperties.getOauth2().getAuthorizedSuccessRedirectUris();
+        String callback = authorizedRedirectUris.stream()
+                              .filter(d -> d.contains(frontDomain))
+                              .findAny()
+                              .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ACCESS_DENIED));
 
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
         queryParams.add("access_token", accessToken.getToken());
@@ -153,7 +155,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         // queryParams.add("refresh_token", refreshToken.getToken());
 
         return UriComponentsBuilder.fromUriString(callback)
-                      .queryParams(queryParams)
-                      .build().toUri();
+                   .queryParams(queryParams)
+                   .build().toUri();
     }
 }

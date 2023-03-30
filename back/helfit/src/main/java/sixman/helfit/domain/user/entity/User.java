@@ -46,7 +46,7 @@ public class User extends Auditable {
     private EmailVerified emailVerifiedYn;
 
     @Enumerated(value = javax.persistence.EnumType.STRING)
-    private PersonalInfoAgreement personalInfoAgreementYn;
+    private PersonalInfoAgreement personalInfoAgreementYn = PersonalInfoAgreement.Y;
 
     @Enumerated(javax.persistence.EnumType.STRING)
     @Column(length = 20)
@@ -73,7 +73,6 @@ public class User extends Auditable {
         this.password = "NO_PASS";
         this.profileImageUrl = profileImageUrl != null ? profileImageUrl : "";
         this.emailVerifiedYn = emailVerifiedYn;
-        this.personalInfoAgreementYn = PersonalInfoAgreement.Y;
         this.providerType = providerType;
         this.roleType = roleType;
     }

@@ -150,5 +150,7 @@ app:
     tokenExpiry: 864000000
     refreshTokenExpiry: 864000000
   oauth2:
-    authorizedRedirectUris:
+    authorizedSuccessRedirectUris:
       - http://localhost:3000/oauth2.html
+    authorizedFailRedirectUris:
+      - http://localhost:3000/404.html
