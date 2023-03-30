@@ -9,15 +9,10 @@ const nextConfig = {
     });
     return config;
   },
-  trailingSlash: true,
+  trailingSlash: false,
   exportPathMap: async function (
     defaultPathMap,
-    { dev,
-      dir,
-      outDir,
-      distDir,
-      buildId
-    }
+    { dev, dir, outDir, distDir, buildId }
   ) {
     return {
       '/': { page: '/' },
