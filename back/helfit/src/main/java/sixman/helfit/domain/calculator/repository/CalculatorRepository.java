@@ -11,8 +11,9 @@ import java.util.Optional;
 
 public interface CalculatorRepository extends JpaRepository<Calculator, Long> {
     Optional<Calculator> findByCalculatorId(Long CalculatorId);
-    @Query("SELECT c FROM Calculator c WHERE c.user.userId = :userId ORDER BY c.createdAt DESC")
-    Optional<Calculator> findFirstByUserIdOrderByCreatedAtDesc(Long userId);
+    //@Query("SELECT c FROM Calculator c WHERE c.user.userId = :userId ORDER BY c.createdAt DESC")
+    @Query(nativeQuery = true, value = "SELECT * FROM calculator c WHERE c.user_id = :userId ORDER BY c.created_at DESC LIMIT 1")
+    Optional<Calculator> findFirstByUserIdOrderByCreatedAtDesc(@Param("userId") Long userId);
     @Query("SELECT c FROM Calculator c WHERE c.user.userId = :userId ORDER BY c.modifiedAt DESC")
     List<Calculator> findAllByUserIdOrderByModifiedAtDesc(Long userId);
 }
