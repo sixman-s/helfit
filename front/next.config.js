@@ -17,7 +17,7 @@ const nextConfig = {
     return {
       '/': { page: '/' },
       '/map': { page: '/map' },
-      '/community:path*': { page: '/community:path*' },
+      '/community': { page: '/community' },
       '/calendar': { page: '/calendar' },
       '/login': { page: '/login' },
       '/signup': { page: '/signup' },
