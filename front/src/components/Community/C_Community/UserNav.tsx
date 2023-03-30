@@ -4,7 +4,7 @@ import style from '../../../styles/Community/C_Community.module.css';
 const UserNav = () => {
   const [userName, setUserName] = useState('User');
   const [userProfile, setUserProfile] = useState(
-    '../../../assets/Community/UserProfile.svg'
+    '../../../../assets/Community/UserProfile.svg'
   );
 
   useEffect(() => {
@@ -27,7 +27,7 @@ const UserNav = () => {
       <div className={style.UserProfile}>
         <div>
           <img
-            src={userProfile || '../../../assets/Community/UserProfile.svg'}
+            src={userProfile || '../../../../assets/Community/UserProfile.svg'}
             className={style.UserPhoto}
           />
         </div>

@@ -146,28 +146,29 @@ const PatchPostBox = () => {
           alert('올바른 전송이 아닙니다.');
           console.log(err);
         });
-    }
-
-    axios
-      .patch(
-        `${URL}/api/v1/board/${pageNumber}/${boardID}`,
-        {
-          title: title,
-          text: editorInput,
-          boardTags: tags
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`
+    } else {
+      axios
+        .patch(
+          `${URL}/api/v1/board/${pageNumber}/${boardID}`,
+          {
+            title: title,
+            text: editorInput,
+            boardTags: tags,
+            boardImageUrl: selectedFile
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`
+            }
           }
-        }
-      )
-      .then(() => alert('게시글이 성공적으로 수정되었습니다.'))
-      .then(() => router.push('/community'))
-      .catch((err) => {
-        alert('올바른 전송이 아닙니다.');
-        console.log(err);
-      });
+        )
+        .then(() => alert('게시글이 성공적으로 수정되었습니다.'))
+        .then(() => router.push('/community'))
+        .catch((err) => {
+          alert('올바른 전송이 아닙니다.');
+          console.log(err);
+        });
+    }
   };
 
   const handleTagAdd = (newTags: string[]) => {

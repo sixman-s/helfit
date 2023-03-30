@@ -21,6 +21,7 @@ public enum ExceptionCode {
 
     ALREADY_LIKE_BOARD(400,"이미 좋아요를 누른 게시글 입니다."),
 
+    MISS_MATCH_MAPID(400,"정확한 리뷰아이디를 입력해주세요!"),
     /*
      * # 401 UNAUTHORIZED
      *
