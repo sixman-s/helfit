@@ -12,7 +12,12 @@ const nextConfig = {
   trailingSlash: true,
   exportPathMap: async function (
     defaultPathMap,
-    { dev, dir, outDir, distDir, buildId }
+    { dev,
+      dir,
+      outDir,
+      distDir,
+      buildId
+    }
   ) {
     return {
       '/': { page: '/' },
@@ -24,21 +29,16 @@ const nextConfig = {
       '/mypage': { page: '/mypage' },
       '/oauth2/receive': { page: '/oauth2/receive' }
     };
+  },
+  async redirects() {
+    return [
+      {
+        source: '/oauth2/receive:path*',
+        destination: '/oauth2/receive:path*',
+        permanent: true
+      }
+    ];
   }
-  // async redirects() {
-  //   return [
-  //     // {
-  //     //   source: '/oauth2/:path*',
-  //     //   destination: '/oauth2/:path*',
-  //     //   permanent: true
-  //     // },
-  //     {
-  //       source: '/oauth2/receive:path*',
-  //       destination: '/oauth2/receive:path*',
-  //       permanent: true
-  //     }
-  //   ];
-  // }
 };
 
 module.exports = nextConfig;

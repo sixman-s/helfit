@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 
 const OAuth2 = () => {
-  console.log('페이지 진입테스트');
+
   return <></>;
 };
 export default OAuth2;
