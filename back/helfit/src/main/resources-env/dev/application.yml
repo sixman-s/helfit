@@ -146,4 +146,4 @@ app:
     refreshTokenExpiry: 604800000
   oauth2:
     authorizedRedirectUris:
-      - https://www.helfit.life/oauth2.html
+      - https://www.helfit.life/oauth2/
