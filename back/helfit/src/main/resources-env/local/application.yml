@@ -40,7 +40,7 @@ spring:
         max-idle: 8
         max-active: 8
     port: 6379
-    host: 127.0.01
+    host: 127.0.0.1
   h2:
     console:
       enabled: true
@@ -150,5 +150,7 @@ app:
     tokenExpiry: 864000000
     refreshTokenExpiry: 864000000
   oauth2:
-    authorizedRedirectUris:
+    authorizedSuccessRedirectUris:
       - http://localhost:3000/oauth2.html
+    authorizedFailRedirectUris:
+      - http://localhost:3000/404.html
