@@ -125,6 +125,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 return true;
             }
         }
+
         return false;
     }
 
@@ -143,8 +144,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     }
 
     private URI createURI(AuthToken accessToken, AuthToken refreshToken) {
-        List<String> authorizedRedirectUris = appProperties.getOauth2().getAuthorizedSuccessRedirectUris();
-        String callback = authorizedRedirectUris.stream()
+        List<String> authorizedSuccessRedirectUris = appProperties.getOauth2().getAuthorizedSuccessRedirectUris();
+        String callback = authorizedSuccessRedirectUris.stream()
                               .filter(d -> d.contains(frontDomain))
                               .findAny()
                               .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ACCESS_DENIED));

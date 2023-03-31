@@ -48,7 +48,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
     defer-datasource-initialization: true
@@ -146,6 +146,6 @@ app:
     refreshTokenExpiry: 604800000
   oauth2:
     authorizedSuccessRedirectUris:
-      - http://localhost:3000/oauth2.html
+      - https://www.helfit.life/oauth2.html
     authorizedFailRedirectUris:
-      - http://localhost:3000/404.html
+      - https://www.helfit.life/404.html
