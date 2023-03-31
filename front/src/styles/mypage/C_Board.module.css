@@ -33,6 +33,10 @@
 }
 
 .boardContent {
+    white-space : nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 520px;
     color: var(--text_3)
 }
 
