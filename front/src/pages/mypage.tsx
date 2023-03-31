@@ -52,12 +52,9 @@ export default function Mypage() {
   const initMyPage = async (token) => {
     try {
       const detail = await getUserInfo(token);
-      const checking = JSON.parse(localStorage.getItem('UserInfo')).gender;
-      if (checking) {
-        const hDetail = await getPhysicalInfo({ token, detail });
-        const { userId } = detail;
-        await getCalculateInfo({ userId, token, hDetail });
-      }
+      const hDetail = await getPhysicalInfo({ token, detail });
+      const { userId } = detail;
+      await getCalculateInfo({ userId, token, hDetail });
     } catch (e) {
       // console.log(e);
     }

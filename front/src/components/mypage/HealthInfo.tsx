@@ -68,7 +68,7 @@ const HealthInfo = ({
     setShowMoadal(true);
   };
 
-  if (detail == undefined || hDetail == undefined)
+  if (cDetail == undefined || hDetail == undefined)
     return (
       <>
         <div className={s.hInfoContainer}>
