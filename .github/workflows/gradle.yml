@@ -1,6 +1,8 @@
 name: Backend CI/CD
 
 on:
+  label:
+    types: [ "deploy" ]
   push:
     branches: [ "dev" ]
 
