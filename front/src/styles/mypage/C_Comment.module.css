@@ -34,7 +34,13 @@
 }
 
 .commentContent {
-    color: var(--text_3)
+    white-space : nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 520px;
+    height: 25px;
+    color: var(--text_3);
+    
 }
 
 

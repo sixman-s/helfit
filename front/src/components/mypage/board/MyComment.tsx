@@ -79,7 +79,7 @@ const MyComment = () => {
   return (
     <div className={s.commentContainer}>
       <div className={s.topLine}>
-        <div className={s.title}>MyComments</div>
+        <div className={s.title}>Comments</div>
         <div>
           <img
             id={s.left}

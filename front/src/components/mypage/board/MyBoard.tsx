@@ -96,7 +96,7 @@ const MyBoard = (): JSX.Element => {
   return (
     <div className={s.BoardContainer}>
       <div className={s.topLine}>
-        <div className={s.title}>MyBoards</div>
+        <div className={s.title}>Boards</div>
         <div>
           <img
             id={s.left}
