@@ -1,7 +1,4 @@
-import React, { useState } from 'react';
-import { Menu, MenuItemProps } from 'semantic-ui-react';
-import styles from '../../styles/Community/C_Community.module.css';
-import { useRouter } from 'next/router';
+import styled from '../../styles/Community/C_category.module.css';
 
 const menuItems = [
   { name: 'home', path: '/community' },
@@ -13,39 +10,7 @@ const menuItems = [
 ];
 
 const newCategory = () => {
-  const router = useRouter();
-  const [activeItem, setActiveItem] = useState<string>(
-    menuItems.find((item) => item.path === router.pathname)?.name || 'home'
-  );
-
-  const handleItemClick = (
-    event: React.MouseEvent<HTMLAnchorElement>,
-    data: MenuItemProps
-  ) => {
-    const name = data.name as string;
-    const path = menuItems.find((item) => item.name === name)?.path || '';
-    setActiveItem(name);
-    event.preventDefault();
-    router.push(path);
-  };
-
-  return (
-    <div>
-      <Menu pointing secondary className={styles.Menubar}>
-        {menuItems.map((item) => (
-          <Menu.Item
-            key={item.name}
-            name={item.name}
-            active={router.pathname === item.path}
-            onClick={handleItemClick}
-            className={
-              activeItem === item.name ? styles.activeItem : styles.menuItem
-            }
-          />
-        ))}
-      </Menu>
-    </div>
-  );
+  return <div>새로운 카테고리</div>;
 };
 
 export default newCategory;

@@ -3,7 +3,7 @@ import Layout from '@/components/MainLayout';
 import Categoty from '@/components/Community/Category';
 import Searchbar from '@/components/Community/SearchBar';
 import Popular from '@/components/Community/Popular';
-import newCategory from '@/components/Community/C_Community/newCategory';
+import newCategory from '@/components/Community/newCategory';
 
 const Community = () => {
   return (
@@ -14,8 +14,9 @@ const Community = () => {
         </div>
         <div className={style.Category}>
           <Categoty />
-          <newCategory />
+          {/* <newCategory /> */}
         </div>
+
         <div className={style.Popular}>
           <Popular />
         </div>
