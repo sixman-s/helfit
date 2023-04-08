@@ -84,7 +84,9 @@ const Oww: React.FC = () => {
           <li className={style.SNSbox}>
             <div className={style.postUser}>
               <img
-                src={userProfileImage}
+                src={
+                  userProfileImage || '../../assets/Community/UserProfile.svg'
+                }
                 className={style.UserPhoto}
                 onError={() =>
                   setUserProfile('../../assets/Community/UserProfile.svg')

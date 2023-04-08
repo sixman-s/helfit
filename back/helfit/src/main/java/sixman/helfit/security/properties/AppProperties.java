@@ -26,14 +26,24 @@ public class AppProperties {
     }
 
     public static final class OAuth2 {
-        private List<String> authorizedRedirectUris = new ArrayList<>();
+        private List<String> authorizedSuccessRedirectUris = new ArrayList<>();
+        private List<String> authorizedFailRedirectUris = new ArrayList<>();
 
-        public List<String> getAuthorizedRedirectUris() {
-            return authorizedRedirectUris;
+        public List<String> getAuthorizedSuccessRedirectUris() {
+            return authorizedSuccessRedirectUris;
         }
 
-        public OAuth2 authorizedRedirectUris(List<String> authorizedRedirectUris) {
-            this.authorizedRedirectUris = authorizedRedirectUris;
+        public OAuth2 authorizedSuccessRedirectUri(List<String> authorizedSuccessRedirectUri) {
+            this.authorizedSuccessRedirectUris = authorizedSuccessRedirectUri;
+            return this;
+        }
+
+        public List<String> getAuthorizedFailRedirectUris() {
+            return authorizedFailRedirectUris;
+        }
+
+        public OAuth2 authorizedFailRedirectUri(List<String> authorizedFailRedirectUri) {
+            this.authorizedFailRedirectUris = authorizedFailRedirectUri;
             return this;
         }
     }

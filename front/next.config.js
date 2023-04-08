@@ -8,6 +8,23 @@ const nextConfig = {
       use: ['@svgr/webpack']
     });
     return config;
+  },
+  trailingSlash: false,
+  exportPathMap: async function (
+    defaultPathMap,
+    { dev, dir, outDir, distDir, buildId }
+  ) {
+    return {
+      '/': { page: '/' },
+      '/map': { page: '/map' },
+      '/community': { page: '/community' },
+      '/calendar': { page: '/calendar' },
+      '/login': { page: '/login' },
+      '/signup': { page: '/signup' },
+      '/mypage': { page: '/mypage' },
+      '/oauth2': { page: '/oauth2' }
+      //'/oauth2/receive': { page: '/oauth2/receive' }
+    };
   }
 };
 

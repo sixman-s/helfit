@@ -3,8 +3,6 @@ running: local
 domain:
   front: http://localhost:3000
   back: http://localhost:8080
-# 프론트 배포 전 임시 저장
-#  back: http://ec2-3-34-96-242.ap-northeast-2.compute.amazonaws.com:8080
 
 chat-gpt:
   secret-key: ${CHAT_GPT_SECRET_KEY}
@@ -14,7 +12,7 @@ crypto:
 
 cloud:
   aws:
-    s3bucket: helfit.life/files
+    s3bucket: back.helfit.life/files
     access-key: ${AWS_ACCESS_KEY}
     secret-key: ${AWS_SECRET_KEY}
     stack:
@@ -42,7 +40,7 @@ spring:
         max-idle: 8
         max-active: 8
     port: 6379
-    host: 127.0.01
+    host: 127.0.0.1
   h2:
     console:
       enabled: true
@@ -53,18 +51,18 @@ spring:
     password:
     driver-class-name: org.h2.Driver
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: create
+    database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
     properties:
       hibernate:
         format_sql: true
         highlight_sql: true
         use_sql_comments: true
-    defer-datasource-initialization : true
   sql:
     init:
-      mode:
+      mode: embedded
       data-locations: classpath*:db/h2/data.sql
   thymeleaf:
     prefix: classpath:/templates/
@@ -152,5 +150,7 @@ app:
     tokenExpiry: 864000000
     refreshTokenExpiry: 864000000
   oauth2:
-    authorizedRedirectUris:
-      - http://localhost:3000/oauth2/receive
+    authorizedSuccessRedirectUris:
+      - http://localhost:3000/oauth2.html
+    authorizedFailRedirectUris:
+      - http://localhost:3000/404.html

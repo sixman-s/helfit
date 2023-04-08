@@ -23,6 +23,7 @@ import sixman.helfit.security.token.AuthTokenProvider;
 import sixman.helfit.domain.user.entity.UserRefreshToken;
 import sixman.helfit.domain.user.repository.UserRefreshTokenRepository;
 import sixman.helfit.utils.CookieUtil;
+import sixman.helfit.utils.HeaderUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -124,13 +125,14 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 return true;
             }
         }
+
         return false;
     }
 
     private boolean isAuthorizedRedirectUri(String uri) {
         URI clientRedirectUri = URI.create(uri);
 
-        return appProperties.getOauth2().getAuthorizedRedirectUris()
+        return appProperties.getOauth2().getAuthorizedSuccessRedirectUris()
                    .stream()
                    .anyMatch(authorizedRedirectUri -> {
                        // Only validate host and port. Let the clients use different paths if they want to
@@ -142,17 +144,19 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     }
 
     private URI createURI(AuthToken accessToken, AuthToken refreshToken) {
-        List<String> authorizedRedirectUris = appProperties.getOauth2().getAuthorizedRedirectUris();
-        String callback = authorizedRedirectUris.stream().filter(d -> d.contains(frontDomain)).findAny()
-                       .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ACCESS_DENIED));
+        List<String> authorizedSuccessRedirectUris = appProperties.getOauth2().getAuthorizedSuccessRedirectUris();
+        String callback = authorizedSuccessRedirectUris.stream()
+                              .filter(d -> d.contains(frontDomain))
+                              .findAny()
+                              .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ACCESS_DENIED));
 
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
         queryParams.add("access_token", accessToken.getToken());
-        // ! Cookie 정보 전달로 대체함
+        // ! Cookie 전달로 대체
         // queryParams.add("refresh_token", refreshToken.getToken());
 
         return UriComponentsBuilder.fromUriString(callback)
-                      .queryParams(queryParams)
-                      .build().toUri();
+                   .queryParams(queryParams)
+                   .build().toUri();
     }
 }

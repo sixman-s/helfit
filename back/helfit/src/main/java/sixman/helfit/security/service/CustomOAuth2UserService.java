@@ -51,6 +51,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         if (savedUser != null) {
             if (providerType != savedUser.getProviderType()) {
+                // ! 동일한 이메일로 회원 가입된 경우
                 throw new OAuthProviderMissMatchException(
                     "Looks like you're signed up with " + providerType +
                         " account. Please use your " + savedUser.getProviderType() + " account to login."
@@ -72,7 +73,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             userInfo.getNickname(),
             userInfo.getImageUrl(),
             EmailVerified.Y,
-            PersonalInfoAgreement.Y,
             providerType,
             RoleType.USER
         );

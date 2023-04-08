@@ -1,7 +1,7 @@
 running: dev
 
 domain:
-  front: http://helfit.life
+  front: https://www.helfit.life
   back: https://back.helfit.life
 
 chat-gpt:
@@ -12,7 +12,7 @@ crypto:
 
 cloud:
   aws:
-    s3bucket: helfit.life/files
+    s3bucket: back.helfit.life/files
     access-key: ${AWS_ACCESS_KEY}
     secret-key: ${AWS_SECRET_KEY}
     stack:
@@ -40,24 +40,27 @@ spring:
         max-idle: 8
         max-active: 8
     port: 6379
-    host: 127.0.01
+    host: 127.0.0.1
   datasource:
-    url: ${LOCAL_DATASOURCE_URL}
-    username: ${LOCAL_DATASOURCE_USERNAME}
-    password: ${LOCAL_DATASOURCE_PASSWORD}
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
-    database: mysql
-    database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
       ddl-auto: update
-    show-sql: true
-    defer-datasource-initialization : true
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    defer-datasource-initialization: true
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true
   sql:
     init:
       mode: always
       data-locations: classpath*:db/mysql/data.sql
-      schema-locations: classpath*:db/mysql/schema.sql
+#      schema-locations: classpath*:db/mysql/schema.sql
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
@@ -79,7 +82,6 @@ spring:
           connectiontimeout: 5000
           timeout: 5000
           writetimeout: 5000
-
   security:
     oauth2:
       client:
@@ -143,5 +145,7 @@ app:
     tokenExpiry: 1800000
     refreshTokenExpiry: 604800000
   oauth2:
-    authorizedRedirectUris:
-      - http://helfit.life/oauth2/receive
+    authorizedSuccessRedirectUris:
+      - https://www.helfit.life/oauth2.html
+    authorizedFailRedirectUris:
+      - https://www.helfit.life/404.html

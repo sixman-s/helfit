@@ -29,9 +29,15 @@
     color: var(--main);
     font-size: var(--h6);
     padding: 4px 0;
+    cursor: pointer;
 }
 
 .boardContent {
+    white-space : nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 520px;
+    height: 25px;
     color: var(--text_3)
 }
 

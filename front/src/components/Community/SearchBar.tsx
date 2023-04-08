@@ -52,15 +52,13 @@ const SearchBar = () => {
           className={style.searchType}
           onChange={(e) => setSearchType(e.target.value)}
         >
-
           <option value='title'>제목</option>
           <option value='text'>내용</option>
           <option value='tag'>태그</option>
           <option value='nickname'>닉네임</option>
-
         </select>
         <button type='submit' className={style.SeachBtn} onClick={handleSubmit}>
-          <img src='../../assets/Community/Search.svg' />
+          <img src='../../../assets/Community/Search.svg' />
         </button>
       </div>
       <div className={style.UserProfile}>

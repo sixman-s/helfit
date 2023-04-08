@@ -31,20 +31,13 @@ const MyComment = () => {
 
     if (count <= 0) {
       setCount(1);
-      console.log(count);
     }
-    console.log(count);
-
     axios
-      .get(
-        `${url}/api/v1/comment/users?page=${count}`,
-
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          }
+      .get(`${url}/api/v1/comment/users?page=${count}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
         }
-      )
+      })
       .then((res) => {
         const {
           data: { count }
@@ -52,7 +45,6 @@ const MyComment = () => {
         setTotalCount(count);
 
         setInfo(res.data.commentResponses);
-        console.log(res.data.commentResponses);
         return info;
       });
   }, [count]);
@@ -77,7 +69,6 @@ const MyComment = () => {
     };
 
     const category = categoryMapper[el.categoryId];
-    console.log(category);
 
     axios
       .get(`${url}/api/v1/board/${el.categoryId}/${el.boardId}`)
@@ -88,7 +79,7 @@ const MyComment = () => {
   return (
     <div className={s.commentContainer}>
       <div className={s.topLine}>
-        <div className={s.title}>MyComments</div>
+        <div className={s.title}>Comments</div>
         <div>
           <img
             id={s.left}

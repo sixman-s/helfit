@@ -1,16 +1,22 @@
 package sixman.helfit.utils;
 
+import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class TempUtil {
     private static final Map<String, String> tempPasswords = new HashMap<>();
+    private static final String PASSWORD_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+[{]}\\|;:'\",<.>/?";
 
     public static String issueTempPassword(String email) {
         // 임시 비밀번호 생성
-        String tempPassword = UUID.randomUUID().toString().replace("-", "").substring(0, 8);
+        SecureRandom random = new SecureRandom();
+        StringBuilder password = new StringBuilder();
+        for (int i = 0; i < 8; i++) {
+            password.append(PASSWORD_CHARS.charAt(random.nextInt(PASSWORD_CHARS.length())));
+        }
+        String tempPassword = password.toString();
 
         // 임시 비밀번호 저장
         tempPasswords.put(email, tempPassword);
@@ -26,6 +32,6 @@ public class TempUtil {
             TimeUnit.MINUTES.toMillis(60)
         );
 
-       return tempPasswords.get(email);
+        return tempPasswords.get(email);
     }
 }

@@ -4,7 +4,7 @@ import style from '../../../styles/Community/C_Community.module.css';
 const UserNav = () => {
   const [userName, setUserName] = useState('User');
   const [userProfile, setUserProfile] = useState(
-    '../../assets/Community/UserProfile.svg'
+    '../../../../assets/Community/UserProfile.svg'
   );
 
   useEffect(() => {
@@ -12,9 +12,12 @@ const UserNav = () => {
     if (accessToken) {
       const userInfo = JSON.parse(localStorage.getItem('UserInfo'));
       if (userInfo) {
-        // add null check here
         setUserName(userInfo.nickname);
+      }
+      if (userInfo.profileImageUrl !== null) {
         setUserProfile(userInfo.profileImageUrl);
+      } else if (userInfo.profileImageUrl == null) {
+        setUserProfile(userProfile);
       }
     }
   }, []);
@@ -23,7 +26,10 @@ const UserNav = () => {
     <>
       <div className={style.UserProfile}>
         <div>
-          <img src={userProfile} className={style.UserPhoto} />
+          <img
+            src={userProfile || '../../../../assets/Community/UserProfile.svg'}
+            className={style.UserPhoto}
+          />
         </div>
         <div className={style.UserName1}>{userName}</div>
       </div>

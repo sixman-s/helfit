@@ -5,25 +5,6 @@ import { useRouter } from 'next/router';
 import s from '../../../styles/mypage/M_ModalHInfo.module.css';
 import { userInfo1, userInfo2, userInfo3 } from '@/pages/mypage';
 
-// export interface detailProps {
-//   result: {
-//     detail: {
-//       userId: number;
-//     };
-//     hDetail: {
-//       birth: number;
-//       gender: string;
-//       height: number;
-//       weight: number;
-//     };
-//     cDetail: {
-//       calculatorId: number;
-//       activityLevel: string;
-//       goal: string;
-//     };
-//   };
-// }
-
 interface HeathForm {
   height: number;
   weight: number;
@@ -50,7 +31,6 @@ const ModalHInfo = ({
   const url = process.env.NEXT_PUBLIC_URL;
   const accessToken = localStorage.getItem('accessToken');
 
-  console.log(hDetail);
   return (
     <form
       onSubmit={handleSubmit(async (data) => {
@@ -88,7 +68,6 @@ const ModalHInfo = ({
             }
           )
           .then((res) => {
-            console.log(`health RES : ${res.data.body.data}`);
             let userInfo = JSON.parse(localStorage.getItem('UserInfo'));
 
             const genderInfo = genderMapper[res.data.body.data.gender];
@@ -110,10 +89,6 @@ const ModalHInfo = ({
               }
             )
             .then((res) => {
-              console.log(
-                `calculate RES : ${JSON.stringify(res.data.body.data)}`
-              );
-
               let userInfo = JSON.parse(localStorage.getItem('UserInfo'));
 
               const activityInfo =
@@ -144,8 +119,6 @@ const ModalHInfo = ({
               }
             )
             .then((res) => {
-              console.log(`calculate RES : ${res.data.body.data}`);
-
               let userInfo = JSON.parse(localStorage.getItem('UserInfo'));
 
               const activityInfo =

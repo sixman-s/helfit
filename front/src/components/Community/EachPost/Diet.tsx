@@ -15,6 +15,8 @@ interface Post {
   title: string;
   userNickname: string;
   view: number;
+  likesCount: number;
+  userProfileImage: string | null;
 }
 type Props = {
   posts: Post[];
@@ -66,7 +68,14 @@ const Oww: React.FC = () => {
     post,
     order
   }) => {
-    const { title, userNickname, view, boardImageUrl } = post;
+    const {
+      title,
+      userNickname,
+      view,
+      boardImageUrl,
+      likesCount,
+      userProfileImage
+    } = post;
 
     return (
       <div>
@@ -74,7 +83,9 @@ const Oww: React.FC = () => {
           <li className={style.SNSbox}>
             <div className={style.postUser}>
               <img
-                src={userProfile}
+                src={
+                  userProfileImage || '../../assets/Community/UserProfile.svg'
+                }
                 className={style.UserPhoto}
                 onError={() =>
                   setUserProfile('../../assets/Community/UserProfile.svg')
@@ -91,7 +102,7 @@ const Oww: React.FC = () => {
             <div className={style.postInfo}>
               <div className={style.postLike}>
                 <img src='../../assets/Community/Like.svg' />
-                <div className={style.postInfoText}>좋아요</div>
+                <div className={style.postInfoText}>좋아요: {likesCount}</div>
               </div>
               <div className={style.postComment}>
                 <img src='../../assets/Community/Comment.svg' />
