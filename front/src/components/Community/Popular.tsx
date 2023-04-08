@@ -29,7 +29,6 @@ const Popular = (): JSX.Element => {
     axios
       .get(`${URL}/api/v1/board/hot/1`)
       .then((res) => setHealthPosts(res.data));
-    //.then((res) => console.log(res.data));
     axios
       .get(`${URL}/api/v1/board/hot/4`)
       .then((res) => setPilatesPosts(res.data));
