@@ -1,0 +1,73 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0px 120px 40px 350px;
+}
+
+@keyframes scroll-in {
+  from {
+    transform: translateY(20%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+.part {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 120px;
+  animation-name: scroll-in;
+  animation-duration: 1s;
+  animation-fill-mode: both;
+}
+
+.part:first-child {
+  margin-top: 60px;
+}
+
+.title {
+  font-size: var(--h0);
+  color: var(--main);
+}
+
+.text {
+  font-size: var(--h5);
+  color: var(--text_2);
+  line-height: 32px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.img {
+  width: 69vw;
+  margin-top: 60px;
+}
+
+.btn {
+  border: none;
+  background: var(--main);
+  background: linear-gradient(90deg, #3361ff 0%, #6d99fe 100%);
+  color: #fff;
+  width: 192px;
+  height: 50px;
+  border-radius: 4px;
+  margin-top: 20px;
+  overflow: hidden;
+}
+
+.btn:hover {
+  opacity: 0.7;
+  text-decoration: none;
+  color: #fff;
+}
+.btn:active {
+  box-shadow: 4px 4px 6px 0 rgba(255, 255, 255, 0.3),
+    -4px -4px 6px 0 rgba(116, 125, 136, 0.2),
+    inset -4px -4px 6px 0 rgba(255, 255, 255, 0.2),
+    inset 4px 4px 6px 0 rgba(0, 0, 0, 0.2);
+}
