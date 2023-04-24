@@ -5,13 +5,16 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.web.servlet.MvcResult;
+import reactor.core.publisher.Flux;
 import sixman.helfit.domain.chat_gpt.dto.ChatGptDto;
-import sixman.helfit.domain.chat_gpt.dto.ChatGptDto.ResponseChoice;
+import sixman.helfit.domain.chat_gpt.dto.ChatGptDto.ResponseQuestionChoice;
 import sixman.helfit.domain.chat_gpt.service.ChatGptService;
 import sixman.helfit.restdocs.ControllerTest;
 
-import java.time.LocalDate;
 import java.util.*;
 
 import static org.mockito.ArgumentMatchers.anyString;
@@ -27,61 +30,63 @@ class ChatGptControllerTest extends ControllerTest {
     @MockBean
     ChatGptService chatGptService;
 
-    private ChatGptDto.Response chatGptDtoResponse;
+    private ChatGptDto.ResponseQuestion chatGptDtoResponse;
+    private ServerSentEvent<ChatGptDto.ResponseQuestion> message;
 
     @BeforeEach
     void setup() {
-        List<ResponseChoice> choices = new ArrayList<>() {{
-            add(ResponseChoice.builder()
-                    .message(new HashMap<>() {{
-                        put("role", "assistant");
-                        put("content", "하세요! 저는 AI 어시스턴트입니다. 무엇을 도와드릴까요?");
-                    }})
-                    .finishReason("stop")
+        List<ResponseQuestionChoice> choices =
+            List.of(
+                ResponseQuestionChoice.builder()
+                    .delta(
+                        new HashMap<>() {{
+                            put("content", "-");
+                        }}
+                    )
+                    .finishReason("null")
                     .index(0)
                     .build()
             );
-        }};
 
-        chatGptDtoResponse = ChatGptDto.Response.builder()
+        chatGptDtoResponse = ChatGptDto.ResponseQuestion.builder()
                                  .id("chatcmpl-6yK7AzSYHL8JlZ6AIPk4Yz01McXJp")
                                  .object("chat.completion")
-                                 .created(LocalDate.now())
+                                 .created(123L)
                                  .model("gpt-3.5-turbo-0301")
                                  .choices(choices)
                                  .build();
+
+        message = ServerSentEvent.<ChatGptDto.ResponseQuestion>builder()
+                      .event("message")
+                      .data(chatGptDtoResponse)
+                      .build();
     }
 
     @Test
     @DisplayName("[테스트] ChatGPT 질문")
-    void sendQuestion() throws Exception {
+    void sendQuestionTest() throws Exception {
         given(chatGptService.askQuestion(anyString()))
-            .willReturn(chatGptDtoResponse);
+            .willReturn(Flux.just(message));
 
-        postResource(DEFAULT_URL + "/question", new ChatGptDto.Post("안녕?"))
+        postResource(DEFAULT_URL + "/question", new ChatGptDto.Question("안녕?"))
             .apply(false)
             .andExpect(status().isOk())
+            .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_EVENT_STREAM))
             .andDo(restDocs.document(
-                customRequestFields(ChatGptDto.Post.class, new LinkedHashMap<>() {{
+                customRequestFields(ChatGptDto.Question.class, new LinkedHashMap<>() {{
                     put("question", "질문 내용, String");
-                }}),
-                relaxedResponseFields(
-                    beneathPath("header").withSubsectionId("header"),
-                    fieldWithPath("code").type(JsonFieldType.NUMBER).description("응답 코드"),
-                    fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지")
-                ),
-                relaxedResponseFields(
-                    beneathPath("body.data").withSubsectionId("data"),
-                    fieldWithPath("id").type(JsonFieldType.STRING).description("챗봇 식별자"),
-                    fieldWithPath("object").type(JsonFieldType.STRING).description("챗봇 오브젝트"),
-                    fieldWithPath("created").type(JsonFieldType.STRING).description("메시지 생성일자"),
-                    fieldWithPath("model").type(JsonFieldType.STRING).description("챗봇 모델"),
-                    fieldWithPath("choices[].message").type(JsonFieldType.OBJECT).description("챗봇 응답 결과"),
-                    fieldWithPath("choices[].message.role").type(JsonFieldType.STRING).description("챗봇 응답 형태"),
-                    fieldWithPath("choices[].message.content").type(JsonFieldType.STRING).description("챗봇 응답 메세지"),
-                    fieldWithPath("choices[].index").type(JsonFieldType.NUMBER).description("챗봇 응답 식별자"),
-                    fieldWithPath("choices[].finish_reason").type(JsonFieldType.STRING).description("챗봇 응답 종료 여부")
-                )
+                }})
+                // relaxedResponseFields(
+                //     beneathPath("data").withSubsectionId("data"),
+                //     fieldWithPath("id").type(JsonFieldType.STRING).description("챗봇 식별자"),
+                //     fieldWithPath("object").type(JsonFieldType.STRING).description("챗봇 오브젝트"),
+                //     fieldWithPath("created").type(JsonFieldType.STRING).description("메시지 생성일자"),
+                //     fieldWithPath("model").type(JsonFieldType.STRING).description("챗봇 모델"),
+                //     fieldWithPath("choices[].delta").type(JsonFieldType.OBJECT).description("챗봇 응답 결과"),
+                //     fieldWithPath("choices[].delta.content").type(JsonFieldType.STRING).description("챗봇 응답 메세지"),
+                //     fieldWithPath("choices[].index").type(JsonFieldType.NUMBER).description("챗봇 응답 식별자"),
+                //     fieldWithPath("choices[].finish_reason").type(JsonFieldType.STRING).description("챗봇 응답 종료 여부")
+                // )
             ));
     }
 }

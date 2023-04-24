@@ -104,7 +104,8 @@ operation::calendar-controller-test/delete-calendar-test[snippets='curl-request,
 
 == ChatGPT
 === 챗봇 질문
-operation::chat-gpt-controller-test/send-question[snippets='curl-request,custom-request-fields,httpie-request,http-request,http-response,request-body,response-body,response-fields-data,response-fields-header']
+operation::chat-gpt-controller-test/send-question-test[snippets='curl-request,custom-request-fields,httpie-request,http-request,http-response,request-body,response-body']
+
 
 == Physical
 === 회원 개인(신체)정보 생성

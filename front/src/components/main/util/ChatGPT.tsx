@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source';
 import styled from '../../../styles/main/C_chatGPT.module.css';
 import axios from 'axios';
 import { DotPulse } from '@uiball/loaders';
@@ -8,13 +9,13 @@ interface SpeechData {
   content: string;
 }
 
-const LodingComponent = () => {
-  return (
-    <span className={styled.loading}>
-      <DotPulse size={20} speed={1.3} color='#3361ff' />
-    </span>
-  );
-};
+// const LoadingComponent = () => {
+//   return (
+//     <span className={styled.loading}>
+//       <DotPulse size={20} speed={1.3} color='#3361ff' />
+//     </span>
+//   );
+// };
 
 const SpeechBubble = ({ data }) => {
   return data.map(({ type, content }: SpeechData, index: number) => {
@@ -33,17 +34,81 @@ const SpeechBubble = ({ data }) => {
 };
 
 const ChatPopup = () => {
+  const url = process.env.NEXT_PUBLIC_URL;
+
   const scrollRef = useRef(null);
 
+  const [input, setInput] = useState('');
   const [speech, setSpeech] = useState([
     {
       type: 'answer',
       content: '안녕하세요. 고객님. 제 이름은 헬쳇이에요. 뭐든지 물어봐주세요.'
     }
+    // {
+    //   type: 'question',
+    //   content: '사용자 질문'
+    // }
+    // ...
   ]);
-  const [input, setInput] = useState('');
-  const [answer, setAnswer] = useState(null);
-  const url = process.env.NEXT_PUBLIC_URL;
+
+  const onSubmit = async () => {
+    try {
+      setSpeech(prevState => [
+        ...prevState,
+        {
+          type: 'question',
+          content: input
+        }
+      ]);
+
+      setInput('');
+
+      await fetchEventSource(`${url}/api/v1/ai/question`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache',
+          Accept: 'text/event-stream'
+        },
+        body: JSON.stringify({
+          question: input
+        }),
+        async onopen(response) {
+          if (response.ok && response.headers.get('content-type') === EventStreamContentType) return;
+          else if (response.status >= 400 && response.status < 500 && response.status !== 429) throw new Error();
+        },
+        onmessage(event) {
+          const answer = JSON.parse(event.data);
+
+          setSpeech(prevState => {
+            let lastSpeech = prevState[prevState.length - 1];
+            let updatedLastSpeech;
+
+            if (lastSpeech.type !== 'answer') {
+              updatedLastSpeech = {
+                type: 'answer',
+                content: ''
+              };
+
+              return [...prevState, updatedLastSpeech];
+            } else {
+              updatedLastSpeech = {
+                ...lastSpeech,
+                content: answer.choices[0].delta.content ? lastSpeech.content + answer.choices[0].delta.content : lastSpeech.content
+              };
+
+              return [...prevState.slice(0, -1), updatedLastSpeech];
+            }
+          });
+        },
+        onclose() {
+          // console.log('connection closed!');
+        }
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   const onPressEnter = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.nativeEvent.isComposing) {
@@ -59,41 +124,9 @@ const ChatPopup = () => {
     }
   };
 
-  const onSubmit = () => {
-    axios
-      .post(`${url}/api/v1/ai/question`, {
-        question: input
-      })
-      .then()
-      .then((res) => {
-        setAnswer(res.data.body.data.choices[0].message.content);
-      })
-      .catch((error) => alert('내용을 입력해 주세요.'));
-    setSpeech([
-      ...speech,
-      {
-        type: 'question',
-        content: input
-      }
-    ]);
-    setInput('');
-  };
-
   useEffect(() => {
     scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   }, [speech]);
-
-  useEffect(() => {
-    answer === null
-      ? null
-      : setSpeech([
-          ...speech,
-          {
-            type: 'answer',
-            content: answer
-          }
-        ]);
-  }, [answer]);
 
   return (
     <article className={styled.popupContainer}>
