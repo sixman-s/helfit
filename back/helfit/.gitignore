@@ -6,6 +6,10 @@ build/
 !**/src/test/**/build/
 
 **/src/main/resources/static
+### Certbot ###
+data/certbot
+init-letsencrypt.sh
+
 
 ### AWS ###
 .run.sh

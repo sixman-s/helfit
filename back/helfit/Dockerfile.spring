@@ -1,0 +1,11 @@
+FROM openjdk:11-jdk
+
+ARG JAR_NAME
+ARG JAR_VERSION
+ARG JAR_FILE=./build/libs/${JAR_NAME}-${JAR_VERSION}-SNAPSHOT.jar
+
+WORKDIR /app
+
+COPY ${JAR_FILE} app.jar
+
+ENTRYPOINT ["java", "-Duser.timezone=Asia/Seoul", "-jar", "app.jar"]

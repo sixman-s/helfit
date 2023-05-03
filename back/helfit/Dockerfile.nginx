@@ -1,0 +1,15 @@
+FROM nginx:latest
+
+ARG DOMAIN_NAME
+
+RUN mkdir /var/log/nginx/proxy
+RUN touch /var/log/nginx/proxy/access.log
+RUN touch /var/log/nginx/proxy/error.log
+
+RUN mkdir /etc/nginx/sites-available
+RUN mkdir /etc/nginx/sites-enabled
+
+VOLUME ./data/nginx/conf.d /etc/nginx/conf.d
+VOLUME ./data/nginx/site-available /etc/nginx/sites-available
+
+RUN ln -s /etc/nginx/sites-available/${DOMAIN_NAME}.conf /etc/nginx/sites-enabled/

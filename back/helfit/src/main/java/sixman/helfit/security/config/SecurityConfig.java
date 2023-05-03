@@ -100,6 +100,7 @@ public class SecurityConfig {
                 // .antMatchers("/api/**/users/**").hasAnyAuthority(RoleType.USER.getCode())
                 .antMatchers("/api/**/admin/**").hasAnyAuthority(RoleType.ADMIN.getCode())
                 .antMatchers("/api/**").permitAll()
+                .antMatchers("/.well-known/**").permitAll()
                 .anyRequest().authenticated()
             .and()
                 .oauth2Login()
