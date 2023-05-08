@@ -7,7 +7,7 @@ import org.springframework.data.redis.core.index.Indexed;
 
 import javax.persistence.Id;
 
-@RedisHash(value = "emailRandomKey")
+@RedisHash(value = "EmailConfirmRandomKey")
 @Getter
 @Setter
 @NoArgsConstructor

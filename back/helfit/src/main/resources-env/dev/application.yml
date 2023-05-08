@@ -40,7 +40,7 @@ spring:
         max-idle: 8
         max-active: 8
     port: 6379
-    host: 127.0.0.1
+    host: redis
   datasource:
     url: ${DATASOURCE_URL}
     username: ${DATASOURCE_USERNAME}
