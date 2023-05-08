@@ -3,20 +3,25 @@ server {
 
     server_name back.helfit.life;
 
-    access_log /var/log/nginx/proxy/access.log;
-    error_log /var/log/nginx/proxy/error.log;
-
     # Load configuration files for the default server block.
     include /etc/nginx/conf.d/service-url.inc;
+
+    location /.well-known/acme-challenge/ {
+        default_type "text/plain";
+        root /var/www/certbot;
+
+        try_files $uri =404;
+    }
 
     location / {
         if ($http_x_forwarded_proto != 'https') {
             return 301 https://$host$request_uri;
         }
 
+        resolver 127.0.0.11;
         proxy_pass $service_url;
 
-        proxy_set_header Host $host;
+        proxy_set_header Host $http_host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
@@ -39,16 +44,12 @@ server {
     ssl_certificate_key /etc/letsencrypt/live/back.helfit.life/privkey.pem;
 
     location / {
+        resolver 127.0.0.11;
         proxy_pass $service_url;
 
-        proxy_set_header Host $host;
+        proxy_set_header Host $http_host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
-    }
-
-    location = /.well-known/acme-challenge/ {
-        allow all;
-        root /var/www/certbot;
     }
 }

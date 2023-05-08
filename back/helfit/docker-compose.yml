@@ -2,7 +2,6 @@ version: "3"
 services:
   nginx:
     container_name: nginx
-    restart: always
     build:
       context: .
       dockerfile: Dockerfile.nginx
@@ -46,5 +45,8 @@ services:
       - KAKAO_CLIENT_SECRET=${KAKAO_CLIENT_SECRET}
       - NAVER_CLIENT_ID=${NAVER_CLIENT_ID}
       - NAVER_CLIENT_SECRET=${NAVER_CLIENT_SECRET}
+      - DATASOURCE_URL=${DATASOURCE_URL}
+      - DATASOURCE_USERNAME=${DATASOURCE_USERNAME}
+      - DATASOURCE_PASSWORD=${DATASOURCE_PASSWORD}
     ports:
       - "8080:8080"

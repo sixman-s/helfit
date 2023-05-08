@@ -9,7 +9,8 @@ RUN touch /var/log/nginx/proxy/error.log
 RUN mkdir /etc/nginx/sites-available
 RUN mkdir /etc/nginx/sites-enabled
 
-VOLUME ./data/nginx/conf.d /etc/nginx/conf.d
-VOLUME ./data/nginx/site-available /etc/nginx/sites-available
+COPY ./data/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY ./data/nginx/conf.d /etc/nginx/conf.d
+COPY ./data/nginx/sites-available /etc/nginx/sites-available
 
-RUN ln -s /etc/nginx/sites-available/${DOMAIN_NAME}.conf /etc/nginx/sites-enabled/
+RUN ln -s /etc/nginx/sites-available/${DOMAIN_NAME} /etc/nginx/sites-enabled
