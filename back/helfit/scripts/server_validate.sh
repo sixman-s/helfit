@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 source "$(dirname "$(readlink -f "$0")")/profile.sh"
 
 PROFILE_AND_PORT=$(find_profile_and_port)
