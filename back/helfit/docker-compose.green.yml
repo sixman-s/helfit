@@ -32,4 +32,4 @@ services:
 networks:
   default:
     external:
-      name: build_default
+      name: helfit_network
