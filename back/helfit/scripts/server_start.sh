@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 cd /home/ubuntu/build
 
-mkdir -p "logs"
+source "$(dirname "$(readlink -f "$0")")/profile.sh"
 
-LOG_PATH="logs"
-LOG_FILE="application.log"
-LOGGED=$LOG_PATH/$LOG_FILE
+PROFILE_AND_PORT=$(find_profile_and_port)
+CURRENT_PROFILE=$(echo "${PROFILE_AND_PORT}" | awk '{print $1}')
 
-sudo nohup java -Duser.timezone=Asia/Seoul -jar build/libs/helfit-0.0.1-SNAPSHOT.jar >> $LOGGED 2>&1 &
+sudo docker-compose -p spring-${CURRENT_PROFILE} -f ./docker-compose.%{CURRENT_PROFILE}.yml up --build -d

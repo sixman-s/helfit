@@ -6,10 +6,6 @@ files:
     destination: /home/ubuntu/build
 
 hooks:
-  ApplicationStop:
-    - location: scripts/server_stop.sh
-      timeout: 3000
-      runas: root
   BeforeInstall:
     - location: scripts/server_clear.sh
       timeout: 3000
@@ -20,5 +16,9 @@ hooks:
       runas: root
   ApplicationStart:
     - location: scripts/server_start.sh
+      timeout: 3000
+      runas: root
+  ValidateService:
+    - location: scripts/server_validate.sh
       timeout: 3000
       runas: root

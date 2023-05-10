@@ -1,0 +1,27 @@
+version: "3"
+services:
+  api:
+    container_name: spring-local
+    build:
+      context: .
+      dockerfile: Dockerfile.spring
+      args:
+        JAR_NAME: helfit
+        JAR_VERSION: 0.0.1
+    environment:
+      - SPRING_PROFILES_ACTIVE=local
+      - AWS_ACCESS_KEY=${AWS_ACCESS_KEY}
+      - AWS_SECRET_KEY=${AWS_SECRET_KEY}
+      - CHAT_GPT_SECRET_KEY=${CHAT_GPT_SECRET_KEY}
+      - CRYPTO_ENCRYPTION_KEY=${CRYPTO_ENCRYPTION_KEY}
+      - GMAIL_ID=${GMAIL_ID}
+      - GMAIL_PASSWORD=${GMAIL_PASSWORD}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - KAKAO_CLIENT_ID=${KAKAO_CLIENT_ID}
+      - KAKAO_CLIENT_SECRET=${KAKAO_CLIENT_SECRET}
+      - NAVER_CLIENT_ID=${NAVER_CLIENT_ID}
+      - NAVER_CLIENT_SECRET=${NAVER_CLIENT_SECRET}
+    ports:
+      - "8080:8080"

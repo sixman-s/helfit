@@ -1,1 +1,1 @@
-set $service_url http://spring:8080;
+set $service_url "http://CURRENT_PROFILE:CURRENT_PORT";

@@ -1,3 +1,101 @@
+chat-gpt:
+  secret-key: ${CHAT_GPT_SECRET_KEY}
+
+crypto:
+  encrypt-key: ${CRYPTO_ENCRYPTION_KEY}
+
+cloud:
+  aws:
+    s3bucket: back.helfit.life/files
+    access-key: ${AWS_ACCESS_KEY}
+    secret-key: ${AWS_SECRET_KEY}
+    stack:
+      auto: false
+    region:
+      static: ap-northeast-2
+
+spring:
+  batch:
+    job:
+      enabled: false
+    jdbc:
+      initialize-schema: always
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    encoding: UTF-8
+    check-template-location: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${GMAIL_ID}           # 앱 비밀번호 발급 google gmail 계정
+    password: ${GMAIL_PASSWORD}     # 앱 비밀번호
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+            required: true
+          auth: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: ${GOOGLE_CLIENT_ID}
+            clientSecret: ${GOOGLE_CLIENT_SECRET}
+            scope:
+              - email
+              - profile
+          naver:
+            clientId: ${NAVER_CLIENT_ID}
+            clientSecret: ${NAVER_CLIENT_SECRET}
+            clientAuthenticationMethod: post
+            authorizationGrantType: authorization_code
+            redirectUri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
+            scope:
+              - name
+              - nickname
+              - email
+              - profile_image
+            clientName: Naver
+          kakao:
+            clientId: ${KAKAO_CLIENT_ID}
+            clientSecret: ${KAKAO_CLIENT_SECRET}
+            clientAuthenticationMethod: post
+            authorizationGrantType: authorization_code
+            redirectUri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
+            scope:
+              - profile_nickname
+              - profile_image
+              - account_email
+            clientName: Kakao
+        provider:
+          naver:
+            authorizationUri: https://nid.naver.com/oauth2.0/authorize
+            tokenUri: https://nid.naver.com/oauth2.0/token
+            userInfoUri: https://openapi.naver.com/v1/nid/me
+            userNameAttribute: response
+          kakao:
+            authorizationUri: https://kauth.kakao.com/oauth/authorize
+            tokenUri: https://kauth.kakao.com/oauth/token
+            userInfoUri: https://kapi.kakao.com/v2/user/me
+            userNameAttribute: id
+
+cors:
+  allowed-origins: "*"
+  allowed-headers: "*"
+  allowed-methods: GET,POST,PATCH,PUT,DELETE,OPTIONS
+  max-age: 3600
+
 server:
   servlet:
     encoding:
