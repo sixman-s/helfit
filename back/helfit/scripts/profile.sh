@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-function find_current_profile_and_port() {
+function find_profile_and_port() {
     IS_ACTIVE_BLUE=$(docker ps --filter "name=spring-blue" --format "{{.Names}}")
     # IS_ACTIVE_BLUE=$(docker-compose -p spring-blue -f docker-compose.blue.yaml ps | grep Up)
 
