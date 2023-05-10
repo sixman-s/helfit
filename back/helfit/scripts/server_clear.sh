@@ -1,2 +1,6 @@
 #!/usr/bin/env bash
-rm -rf /home/ubuntu/build
+find /home/ubuntu/build -maxdepth 2 \
+  ! -wholename '/home/ubuntu/build' \
+  ! -wholename '/home/ubuntu/build/data' \
+  ! -wholename '/home/ubuntu/build/data/certbot' \
+  -exec rm -rf {} +

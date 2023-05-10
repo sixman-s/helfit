@@ -29,8 +29,7 @@ server {
 }
 
 server {
-    listen 443;
-    # listen 443 ssl;
+    listen 443 ssl;
 
     access_log /var/log/nginx/proxy/access.log;
     error_log /var/log/nginx/proxy/error.log;
@@ -38,11 +37,11 @@ server {
     # Load configuration files for the default server block.
     include /etc/nginx/conf.d/service-url.inc;
 
-    # include /etc/letsencrypt/options-ssl-nginx.conf;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
 
-    # ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
-    # ssl_certificate /etc/letsencrypt/live/back.helfit.life/fullchain.pem;
-    # ssl_certificate_key /etc/letsencrypt/live/back.helfit.life/privkey.pem;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+    ssl_certificate /etc/letsencrypt/live/back.helfit.life/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/back.helfit.life/privkey.pem;
 
     location / {
         resolver 127.0.0.11;

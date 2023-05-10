@@ -28,3 +28,8 @@ services:
       - DATASOURCE_PASSWORD=${DATASOURCE_PASSWORD}
     ports:
       - "8080:8080"
+
+networks:
+  default:
+    external:
+      name: service-network
