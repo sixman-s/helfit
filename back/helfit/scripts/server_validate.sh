@@ -4,10 +4,10 @@ source "$(dirname "$(readlink -f "$0")")/profile.sh"
 ROOT_PATH="/home/ubuntu/build"
 
 PROFILE_AND_PORT=$(find_profile_and_port)
-ACTIVE_PROFILE=$(echo "${PROFILE_AND_PORT}" | awk "{print $1}")
-ACTIVE_PORT=$(echo "${PROFILE_AND_PORT}" | awk "{print $2}")
-IDLE_PROFILE=$(echo "${PROFILE_AND_PORT}" | awk "{print $3}")
-IDLE_PORT=$(echo "${PROFILE_AND_PORT}" | awk "{print $4}")
+ACTIVE_PROFILE=$(echo "${PROFILE_AND_PORT}" | awk '{print $1}')
+ACTIVE_PORT=$(echo "${PROFILE_AND_PORT}" | awk '{print $2}')
+IDLE_PROFILE=$(echo "${PROFILE_AND_PORT}" | awk '{print $3}')
+IDLE_PORT=$(echo "${PROFILE_AND_PORT}" | awk '{print $4}')
 
 for cnt in {1..10}
 do
