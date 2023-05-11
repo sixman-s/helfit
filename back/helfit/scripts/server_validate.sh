@@ -13,7 +13,7 @@ for cnt in {1..10}
 do
     echo "서버 응답 대기중 ... (${cnt}/10)";
 
-    UP=$(curl -s https://localhost:${ACTIVE_PORT}/api/v1/health | grep "blue\|green")
+    UP=$(curl -s http://localhost:${ACTIVE_PORT}/api/v1/health | grep "blue\|green")
 
     if [ -z "${UP}" ]
         then
