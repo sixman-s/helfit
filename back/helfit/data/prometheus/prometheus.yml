@@ -1,0 +1,15 @@
+global:
+  scrape_interval: 10s # 매트릭 수집 시간 단위: default: 1m
+  evaluation_interval: 1m # 평가 default: 1m
+  external_labels:
+    monitor: 'helfit-monitor'
+
+rule_files:
+# - "first.rules"
+# - "second.rules"
+
+scrape_configs:
+  - job_name: 'helfit-monitor-app'
+    metrics_path: '/api/v1/actuator/prometheus'
+    static_configs:
+      - targets: ['host.docker.internal:8082']

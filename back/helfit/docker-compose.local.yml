@@ -25,3 +25,9 @@ services:
       - NAVER_CLIENT_SECRET=${NAVER_CLIENT_SECRET}
     ports:
       - "8080:8080"
+      - "8082:8082"
+
+networks:
+  default:
+    external:
+      name: build_helfit_network

@@ -80,28 +80,27 @@ public class SecurityConfig {
                 .apply(new CustomFilterConfigurer())
             .and()
                 .exceptionHandling()
-                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-                .accessDeniedHandler(new CustomAccessDeniedHandler())
+                    .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                    .accessDeniedHandler(new CustomAccessDeniedHandler())
             .and()
                 .authorizeRequests()
-                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                .antMatchers("/",
-                    "/error",
-                    "/favicon.ico",
-                    "/**/*.png",
-                    "/**/*.gif",
-                    "/**/*.svg",
-                    "/**/*.jpg",
-                    "/**/*.html",
-                    "/**/*.css",
-                    "/**/*.js"
-                ).permitAll()
-                // # Ex: RoleType.USER 인가 설정
-                // .antMatchers("/api/**/users/**").hasAnyAuthority(RoleType.USER.getCode())
-                .antMatchers("/api/**/admin/**").hasAnyAuthority(RoleType.ADMIN.getCode())
-                .antMatchers("/api/**").permitAll()
-                .antMatchers("/.well-known/**").permitAll()
-                .anyRequest().authenticated()
+                    .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+                    .antMatchers("/",
+                        "/error",
+                        "/favicon.ico",
+                        "/**/*.png",
+                        "/**/*.gif",
+                        "/**/*.svg",
+                        "/**/*.jpg",
+                        "/**/*.html",
+                        "/**/*.css",
+                        "/**/*.js"
+                    ).permitAll()
+                    // # Ex: RoleType.USER 인가 설정
+                    // .antMatchers("/api/**/users/**").hasAnyAuthority(RoleType.USER.getCode())
+                    .antMatchers("/api/**/admin/**").hasAnyAuthority(RoleType.ADMIN.getCode())
+                    .antMatchers("/api/**").permitAll()
+                    .anyRequest().authenticated()
             .and()
                 .oauth2Login()
                     .authorizationEndpoint()
