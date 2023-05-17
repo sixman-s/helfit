@@ -28,6 +28,7 @@ services:
       - DATASOURCE_PASSWORD=${DATASOURCE_PASSWORD}
     ports:
       - "8080:8080"
+      - "8082:8082"
 
 networks:
   default:

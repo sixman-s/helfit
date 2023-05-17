@@ -9,7 +9,6 @@ build/
 ### Certbot ###
 data/certbot
 
-
 ### AWS ###
 .run.sh
 

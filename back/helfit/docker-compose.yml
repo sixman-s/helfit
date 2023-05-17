@@ -51,6 +51,5 @@ services:
     networks:
       helfit_network:
 
-
 networks:
   helfit_network:
