@@ -13,7 +13,7 @@ server {
         try_files $uri =404;
     }
 
-    location / {
+    location ~ ^/docs(.*)$ {
         if ($http_x_forwarded_proto != 'https') {
             return 301 https://$host$request_uri;
         }
@@ -26,10 +26,36 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
     }
+
+    location ~ ^/api/v1(.*)$ {
+        if ($http_x_forwarded_proto != 'https') {
+            return 301 https://$host$request_uri;
+        }
+
+        resolver 127.0.0.11;
+        proxy_pass $service_url;
+
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location ~ / {
+        resolver 127.0.0.11;
+        proxy_pass http://grafana:3000;
+
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
 }
 
 server {
     listen 443 ssl;
+
+    server_name back.helfit.life;
 
     access_log /var/log/nginx/proxy/access.log;
     error_log /var/log/nginx/proxy/error.log;
@@ -43,7 +69,17 @@ server {
     ssl_certificate /etc/letsencrypt/live/back.helfit.life/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/back.helfit.life/privkey.pem;
 
-    location / {
+    location ~ ^/docs(.*)$ {
+        resolver 127.0.0.11;
+        proxy_pass $service_url;
+
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location ~ ^/api/v1/(.*)$ {
         resolver 127.0.0.11;
         proxy_pass $service_url;
 
