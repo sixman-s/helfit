@@ -108,8 +108,6 @@ server:
       enabled: true
 
 management:
-  server:
-    port: 8082
   endpoint:
     info:
       enabled: true

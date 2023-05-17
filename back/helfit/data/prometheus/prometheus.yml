@@ -12,4 +12,4 @@ scrape_configs:
   - job_name: 'helfit-monitor-app'
     metrics_path: '/api/v1/actuator/prometheus'
     static_configs:
-      - targets: ['spring-blue:8082', 'spring-green:8082']
+      - targets: ['spring-blue:8082', 'spring-green:8083']
