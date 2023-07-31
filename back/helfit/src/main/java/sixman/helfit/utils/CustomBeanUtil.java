@@ -20,7 +20,6 @@ public class CustomBeanUtil<T> {
 
             if (sourceProperty != null && !(sourceProperty instanceof Collection<?>))
                 dest.setPropertyValue(property.getName(), sourceProperty);
-
         }
 
         return destination;

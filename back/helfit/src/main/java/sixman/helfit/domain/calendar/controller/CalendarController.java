@@ -10,6 +10,7 @@ import sixman.helfit.domain.calendar.dto.CalendarDto;
 import sixman.helfit.domain.calendar.entity.Calendar;
 import sixman.helfit.domain.calendar.mapper.CalendarMapper;
 import sixman.helfit.domain.calendar.service.CalendarService;
+import sixman.helfit.domain.user.entity.User;
 import sixman.helfit.response.ApiResponse;
 import sixman.helfit.security.entity.UserPrincipal;
 import sixman.helfit.utils.UriUtil;
@@ -113,7 +114,7 @@ public class CalendarController {
         Calendar calendar = calendarService.updateCalendar(
             calendarMapper.calendarDtoPatchToCalendar(requestBody),
             verifiedCalendarWithUserId
-            );
+        );
 
         CalendarDto.Response response = calendarMapper.calendarToCalendarDtoResponse(calendar);
 
