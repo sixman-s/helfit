@@ -42,7 +42,7 @@ const Intro = () => {
           </span>
           <img
             className={styled.img}
-            src='assets/main/intro01.svg'
+            src='/assets/Main/intro01.svg'
             alt='intro01'
           />
         </li>
@@ -54,7 +54,7 @@ const Intro = () => {
           </span>
           <img
             className={styled.img}
-            src='assets/main/intro02.svg'
+            src='/assets/Main/intro02.svg'
             alt='intro02'
           />
         </li>
@@ -67,7 +67,7 @@ const Intro = () => {
           </span>
           <img
             className={styled.img}
-            src='assets/main/intro03.svg'
+            src='/assets/Main/intro03.svg'
             alt='intro03'
           />
         </li>
@@ -82,7 +82,7 @@ const Intro = () => {
           </Link>
           <img
             className={styled.img}
-            src='assets/main/intro04.svg'
+            src='/assets/Main/intro04.svg'
             alt='intro04'
           />
         </li>

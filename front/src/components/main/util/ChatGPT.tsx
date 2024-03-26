@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import { EventStreamContentType, fetchEventSource } from '@microsoft/fetch-event-source';
+import {
+  EventStreamContentType,
+  fetchEventSource
+} from '@microsoft/fetch-event-source';
 import styled from '../../../styles/main/C_chatGPT.module.css';
 import axios from 'axios';
 import { DotPulse } from '@uiball/loaders';
@@ -22,11 +25,11 @@ const SpeechBubble = ({ data }) => {
     return type === 'question' && content !== '' ? (
       <div className={styled.questionArea} key={index}>
         <p className={`${styled.speech} ${styled.question}`}>{content}</p>
-        <img src='../../../assets/main/questioner_icon.svg' />
+        <img src='/assets/Main/questioner_icon.svg' />
       </div>
     ) : (
       <div className={styled.answerArea} key={index}>
-        <img src='../../../assets/main/answer_icon.svg' />
+        <img src='/assets/Main/answer_icon.svg' />
         <p className={`${styled.speech} ${styled.answer}`}>{content}</p>
       </div>
     );
@@ -53,7 +56,7 @@ const ChatPopup = () => {
 
   const onSubmit = async () => {
     try {
-      setSpeech(prevState => [
+      setSpeech((prevState) => [
         ...prevState,
         {
           type: 'question',
@@ -74,13 +77,22 @@ const ChatPopup = () => {
           question: input
         }),
         async onopen(response) {
-          if (response.ok && response.headers.get('content-type') === EventStreamContentType) return;
-          else if (response.status >= 400 && response.status < 500 && response.status !== 429) throw new Error();
+          if (
+            response.ok &&
+            response.headers.get('content-type') === EventStreamContentType
+          )
+            return;
+          else if (
+            response.status >= 400 &&
+            response.status < 500 &&
+            response.status !== 429
+          )
+            throw new Error();
         },
         onmessage(event) {
           const answer = JSON.parse(event.data);
 
-          setSpeech(prevState => {
+          setSpeech((prevState) => {
             let lastSpeech = prevState[prevState.length - 1];
             let updatedLastSpeech;
 
@@ -94,7 +106,9 @@ const ChatPopup = () => {
             } else {
               updatedLastSpeech = {
                 ...lastSpeech,
-                content: answer.choices[0].delta.content ? lastSpeech.content + answer.choices[0].delta.content : lastSpeech.content
+                content: answer.choices[0].delta.content
+                  ? lastSpeech.content + answer.choices[0].delta.content
+                  : lastSpeech.content
               };
 
               return [...prevState.slice(0, -1), updatedLastSpeech];
@@ -157,7 +171,7 @@ const ChatGPT = () => {
     <div>
       <img
         className={styled.stikyBtn}
-        src='../../../../assets/main/chatGPT_icon.svg'
+        src='/assets/Main/chatGPT_icon.svg'
         onClick={() => setClick(!click)}
       />
       {click ? <ChatPopup /> : null}

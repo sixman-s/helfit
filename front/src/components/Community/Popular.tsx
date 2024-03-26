@@ -83,7 +83,8 @@ const Popular = (): JSX.Element => {
   return (
     <>
       <div className={style.box}>
-        <div className={style.Oww_content}>
+        {/* <div className={style.Oww_content}> */}
+        <div className={style.P_content}>
           <h4 className={style.Oww_text_h4}>🔥 인기 오운완 게시글</h4>
           {owwPosts.length === 0 ? (
             <div className={style.noneMsg}>게시글을 입력해주세요 </div>
